@@ -81,7 +81,13 @@
   --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
 
-  --maxw:1080px;
+  /* Grow past the design width instead of stranding on wide screens, but keep a
+     ceiling — prose has an optimal measure and "wider" is not "better". The FLOOR is
+     this page's own design width (1080), never a number borrowed from another surface:
+     at Jared's 1536px screen 68vw resolves to 1044, so a shared floor would have made
+     this page NARROWER than designed. Inner prose caps (.lede, .sec-sub) are separate,
+     so widening the container never widens a line of text. */
+  --maxw:clamp(1080px, 68vw, 1560px);
   --pad:clamp(20px,4.4vw,44px);
   --rail:clamp(0px,4vw,68px);   /* the cable's column, collapses to 0 on phones */
   --r:14px; --r-lg:20px;
@@ -148,7 +154,7 @@ header{
   -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
 }
 .bar{display:flex;align-items:center;justify-content:space-between;gap:14px;
-  max-width:1220px;margin:0 auto;padding:17px var(--pad)}
+  max-width:calc(var(--maxw) + 140px);margin:0 auto;padding:17px var(--pad)}
 .sig{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
   text-decoration:none;white-space:nowrap}
 .sig b{color:var(--ember);font-weight:500}
