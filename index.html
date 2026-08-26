@@ -20,9 +20,16 @@
 <meta name="twitter:title" content="Lilliss IT — small-business IT support, Sydney">
 <meta name="twitter:description" content="One person from fault intake to fix. POS and EFTPOS, Windows, networks, CCTV and AV.">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fonts are served from this origin, not from a font network. That is a
+     deliberate choice, not a micro-optimisation: it means this page makes ZERO
+     third-party requests, so no one but the host sees a visitor's IP — and the
+     privacy policy can state that as a fact rather than disclose an exception.
+     Fraunces, Inter and IBM Plex Mono are all SIL Open Font Licence, which
+     permits redistribution. Latin subset only, 187 KB for all five files.
+     Fraunces and Inter are variable (wght 100-900), so one file covers every
+     weight; IBM Plex Mono is static and needs one file per weight. -->
+<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 
 <script type="application/ld+json">
 {
@@ -41,6 +48,17 @@
 
 <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
 <style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;
+  src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
 :root{
   /* ground + ink — never pure black, never pure white */
   --bg:#05070d; --bg-2:#080b13;
@@ -77,6 +95,10 @@ body{
   font:400 16.5px/1.68 var(--sans);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
+  /* Fraunces carries an optical-size axis whose default is 9 (its smallest
+     design). Stated explicitly rather than left to the initial value, because
+     without it a 116px headline would render the caption-sized drawing. */
+  font-optical-sizing:auto;
 }
 a{color:inherit}
 ::selection{background:var(--ember);color:#140a04}
