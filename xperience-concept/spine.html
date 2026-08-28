@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Span — XperienceSpace | Lilliss IT concept</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="An unsolicited Lilliss IT design concept. One screen: the UAE's space programme as a single span from the 1970s to 2117. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative. Not indexed.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Span — XperienceSpace | Lilliss IT concept">
+<meta property="og:description" content="An unsolicited design concept by Jared Lilliss (Lilliss IT). Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<meta property="og:site_name" content="Lilliss IT">
+<meta name="twitter:card" content="summary">
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     THE SPINE — step 1 of the XperienceSpace rebuild. Brief:
+     XPERIENCE-REBUILD-PLAN-2026-08-27.md
+
+     This is deliberately NOT a page. It is one screen you travel.
+
+     WHY IT EXISTS: the old page failed because it was a document — heading,
+     paragraph, scroll, repeat — while both of Jared's reference sites (k95.it,
+     ode.partners) are image-led and type-quiet. Measured, not described: 67
+     images between them, ~2,400 characters of copy, largest heading 32px.
+     The old page could never get there because build_v3.py forbids the img tag
+     outright. Jared's ruling unlocked it: original imagery he owns is allowed.
+
+     TWO DECISIONS, both taken FROM THE CONTENT rather than from taste:
+
+     1. THE GROUND SHIFTS ALONG THE SPAN. Night-blue at the 1970s end, Mars-rust
+        at 2117. k95's power is one committed colour; here the colour carries the
+        journey, so travelling it feels like going somewhere.
+
+     2. TRUE DATE POSITIONS, NOT EVEN SPACING. Every milestone sits at its real
+        fraction of a 142-year span. The consequence is that everything clusters
+        between 31% and 46% — and then there is NOTHING until 2117. That vast
+        emptiness is the honest shape of the story and the most truthful thing
+        on the screen. Even spacing would have been a lie that looked tidier.
+
+     EVERY OBJECT TRACES TO A VERIFIED FACT (ATELIER-UAE-VERIFY-RULING-2026-08-26).
+     Nothing here is estimated, and the excluded set is excluded on purpose:
+     no 6/21/79 strategy structure (two official UAE sources contradict each
+     other); RETRACTED: no Arkisys (a US company with no documented UAE tie);
+     nothing whose only source is a language model.
+
+     DEGRADES: with JavaScript off this is a plain vertical list carrying every
+     date, name and note. Spatial navigation that strands people is worse than
+     the page it replaces.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+<style>
+/* Self-hosted. The estate loads nothing third-party; do not reintroduce a
+   Google Fonts request. Inter is VARIABLE (one file). */
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url('fonts/plexmono-500.woff2') format('woff2')}
+
+:root{
+  --near:#0C1A5E;      /* the 1970s end — night, Earth */
+  --far:#5A1F1A;       /* 2117 — Mars, rust */
+  --ink:#EEF1F8;
+  --muted:rgba(238,241,248,.52);
+  /* .26 measured about 2.2:1 on the rust ground and 2.3:1 on navy, against a
+     4.5:1 AA requirement - and everything wearing it is CONTENT, not ornament:
+     the note under each milestone, the source line, the gap labels, the hint,
+     and the provenance footer. The quiet look was being paid for by the text
+     that carries the page's honesty claim. */
+  --faint:rgba(238,241,248,.58);
+  --line:rgba(238,241,248,.30);
+  --now:#F2C46A;
+  --sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--near);color:var(--ink);
+  font:400 15px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ── the world ──────────────────────────────────────────────────────────── */
+.world{position:fixed;inset:0;overflow:hidden}
+/* the ground spans the WHOLE rail, not the viewport. If it is viewport-sized
+   the gradient never moves and the colour journey silently does not happen. */
+.ground{
+  position:absolute;top:0;left:0;height:100%;
+  background:linear-gradient(100deg,var(--near) 0%,#141C56 22%,#2B1F4A 48%,#43203A 74%,var(--far) 100%);
+}
+/* Horizon glow and vignette. Without these the top and bottom thirds of the
+   frame were dead space and the emptiness read as BLANK rather than as SPACE.
+   The vignette also darkens behind the fixed chrome, which is why the header
+   and footer sit more comfortably. All drawn - no image asset. */
+.haze{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(128% 44% at 50% 56%, rgba(255,255,255,.085), transparent 68%),
+    linear-gradient(180deg, rgba(0,0,0,.34) 0%, transparent 30%, transparent 60%, rgba(0,0,0,.46) 100%);
+}
+.grain{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:
+    radial-gradient(1px 1px at 18% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 82% 62%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 36% 74%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 8% 58%, rgba(255,255,255,.28), transparent),
+    radial-gradient(1px 1px at 92% 34%, rgba(255,255,255,.3), transparent);
+}
+
+/* ── the rail: everything is positioned along this ──────────────────────── */
+.rail{position:absolute;top:0;left:0;height:100%;will-change:transform}
+.line{
+  position:absolute;top:56%;left:0;height:1px;
+  background:linear-gradient(90deg,var(--faint),var(--line) 30%,var(--line) 70%,rgba(242,196,106,.55));
+}
+
+/* The GLYPH stays on the line - it is the object in space and must sit at its
+   true date. Only the LABEL staggers, alternating above and below, which
+   halves the density where the milestones cluster. A stem ties each label
+   back to its mark so the anchor is never ambiguous. */
+.stop{position:absolute;top:56%;transform:translate(-50%,-50%);text-align:center}
+/* The glyphs ARE the imagery on this page - the only media the provenance
+   rules permit. They were fixed 54-66px marks on a 1536px screen: the media
+   budget existed and was barely spent. Sized here rather than by attribute so
+   they can grow as you arrive. */
+.stop svg{
+  display:block;overflow:visible;margin:0 auto;
+  width:clamp(74px,8.4vw,128px);height:auto;
+  transform-origin:50% 50%;
+  /* scale(), not width: animating width forces relayout AND SVG
+     re-rasterisation for 420ms on every arrival. transform is composited. */
+  transition:transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.stop.on svg{transform:scale(1.82)}
+.txt{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:max-content;max-width:21ch;text-align:center;
+}
+.stop.dn .txt{top:100%;margin-top:20px}
+.stop.up .txt{bottom:100%;margin-bottom:20px}
+.txt::before{content:'';position:absolute;left:50%;width:1px;height:13px;background:var(--faint)}
+.stop.dn .txt::before{bottom:100%;margin-bottom:3px}
+.stop.up .txt::before{top:100%;margin-top:3px}
+/* The display year, shown only on the stop you have arrived at. Revelatio
+   runs 191.92px at weight 400 in one family - proof that size alone carries
+   hierarchy, and that 'one family, one weight' and 'enormous' are not in
+   tension. font-size collapses to 0 rather than display:none so it animates. */
+/* The display year sits on the OPPOSITE side of the horizon from its label, so
+   the stop straddles the line rather than stacking under it. Stacked, a 107px
+   year pushed the focused block off a 750px viewport and collided with the
+   TODAY marker. Straddling also fills the dead top third of the frame.
+   Sized against HEIGHT as well as width - a width-only clamp is what overflowed. */
+.disp{
+  position:absolute;left:50%;white-space:nowrap;
+  font-family:var(--sans);font-weight:500;
+  font-size:0;line-height:0;letter-spacing:-.035em;color:var(--ink);
+  opacity:0;transform:translateX(-50%) translateY(6px);
+  transition:font-size .42s cubic-bezier(.22,.61,.36,1),line-height .42s,
+             opacity .34s ease,transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.stop.dn .disp{bottom:100%;margin-bottom:20px}
+.stop.up .disp{top:100%;margin-top:20px}
+.stop.on .disp{
+  font-size:clamp(42px,min(7vw,13vh),108px);line-height:.94;
+  opacity:1;transform:translateX(-50%);
+}
+.stop.on .txt{max-width:none}
+.stop.on{z-index:3}
+/* arriving brings one milestone forward and lets the rest recede - the
+   'approach an object, it opens' behaviour, and it is also what stops a 112px
+   year colliding with its neighbours' labels. */
+.stop{transition:opacity .4s ease}
+.rail.focusing .stop:not(.on){opacity:.24}
+.stop .yr{
+  display:block;
+  font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted);
+}
+.stop .nm{
+  display:block;margin-top:7px;max-width:19ch;margin-inline:auto;
+  font:500 13px/1.3 var(--sans);letter-spacing:-.005em;color:var(--ink);
+}
+.stop .no{
+  display:block;margin-top:5px;max-width:22ch;margin-inline:auto;
+  font:400 11px/1.4 var(--mono);color:var(--faint);
+}
+.stop.lost .nm{color:rgba(238,241,248,.68)}
+/* The honesty layer, made visible: arriving at a milestone shows where it came
+   from. Every one traces to a named primary source in the 26/08 ruling. */
+/* visibility:hidden, not just clipping: a clipped link is still in the tab
+   order, so tabbing walked into source links on stops nobody could see. */
+.src{
+  display:block;margin-top:0;max-height:0;overflow:hidden;opacity:0;visibility:hidden;
+  font:400 10px/1.5 var(--mono);letter-spacing:.06em;color:var(--faint);
+  transition:opacity .3s ease,max-height .34s ease,margin-top .34s ease,visibility .3s;
+}
+.stop.on .src{opacity:1;visibility:visible;max-height:5em;margin-top:10px}
+.src a{color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(238,241,248,.2)}
+.src a:hover,.src a:focus-visible{color:var(--now);border-color:var(--now)}
+
+.mark{fill:none;stroke:var(--ink);stroke-width:1.25;stroke-linecap:round}
+/* the dashed construction strokes ARE ornament, so they keep the old quiet
+   value rather than following --faint up to a text-legibility level. */
+.mark-soft{fill:none;stroke:rgba(238,241,248,.30);stroke-width:1;stroke-dasharray:2 4}
+.mark-fill{fill:var(--ink);stroke:none}
+.mark-now{stroke:var(--now)}
+.fill-now{fill:var(--now)}
+.mark-far{stroke:#E08A6A}
+.fill-far{fill:#E08A6A}
+
+/* today */
+.today{position:absolute;top:0;height:100%;transform:translateX(-50%);pointer-events:none}
+.today i{position:absolute;top:0;left:50%;height:100%;width:1px;background:linear-gradient(180deg,transparent,rgba(242,196,106,.42) 34%,rgba(242,196,106,.42) 66%,transparent)}
+.today b{
+  position:absolute;bottom:78px;left:50%;transform:translateX(-50%);
+  font:500 10.5px/1 var(--mono);letter-spacing:.24em;color:var(--now);white-space:nowrap;
+}
+
+/* the long emptiness gets one honest label rather than filler */
+/* THE RECORD STEMS. A different object class from a milestone and it must stay
+   that way: hairline, no glyph, no focus swell, always below the horizon. If a
+   stem competed with a milestone the page would lose its hierarchy, and the
+   five-milestones-in-697px cluster that forced the label stagger would worsen. */
+.stem{position:absolute;top:56%;transform:translate(-50%,-20px);text-align:center;
+  width:max-content;max-width:16ch;pointer-events:auto}
+.stem svg{display:block;margin:0 auto 4px;overflow:visible;opacity:.86;
+  width:clamp(48px,4.4vw,68px);height:auto}
+.stem svg .mark{stroke-width:1}
+.stem i{display:block;width:1px;height:20px;margin:0 auto;
+  background:linear-gradient(180deg,rgba(238,241,248,.40),rgba(238,241,248,.10))}
+.stem .sy{display:block;margin-top:8px;font:500 10px/1 var(--mono);
+  letter-spacing:.18em;color:var(--muted)}
+.stem .sn{display:block;margin-top:5px;font:400 11px/1.3 var(--sans);color:var(--faint)}
+.stem .ss{display:block;margin-top:5px;font:400 9px/1.4 var(--mono);color:var(--faint);
+  opacity:0;max-height:0;overflow:hidden;visibility:hidden;
+  transition:opacity .3s ease,max-height .3s ease,visibility .3s}
+.stem:hover .ss,.stem:focus-within .ss{opacity:.9;max-height:4em;visibility:visible}
+.stem .ss a{color:var(--muted)}
+/* COMPACT REGISTER - entered by measurement, see nearestGap(). A dense run of
+   small marks is also the honest picture of that decade: it WAS dense. */
+.stem.tight svg{width:clamp(28px,2.5vw,38px)}
+.stem.tight .sy{writing-mode:vertical-rl;text-orientation:mixed;
+  margin:7px auto 0;letter-spacing:.14em;font-size:9.5px}
+.stem.tight .sn{opacity:0;max-height:0;overflow:hidden;visibility:hidden;margin-top:0;
+  transition:opacity .3s ease,max-height .3s ease,visibility .3s}
+.stem.tight:hover .sn,.stem.tight:focus-within .sn{opacity:1;max-height:4em;
+  visibility:visible;margin-top:6px}
+/* the ending - quiet, and the only place on the span that asks for anything */
+.ending{
+  position:absolute;top:56%;transform:translate(-50%,-50%);
+  width:max-content;max-width:38ch;text-align:center;
+}
+.ending h2{font:500 clamp(21px,2.6vw,32px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.ending p{margin-top:13px;font:400 11.5px/1.65 var(--mono);color:var(--faint)}
+.ending .go{
+  display:inline-block;margin-top:22px;padding:13px 22px;
+  border:1px solid var(--line);border-radius:2px;text-decoration:none;
+  font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink);
+  transition:background .25s ease,border-color .25s ease;
+}
+.ending .go:hover,.ending .go:focus-visible{background:rgba(242,196,106,.12);border-color:var(--now)}
+.ending .sig{margin-top:16px;letter-spacing:.16em}
+.gap{
+  position:absolute;top:calc(56% - 74px);transform:translateX(-50%);
+  font:400 11px/1.5 var(--mono);letter-spacing:.16em;color:var(--faint);
+  text-align:center;white-space:nowrap;
+}
+
+/* ── chrome: almost none ────────────────────────────────────────────────── */
+.top{
+  position:fixed;top:0;left:0;right:0;z-index:5;
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+  padding:22px clamp(16px,3vw,34px);pointer-events:none;
+}
+/* The travel easing already honoured this; the glyph-scaling and display-year
+   transitions added later did not, so a reduced-motion user still got 0.42s of
+   animation on every arrival. */
+@media (prefers-reduced-motion: reduce){
+  .stop svg,.disp,.src,.stop,.ending .go{transition:none !important}
+  .hint{animation:none}
+}
+@media (max-width:620px){
+  .who{font-size:11px;letter-spacing:.16em}
+  .who span{font-size:9.5px;letter-spacing:.12em}
+  .count{font-size:10px;letter-spacing:.12em}
+  .foot{max-width:30ch;font-size:9.5px}
+}
+.who{font:500 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.who span{color:var(--faint);display:block;margin-top:7px;font-size:10px;letter-spacing:.16em}
+.count{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--muted)}
+
+.hint{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
+  font:500 10.5px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--faint);pointer-events:none;
+  animation:fade 5s ease 3s forwards;
+}
+@keyframes fade{to{opacity:0}}
+
+.scrub{
+  position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);bottom:0;height:44px;z-index:6;
+  display:flex;align-items:center;
+}
+.scrub input{
+  -webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--faint),rgba(242,196,106,.5));outline:none;cursor:ew-resize;
+}
+.scrub input::-webkit-slider-thumb{
+  -webkit-appearance:none;width:2px;height:15px;border-radius:1px;
+  background:var(--now);border:0;cursor:grab;
+}
+.scrub input::-moz-range-thumb{width:2px;height:15px;border-radius:1px;background:var(--now);border:0}
+.scrub input:focus-visible{outline:2px solid var(--now);outline-offset:6px}
+
+.foot{
+  position:fixed;right:clamp(18px,3vw,34px);bottom:52px;z-index:5;
+  max-width:44ch;text-align:right;
+  font:400 10.5px/1.55 var(--mono);color:var(--faint);
+}
+
+/* ── no-JS: everything becomes a plain readable list ────────────────────── */
+/* visually hidden but present in the accessibility tree - NOT display:none,
+   which would remove it exactly as the fallback's own h1 was removed. */
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap;border:0}
+/* THE ENTRANCE. Covers a real font fetch, not a manufactured wait.
+   .no-js hides it outright: with JS off nothing would ever remove it, and an
+   overlay that cannot clear is worse than no overlay. */
+.boot{position:fixed;inset:0;z-index:30;background:var(--near);
+  display:grid;place-items:center;
+  transition:opacity .55s ease,visibility .55s}
+.boot.done{opacity:0;visibility:hidden;pointer-events:none}
+.no-js .boot{display:none}
+.boot svg{width:clamp(120px,17vw,190px);height:auto;overflow:visible}
+.boot-ring{fill:none;stroke:var(--ink);stroke-width:1.1;opacity:.55;
+  stroke-dasharray:236;stroke-dashoffset:236;
+  animation:bootdraw 1.9s cubic-bezier(.4,0,.2,1) infinite}
+.boot-core{fill:var(--ink);opacity:.9}
+.boot-dot{fill:var(--now);animation:bootorbit 1.9s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes bootdraw{0%{stroke-dashoffset:236}55%{stroke-dashoffset:0}
+  100%{stroke-dashoffset:-236}}
+@keyframes bootorbit{0%{opacity:0;transform:translateX(0)}
+  20%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateX(-104px)}}
+@media (prefers-reduced-motion: reduce){
+  .boot-ring,.boot-dot{animation:none}
+  .boot-ring{stroke-dashoffset:0}
+}
+.fallback{display:none}
+.fallback .fb-h{font:600 30px/1.15 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.fallback .s{display:block;margin-top:5px;font:400 10.5px/1.5 var(--mono);color:var(--faint)}
+.fallback .s a{color:var(--muted)}
+.no-js body{overflow:auto}
+.no-js .world,.no-js .hint,.no-js .scrub{display:none}
+.no-js .fallback{
+  display:block;max-width:66ch;margin:0 auto;padding:56px clamp(18px,4vw,28px) 80px;
+}
+.no-js .fallback h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.no-js .fallback .sub{color:var(--muted);margin-bottom:34px}
+.no-js .fallback li{list-style:none;padding:16px 0;border-top:1px solid rgba(238,241,248,.14)}
+.no-js .fallback .y{font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted)}
+.no-js .fallback .n{display:block;margin-top:6px;font-weight:600}
+.no-js .fallback .d{display:block;margin-top:4px;color:var(--faint);font-size:13px}
+
+@media (prefers-reduced-motion:reduce){
+  .rail{transition:none!important}
+  .hint{animation:none}
+}
+</style>
+</head>
+<body class="no-js">
+<script>document.body.classList.remove('no-js')</script>
+
+<!-- The entrance. Tied to document.fonts.ready because that is a REAL wait on
+     this page (inter.woff2 is 34KB plus two Plex Mono weights); it is not a
+     fake loader holding an instant page back to look busy. The figure is the
+     orbit ellipse the Hope Probe milestone already uses - the closest thing
+     this page has to an emblem. Never shown with JS off, so it can never
+     cover the static fallback with something that cannot clear itself. -->
+<div class="boot" id="boot" aria-hidden="true">
+  <svg viewBox="0 0 120 76" role="presentation">
+    <ellipse class="boot-ring" cx="60" cy="38" rx="52" ry="22"/>
+    <circle class="boot-core" cx="60" cy="38" r="4"/>
+    <circle class="boot-dot" cx="112" cy="38" r="3"/>
+  </svg>
+</div>
+
+<!-- The interactive view had NO heading and NO landmark: the only h1 lived in
+     .fallback, which display:none removes from the accessibility tree the moment
+     JS runs. Visually hidden, but present for assistive tech. -->
+<h1 class="sr">The Span — the UAE’s space programme, from the 1970s to 2117</h1>
+
+<header class="top">
+  <p class="who">XperienceSpace<span>A Lilliss IT concept &middot; not affiliated</span></p>
+  <p class="count" id="count">SPAN 1970s&ndash;2117</p>
+</header>
+
+<main class="world" id="world">
+  <div class="rail" id="rail">
+    <div class="ground" id="ground"></div>
+    <div class="line" id="line"></div>
+  </div>
+  <!-- stars sit ABOVE the ground. When .ground moved into .rail it became an
+       opaque gradient painted over .grain, and the starfield silently vanished. -->
+  <div class="grain"></div>
+  <div class="haze"></div>
+</main>
+
+<p class="hint">drag &middot; scroll &middot; &larr; &rarr;</p>
+
+<div class="scrub">
+  <input type="range" id="scrub" min="0" max="1000" value="0"
+         aria-label="Travel the span from the 1970s to 2117">
+</div>
+
+<p class="foot">
+  An unsolicited concept restyling public content from xperiencespace.com.
+  Not affiliated with, endorsed by, or commissioned by the XperienceSpace
+  Initiative. Every date shown is sourced; nothing is estimated.
+</p>
+
+<!-- Everything above is enhancement. This is the page without JavaScript. -->
+<div class="fallback">
+  <p class="fb-h">The Span</p>
+  <p class="sub">The UAE&rsquo;s space programme, from the 1970s to 2117. Every date
+    below is drawn from a named primary source.</p>
+  <!-- STATIC on purpose. This list was previously built by STOPS.forEach() in
+       the same script that is absent when this fallback is needed, so with JS
+       off the page printed "Every date below is drawn from a named primary
+       source" above an EMPTY list. A no-JS path built by JS is not a no-JS
+       path. Generated from the page's own STOPS/SRC data - if you edit those,
+       re-run scratchpad/atelier/fix_spine_nojs.py or the two WILL drift. -->
+    <ul id="fb">
+      <li><span class="y">THE 1970s</span><span class="n">A meeting with NASA’s Apollo team</span><span class="d">The Agency names no year</span><span class="s">Source: <a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">UAE Cabinet portal ↗</a></span></li>
+      <li><span class="y">2009</span><span class="n">DubaiSat‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2013</span><span class="n">DubaiSat‑2</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2017</span><span class="n">Nayif‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2018</span><span class="n">KhalifaSat</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">11 MAR 2019</span><span class="n">National Space Strategy 2030</span><span class="d">Cabinet approved</span><span class="s">Source: <a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Government Media Office ↗</a></span></li>
+      <li><span class="y">2020</span><span class="n">Hope Probe launch</span><span class="d">Emirates Mars Mission, MBRSC</span><span class="s">Source: <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC ↗</a></span></li>
+      <li><span class="y">9 FEB 2021</span><span class="n">Hope Probe enters Mars orbit</span><span class="d">First Arab nation to reach Mars</span><span class="s">Source: <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC ↗</a></span></li>
+      <li><span class="y">2022</span><span class="n">Rashid‑1 launch</span><span class="d">Emirates Lunar Mission, MBRSC</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
+      <li><span class="y">25 APR 2023</span><span class="n">Rashid‑1</span><span class="d">Lost — the lander failed to touch down</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
+      <li><span class="y">14 JAN 2025</span><span class="n">MBZ‑Sat</span><span class="d">MBRSC’s national satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
+      <li><span class="y">2028</span><span class="n">Emirates Mission to the Asteroid Belt</span><span class="d">Launch</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2030</span><span class="n">First main‑belt fly‑by</span><span class="d">Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2033</span><span class="n">Landing on an asteroid</span><span class="d">Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2117</span><span class="n">Mars</span><span class="d">The horizon</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/uae-future" target="_blank" rel="noopener noreferrer">u.ae — the UAE in the future ↗</a></span></li>
+    </ul>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── THE FACTS. Every one verified 26/08/2026 against a named primary source
+        (ATELIER-UAE-VERIFY-RULING-2026-08-26.md). `at` is the real year, so
+        positions are true rather than tidy. `mark` names the drawn form; each
+        one means something about its own event rather than decorating it. ── */
+  var ORIGIN = 1975, END = 2117;
+  var STOPS = [
+    {at:1975, yr:'THE 1970s', nm:'A meeting with NASA’s Apollo team',
+     no:'The Agency names no year', mark:'contact'},
+    {at:2019, yr:'11 MAR 2019', nm:'National Space Strategy 2030',
+     no:'Cabinet approved', mark:'frame'},
+    {at:2021, yr:'9 FEB 2021', nm:'Hope Probe enters Mars orbit',
+     no:'First Arab nation to reach Mars', mark:'orbit'},
+    {at:2023, yr:'25 APR 2023', nm:'Rashid‑1', no:'Lost — the lander failed to touch down',
+     mark:'descent', lost:true},
+    {at:2025, yr:'14 JAN 2025', nm:'MBZ‑Sat', no:'MBRSC’s national satellite programme',
+     mark:'track'},
+    {at:2028, yr:'2028', nm:'Emirates Mission to the Asteroid Belt',
+     no:'Launch', mark:'loop'},
+    {at:2117, yr:'2117', nm:'Mars', no:'The horizon', mark:'mars', far:true}
+  ];
+
+  var NOW = new Date().getFullYear();
+  var SPAN = END - ORIGIN;
+  var frac = function(y){ return (y - ORIGIN) / SPAN; };
+
+  /* the drawn forms. no clip art: each is a line that means its own event. */
+  /* THE RECORD. Sourced facts the page owns and had never drawn - a different
+     object class from a milestone: hairlines, no focus, no swell. Both are in
+     the 26/08 ruling's verified table on ONE source, mbrsc.ae/satellites/.
+     Two, deliberately, not eight: this tests whether a stem reads as WORK
+     before six more follow. */
+  var RECORD = [
+    {at:2009, nm:'DubaiSat‑1',              mk:'sat', own:'MBRSC satellite programme'},
+    {at:2013, nm:'DubaiSat‑2',              mk:'sat', own:'MBRSC satellite programme'},
+    /* u.ae, read directly 28/08: "first fly-by of a main asteroid belt object
+       in 2030" and "final landing on an asteroid ... in 2033".
+       RETRACTED: the 2034 date reported elsewhere is NOT used - u.ae says 2033. */
+    {at:2017, nm:'Nayif‑1',                mk:'sat', own:'MBRSC satellite programme'},
+    {at:2018, nm:'KhalifaSat',             mk:'sat', own:'MBRSC satellite programme'},
+    {at:2020, nm:'Hope Probe launch',      mk:'lch', own:'Emirates Mars Mission, MBRSC'},
+    {at:2022, nm:'Rashid‑1 launch',        mk:'lch', own:'Emirates Lunar Mission, MBRSC'},
+    {at:2030, nm:'First main‑belt fly‑by', mk:'ast', own:'Emirates Mission to the Asteroid Belt, UAE Space Agency'},
+    {at:2033, nm:'Landing on an asteroid',  mk:'ast', own:'Emirates Mission to the Asteroid Belt, UAE Space Agency'}
+  ];
+
+  /* EXPLICIT, never derived. The Agency names no year for the NASA meeting, and
+     Space City is a range - deriving a number from either would invent the
+     precision this page exists to refuse. */
+  var BIG = {1975:'1970s', 2019:'2019', 2021:'2021', 2023:'2023',
+             2025:'2025', 2028:'2028', 2117:'2117'};
+
+  /* Primary sources, taken from the 26/08 verify ruling's own verified table.
+     Where the ruling names a source but gives no URL (Rashid-1), the source is
+     NAMED and NOT linked - inventing a plausible link is the same failure as
+     inventing a date. */
+  var SRC = {
+    1975:['UAE Cabinet portal','https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency'],
+    2019:['UAE Government Media Office','https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030'],
+    2021:['MBRSC','https://www.mbrsc.ae/about/'],
+    2023:['MBRSC — Emirates Lunar Mission',''],
+    2009:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2013:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2017:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2018:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2020:['MBRSC','https://www.mbrsc.ae/about/'],
+    2022:['MBRSC — Emirates Lunar Mission',''],
+    2025:['MBRSC satellite programme','https://www.mbrsc.ae/satellites/'],
+    2028:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
+    2030:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
+    2033:['u.ae — Projects of the 50','https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028'],
+    2117:['u.ae — the UAE in the future','https://u.ae/en/about-the-uae/uae-in-the-future/uae-future']
+  };
+
+  function srcHTML(at){
+    var v = SRC[at]; if (!v) return '';
+    return v[1]
+      ? 'Source: <a href="' + v[1] + '" target="_blank" rel="noopener noreferrer">' + v[0] + ' ↗</a>'
+      : 'Source: ' + v[0];
+  }
+
+  /* The stem glyph. Small on purpose - a stem must stay a different object
+     class from a milestone - but a GLYPH, because a hairline alone read as an
+     axis tick when it was captured and judged. Body plus two panels: a
+     satellite is what these two entries are. */
+  var STEMMARK = '<svg width="34" height="20" viewBox="0 0 34 20">'+
+    '<rect class="mark" x="14" y="6" width="6" height="8"/>'+
+    '<path class="mark" d="M14 10H4M20 10h10"/>'+
+    '<path class="mark-soft" d="M4 6v8M30 6v8"/></svg>';
+
+  /* An irregular body, for asteroid encounters. A stem must depict what it IS
+     or depict nothing - reusing the satellite glyph for a fly-by would be a
+     small lie of exactly the kind this page exists to avoid. */
+  var STEMMARK_AST = '<svg width="34" height="20" viewBox="0 0 34 20">'+
+    '<path class="mark" d="M12 4l7-1 6 4 1 7-5 4-8-1-4-6z"/>'+
+    '<path class="mark-soft" d="M2 10h8M26 10h6"/></svg>';
+
+  /* An ascent, for launches. Neither a satellite nor an asteroid. */
+  var STEMMARK_LCH = '<svg width="34" height="20" viewBox="0 0 34 20">'+
+    '<path class="mark" d="M4 18C12 18 20 12 28 2"/>'+
+    '<circle class="mark-fill" cx="28" cy="2" r="2"/>'+
+    '<path class="mark-soft" d="M2 18h12"/></svg>';
+
+  var MARKS = {
+    contact: '<svg width="54" height="54" viewBox="0 0 54 54"><circle class="mark" cx="27" cy="27" r="5"/>'+
+             '<path class="mark-soft" d="M27 22V4M27 32v18M22 27H4M32 27h18"/></svg>',
+    frame:   '<svg width="54" height="54" viewBox="0 0 54 54"><path class="mark" d="M14 12h-6v30h6M40 12h6v30h-6"/>'+
+             '<path class="mark-soft" d="M27 16v22"/></svg>',
+    orbit:   '<svg width="60" height="54" viewBox="0 0 60 54"><ellipse class="mark" cx="30" cy="27" rx="26" ry="11"/>'+
+             '<circle class="mark-fill" cx="30" cy="27" r="3.5"/><circle class="mark-fill" cx="56" cy="27" r="2"/></svg>',
+    descent: '<svg width="54" height="54" viewBox="0 0 54 54"><path class="mark" d="M6 6C18 18 26 28 32 38"/>'+
+             '<path class="mark-soft" d="M4 46h46"/><path class="mark" d="M28 42l8 8M36 42l-8 8"/></svg>',
+    track:   '<svg width="62" height="54" viewBox="0 0 62 54"><path class="mark" d="M4 34C14 16 24 16 31 27s17 11 27-7"/>'+
+             '<circle class="mark-fill" cx="31" cy="27" r="2.5"/></svg>',
+    loop:    '<svg width="62" height="54" viewBox="0 0 62 54"><path class="mark" d="M6 40C6 18 26 8 40 18s10 26-4 26-16-16-4-22"/>'+
+             '<circle class="mark-fill" cx="56" cy="16" r="2"/></svg>',
+    mars:    '<svg width="66" height="66" viewBox="0 0 66 66"><circle class="mark mark-far" cx="33" cy="33" r="19"/>'+
+             '<path class="mark-soft" d="M14 33h38"/><circle class="fill-far" cx="33" cy="33" r="4"/></svg>'
+  };
+
+  var rail = document.getElementById('rail');
+  var world = document.getElementById('world');
+  var scrub = document.getElementById('scrub');
+  var count = document.getElementById('count');
+
+  /* the span is deliberately much wider than the screen: travelling it should
+     take real distance, because the subject is 142 years long. */
+  /* max(200, innerWidth/2): the focus test is |stop - centre| < innerWidth*0.26,
+     and at x=0 the centre is innerWidth/2. With PAD fixed at 200 the FIRST
+     milestone sat 568px from centre against a 399px threshold at 1536 - it
+     could never be focused on any viewport wider than ~833px. One of seven
+     stops was unreachable on every desktop. Everything positions off PAD, so
+     the span shifts uniformly and nothing else needs to change. */
+  var PAD  = Math.max(200, Math.round(innerWidth / 2));                       /* breathing room at both ends: the first
+                                           stop sat at x=0 and translate(-50%) put
+                                           half of it off-screen. */
+  /* 11000px puts the dense 2019-2030 decade at roughly one screenful, so it
+     reads as a cluster you can stop inside. At the old 6400 those stops were
+     90px apart and collided in five places. */
+  var SPANPX = Math.max(11000, innerWidth * 7);
+  var ENDPAD = 720;                     /* room past 2117 for the ending, which
+                                           you should ARRIVE at rather than read
+                                           in a fixed footer. */
+  var WIDE = SPANPX + PAD + ENDPAD;
+
+  var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
+
+  function build(){
+    rail.setAttribute('role', 'list');
+    rail.setAttribute('aria-label', 'Milestones, earliest to latest');
+    rail.style.width = WIDE + 'px';
+    /* the line IS the span, so it ends at 2117 rather than running the full
+       rail. It was striking through the ending's text; stopping it there also
+       marks where the subject ends and the author begins. */
+    document.getElementById('line').style.width = (PAD + SPANPX) + 'px';
+    /* wider than the rail on purpose: measure() allows 240px of overtravel past
+       WIDE, and without the margin the body background shows through as a hard
+       navy strip at the Mars end. */
+    document.getElementById('ground').style.width = (WIDE + 480) + 'px';
+
+    STOPS.forEach(function(s, i){
+      var el = document.createElement('div');
+      /* alternate the label lane: chronological order, so consecutive
+         milestones never share a side and the dense decade halves. */
+      el.className = 'stop ' + (i % 2 ? 'up' : 'dn') + (s.lost ? ' lost' : '');
+      /* the span is painted as a landscape but must still be navigable as a
+         list. One sentence per stop, so a screen reader gets the milestone
+         whole rather than three orphaned fragments. */
+      el.setAttribute('role', 'listitem');
+      el.setAttribute('aria-label', s.yr + '. ' + s.nm + '. ' + s.no + '.');
+      el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
+      el.innerHTML = MARKS[s.mark] +
+        '<b class="disp">' + (BIG[s.at] || s.at) + '</b>' +
+        '<span class="txt">' +
+          '<b class="yr">' + s.yr + '</b>' +
+          '<b class="nm">' + s.nm + '</b>' +
+          '<b class="no">' + s.no + '</b>' +
+          '<b class="src">' + srcHTML(s.at) + '</b>' +
+        '</span>';
+      rail.appendChild(el);
+      STOPEL.push({el:el, at:PAD + frac(s.at) * SPANPX});
+    });
+
+    /* today */
+    var t = document.createElement('div');
+    t.className = 'today';
+    t.style.left = (PAD + frac(NOW) * SPANPX) + 'px';
+    t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
+    rail.appendChild(t);
+
+    /* The ending. One action, one address. Placed past the last milestone so it
+       is somewhere you arrive, not a footer you were always looking at.
+       jaredlils99@gmail.com deliberately: contact@lilliss.au was submitted twice
+       and never minted, so it does not exist, and index.html already uses this. */
+    var e = document.createElement('div');
+    e.className = 'ending';
+    e.style.left = (PAD + SPANPX + 350) + 'px';
+    e.innerHTML =
+      '<h2>A concept, not a proposal.</h2>' +
+      '<p>Every milestone on this span is a public fact with a named source, set at its ' +
+      'true place in 142 years. Nothing here is affiliated with, endorsed by, or ' +
+      'commissioned by the XperienceSpace Initiative, and nothing on this page reaches them.</p>' +
+      '<a class="go" href="mailto:jaredlils99@gmail.com?subject=XperienceSpace%20concept%20%E2%80%94%20The%20Span">Write to the author</a>' +
+      '<p class="sig">Jared Lilliss &middot; Lilliss IT</p>';
+    rail.appendChild(e);
+
+    /* CROWDING IS MEASURED, NOT ASSUMED. 2017-2023 sit at 77px intervals, where
+       a horizontal stem label lands INSIDE its neighbour's and inside the 159px
+       milestone labels. Each stem measures its distance to the nearest other
+       dated item and drops to a compact register below 130px: smaller glyph,
+       vertical year, name held until hover. Nothing hardcoded, so it adapts if
+       the span width or the record changes. */
+    var ALLX = STOPS.concat(RECORD).map(function(o){ return PAD + frac(o.at) * SPANPX; });
+    function nearestGap(x){
+      var best = Infinity;
+      ALLX.forEach(function(v){ var d = Math.abs(v - x); if (d > 0.5 && d < best) best = d; });
+      return best;
+    }
+
+    /* the record stems, drawn quieter than the milestones */
+    RECORD.forEach(function(r){
+      var el = document.createElement('div');
+      el.className = 'stem';
+      el.setAttribute('role', 'listitem');
+      /* The owner comes from the entry, never from a literal. Hardcoding it here
+         announced every stem as "MBRSC satellite programme" - including the two
+         Emirates Mission to the Asteroid Belt entries, which the ruling assigns to
+         the UAE Space Agency. The visible layer was right the whole time; only the
+         layer nobody screenshots was wrong. */
+      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. ' + r.own + '.');
+      var rx = PAD + frac(r.at) * SPANPX;
+      el.style.left = rx + 'px';
+      if (nearestGap(rx) < 130) el.classList.add('tight');
+      var mk = r.mk === 'ast' ? STEMMARK_AST : (r.mk === 'lch' ? STEMMARK_LCH : STEMMARK);
+      el.innerHTML = mk + '<i></i>' +
+        '<b class="sy">' + r.at + '</b>' +
+        '<b class="sn">' + r.nm + '</b>' +
+        '<b class="ss">' + srcHTML(r.at) + '</b>';
+      rail.appendChild(el);
+    });
+
+    /* ONE gap label, DERIVED rather than hardcoded. Both previous labels were
+       deleted 27/08 for being FALSE against this page's own ruling. This one is
+       computed from the last dated item before 2117, so it cannot go stale the
+       way a hardcoded string did - and it is TRUE: checked against the ruling's
+       verified table, nothing is sourced between 2033 and 2117. */
+    var lastBefore = 0;
+    STOPS.concat(RECORD).forEach(function(o){ if (o.at < END && o.at > lastBefore) lastBefore = o.at; });
+    if (END - lastBefore > 40) {
+      var g = document.createElement('p');
+      g.className = 'gap';
+      g.style.left = (PAD + (frac(lastBefore) + frac(END)) / 2 * SPANPX) + 'px';
+      g.textContent = (END - lastBefore) + ' YEARS \u00b7 NOTHING FURTHER SOURCED';
+      rail.appendChild(g);
+    }
+
+    /* THE OTHER VOID IS DELIBERATELY UNLABELLED.
+       They used to carry "NOTHING SOURCED IN BETWEEN" (1975-2019) and
+       "89 YEARS · NOTHING ELSE SOURCED IN BETWEEN" (2028-2117). BOTH WERE
+       FALSE against this page's own verify ruling: §3 sources DubaiSat-1
+       (2009), DubaiSat-2 (2013), Nayif-1 (2017) and KhalifaSat (2018) inside
+       the first, and a Venus flyby 2028 / Earth 2029 / first asteroid flyby
+       2030 inside the second.
+       On a page that ends "Every date shown is sourced; nothing is estimated",
+       asserting an absence of sources the ruling contradicts is the worst
+       error available. An unlabelled gap asserts nothing. These return only
+       when derived from the data rather than hardcoded. */
+  }
+
+  /* ── travel ──────────────────────────────────────────────────────────── */
+  var x = 0, target = 0, maxX = 0, raf = 0, FOCUS = null;
+
+  function clampX(v){ return Math.max(0, Math.min(maxX, v)); }
+
+  function paint(){
+    raf = 0;
+    x += (target - x) * (REDUCED ? 1 : 0.12);
+    if (Math.abs(target - x) < 0.5) x = target;
+    rail.style.transform = 'translateX(' + (-x) + 'px)';
+    var p = maxX ? Math.min(1, Math.max(0, (x + innerWidth / 2 - PAD) / SPANPX)) : 0;
+    var yr = Math.round(ORIGIN + p * SPAN);
+    /* This is a POSITION, not a range. Written as an arrow it read as a span
+       starting in 1982, contradicting 'THE 1970s' on screen beneath it. */
+    /* narrow screens drop the span half - it will not fit beside the wordmark in
+       339px. The PROVENANCE sub-line is never touched at any width. */
+    var lbl = (yr <= 1979 ? 'THE 1970s' : yr);
+    /* the readout counts what is DRAWN, milestones + record */
+    count.textContent = innerWidth < 620 ? ('AT ' + lbl)
+                                         : ('AT ' + lbl + '  ·  SPAN 1970s–2117');
+    if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
+    /* without this it announces "0 to 1000, currently 359", which is not a
+       fact about anything a listener can use. */
+    scrub.setAttribute('aria-valuetext', yr <= 1979 ? 'the 1970s' : String(yr));
+
+    /* whichever milestone is nearest the centre of the screen is the one you
+       have arrived at. Within roughly a quarter-screen, or nothing is focused -
+       crossing the empty stretches should feel empty. */
+    var centre = x + innerWidth / 2, near = null, best = innerWidth * 0.26;
+    for (var i = 0; i < STOPEL.length; i++) {
+      var d = Math.abs(STOPEL[i].at - centre);
+      if (d < best) { best = d; near = STOPEL[i].el; }
+    }
+    if (near !== FOCUS) {
+      if (FOCUS) FOCUS.classList.remove('on');
+      if (near) near.classList.add('on');
+      rail.classList.toggle('focusing', !!near);
+      FOCUS = near;
+    }
+    if (x !== target) queue();
+  }
+  function queue(){ if (!raf) raf = requestAnimationFrame(paint); }
+  function go(v){ target = clampX(v); queue(); }
+
+  function measure(){
+    maxX = Math.max(0, WIDE - innerWidth + 240);
+    target = clampX(target); x = clampX(x); queue();
+  }
+
+  world.addEventListener('wheel', function(e){
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+    e.preventDefault();
+    go(target + d * 1.5);
+  }, {passive:false});
+
+  var down = false, startX = 0, startT = 0;
+  world.addEventListener('pointerdown', function(e){
+    down = true; startX = e.clientX; startT = target;
+    world.setPointerCapture(e.pointerId);
+  });
+  world.addEventListener('pointermove', function(e){
+    if (!down) return;
+    go(startT - (e.clientX - startX) * 1.6);
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    world.addEventListener(ev, function(){ down = false; });
+  });
+
+  addEventListener('keydown', function(e){
+    var step = innerWidth * 0.55;
+    if (e.key === 'ArrowRight'){ e.preventDefault(); go(target + step); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(target - step); }
+    else if (e.key === 'Home'){ e.preventDefault(); go(0); }
+    else if (e.key === 'End'){ e.preventDefault(); go(maxX); }
+  });
+
+  scrub.addEventListener('input', function(){
+    target = x = clampX(scrub.value / 1000 * maxX);
+    queue();
+  });
+
+  addEventListener('resize', measure, {passive:true});
+
+  /* The no-JS list is STATIC HTML above - deliberately not built here.
+     It used to be generated by this script, which meant the fallback did
+     not exist in the only situation it was for. */
+
+  /* Leave the moment the REAL wait ends - the font fetch - with a hard ceiling
+     so a promise that never resolves can never trap anyone behind the overlay. */
+  (function(){
+    var boot = document.getElementById('boot');
+    if (!boot) return;
+    var gone = false;
+    function clear(){ if (gone) return; gone = true; boot.classList.add('done'); }
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+      document.fonts.ready.then(function(){ setTimeout(clear, 240); });
+    } else {
+      setTimeout(clear, 500);
+    }
+    setTimeout(clear, 2600);          /* hard ceiling, always */
+    addEventListener('keydown', clear, {once:true});
+    addEventListener('pointerdown', clear, {once:true});
+  })();
+
+  build();
+  measure();
+  /* Deep link: ?at=2021 opens centred on that milestone, ?at=start at the
+     beginning, ?at=end at the ending. A span you travel is exactly the kind of
+     page where you want to hand someone a moment rather than say "drag right
+     for a while", and it makes every position reachable without dragging at
+     all - which matters for anyone who cannot.
+     The year is validated and clamped: ?at=9999 lands at the end rather than
+     off the rail, ?at=anything-else parses to NaN and is ignored, and the value
+     is never written into the DOM. */
+  function deepLink(){
+    var m = /[?&]at=([^&]+)/.exec(location.search);
+    if (!m) return null;
+    var v = decodeURIComponent(m[1]).toLowerCase();
+    if (v === 'start') return 0;
+    if (v === 'end')   return maxX;
+    var y = parseInt(v, 10);
+    if (!y || y < ORIGIN || y > END) return null;
+    return clampX(PAD + frac(y) * SPANPX - innerWidth / 2);
+  }
+
+  /* Otherwise land in the PRESENT. Opening at 1975 meant the first thing anyone
+     saw was four empty decades, which reads as unfinished rather than vast.
+     From TODAY the 1970s are behind you and Mars is ahead. */
+  var LINKED = deepLink();
+  x = target = (LINKED === null)
+    ? clampX(PAD + frac(NOW) * SPANPX - innerWidth / 2)
+    : LINKED;
+  paint();
+})();
+</script>
+</body>
+</html>
