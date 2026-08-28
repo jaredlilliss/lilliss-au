@@ -355,8 +355,8 @@ body{
 .fallback .s{display:block;margin-top:5px;font:400 10.5px/1.5 var(--mono);color:var(--faint)}
 .fallback .s a{color:var(--muted)}
 /* body.no-js, NOT .no-js body. The descendant form needs an ANCESTOR carrying
-     the class, and <body> IS the element carrying it - nothing is its own
-     ancestor, and body's only ancestor is <html>, which has no class. So the
+     the class, and the body element ITSELF carries it - nothing is its own
+     ancestor, and its only ancestor is the html element, which has no class. So the
      rule never matched, `overflow:hidden` stood, and a reader with JavaScript
      off got the sourced fallback list rendered correctly and COULD NOT SCROLL
      past the first screen of it.
