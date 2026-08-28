@@ -886,7 +886,11 @@ footer b{color:var(--dim)}
   function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
   var cv=document.getElementById("stars"),cx=cv.getContext("2d"),stars=[],W=0,H=0;
   function sizeCanvas(){
-    var dpr=Math.min(devicePixelRatio||1,3);
+    /* 3 -> 2. At DPR 3 a 1920x1080 viewport is a 5760x3240 backing store,
+       repainted every frame for points a few pixels across. Not taken to the
+       1.5 used on the gradient scenes elsewhere - those lose nothing to
+       resolution and small bright points do. */
+    var dpr=Math.min(devicePixelRatio||1,2);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
     cv.style.width=W+"px";cv.style.height=H+"px";
     cx.setTransform(dpr,0,0,dpr,0,0);
@@ -917,10 +921,23 @@ footer b{color:var(--dim)}
     }
     cx.globalAlpha=1;
   }
-  var raf;
-  function loop(ts){drawStars(ts);raf=requestAnimationFrame(loop)}
+  var raf,starsRunning=false;
+  function loop(ts){
+    if(!starsRunning||document.hidden){starsRunning=false;return;}
+    drawStars(ts);raf=requestAnimationFrame(loop);
+  }
+  function starsStart(){
+    if(starsRunning||reduced||document.hidden)return;
+    starsRunning=true;raf=requestAnimationFrame(loop);
+  }
   seedStars();
-  if(reduced){drawStars(0);}else{raf=requestAnimationFrame(loop);}
+  /* #stars is position:fixed and always on screen, so a viewport gate would
+     buy nothing - but nothing stopped it when the TAB was hidden either, so
+     it painted a full-viewport starfield for as long as the tab existed. */
+  addEventListener("visibilitychange",function(){
+    if(document.hidden){starsRunning=false;}else{starsStart();}
+  });
+  if(reduced){drawStars(0);}else{starsStart();}
   var rsz;addEventListener("resize",function(){clearTimeout(rsz);rsz=setTimeout(function(){seedStars();if(reduced)drawStars(0);},160)});
 
   /* ---------- scroll: rail + HUD ---------- */
@@ -1048,14 +1065,37 @@ footer b{color:var(--dim)}
     sg.addColorStop(0,'rgba(233,188,106,.85)');sg.addColorStop(1,'rgba(233,188,106,0)');
     x.fillStyle=sg;x.fillRect(sx2-9*DPR,sy2-9*DPR,18*DPR,18*DPR);
     x.fillStyle='#F2DFB4';x.fillRect(sx2-1.4*DPR,sy2-1.4*DPR,2.8*DPR,2.8*DPR);
-    if(!SG_RED)requestAnimationFrame(frame);
+    if(!SG_RED&&sgRunning&&!document.hidden)requestAnimationFrame(frame);
+    else sgRunning=false;
   }
   build();
   var sgRs;addEventListener('resize',function(){
     clearTimeout(sgRs);
     sgRs=setTimeout(function(){build(true);if(SG_RED)frame(0)},180);
   });
-  if(SG_RED)frame(0);else requestAnimationFrame(frame);
+  /* #scene sits inside #pad - the FIRST section. It rebuilt four radial
+     gradients every frame while the reader was metres further down the page.
+     Gated on its own container being near the viewport, and on the tab being
+     visible. Degrades to the previous always-on behaviour where
+     IntersectionObserver is missing - to the old cost, never to a blank hero. */
+  var sgRunning=false,sgVisible=true;
+  function sgStart(){
+    if(sgRunning||SG_RED||document.hidden||!sgVisible)return;
+    sgRunning=true;requestAnimationFrame(frame);
+  }
+  try{
+    var pad=document.getElementById('pad');
+    if(window.IntersectionObserver&&pad){
+      sgVisible=false;
+      new IntersectionObserver(function(recs){
+        sgVisible=recs[0].isIntersecting;sgStart();
+      },{rootMargin:'150px'}).observe(pad);
+    }
+  }catch(e){sgVisible=true;}
+  addEventListener('visibilitychange',function(){
+    if(document.hidden){sgRunning=false;}else{sgStart();}
+  });
+  if(SG_RED)frame(0);else{frame(0);sgStart();}
 })();
 </script>
 </body>

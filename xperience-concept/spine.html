@@ -354,7 +354,15 @@ body{
 .fallback .fb-h{font:600 30px/1.15 var(--sans);letter-spacing:-.02em;color:var(--ink)}
 .fallback .s{display:block;margin-top:5px;font:400 10.5px/1.5 var(--mono);color:var(--faint)}
 .fallback .s a{color:var(--muted)}
-.no-js body{overflow:auto}
+/* body.no-js, NOT .no-js body. The descendant form needs an ANCESTOR carrying
+     the class, and <body> IS the element carrying it - nothing is its own
+     ancestor, and body's only ancestor is <html>, which has no class. So the
+     rule never matched, `overflow:hidden` stood, and a reader with JavaScript
+     off got the sourced fallback list rendered correctly and COULD NOT SCROLL
+     past the first screen of it.
+     The whole point of that list is the audience that cannot run the script.
+     Verified against the served page before changing it. */
+  body.no-js{overflow:auto}
 .no-js .world,.no-js .hint,.no-js .scrub{display:none}
 .no-js .fallback{
   display:block;max-width:66ch;margin:0 auto;padding:56px clamp(18px,4vw,28px) 80px;
