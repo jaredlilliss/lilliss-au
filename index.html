@@ -576,6 +576,59 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 (function(){
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ── reveals — FIRST, and defended ────────────────────────────────────────
+     Every content block on this page is .rv{opacity:0} and only becomes visible
+     when this runs. It used to be the LAST thing in this IIFE, after the sky
+     engine, the clock and the year — so anything throwing earlier left the whole
+     front door blank. The <noscript> rule covers JavaScript being OFF; it does
+     nothing for JavaScript that runs and then dies, which is the likelier case.
+
+     MEASURED, not theorised: stubbing getContext to return null (iOS Lockdown
+     Mode, memory pressure, a hardened browser, or any bug in the sky engine)
+     gave 30 .rv blocks and 0 visible — a 105 KB screenshot where a healthy page
+     is 732 KB. The business front door, blank, from one null.
+
+     So it runs before anything that can throw, in its own try, with a timed
+     backstop if IntersectionObserver itself never fires. Content first; the
+     decoration can fail on its own time. */
+  try {
+    var rvAll = [].slice.call(document.querySelectorAll('.rv'));
+    var show = function(el){ el.classList.add('in'); };
+    if ('IntersectionObserver' in window) {
+      var rvio = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if (e.isIntersecting){ show(e.target); rvio.unobserve(e.target); } });
+      }, {threshold:.12});
+      rvAll.forEach(function(el){ rvio.observe(el); });
+      setTimeout(function(){ rvAll.forEach(show); }, 2600);
+    } else {
+      rvAll.forEach(show);
+    }
+  } catch (e) {
+    [].forEach.call(document.querySelectorAll('.rv'), function(el){ el.classList.add('in'); });
+  }
+
+  /* ── clock and year — also ahead of the sky ───────────────────────────────
+     Same reasoning as the reveals: the sky may bail out entirely if the canvas
+     is unavailable, and nothing a reader actually needs should sit downstream of
+     a decoration. Sydney time regardless of the visitor's own zone — the point
+     is showing when HE is, not when they are — falling back to a plain label if
+     the browser has no tz database for Australia/Sydney. */
+  try {
+    var clock = document.getElementById('clock');
+    var tickClock = function(){
+      try{
+        var now = new Date().toLocaleTimeString('en-AU', {
+          hour:'2-digit', minute:'2-digit',
+          timeZone:'Australia/Sydney', timeZoneName:'shortOffset'
+        });
+        clock.textContent = 'Sydney ' + now.replace('GMT','UTC');
+      }catch(e){ clock.textContent = 'Sydney, Australia'; }
+    };
+    if (clock) { tickClock(); setInterval(tickClock, 30000); }
+    var yrEl = document.getElementById('yr');
+    if (yrEl) yrEl.textContent = new Date().getFullYear();
+  } catch (e) {}
+
   /* ── night sky ──────────────────────────────────────────────────────────
      Same visual language as the personal site, so the two properties read as
      one hand — but a different engine underneath, for three measured reasons:
@@ -592,8 +645,15 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
         gains nothing from a 2.5x backing store, and pixel cost is quadratic.
      3. THE LOOP STOPS WHEN THE TAB IS HIDDEN. rAF already throttles in most
         browsers, but not all, and this is a page people leave open. */
-  var c = document.getElementById('sky'), x = c.getContext('2d');
-  var off = document.createElement('canvas'), ox = off.getContext('2d');
+  /* getContext can return null — Lockdown Mode, memory pressure, a hardened
+     browser. Unguarded, `c.getContext('2d')` on a missing element or a null
+     context threw and took everything after it with it. Now the sky simply does
+     not start, and the page is unaffected. */
+  var c = document.getElementById('sky');
+  var x = (c && c.getContext) ? c.getContext('2d') : null;
+  var off = document.createElement('canvas');
+  var ox = off.getContext ? off.getContext('2d') : null;
+  if (!x || !ox) { c && c.parentNode && c.parentNode.removeChild(c); return; }
   var W, H, DPR, stars = [], t = 0, lastW = 0, lastH = 0, lastDpr = 0;
   var auroraAt = -1e9, running = false;
 
@@ -708,31 +768,11 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     addEventListener('resize', function(){ buildNodes(); onScroll(); });
   }
 
-  /* ── clock ─────────────────────────────────────────────────────────────
-     Sydney time regardless of the visitor's own zone — the point is showing
-     when *he* is, not when they are. Falls back to a plain label if the
-     browser has no tz database for Australia/Sydney. */
-  var clock = document.getElementById('clock');
-  function tick(){
-    try{
-      var now = new Date().toLocaleTimeString('en-AU', {
-        hour:'2-digit', minute:'2-digit',
-        timeZone:'Australia/Sydney', timeZoneName:'shortOffset'
-      });
-      clock.textContent = 'Sydney ' + now.replace('GMT','UTC');
-    }catch(e){ clock.textContent = 'Sydney, Australia'; }
-  }
-  tick(); setInterval(tick, 30000);
+  /* clock and year moved to the TOP of this IIFE — see the note there. They sat
+     downstream of the sky engine, so a null canvas context took them too. */
 
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
-  /* ── reveals ───────────────────────────────────────────────────────── */
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, {threshold:.12});
-  [].forEach.call(document.querySelectorAll('.rv'), function(el){ io.observe(el); });
+  /* reveals now run at the TOP of this IIFE — see the note there. Leaving them
+     here meant the whole page depended on every preceding line surviving. */
 })();
 </script>
 </body>
