@@ -84,7 +84,15 @@ body{
 }
 
 /* ── the world ──────────────────────────────────────────────────────────── */
-.world{position:fixed;inset:0;overflow:hidden}
+/* touch-action is what makes this page usable on a phone at all. The only
+   travel gesture is a pointer drag; without this iOS claims the gesture for
+   native panning, the handler never fires, and the page becomes untravellable
+   by touch — leaving the scrub as the only control. `none` is the fallback and
+   `pinch-zoom` wins where understood, because taking zoom away from someone to
+   fix a swipe is a bad trade. */
+.world{position:fixed;inset:0;overflow:hidden;
+  touch-action:none;
+  touch-action:pinch-zoom}
 /* the ground spans the WHOLE rail, not the viewport. If it is viewport-sized
    the gradient never moves and the colour journey silently does not happen. */
 .ground{
@@ -294,6 +302,32 @@ body{
 .who span{color:var(--faint);display:block;margin-top:7px;font-size:10px;letter-spacing:.16em}
 .count{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--muted)}
 
+/* ── the ticks: where the objects actually are ─────────────────────────────
+   Jumping blind on a featureless bar is how you land in fifty-five empty years.
+   With the cluster visible the control finally says where the page lives. */
+.ticks{position:absolute;left:0;right:0;top:50%;height:12px;transform:translateY(-50%);
+  pointer-events:none;z-index:0}
+.ticks i{position:absolute;top:0;width:1px;height:100%;background:var(--line);
+  transform:translateX(-50%)}
+.ticks i.t-rec{height:60%;top:20%;opacity:.62}
+
+/* ── the void marker ───────────────────────────────────────────────────────
+   Shown ONLY where the screen would otherwise be empty. The emptiness is the
+   page's argument and is not being filled in — it is being named, with both
+   edges reachable, so a blank screen reads as the shape of the plan rather
+   than a broken page. */
+.void{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+  text-align:center;max-width:min(46ch,86vw);pointer-events:auto}
+.void[hidden]{display:none}
+.void h2{font:500 11px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 14px}
+.void p{font:400 14px/1.6 var(--sans);color:var(--faint);margin:16px 0 0}
+.void nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.void button{appearance:none;background:rgba(238,241,248,.05);color:var(--ink);max-width:min(38ch,84vw);
+  border:1px solid var(--line);border-radius:3px;padding:11px 15px;cursor:pointer;
+  font:500 12px/1.25 var(--mono);letter-spacing:.06em;min-height:44px}
+.void button:hover,.void button:focus-visible{border-color:var(--now);color:var(--now)}
+
 .hint{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
   font:500 10.5px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;
@@ -302,8 +336,12 @@ body{
 }
 @keyframes fade{to{opacity:0}}
 
+/* bottom:0 put a 44px range input across the iOS home-indicator strip — the
+   most-tapped part of a phone — and a range input JUMPS to wherever you press
+   it. That is how you end up at 2088 without meaning to. */
 .scrub{
-  position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);bottom:0;height:44px;z-index:6;
+  position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);
+  bottom:max(6px,env(safe-area-inset-bottom,0px));height:44px;z-index:6;
   display:flex;align-items:center;
 }
 .scrub input{
@@ -420,7 +458,17 @@ body{
 
 <p class="hint">drag &middot; scroll &middot; &larr; &rarr;</p>
 
+<div class="void" id="void" hidden>
+  <h2 id="void-h">Nothing here</h2>
+  <nav aria-labelledby="void-h">
+    <button type="button" id="void-prev"></button>
+    <button type="button" id="void-next"></button>
+  </nav>
+  <p id="void-say"></p>
+</div>
+
 <div class="scrub">
+  <div class="ticks" id="ticks" aria-hidden="true"></div>
   <input type="range" id="scrub" min="0" max="1000" value="0"
          aria-label="Travel the span from the 1970s to 2117">
 </div>
@@ -610,6 +658,19 @@ body{
                                            in a fixed footer. */
   var WIDE = SPANPX + PAD + ENDPAD;
 
+  /* WHERE THE OBJECTS ARE. The page drew them and then had no idea where they
+     were - which is why you could jump into fifty-five empty years with nothing
+     to tell you so. Computed ONCE from the data, never measured from layout. */
+  function px(y){ return PAD + frac(y) * SPANPX; }
+  var OBJ = STOPS.map(function(o){ return {x:px(o.at), at:o.at, nm:o.nm}; })
+    .concat(RECORD.map(function(o){ return {x:px(o.at), at:o.at, nm:o.nm, rec:true}; }))
+    .sort(function(a, b){ return a.x - b.x; });
+  function label(o){ return (o.at <= 1979 ? 'THE 1970s' : o.at) + ' \u00b7 ' + o.nm; }
+  /* The ending block is CONTENT, not an object. Counted for presence so the void
+     marker never covers the page's own finale, but never offered as a jump
+     target, because it carries no date to travel to. */
+  var ENDX = PAD + SPANPX + 350;
+
   var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
 
   function build(){
@@ -773,14 +834,85 @@ body{
       rail.classList.toggle('focusing', !!near);
       FOCUS = near;
     }
+    /* NOTHING ON SCREEN? Say so, and offer both edges. The empty stretches are
+       this page's argument — a 142-year span whose objects sit only where a
+       dated fact does — so the emptiness is named rather than filled, and made
+       possible to leave. Before this, a phone user who tapped the scrub landed
+       in a blank field with no instruction (the hint fades after 3s) and, on
+       iOS, no working drag to get back. */
+    var onScreen = false;
+    for (var k = 0; k < OBJ.length; k++) {
+      if (OBJ[k].x > x - 40 && OBJ[k].x < x + innerWidth + 40) { onScreen = true; break; }
+    }
+    if (!onScreen && ENDX > x - 40 && ENDX < x + innerWidth + 400) onScreen = true;
+    setVoid(onScreen ? null : centre);
+
     if (x !== target) queue();
+  }
+
+  var VEL = document.getElementById('void'), VKEY = null;
+  var VH = document.getElementById('void-h'), VSAY = document.getElementById('void-say');
+  var VP = document.getElementById('void-prev'), VN = document.getElementById('void-next');
+  function jump(o){ go(clampX(o.x - innerWidth / 2)); }
+  function setVoid(centre){
+    if (!VEL) return;
+    if (centre === null) { if (VKEY !== null) { VEL.hidden = true; VKEY = null; } return; }
+    var prev = null, next = null;
+    for (var i = 0; i < OBJ.length; i++) {
+      if (OBJ[i].x <= centre) prev = OBJ[i]; else { next = OBJ[i]; break; }
+    }
+    var key = (prev ? prev.at : '-') + '|' + (next ? next.at : '-');
+    if (key !== VKEY) {
+      VKEY = key;
+      VH.textContent = (prev && next) ? ('Nothing between ' + prev.at + ' and ' + next.at)
+                     : next ? ('Nothing before ' + next.at)
+                            : ('Nothing after ' + prev.at);
+      VSAY.textContent = 'A ' + SPAN + '-year span. Every object sits where a dated fact '
+                       + 'does, so the gaps are the plan rather than a gap in the page.';
+      if (prev) { VP.hidden = false; VP.textContent = '\u2190 ' + label(prev); VP.onclick = function(){ jump(prev); }; }
+      else VP.hidden = true;
+      if (next) { VN.hidden = false; VN.textContent = label(next) + ' \u2192'; VN.onclick = function(){ jump(next); }; }
+      else VN.hidden = true;
+    }
+    VEL.hidden = false;
   }
   function queue(){ if (!raf) raf = requestAnimationFrame(paint); }
   function go(v){ target = clampX(v); queue(); }
 
+  /* The ticks sit at the scrub fraction that would CENTRE each object, which
+     depends on innerWidth - so they are rebuilt whenever that changes rather
+     than being placed once and quietly lying after a rotation. */
+  function buildTicks(){
+    var t = document.getElementById('ticks');
+    if (!t || !maxX) return;
+    /* Built with DOM methods rather than an innerHTML string. Concatenating
+       `class="` inside a script made the estate's class-resolution guard read
+       JavaScript as markup and report `(OBJ[i].rec` as an undefined CSS class —
+       a false alarm, but the fix is also just better code. */
+    t.textContent = '';
+    for (var i = 0; i < OBJ.length; i++) {
+      var f = (OBJ[i].x - innerWidth / 2) / maxX;
+      if (f < 0) f = 0; else if (f > 1) f = 1;
+      var tick = document.createElement('i');
+      if (OBJ[i].rec) tick.className = 't-rec';
+      tick.style.left = (f * 100).toFixed(3) + '%';
+      t.appendChild(tick);
+    }
+  }
+
+  /* ROTATION USED TO MOVE YOU. measure() kept the pixel offset while the year
+     readout is derived from x + innerWidth/2, so turning the phone shifted the
+     reported year by half the width change — about 3 years on a 390→844 turn.
+     The CENTRED rail position is what a reader thinks they are looking at, so
+     that is what survives the resize now. */
+  var lastW = innerWidth;
   function measure(){
+    var centreRail = x + lastW / 2;
     maxX = Math.max(0, WIDE - innerWidth + 240);
-    target = clampX(target); x = clampX(x); queue();
+    lastW = innerWidth;
+    target = x = clampX(centreRail - innerWidth / 2);
+    buildTicks();
+    queue();
   }
 
   world.addEventListener('wheel', function(e){
@@ -854,7 +986,13 @@ body{
     if (!m) return null;
     var v = decodeURIComponent(m[1]).toLowerCase();
     if (v === 'start') return 0;
-    if (v === 'end')   return maxX;
+    /* ?at=end promised "at the ending" and OVERSHOT it: maxX sits ENDPAD+240
+       past the span, leaving the ending block off the left edge entirely. The
+       void marker made that visible by appearing where the finale should be.
+       .ending is transform:translate(-50%,-50%), so ENDX is its CENTRE, not its
+       left edge - an offset landing cut the block off on the left. Centred, the
+       same way every ?at=<year> already centres its milestone. */
+    if (v === 'end')   return clampX(ENDX - innerWidth / 2);
     var y = parseInt(v, 10);
     if (!y || y < ORIGIN || y > END) return null;
     return clampX(PAD + frac(y) * SPANPX - innerWidth / 2);
