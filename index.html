@@ -245,6 +245,25 @@ h2{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1
   font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--dim)}
 .lane.here .lane-foot{color:var(--ember)}
 
+/* ── work ──────────────────────────────────────────────────── */
+/* Three rules. The cards, grid, headings and reveal are #services' own, reused
+   unchanged - a second set of components is how a section starts looking bolted
+   on. The caveat sits in the same footer as the links, on its own row, because a
+   caveat kept somewhere else is a caveat nobody reads. */
+.work-foot{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;
+  margin-top:22px;padding-top:16px;border-top:1px solid var(--edge)}
+.wln{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember);text-decoration:none;white-space:nowrap;transition:color .28s}
+.wln:hover,.wln:focus-visible{color:var(--ink)}
+.wnote{flex-basis:100%;font-family:var(--mono);font-size:10.8px;letter-spacing:.08em;
+  /* --muted, not --dim. On the composited card --dim measures 4.33:1, the only
+     thing in this section that fails AA - and it is the caveat that protects
+     someone else's business: "with permission, for prototyping", "unsolicited
+     concept, no affiliation". The qualifier carrying the legal and ethical weight
+     should not be the hardest text on the page to read. --muted gives 6.57:1 and
+     the note still reads as secondary, because it stays small and monospaced. */
+  line-height:1.6;color:var(--muted)}
+
 /* ── services ──────────────────────────────────────────────────────────── */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:18px;margin-top:58px}
 .card{position:relative;background:var(--s-1);border:1px solid var(--edge);border-radius:var(--r-lg);
@@ -306,6 +325,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     <nav>
       <a href="#services">Services</a>
       <a href="#how">How it runs</a>
+      <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
       <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
@@ -426,7 +446,71 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   </section>
 
   <!-- ── about ────────────────────────────────────────────────────────── -->
-  <section id="about">
+  <section id="work">
+  <div class="wrap">
+    <p class="sec-k rv">Work</p>
+    <h2 class="rv">Some of it is still running.</h2>
+    <p class="sec-sub rv">
+      A live data pipeline, and two concept sites built to see how far a single
+      HTML file can go. Everything here is either running right now or labelled
+      as a concept on its own page.
+    </p>
+
+    <div class="cards">
+      <article class="card rv">
+        <h3>Aussie Health Utility</h3>
+        <p>A collector that takes a reading from every NSW emergency department
+        publishing a live count, every fifteen minutes since July. It runs
+        unattended on a small Melbourne server, backs itself up nightly, and
+        publishes a board anyone can read &mdash; with the counting method written
+        on the page, including what the data cannot support.</p>
+        <div class="work-foot">
+          <a class="wln" href="https://jaredlilliss.github.io/queue-board/">The live board &rarr;</a>
+          <a class="wln" href="https://github.com/jaredlilliss/aussie-health-utility">Public mirror &rarr;</a>
+          <span class="wnote">Public mirror &mdash; the working repository stays private.</span>
+        </div>
+      </article>
+
+      <article class="card rv">
+        <h3>Still Wild &mdash; concept</h3>
+        <p>A concept site for a Brisbane adventure business, built as one
+        self-contained HTML file: a live canvas dawn over layered ridges, five
+        languages, and an honesty layer that labels every invented detail as
+        invented rather than quietly leaving it in.</p>
+        <div class="work-foot">
+          <a class="wln" href="/stillwild-concept/">See the concept &rarr;</a>
+          <span class="wnote">Built from the business&rsquo;s published photographs, with
+          permission, for prototyping. Not affiliated with them.</span>
+        </div>
+      </article>
+
+      <article class="card rv">
+        <h3>The Ascent &mdash; concept</h3>
+        <p>An Earth-to-Mars scroll narrative restyling public content from a
+        space-industry initiative, with a companion timeline where every date
+        traces to a named government source &mdash; and the gaps left visibly
+        empty rather than filled in.</p>
+        <div class="work-foot">
+          <a class="wln" href="/xperience-concept/">See the concept &rarr;</a>
+          <a class="wln" href="/xperience-concept/spine.html">The sourced timeline &rarr;</a>
+          <span class="wnote">An unsolicited concept. No affiliation with the organisation
+          it depicts.</span>
+        </div>
+      </article>
+
+      <article class="card rv">
+        <h3>Everything else</h3>
+        <p>Older builds, experiments, and the writing about how each one is put
+        together &mdash; single-file sites, offline-capable, no frameworks.</p>
+        <div class="work-foot">
+          <a class="wln" href="https://jaredlilliss.github.io/">The personal site &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about">
     <p class="sec-k rv">About</p>
     <h2 class="rv">Field tech hands,<br>systems head</h2>
 
