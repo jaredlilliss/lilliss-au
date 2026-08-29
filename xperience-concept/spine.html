@@ -354,16 +354,28 @@ body{
   position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);
   bottom:10px;height:44px;z-index:6;
   display:flex;align-items:center;
+  /* THE WRAPPER IS CHROME, NOT A CONTROL. It is a 44px-tall, near-full-width
+     fixed box at z-index:6 sitting over .world, with no listener of its own —
+     only the 2px input inside is live. Without this, every pointerdown in that
+     band hit the wrapper and .world's drag never fired, which on a phone is the
+     bottom fifth of the thumb's natural swipe zone. Identical defect to the one
+     already fixed on .foot; .hint and .ticks always had it. */
+  pointer-events:none;
 }
 .scrub input{
   -webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;
   background:linear-gradient(90deg,var(--faint),rgba(242,196,106,.5));outline:none;cursor:ew-resize;
+  pointer-events:auto;              /* the control itself must still be live */
 }
+/* A 2px thumb cannot be aimed at or grabbed, which left tap-to-jump — 142 years
+   in one contact — as the only way to use the scrub. Widened, but the input's
+   BOX is deliberately left alone: growing it would enlarge the accidental-
+   activation surface this whole pass exists to shrink. */
 .scrub input::-webkit-slider-thumb{
-  -webkit-appearance:none;width:2px;height:15px;border-radius:1px;
+  -webkit-appearance:none;width:20px;height:15px;border-radius:2px;
   background:var(--now);border:0;cursor:grab;
 }
-.scrub input::-moz-range-thumb{width:2px;height:15px;border-radius:1px;background:var(--now);border:0}
+.scrub input::-moz-range-thumb{width:20px;height:15px;border-radius:2px;background:var(--now);border:0}
 .scrub input:focus-visible{outline:2px solid var(--now);outline-offset:6px}
 
 .foot{
@@ -832,7 +844,17 @@ body{
     /* the readout counts what is DRAWN, milestones + record */
     count.textContent = innerWidth < 620 ? ('AT ' + lbl)
                                          : ('AT ' + lbl + '  ·  SPAN 1970s–2117');
-    if (document.activeElement !== scrub) scrub.value = Math.round(p * 1000);
+    /* THE SCRUB READ AND WROTE TWO DIFFERENT COORDINATE SPACES, and this is the
+       line that lied. Three consumers share the 0–1000 range: this write used
+       SPAN space (p = (x + innerWidth/2 - PAD) / SPANPX), while the input
+       handler reads TRAVEL space (x = value/1000 * maxX) and buildTicks places
+       ticks in TRAVEL space. Two of three agreed, so the write was wrong.
+       The cost is width-dependent, which is why it never showed on a desk: at
+       390px maxX=11770 against SPANPX=11000, so a state reading AT 2088 that
+       round-trips through one scrub touch comes back AT 2096 — exactly the pair
+       of years in the report. At 1920px the same round-trip costs nothing. */
+    if (document.activeElement !== scrub)
+      scrub.value = maxX ? Math.round(Math.min(1, Math.max(0, x / maxX)) * 1000) : 0;
     /* without this it announces "0 to 1000, currently 359", which is not a
        fact about anything a listener can use. */
     scrub.setAttribute('aria-valuetext', yr <= 1979 ? 'the 1970s' : String(yr));
@@ -932,7 +954,13 @@ body{
   var lastW = innerWidth;
   function measure(){
     var centreRail = x + lastW / 2;
-    maxX = Math.max(0, WIDE - innerWidth + 240);
+    /* Cap travel against CONTENT, not just against the rail's width. ENDX - maxX
+       worked out to innerWidth - 610 identically, so below ~610px the .ending
+       block's centre sat off the left edge at full travel — 220px off at 390px —
+       hiding the page's only call to action from all three paths that reach the
+       far end (drag-to-clamp, End, and the scrub at maximum). The cap only binds
+       below ~1220px, so desktop travel is unchanged. */
+    maxX = Math.max(0, Math.min(WIDE - innerWidth + 240, ENDX - innerWidth / 2));
     lastW = innerWidth;
     target = x = clampX(centreRail - innerWidth / 2);
     buildTicks();
