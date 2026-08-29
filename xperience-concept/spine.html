@@ -316,8 +316,14 @@ body{
    page's argument and is not being filled in — it is being named, with both
    edges reachable, so a blank screen reads as the shape of the plan rather
    than a broken page. */
+/* pointer-events:none is LOAD-BEARING, not tidiness. This panel appears
+   exactly when the screen is empty, which is exactly when someone swipes to
+   leave - and it covers the centre of the screen, where a thumb starts. With
+   pointer-events:auto it was a dead zone sitting on top of the escape route it
+   exists to provide. Only the buttons need to be hit-testable. */
 .void{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
-  text-align:center;max-width:min(46ch,86vw);pointer-events:auto}
+  text-align:center;max-width:min(46ch,86vw);pointer-events:none}
+.void button{pointer-events:auto}
 .void[hidden]{display:none}
 .void h2{font:500 11px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;
   color:var(--faint);margin:0 0 14px}
@@ -336,12 +342,17 @@ body{
 }
 @keyframes fade{to{opacity:0}}
 
-/* bottom:0 put a 44px range input across the iOS home-indicator strip — the
+/* bottom:0 put a 44px range input hard against the bottom edge — the
    most-tapped part of a phone — and a range input JUMPS to wherever you press
-   it. That is how you end up at 2088 without meaning to. */
+   it. That is how you reach 2088 without meaning to.
+   NOT written as env(safe-area-inset-bottom): this page uses the default
+   viewport-fit=contain, under which the layout viewport already excludes the
+   home indicator and every safe-area-inset-* resolves to 0. An env() here would
+   have been theatre — a hard hat on a line doing nothing. The clearance below is
+   plain distance from the edge, which is what actually reduces stray taps. */
 .scrub{
   position:fixed;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);
-  bottom:max(6px,env(safe-area-inset-bottom,0px));height:44px;z-index:6;
+  bottom:10px;height:44px;z-index:6;
   display:flex;align-items:center;
 }
 .scrub input{
@@ -359,6 +370,12 @@ body{
   position:fixed;right:clamp(18px,3vw,34px);bottom:52px;z-index:5;
   max-width:44ch;text-align:right;
   font:400 10.5px/1.55 var(--mono);color:var(--faint);
+  /* Non-interactive text over the travel surface, fixed in the bottom-right —
+     which on a phone is exactly where a right thumb starts a swipe. Without
+     this it silently ate 8% of all drag starts (measured on a 19x19 grid of
+     elementFromPoint samples: 30 of 361 landed on this paragraph and never
+     reached .world). .hint already had it; this never did. */
+  pointer-events:none;
 }
 
 /* ── no-JS: everything becomes a plain readable list ────────────────────── */
@@ -864,11 +881,18 @@ body{
     var key = (prev ? prev.at : '-') + '|' + (next ? next.at : '-');
     if (key !== VKEY) {
       VKEY = key;
-      VH.textContent = (prev && next) ? ('Nothing between ' + prev.at + ' and ' + next.at)
-                     : next ? ('Nothing before ' + next.at)
-                            : ('Nothing after ' + prev.at);
-      VSAY.textContent = 'A ' + SPAN + '-year span. Every object sits where a dated fact '
-                       + 'does, so the gaps are the plan rather than a gap in the page.';
+      /* Derived from OBJ, never hardcoded - which is the condition the gap-label
+         ruling above sets for a label like this returning at all. And it claims
+         only what this page can support: that nothing is CITED HERE between two
+         dates. The earlier labels were removed for asserting an absence of
+         sources the verify ruling contradicts, and "the gaps are the plan" would
+         have been the same error in a new costume: a claim about the world, from
+         a page that can only speak for its own citations. */
+      VH.textContent = (prev && next) ? ('Nothing cited between ' + prev.at + ' and ' + next.at)
+                     : next ? ('Nothing cited before ' + next.at)
+                            : ('Nothing cited after ' + prev.at);
+      VSAY.textContent = 'Every object on this ' + SPAN + '-year span sits at a date this '
+                       + 'page can cite. An empty stretch means nothing is cited there.';
       if (prev) { VP.hidden = false; VP.textContent = '\u2190 ' + label(prev); VP.onclick = function(){ jump(prev); }; }
       else VP.hidden = true;
       if (next) { VN.hidden = false; VN.textContent = label(next) + ' \u2192'; VN.onclick = function(){ jump(next); }; }
