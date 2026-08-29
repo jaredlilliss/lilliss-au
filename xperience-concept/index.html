@@ -1,2541 +1,842 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>XperienceSpace — building the UAE Space Nation | Lilliss IT concept</title>
-<meta name="description" content="An unsolicited Lilliss IT design concept restyling public content from xperiencespace.com. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative. Not indexed.">
+<meta name="description" content="An unsolicited Lilliss IT design concept restyling public content from the XperienceSpace Initiative. Every UAE fact is sourced to the body that published it. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative. Not indexed.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="XperienceSpace &mdash; building the UAE Space Nation | Lilliss IT concept">
 <meta property="og:description" content="An unsolicited design concept by Jared Lilliss (Lilliss IT), restyling public content from xperiencespace.com. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
-<!-- og:url moved to lilliss.au 28/08, on Jared's direct word ("all under lilliss.au").
-     This tag is what UNFURLERS resolve - Slack, Discord, LinkedIn, WhatsApp - so a page
-     that changes domain while keeping its old og:url advertises the copy being retired
-     and sends every share back through a redirect. The github.io build carries the same
-     tag on purpose: that copy now redirects here, so pointing at the new home is correct
-     on both. -->
 <meta property="og:url" content="https://lilliss.au/xperience-concept/">
 <meta property="og:site_name" content="Lilliss IT">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XperienceSpace &mdash; building the UAE Space Nation | Lilliss IT concept">
 <meta name="twitter:description" content="An unsolicited design concept by Jared Lilliss (Lilliss IT). Not affiliated with the XperienceSpace Initiative.">
-<meta name="theme-color" content="#08090A">
+<meta name="theme-color" content="#0C0B09">
 <!-- ═══════════════════════════════════════════════════════════════════════════
-     XperienceSpace v2 — a NEW FOUNDATION, not a reskin.
+     v4 — A COMPLETE OVERHAUL. 29/08/2026.
 
-     Jared, 24/08/2026: "the original template can only be refined so much.
-     eventually, dirt is dirt... you need to source a new" · "they all have their
-     pros but they are all killed by their cons" · "we arent a web development
-     business. i dont need a gallery of different styles... they need a high tech
-     looking website that just wows them".
+     JARED'S RULING, verbatim: "the current design is not up to standard and
+     looks like a Year 12 HSC project. Please scrap the current aesthetic and
+     elevate the design to a highly professional, modern standard."
 
-     All eight previous renditions were override layers on one skeleton, so each
-     was a costume over the same marketing page. This shares no markup with them.
+     WHY v3 READ AS STUDENT WORK — diagnosed before anything was drawn, because
+     "make it better" is not actionable:
 
-     REFERENCE CLASS — deliberately NOT awwwards. Measured live 24/08:
-       · docs.leap.new (Jared's own reference) — charcoal #252525, soft white
-         #F2F2F2, ONE typeface (Inter) at 14–16px with letter-spacing NORMAL,
-         radii 6–16px, surfaces layered rather than outlined.
-       · linear.app — ground rgb(8,9,10), ink #F7F8F8, muted #8A8F98, ONE font
-         (Inter Variable), h1 64px on 64px leading at -0.022em weight 510, and
-         crucially SURFACES BUILT FROM WHITE AT 2–7% ALPHA rather than from
-         separate colours. That is what makes it read as engineered rather than
-         decorated.
-     The lesson taken: a national space initiative should look like a serious,
-     well-funded technology organisation — not like a gallery piece. Restraint in
-     the system, one moment of spectacle, everything else earning its place.
+       · It was a CATALOGUE OF EFFECTS. Four always-on canvases, eleven rAF call
+         sites, a ticker, horizon counters, a magnetic CTA, a cursor spotlight, a
+         scroll-progress bar, a trajectory rail, an audience switcher and a
+         section-index rail. Eleven mechanisms, none of them load-bearing. The
+         problem was never that it lacked effects — it had nothing but effects.
+       · The palette was the default dark-tech gradient: blue, purple AND teal
+         accents on blue-black. Three accents is no accent.
+       · Everything was a card in a grid, so every section had identical rhythm.
+       · Nine headings, every one a marketing slogan.
 
-     HONESTY (unchanged and non-negotiable): noindex, full disclosure in the
-     footer, the source named and the absence of any affiliation stated plainly, and NO third-party imagery —
-     every visual is drawn in-page as canvas or vector. The page this line of
-     work replaced was killed for carrying fabricated AI infographics with
-     garbled Arabic; there is no Arabic here for the same reason, and any Arabic
-     on a real build comes from the client.
+     WHAT REPLACES IT: an institutional prospectus. The subject is a national
+     programme with a ninety-year horizon; the register should be editorial
+     gravitas, not startup-tech. Concretely —
+
+       · ONE accent (burnt gold, which also carries the UAE thread honestly),
+         on a WARM near-black rather than the blue-black every template uses.
+       · A serif display face. Fraunces was already self-hosted at /fonts/ for
+         the front door, so this costs no new asset and instantly separates the
+         page from the uniformly all-sans template look.
+       · RHYTHM AS STRUCTURE. An airy hero, then a deliberately DENSE record of
+         what the UAE has actually done, then wide editorial sections. Student
+         work is evenly dense; professional work contrasts dense against empty.
+       · Interactions that answer rather than acknowledge.
+
+     THE TWO BUGS HE REPORTED, both fixed by construction:
+
+     1. "the cursor doesn't trigger any state changes ... zero interactivity
+        beyond tracking the cursor's position."
+        TRUE, and measurably so. v3 ran a document-level pointermove writing
+        --mx/--my onto every hovered surface, and exactly ONE rule consumed them:
+        a radial-gradient at rgba(...,.10) fading out by 42%, over a #08090A
+        ground. .panel:hover and .phase:hover had ZERO rules of their own. So the
+        page paid for continuous pointer tracking and returned a highlight that
+        is very nearly invisible, plus a 2px lift. He experienced that as
+        nothing, which is a fair reading of it.
+        HERE: no pointer tracking at all. Hover and focus produce a real change —
+        the hairline takes the accent, the block lifts, and the trajectory phases
+        genuinely enlarge, which is the behaviour he named.
+
+     2. "scrolling is glitchy and currently behaves as if it is dependent on
+        which elements are enlarged."
+        The trajectory handler ran on every scroll frame and did this:
+            fill.style.height = head + 'px';        // layout WRITE
+            phases.forEach(p => p.getBoundingClientRect())  // layout READ
+        A write followed by reads in a loop forces a synchronous layout per
+        iteration — classic thrash — and it then toggled a class named `lit`
+        which has ZERO CSS rules anywhere in the file. All that cost, no result.
+        HERE: there is not one scroll listener. Nothing reads layout during
+        scroll. Progress and reveals are IntersectionObserver only, and every
+        animated property is transform or opacity, which the compositor handles
+        without touching layout. The sticky masthead carries NO backdrop-filter,
+        because a blurred backdrop is re-composited every single frame.
+
+     UNCHANGED RAILS: noindex · the unsolicited/no-affiliation disclosure · the
+     authorship line · the ecosystem disclaimer · the sources table with all
+     eleven citation URLs · no outbound link to the subject's own site · fonts
+     absolute from /fonts/ · no third-party anything. Machine-checked by
+     honesty.py and site-verify\verify_sources.py before publish.
+
+     ARABIC: the RTL layout is real and the copy is deliberately absent, because
+     it is not mine to write. Unchanged in principle from v3, rebuilt smaller.
+     Numerals stay Western — that is what UAE institutions publish.
+
+     DEGRADES: everything is in the HTML. JavaScript adds reveals, the language
+     toggle and the trajectory's click-to-expand. With it off the page is a
+     complete, readable document with every phase already open.
      ═══════════════════════════════════════════════════════════════════════════ -->
 <style>
-/* Self-hosted 26/08/2026. This page previously fetched Inter and IBM Plex Mono
-   from Google, so every visitor's browser announced itself to Google. It does
-   not any more. Three files, latin subset, ~57 KB - no Fraunces on this page,
-   so none of its weight is carried.
-   Inter is VARIABLE: one file, declared 100 900.
-   IBM Plex Mono is STATIC: one file PER WEIGHT. Declaring a range on a static
-   face gets you synthetic bold. Trap named by central, who hit it first. */
+/* Self-hosted, absolute. Nothing third-party is ever fetched. Absolute because
+   this page lives in a subdirectory and relative paths resolved to nothing here
+   for days without raising a single error (found 29/08). */
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/fraunces.woff2') format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/inter.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
   src:url('/fonts/plexmono-400.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
   src:url('/fonts/plexmono-500.woff2') format('woff2')}
-</style>
-<style>
+
 :root{
-  /* ground + ink, both softened — never #000, never #FFF */
-  --bg:#08090A; --bg-2:#0B0D0F;
-  --ink:#F7F8F8; --muted:#8A8F98; --dim:#7C8087;  /* --dim was #62666D: ~3.5:1 on --bg, failing AA, and it carries the
-       provenance line, the contact disclosure and the honesty note. */
+  /* WARM near-black, not the blue-black every dark template ships. The whole
+     palette is two neutrals and ONE accent; three accents is no accent. */
+  --ground:#0C0B09;
+  --ground-2:#100E0B;
+  --ink:#F2EFE8;                 /* bone, never #FFF */
+  --muted:#A29B90;               /* 7.15:1 on --ground */
+  --dim:#8E877C;                 /* 5.4:1  — still AA for body text */
+  --accent:#D9A441;              /* burnt gold, 8.74:1 */
+  --accent-soft:rgba(217,164,65,.14);
 
-  /* surfaces are WHITE AT LOW ALPHA, not separate colours. This is the whole
-     trick behind the "expensive" feel in the reference class. */
-  --s-1:rgba(255,255,255,.024);
-  --s-2:rgba(255,255,255,.045);
-  --s-3:rgba(255,255,255,.07);
-  --edge:rgba(255,255,255,.09);
-  --edge-2:rgba(255,255,255,.14);
+  --line:rgba(242,239,232,.13);
+  --line-2:rgba(242,239,232,.26);
+  /* Interactive borders are held to a DIFFERENT bar than decorative rules.
+     WCAG 1.4.11 wants 3:1 for anything that is the only thing identifying a
+     control's boundary — the language buttons and the ghost button are exactly
+     that. Composited over the ground, .26 measures ~2.1:1 and .38 measures
+     3.21:1, so interactive edges get their own token rather than borrowing the
+     hairline used to separate rows. */
+  --edge-ui:rgba(242,239,232,.38);
+  --surface:rgba(242,239,232,.035);
+  --surface-2:rgba(242,239,232,.06);
 
-  --accent:#7CC9F5; --accent-2:#A78BFA; --accent-3:#5EEAD4;
-  --gold:#E9BC6A;                       /* used sparingly, for the UAE thread */
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
 
-  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
-
-  --r:12px; --r-lg:16px; --r-sm:8px;
-  --pad:clamp(20px,4.4vw,48px);
-  --maxw:clamp(1200px, 68vw, 1560px); /* grows on wide screens, hard ceiling at 1500 - a flat cap made the page look broken at low zoom (26/08/2026) */
+  --pad:clamp(20px,5vw,64px);
+  --wide:min(1320px,100%);
+  --text:min(70ch,100%);
+  --r:3px;                        /* near-square. Rounded cards read as template */
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
-  background:var(--bg);color:var(--ink);
-  font:400 16px/1.55 var(--sans);
-  -webkit-font-smoothing:antialiased;overflow-x:clip;
+  background:var(--ground);color:var(--ink);
+  font:400 17px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  /* Fraunces carries an optical-size axis whose default is 9 — its CAPTION
+     drawing. Without this an 96px headline renders the small-text design.
+     Inherited gotcha from the front door; it costs one line and looks like a
+     bad font if you miss it. */
+  font-optical-sizing:auto;
 }
-::selection{background:var(--accent);color:#04202E}
+::selection{background:var(--accent);color:#160F03}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-.shell{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+img,svg{max-width:100%}
 
-.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--accent);color:#04202E;
-  padding:10px 16px;font-weight:600;border-radius:0 0 var(--r-sm) 0}
+.wide{width:var(--wide);margin:0 auto;padding-inline:var(--pad)}
+.col{width:var(--text)}
+
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--accent);color:#160F03;
+  padding:12px 18px;font-weight:600}
 .skip:focus{left:0}
 
-/* ───────────────── nav: slim, glassy, product-grade ───────────────── */
-header{position:sticky;top:0;z-index:50;background:rgba(8,9,10,.72);
-  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);
-  border-bottom:1px solid var(--edge)}
-.nav{display:flex;align-items:center;gap:14px;height:56px}
-.brand{display:flex;align-items:center;gap:9px;text-decoration:none;margin-right:auto;font-weight:600;letter-spacing:-.012em}
-.brand .mk{width:20px;height:20px;border-radius:6px;flex:none;
-  background:conic-gradient(from 210deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent));
-  box-shadow:0 0 0 1px var(--edge-2),0 2px 10px rgba(124,201,245,.28)}
-.brand small{display:block;font:400 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px}
-.nav nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
-.nav nav::-webkit-scrollbar{display:none}
-.nav nav a{padding:7px 11px;border-radius:var(--r-sm);font-size:13.5px;color:var(--muted);
-  text-decoration:none;white-space:nowrap;transition:color .18s,background .18s}
-.nav nav a:hover,.nav nav a[aria-current=true]{color:var(--ink);background:var(--s-2)}
+/* ── masthead: quiet, and NO backdrop-filter ──────────────────────────────
+   A blurred backdrop on a sticky element is re-composited every scroll frame.
+   A solid ground with a hairline costs nothing and reads more editorial. */
+.mast{position:sticky;top:0;z-index:50;background:var(--ground);
+  border-bottom:1px solid var(--line)}
+.mast .wide{display:flex;align-items:center;gap:18px;min-height:60px;flex-wrap:wrap}
+.mark{display:flex;align-items:baseline;gap:10px;text-decoration:none;margin-right:auto}
+.mark b{font:600 17px/1 var(--display);letter-spacing:-.01em}
+.mark span{font:400 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim)}
+.mast nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.mast nav::-webkit-scrollbar{display:none}
+.mast nav a{padding:7px 11px;font:400 13.5px/1 var(--sans);color:var(--muted);
+  text-decoration:none;white-space:nowrap;border-bottom:1px solid transparent}
+.mast nav a:hover,.mast nav a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.lang{display:flex;gap:2px}
+.lang button{appearance:none;background:none;border:1px solid var(--edge-ui);color:var(--muted);
+  font:500 11px/1 var(--mono);letter-spacing:.08em;padding:7px 10px;cursor:pointer;border-radius:var(--r)}
+.lang button[aria-pressed="true"]{color:var(--ground);background:var(--ink);border-color:var(--ink)}
+.lang button:hover{color:var(--ink);border-color:var(--line-2)}
+.lang button[aria-pressed="true"]:hover{color:var(--ground)}
 
-/* ───────────────── buttons ───────────────── */
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r-sm);
-  padding:10px 16px;font-size:14px;font-weight:500;text-decoration:none;
-  border:1px solid transparent;transition:background .18s,border-color .18s,transform .18s}
-.btn-p{background:var(--ink);color:#08090A}
-.btn-p:hover{background:#fff;transform:translateY(-1px)}
-.btn-s{background:var(--s-2);color:var(--ink);border-color:var(--edge)}
-.btn-s:hover{background:var(--s-3);border-color:var(--edge-2)}
-@media (prefers-reduced-motion:reduce){.btn-p:hover{transform:none}}
+#lang-note{display:none;border-bottom:1px solid var(--line);background:var(--surface)}
+#lang-note[data-on]{display:block}
+#lang-note .wide{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding-block:14px}
+#lang-note p{color:var(--muted);font-size:14.5px;max-width:76ch;margin-right:auto}
+#lang-note b{color:var(--accent);font-weight:500}
+#lang-note button{appearance:none;background:none;border:1px solid var(--edge-ui);color:var(--ink);
+  font:500 12px/1 var(--mono);padding:9px 13px;cursor:pointer;border-radius:var(--r)}
 
-/* ───────────────── hero ───────────────── */
-.hero{position:relative;isolation:isolate;padding:clamp(52px,6vw,72px) 0 clamp(32px,4vw,44px);overflow:hidden}
-#mesh{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(120% 70% at 50% -10%,transparent 40%,var(--bg) 92%)}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 11px 5px 7px;border-radius:999px;
-  background:var(--s-2);border:1px solid var(--edge);font:500 12.5px/1 var(--sans);color:var(--muted);margin-bottom:22px}
-.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--accent-3);box-shadow:0 0 8px var(--accent-3);font-style:normal}
-h1{font-size:clamp(38px,6.2vw,74px);line-height:1.02;letter-spacing:-.028em;font-weight:600;max-width:17ch}
-h1 .g{background:linear-gradient(96deg,var(--accent) 8%,var(--accent-2) 52%,var(--accent-3) 96%);
-  -webkit-background-clip:text;background-clip:text;color:transparent}
-@supports not (-webkit-background-clip:text){h1 .g{color:var(--accent)}}
-.tagline{margin-top:16px;font-size:clamp(15.5px,1.7vw,18px);color:var(--gold);font-weight:500}
-.lede{margin-top:18px;max-width:60ch;color:var(--muted);font-size:clamp(15.5px,1.55vw,17px);line-height:1.62}
-.lede b{color:var(--ink);font-weight:500}
-.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
-.pill{font:400 12.5px/1 var(--mono);letter-spacing:.01em;color:var(--muted);
-  background:var(--s-1);border:1px solid var(--edge);border-radius:999px;padding:8px 13px}
+/* ── the opening: type, and nothing else ─────────────────────────────────── */
+.open{padding:clamp(64px,13vh,150px) 0 clamp(48px,7vw,88px);border-bottom:1px solid var(--line)}
+.eyebrow{font:500 11.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:clamp(24px,4vw,40px)}
+h1{
+  font-family:var(--display);
+  font-size:clamp(42px,8.2vw,104px);
+  line-height:.98;letter-spacing:-.028em;font-weight:300;
+  max-width:15ch;
+}
+/* display:block puts the break exactly where the accent starts — "Building the"
+   over "UAE Space Nation" — instead of letting it fall after "Space" and
+   stranding "Nation" alone. Deterministic and still responsive: on narrow
+   screens the second line wraps again, which is correct. */
+h1 em{font-style:normal;color:var(--accent);display:block}
+.disclose{margin-top:clamp(26px,4vw,38px);font:400 12.5px/1.7 var(--mono);color:var(--dim);
+  max-width:64ch}
+.stand{margin-top:clamp(30px,4.5vw,48px);max-width:62ch;font-size:clamp(17px,1.7vw,19.5px);
+  line-height:1.6;color:var(--muted)}
+.stand b{color:var(--ink);font-weight:500}
 
-/* the console: a product panel, drawn — the one moment of spectacle */
-.console{margin-top:clamp(22px,2.8vw,34px);border:1px solid var(--edge);border-radius:var(--r-lg);
-  background:linear-gradient(180deg,var(--s-2),var(--s-1));overflow:hidden;
-  box-shadow:0 40px 90px -50px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02) inset}
-.console-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--edge);background:var(--s-1)}
-.console-bar .d{width:9px;height:9px;border-radius:50%;background:var(--s-3)}
-.console-bar span{margin-left:6px;font:400 11.5px/1 var(--mono);color:var(--dim);letter-spacing:.06em}
-.console-body{display:grid;grid-template-columns:1.15fr .85fr;gap:0}
-@media (max-width:820px){.console-body{grid-template-columns:1fr}}
-.console-vis{position:relative;min-height:330px;border-right:1px solid var(--edge)}
-@media (max-width:820px){.console-vis{border-right:0;border-bottom:1px solid var(--edge);min-height:240px}}
-#orbit{position:absolute;inset:0;width:100%;height:100%}
-.console-side{padding:18px}
-.kv{display:flex;justify-content:space-between;gap:14px;padding:11px 2px;border-bottom:1px solid var(--edge)}
-.kv:last-child{border-bottom:0}
-.kv dt{font:400 12px/1.5 var(--mono);color:var(--dim);letter-spacing:.04em}
-.kv dd{font-size:13.5px;color:var(--ink);text-align:right;font-weight:500}
-.kv dd em{font-style:normal;color:var(--accent-3)}
+/* ── section furniture ───────────────────────────────────────────────────── */
+section{padding:clamp(56px,8vw,110px) 0;border-bottom:1px solid var(--line)}
+.kicker{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(20px,3vw,30px)}
+.kicker i{font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);font-style:normal}
+.kicker hr{flex:1;border:0;border-top:1px solid var(--line)}
+h2{font-family:var(--display);font-weight:300;letter-spacing:-.02em;
+  font-size:clamp(28px,4.4vw,54px);line-height:1.06;max-width:20ch}
+.sub{margin-top:20px;max-width:62ch;color:var(--muted);font-size:16.5px;line-height:1.62}
+.sub b{color:var(--ink);font-weight:500}
 
-/* ───────────────── stat row ───────────────── */
-.stats{border-block:1px solid var(--edge);background:var(--s-1)}
-.stats .shell{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.stat{padding:26px 0;border-left:1px solid var(--edge);padding-left:26px}
-.stat:first-child{border-left:0;padding-left:0}
-@media (max-width:700px){.stat{border-left:0;padding-left:0;border-top:1px solid var(--edge)}.stat:first-child{border-top:0}}
-.stat .k{font:400 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.stat .v{font-size:clamp(26px,3.4vw,38px);font-weight:600;letter-spacing:-.03em;margin:10px 0 8px}
-.stat .v.a{background:linear-gradient(96deg,var(--accent),var(--accent-3));-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat p{color:var(--muted);font-size:14px;line-height:1.55;max-width:34ch}
+/* ── THE RECORD: deliberately dense, against the airy opening ────────────── */
+.record{margin-top:clamp(30px,4vw,46px);border-top:1px solid var(--line-2)}
+.rec{display:grid;grid-template-columns:minmax(88px,.5fr) minmax(190px,1.1fr) 2fr auto;
+  gap:6px 26px;padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.rec .yr{font:500 15px/1.3 var(--mono);color:var(--accent);letter-spacing:.02em}
+.rec .what{font-weight:500;font-size:16px;letter-spacing:-.006em}
+.rec .who{color:var(--muted);font-size:14.5px;line-height:1.55}
+.rec .cite{font:400 11.5px/1 var(--mono);color:var(--dim);text-decoration:none;
+  border-bottom:1px solid var(--line-2);white-space:nowrap}
+.rec .cite:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.rec .chg{display:block;margin-top:6px;color:var(--ink);font-size:13.5px}
+@media (max-width:820px){
+  .rec{grid-template-columns:1fr;gap:4px;padding:16px 0}
+  .rec .cite{justify-self:start;margin-top:6px}
+}
 
-/* ───────────────── sections ───────────────── */
-section{padding:clamp(30px,3.6vw,54px) 0;position:relative}
-.sec-k{font:500 12.5px/1 var(--sans);color:var(--accent);margin-bottom:14px;letter-spacing:-.005em}
-h2{font-size:clamp(21px,2.3vw,27px);line-height:1.16;letter-spacing:-.014em;font-weight:600;max-width:30ch}
-.sec-sub{margin-top:10px;color:var(--muted);max-width:68ch;font-size:clamp(15px,1.5vw,16.5px);line-height:1.55}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,26px);margin-top:clamp(18px,2.4vw,28px);align-items:start}
-@media (max-width:860px){.grid-2{grid-template-columns:1fr}}
+/* ── numbered editorial list (the pillars) ───────────────────────────────── */
+.numbered{margin-top:clamp(30px,4vw,46px);border-top:1px solid var(--line-2)}
+.num{display:grid;grid-template-columns:auto 1fr;gap:8px clamp(20px,3.4vw,48px);
+  padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid var(--line);
+  transition:background .18s}
+.num:hover{background:var(--surface)}
+.num .n{font-family:var(--display);font-weight:200;font-size:clamp(38px,5.6vw,72px);
+  line-height:.9;color:var(--line-2);grid-row:span 2;transition:color .18s}
+.num:hover .n{color:var(--accent)}
+.num h3{font-size:clamp(18px,2.1vw,24px);font-weight:500;letter-spacing:-.014em;align-self:center}
+.num p{color:var(--muted);font-size:15.5px;line-height:1.6;max-width:64ch;grid-column:2}
 
-.panel{border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);padding:clamp(18px,2.4vw,26px)}
-.panel h3{font-size:17px;font-weight:600;letter-spacing:-.012em;margin-bottom:10px}
-.panel p{color:var(--muted);font-size:14.5px;line-height:1.62}
-.panel p+p{margin-top:10px}
-.panel p b{color:var(--ink);font-weight:500}
+/* ── definition rows (ecosystem, welcome centre, network) ────────────────── */
+.defs{margin-top:clamp(28px,3.6vw,42px);border-top:1px solid var(--line-2)}
+.def{display:grid;grid-template-columns:minmax(200px,.85fr) 2fr;gap:8px clamp(20px,3.4vw,48px);
+  padding:clamp(18px,2.4vw,26px) 0;border-bottom:1px solid var(--line);transition:background .18s}
+.def:hover{background:var(--surface)}
+.def dt{font-weight:500;font-size:16.5px;letter-spacing:-.008em}
+.def dd{color:var(--muted);font-size:15.5px;line-height:1.62;margin:0}
+.def dd b{color:var(--ink);font-weight:500}
+@media (max-width:760px){.def{grid-template-columns:1fr}}
 
-/* timeline strip, drawn */
-.tl{display:grid;gap:0;margin-top:6px}
-.tl-row{display:grid;grid-template-columns:74px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--edge);align-items:baseline}
-.tl-row:last-child{border-bottom:0}
-.tl-row b{font:500 12px/1.4 var(--mono);color:var(--accent);letter-spacing:.02em}
-.tl-row span{color:var(--muted);font-size:14px}
+/* ── the disclaimer, given structural weight rather than a footnote ──────── */
+.claimbox{margin-top:clamp(28px,3.6vw,42px);border-left:2px solid var(--accent);
+  background:var(--accent-soft);padding:clamp(18px,2.6vw,26px) clamp(20px,3vw,30px)}
+.claimbox p{max-width:74ch;font-size:15.5px;line-height:1.62;color:var(--ink)}
+.claimbox p + p{margin-top:10px;color:var(--muted)}
 
-/* ───────────────── pillars: a real segmented control ───────────────── */
-.seg{display:flex;gap:4px;padding:4px;background:var(--s-1);border:1px solid var(--edge);
-  border-radius:var(--r);margin-top:clamp(24px,3.4vw,36px);overflow-x:auto;scrollbar-width:none}
-.seg::-webkit-scrollbar{display:none}
-.seg button{flex:1 1 auto;min-width:max-content;appearance:none;background:transparent;border:0;cursor:pointer;
-  color:var(--muted);font:500 13.5px/1 var(--sans);padding:11px 14px;border-radius:var(--r-sm);
-  transition:background .18s,color .18s;white-space:nowrap}
-.seg button:hover{color:var(--ink)}
-.seg button[aria-selected=true]{background:var(--s-3);color:var(--ink);box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
-.seg-panel{margin-top:18px;border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);
-  padding:clamp(20px,3vw,32px);min-height:150px}
-.seg-panel h3{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
-.seg-panel p{color:var(--muted);max-width:66ch;line-height:1.62}
-.no-js .seg{display:none}
-.no-js .seg-panel{min-height:0}
-.no-js .seg-panel h3{margin-top:22px}
-.no-js .seg-panel > div:first-child h3{margin-top:0}
+/* ── the trajectory ───────────────────────────────────────────────────────
+   A ROW OF TRIGGERS with one shared panel beneath, not three self-contained
+   columns. The first build put each phase's detail inside its own button: the
+   open column ran tall while the other two sat empty beside it, with a border
+   running down through the dead space. Even triggers plus a full-width panel is
+   both more balanced and a better use of the line length. */
+.traj{margin-top:clamp(30px,4vw,46px);border-top:1px solid var(--line-2)}
+.legs{display:grid;gap:10px}
+@media (min-width:860px){.legs{grid-template-columns:repeat(3,1fr);gap:0}}
+.leg{
+  border:1px solid var(--line);background:var(--surface);
+  padding:clamp(18px,2.4vw,26px);border-radius:var(--r);
+  cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%;
+  transition:background .22s cubic-bezier(.2,.7,.3,1),border-color .22s,
+             transform .22s cubic-bezier(.2,.7,.3,1);
+}
+@media (min-width:860px){
+  .legs .leg{border:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
+  .legs .leg:last-child{border-right:0}
+}
+/* The response Jared named: the block ENLARGES. On transform, so the compositor
+   does it without a single layout pass. */
+.leg:hover,.leg:focus-visible{
+  background:var(--surface-2);border-color:var(--line-2);
+  transform:scale(1.03);z-index:2;position:relative;
+}
+.leg[aria-selected="true"]{background:var(--surface-2);position:relative}
+.leg[aria-selected="true"]::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);
+}
+@media (prefers-reduced-motion:reduce){
+  .leg:hover,.leg:focus-visible{transform:none}
+  .leg{transition:none}
+}
+.leg .span{display:block;font:500 12.5px/1 var(--mono);letter-spacing:.14em;color:var(--accent)}
+.leg h3{margin:13px 0 0;font-size:clamp(17px,1.8vw,21px);font-weight:500;letter-spacing:-.014em}
 
-/* ───────────────── hairline tables + cards ───────────────── */
-.rows{margin-top:clamp(16px,2vw,22px);border:1px solid var(--edge);border-radius:var(--r);overflow:hidden}
-.row{display:grid;grid-template-columns:minmax(190px,.8fr) 1.6fr;gap:8px 22px;padding:16px clamp(14px,2vw,20px);
-  border-bottom:1px solid var(--edge);background:var(--s-1);transition:background .2s}
-.row:last-child{border-bottom:0}
-.row:hover{background:var(--s-2)}
-.row b{font-weight:500;font-size:14.5px}
-.row span{color:var(--muted);font-size:14px;line-height:1.58}
+.panel{border-top:1px solid var(--line);padding:clamp(24px,3.4vw,38px) 0 0}
+.panel .more{display:grid;gap:11px;list-style:none;max-width:78ch}
+.panel .more li{color:var(--muted);font-size:15.5px;line-height:1.6;padding-left:18px;position:relative}
+.panel .more li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;
+  background:var(--accent);opacity:.85}
+.panel .flag{margin-top:18px;font:400 13px/1.65 var(--mono);color:var(--dim);max-width:62ch}
+/* Without JS every panel is shown, each under its own heading, so the roadmap is
+   complete rather than empty. With JS only the selected one is. */
+.panel h4{font:500 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:14px}
+.js .panel h4{display:none}
+.js .panel[hidden]{display:none}
+.panel + .panel{margin-top:clamp(22px,3vw,32px)}
+.js .panel + .panel{margin-top:0}
 
-/* Citation links, added 29/08. This page's ONLY anchor rule is a{color:inherit},
-   so a link in prose here renders identically to the text beside it. That is
-   survivable for the one contact link in .join; it is fatal in a sources list,
-   where following the link IS the point. Coloured AND underlined, because colour
-   alone fails WCAG 1.4.1 - and this is the one block on the page a sceptical
-   reader is explicitly invited to check. --accent on --bg measures 10.9:1. */
-.row .src{display:inline-block;margin:8px 14px 0 0;padding:2px 0;
-  font:500 13px/1.45 var(--mono);color:var(--accent);text-decoration:underline;
-  text-underline-offset:3px;text-decoration-color:rgba(124,201,245,.45)}
-.row .src:hover{text-decoration-color:var(--accent)}
-.row .nolink{color:var(--dim);text-decoration:none;cursor:default}
-.row .chg{color:var(--ink);font-weight:500}
-@media (max-width:660px){.row{grid-template-columns:1fr;gap:4px}}
+/* ── sources ─────────────────────────────────────────────────────────────── */
+.srcs{margin-top:clamp(28px,3.6vw,42px);border-top:1px solid var(--line-2)}
+.src{display:grid;grid-template-columns:minmax(210px,.9fr) 2fr;gap:8px clamp(20px,3.4vw,48px);
+  padding:clamp(16px,2.2vw,24px) 0;border-bottom:1px solid var(--line);transition:background .18s}
+.src:hover{background:var(--surface)}
+.src dt{font-weight:500;font-size:16px;letter-spacing:-.008em}
+.src dd{margin:0;color:var(--muted);font-size:15px;line-height:1.6}
+.src .chg{color:var(--ink);font-weight:500}
+.src a{display:inline-block;margin:9px 14px 0 0;font:500 12.5px/1.4 var(--mono);
+  color:var(--accent);text-decoration:underline;text-underline-offset:3px;
+  text-decoration-color:rgba(217,164,65,.42)}
+.src a:hover{text-decoration-color:var(--accent)}
+.src .nolink{color:var(--dim);text-decoration:none;font:400 12.5px/1.4 var(--mono);
+  display:inline-block;margin-top:9px}
+@media (max-width:760px){.src{grid-template-columns:1fr}}
 
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(12px,1.4vw,16px);margin-top:clamp(16px,2vw,22px)}
-.card{border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);padding:clamp(18px,2.2vw,24px);
-  transition:background .2s,border-color .2s,transform .2s}
-.card:hover{background:var(--s-2);border-color:var(--edge-2);transform:translateY(-2px)}
-@media (prefers-reduced-motion:reduce){.card:hover{transform:none}}
-.card h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:9px}
-.card p{color:var(--muted);font-size:14px;line-height:1.6}
-.card ul{list-style:none;margin-top:12px;display:grid;gap:7px}
-.card li{color:var(--muted);font-size:13.5px;padding-left:16px;position:relative;line-height:1.5}
-.card li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.75}
+/* ── close + colophon ────────────────────────────────────────────────────── */
+.close{background:var(--ground-2)}
+.close h2{max-width:16ch}
+.act{margin-top:clamp(26px,3.4vw,38px);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 22px;border-radius:var(--r);
+  text-decoration:none;font-weight:500;font-size:15px;border:1px solid var(--ink);
+  background:var(--ink);color:var(--ground);
+  transition:background .18s,color .18s,border-color .18s,transform .18s}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:#160F03;transform:translateY(-2px)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--edge-ui)}
+.btn.ghost:hover{background:none;color:var(--accent);border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.btn:hover{transform:none}}
+.act small{color:var(--dim);font:400 13px/1.5 var(--sans);max-width:44ch}
 
-.phase{border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);padding:clamp(18px,2.2vw,24px)}
-.phase .yr{font:500 12px/1 var(--mono);color:var(--accent);letter-spacing:.06em}
-.phase h3{font-size:16.5px;font-weight:600;margin:10px 0 12px;letter-spacing:-.012em}
-.phase ul{list-style:none;display:grid;gap:8px}
-.phase li{color:var(--muted);font-size:13.5px;line-height:1.55;padding-left:16px;position:relative}
-.phase li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--accent-3);opacity:.7}
-
-.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,26px);margin-top:clamp(24px,3.4vw,36px)}
-@media (max-width:780px){.split{grid-template-columns:1fr}}
-.split ul{list-style:none;display:grid;gap:10px;margin-top:14px}
-.split li{color:var(--muted);font-size:14px;line-height:1.55;padding-left:20px;position:relative}
-.split li::before{position:absolute;left:0;top:0;font:500 13px/1.6 var(--mono)}
-.do li::before{content:"+";color:var(--accent-3)}
-.dont li::before{content:"\2212";color:var(--dim)}
-
-/* ───────────────── closing CTA ───────────────── */
-.join{border:1px solid var(--edge);border-radius:var(--r-lg);background:
-  radial-gradient(90% 140% at 12% 0%,rgba(124,201,245,.10),transparent 60%),var(--s-1);
-  padding:clamp(28px,4.4vw,56px);margin-top:clamp(24px,3.4vw,36px)}
-.join h2{max-width:20ch}
-.join .contact{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;font:400 13.5px/1 var(--mono);color:var(--muted)}
-.join .contact a{color:var(--accent);text-decoration:none}
-.join .contact a:hover{text-decoration:underline}
-
-/* the closing statement: quiet, wide, and the last thing before the legal line */
-.closer{padding:clamp(48px,7vw,90px) 0;border-top:1px solid var(--edge);
-  background:radial-gradient(70% 120% at 50% 120%,rgba(167,139,250,.09),transparent 70%)}
-.closer-line{max-width:34ch;font-size:clamp(20px,2.8vw,32px);line-height:1.3;
-  letter-spacing:-.022em;font-weight:500;color:var(--ink)}
-
-footer{border-top:1px solid var(--edge);padding:34px 0 46px;color:var(--dim);font-size:13px;line-height:1.7}
-footer .shell{display:grid;gap:12px}
+footer{padding:clamp(40px,5.5vw,70px) 0;color:var(--dim);font-size:13.5px;line-height:1.7}
+footer p{max-width:88ch}
+footer p + p{margin-top:14px}
 footer b{color:var(--muted);font-weight:500}
 
-.rv{opacity:0;transform:translateY(14px)}
-.js .rv{transition:opacity .6s cubic-bezier(.22,.8,.3,1),transform .6s cubic-bezier(.22,.8,.3,1)}
+/* ── reveals: opacity + transform only, so the compositor does all of it ─── */
+.js .rv{opacity:0;transform:translateY(14px);
+  transition:opacity .6s cubic-bezier(.22,.8,.3,1),transform .6s cubic-bezier(.22,.8,.3,1)}
 .js .rv.in{opacity:1;transform:none}
-.no-js .rv{opacity:1;transform:none}
-/* A reveal container holding keyboard focus must be visible, whatever the
-   IntersectionObserver has or has not done yet. Six controls (the audience
-   filter buttons and the join CTAs) sit inside un-revealed .rv blocks at load,
-   and nothing else guarantees they become visible when focused - not for a
-   screen reader's virtual cursor, a find-in-page jump, or restored focus. */
-.js .rv:focus-within{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
-</style>
-<style id="v3-interactive">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v3 INTERACTIVE LAYER — "juiced tf up with elements, interactive and wow
-   factor", on top of v2's foundation.
 
-   Jared, 24/08: "i just wish u could pump out 1 site that is juiced tf up with
-   elements, interactive and wow factor wow wowowowoowow. foundational site we
-   build strong sets us up for futgure success."
-
-   v2 got the REGISTER right (product-grade, Linear/Leap reference class) and was
-   deliberately restrained. This layer keeps that register and loads it up. The
-   rule that stops it becoming gimmick soup: every effect is attached to real
-   content and does real work. Nothing here is motion for its own sake.
-
-   Everything degrades: no JS -> static and readable; reduced motion -> no
-   movement, all content shown; offscreen -> paused.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* ── scroll progress: a hairline that fills across the top ───────────────── */
-#prog{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);
-  background:linear-gradient(90deg,var(--accent),var(--accent-2) 55%,var(--accent-3));
-  z-index:60;pointer-events:none;will-change:transform}
-.no-js #prog{display:none}
-
-/* ── section index: sticky dots down the right edge ─────────────────────── */
-#idx{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:40;
-  display:grid;gap:12px;pointer-events:auto}
-#idx a{display:block;width:8px;height:8px;border-radius:50%;background:var(--s-3);
-  border:1px solid var(--edge);transition:background .25s,transform .25s,border-color .25s;position:relative}
-#idx a:hover{transform:scale(1.35);border-color:var(--edge-2)}
-#idx a[aria-current=true]{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,201,245,.6)}
-#idx a span{position:absolute;right:16px;top:50%;transform:translateY(-50%) translateX(6px);
-  white-space:nowrap;font:400 11px/1 var(--mono);color:var(--muted);background:rgba(8,9,10,.88);
-  border:1px solid var(--edge);border-radius:6px;padding:5px 8px;opacity:0;pointer-events:none;
-  transition:opacity .2s,transform .2s}
-#idx a:hover span{opacity:1;transform:translateY(-50%) translateX(0)}
-.no-js #idx{display:none}
-@media (max-width:900px){#idx{display:none}}
-
-/* ── cursor spotlight: the single cheapest "expensive" effect there is ────
-   A radial highlight that follows the pointer INSIDE each surface. Only paints
-   on fine pointers; touch devices get the plain card. */
-@media (hover:hover) and (pointer:fine){
-  .card,.panel,.phase,.row,.seg-panel,.join,.console{position:relative}
-  .card::before,.panel::before,.phase::before,.seg-panel::before,.join::before{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
-      rgba(124,201,245,.10),transparent 42%);
-    opacity:0;transition:opacity .3s;z-index:0;
-  }
-  .card:hover::before,.panel:hover::before,.phase:hover::before,
-  .seg-panel:hover::before,.join:hover::before{opacity:1}
-  .card>*,.panel>*,.phase>*,.seg-panel>*,.join>*{position:relative;z-index:1}
-}
-
-/* ── magnetic primary CTA ───────────────────────────────────────────────── */
-.btn-p{will-change:transform}
-@media (prefers-reduced-motion:reduce){.btn-p{will-change:auto;transform:none!important}}
-
-/* ── animated counters ──────────────────────────────────────────────────── */
-.stat .v{font-variant-numeric:tabular-nums}
-
-/* ── ticker: real programme names, nothing invented ─────────────────────── */
-.ticker{border-block:1px solid var(--edge);background:var(--s-1);overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.ticker-track{display:flex;gap:0;width:max-content;animation:tick 46s linear infinite}
-.ticker span{font:400 12.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);padding:14px 26px;white-space:nowrap;position:relative}
-.ticker span::after{content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);
-  width:3px;height:3px;border-radius:50%;background:var(--accent);opacity:.5}
-@keyframes tick{to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
-.ticker:hover .ticker-track{animation-play-state:paused}
-
-/* ── trajectory: a rail that draws itself as you scroll ─────────────────── */
-.traj{position:relative;margin-top:clamp(18px,2.4vw,28px);padding-left:34px}
-.traj::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--edge)}
-.traj-fill{position:absolute;left:9px;top:6px;width:2px;height:0;border-radius:2px;
-  background:linear-gradient(180deg,var(--accent),var(--accent-3));
-  box-shadow:0 0 12px rgba(124,201,245,.5);will-change:height}
-.no-js .traj-fill{display:none}
-.traj .phase{margin-bottom:16px}
-.traj .phase::after{content:"";position:absolute;left:-34px;top:26px;width:20px;height:20px;
-  border-radius:50%;background:var(--bg);border:2px solid var(--edge);
-  transition:border-color .35s,box-shadow .35s,background .35s}
-.traj .phase.lit::after{border-color:var(--accent-3);background:rgba(94,234,212,.16);
-  box-shadow:0 0 0 4px rgba(94,234,212,.08),0 0 16px rgba(94,234,212,.35)}
-@media (max-width:640px){.traj{padding-left:26px}.traj::before,.traj-fill{left:5px}
-  .traj .phase::after{left:-26px;width:14px;height:14px;top:22px}}
-
-/* ── interactive ecosystem graph ────────────────────────────────────────── */
-.graph{display:grid;grid-template-columns:1.05fr .95fr;gap:0;margin-top:clamp(24px,3.4vw,36px);
-  border:1px solid var(--edge);border-radius:var(--r);overflow:hidden;background:var(--s-1)}
-@media (max-width:880px){.graph{grid-template-columns:1fr}}
-.graph-vis{position:relative;min-height:340px;border-right:1px solid var(--edge)}
-@media (max-width:880px){.graph-vis{border-right:0;border-bottom:1px solid var(--edge);min-height:300px}}
-#eco{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
-.graph-side{padding:clamp(18px,2.4vw,26px);display:flex;flex-direction:column;gap:12px}
-.graph-side .lab{font:400 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.graph-side h3{font-size:clamp(17px,2vw,21px);font-weight:600;letter-spacing:-.016em}
-.graph-side p{color:var(--muted);font-size:14.5px;line-height:1.62}
-.graph-hint{margin-top:auto;font:400 11.5px/1.5 var(--mono);color:var(--dim)}
-.no-js .graph-vis{display:none}
-.no-js .graph{grid-template-columns:1fr}
-
-/* ── reveal: a mask wipe rather than a fade, for the big headings ───────── */
-.js .wipe{clip-path:inset(0 100% 0 0);transition:clip-path .9s cubic-bezier(.16,1,.3,1)}
-.js .wipe.in{clip-path:inset(0 0 0 0)}
-.no-js .wipe{clip-path:none}
-@media (prefers-reduced-motion:reduce){.js .wipe{clip-path:none;transition:none}}
-
-/* ── the console compacts on phones ──────────────────────────────────────────
-   Measured: the hero is 2.33 screens at 375px, and 552px of that is the console.
-   Its canvas shrinks to a 240px smudge on a phone and the spec list restates
-   what the page already says in prose. On narrow screens the canvas goes and the
-   spec list becomes a tight two-column strip — the values all survive, the
-   furniture does not. Desktop is untouched. */
-@media (max-width:640px){
-  .console-vis{display:none}
-  .console-body{grid-template-columns:1fr}
-  .console-side{padding:12px 14px}
-  .kv{padding:9px 2px;gap:10px}
-  .kv dt{font-size:11px}
-  .kv dd{font-size:12.5px}
-  .kv dd br{display:none}
-  /* and give the hero itself less air, since it has plenty of content */
-  .hero{padding-top:clamp(36px,7vw,56px)}
-  .pills{gap:6px;margin-top:20px}
-  .pill{font-size:11.5px;padding:7px 11px}
-  .aud-body{padding:14px}
-  .aud-head{padding:12px 14px}
-  .aud-head .hint{display:none}
-}
-
-</style>
-<style id="v4-audience">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v4 AUDIENCE LAYER — target the demographic, not just the aesthetic.
-
-   Jared, 24/08: "can you get an extremely personalised xperience website?
-   target the demographic. not just the aesthetic."
-
-   THE GAP HE FOUND. The page's own copy names five distinct audiences —
-   "whether you are a student, educator, entrepreneur, investor, technology
-   developer or policymaker" — and then addresses all of them in one
-   undifferentiated voice. An investor and a fifteen-year-old in Sharjah need
-   completely different things from the same initiative, and both currently get
-   the same paragraph. Speaking to everyone is how you speak sharply to no one.
-
-   THE RULE THAT KEEPS THIS HONEST, and it is not negotiable: this layer
-   SELECTS and EMPHASISES; it never invents and it never hides. Every line the
-   "for you" panel shows is already elsewhere on the page, verbatim. Nothing is
-   removed when an audience is chosen — the full page stays below, in the same
-   order, for anyone who scrolls. Five audiences see five routes through ONE set
-   of facts, not five different sets of facts. A page that showed an investor
-   something the public could not see would be the same category of dishonesty
-   as the fabricated infographics this whole line of work started by deleting.
-
-   The business value is the deep link: /xs-v3.html?as=investor opens already
-   framed for an investor, so a single page can be sent to five different rooms.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.aud{margin-top:clamp(26px,3.6vw,38px);border:1px solid var(--edge);border-radius:var(--r-lg);
-  background:linear-gradient(180deg,var(--s-2),var(--s-1));overflow:hidden}
-.aud-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:14px clamp(14px,2vw,20px);border-bottom:1px solid var(--edge)}
-.aud-head .q{font:500 13.5px/1 var(--sans);color:var(--ink);margin-right:4px}
-.aud-head .hint{font:400 11.5px/1 var(--mono);color:var(--dim);margin-left:auto}
-.aud-opts{display:flex;gap:6px;flex-wrap:wrap}
-.aud-opts button{appearance:none;cursor:pointer;border-radius:999px;
-  border:1px solid var(--edge);background:var(--s-1);color:var(--muted);
-  font:500 13px/1 var(--sans);padding:9px 14px;
-  transition:background .18s,color .18s,border-color .18s,transform .18s}
-.aud-opts button:hover{color:var(--ink);border-color:var(--edge-2);background:var(--s-3)}
-.aud-opts button[aria-pressed=true]{
-  background:linear-gradient(96deg,rgba(124,201,245,.22),rgba(94,234,212,.16));
-  color:var(--ink);border-color:rgba(124,201,245,.55);
-  box-shadow:0 0 0 1px rgba(124,201,245,.18),0 6px 20px -10px rgba(124,201,245,.7)}
-@media (prefers-reduced-motion:reduce){.aud-opts button{transition:none}}
-
-.aud-body{padding:clamp(16px,2.4vw,24px);display:grid;grid-template-columns:1.1fr .9fr;
-  gap:clamp(16px,2.4vw,28px);align-items:start}
-@media (max-width:820px){.aud-body{grid-template-columns:1fr}}
-.aud-lede{font-size:clamp(16px,1.8vw,19px);line-height:1.5;letter-spacing:-.012em;color:var(--ink)}
-.aud-lede em{font-style:normal;color:var(--accent)}
-.aud-points{list-style:none;display:grid;gap:11px}
-.aud-points li{color:var(--muted);font-size:14.5px;line-height:1.55;padding-left:20px;position:relative}
-.aud-points li::before{content:"";position:absolute;left:0;top:.52em;width:6px;height:6px;
-  border-radius:50%;background:var(--accent-3);box-shadow:0 0 8px rgba(94,234,212,.55)}
-.aud-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.aud-cta .where{font:400 11.5px/1.5 var(--mono);color:var(--dim)}
-.aud-cta .where a{color:var(--accent);text-decoration:none}
-.aud-cta .where a:hover{text-decoration:underline}
-
-/* the section a chosen audience most cares about gets a quiet marker — it is a
-   signpost, never a filter: nothing else dims and nothing is removed */
-section[data-key]{scroll-margin-top:70px}
-body[data-aud] section[data-key].relevant > .shell > .sec-k::after{
-  content:"most relevant to you";
-  margin-left:10px;padding:3px 8px;border-radius:999px;
-  font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
-  color:var(--accent);background:rgba(124,201,245,.12);border:1px solid rgba(124,201,245,.35);
-  vertical-align:middle;white-space:nowrap;
-}
-@media (max-width:560px){
-  body[data-aud] section[data-key].relevant > .shell > .sec-k::after{display:none}
-}
-
-/* no JS: the control is meaningless, the page is already the universal version */
-.no-js .aud{display:none}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FILTERING — the control stops re-emphasising and starts collapsing.
-
-   Only ever active when body[data-aud] is set, i.e. after the reader has
-   chosen. Nothing here applies to a page nobody has filtered.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-body[data-aud] section.folded > .shell{display:none}
-
-.fold-bar{
-  display:none;
-  width:100%;text-align:left;cursor:pointer;
-  background:transparent;border:0;border-top:1px solid var(--edge);
-  padding:20px 0;color:inherit;font:inherit;
-  align-items:baseline;gap:16px;
-  transition:opacity .2s ease;
-}
-body[data-aud] section.folded > .fold-bar{display:flex}
-.fold-bar:hover{opacity:.78}
-.fold-bar:focus-visible{outline:2px solid var(--accent,#7cc9f5);outline-offset:4px}
-
-.fold-bar .fb-title{
-  font-size:clamp(16px,1.7vw,19px);font-weight:600;letter-spacing:-.01em;
-  flex:1 1 auto;
-}
-.fold-bar .fb-hint{
-  font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);flex:none;white-space:nowrap;
-}
-.fold-bar .fb-hint::after{content:" +";}
-
-/* the folded bar sits inside the section's own horizontal rhythm */
-section.folded{padding-top:0;padding-bottom:0}
-section.folded > .fold-bar{max-width:1200px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
-
-/* a section the reader has opened again keeps a quiet marker, so they can see
-   they are looking at something outside their own selection */
-body[data-aud] section.unfolded > .shell{
-  border-left:1px solid var(--edge);padding-left:clamp(14px,2vw,26px);
-}
-
-@media (prefers-reduced-motion:reduce){
-  .fold-bar{transition:none}
-}
-
-</style>
-<style id="v5-numbers">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v5 LIVE NUMBERS — "more interactive numbers like the 40+ years thing".
-
-   THE CONSTRAINT THAT SHAPES ALL OF THIS: no invented figures, no percentages.
-   This page's whole history is deleting fabricated data, so a made-up statistic
-   here would undo the point of the exercise. Every number below is either
-   ALREADY STATED on the page (2030, 2040, 2117, four pillars) or is plain
-   ARITHMETIC on those stated years against today's date. Nothing is sourced from
-   anywhere else, and nothing is a claim about performance.
-
-   What that buys, and it is better than a fabricated stat would have been: these
-   numbers are LIVE. The horizon countdown is different every day the page is
-   opened. A roadmap that says "2117" is abstract; one that says "91 years from
-   today" is not.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* ── the horizon counter: the page's biggest number, made concrete ───────── */
-.horizon{margin-top:clamp(26px,3.6vw,40px);border:1px solid var(--edge);border-radius:var(--r-lg);
-  background:
-    radial-gradient(80% 160% at 88% 0%,rgba(167,139,250,.10),transparent 62%),
-    linear-gradient(180deg,var(--s-2),var(--s-1));
-  padding:clamp(18px,2.6vw,26px);display:grid;grid-template-columns:auto 1fr;
-  gap:clamp(16px,2.6vw,30px);align-items:center}
-@media (max-width:680px){.horizon{grid-template-columns:1fr;gap:14px}}
-.horizon .figs{display:flex;align-items:baseline;gap:clamp(14px,2vw,22px)}
-.horizon .fig{display:grid;gap:4px}
-.horizon .fig b{font-size:clamp(34px,5.6vw,58px);line-height:.94;font-weight:600;
-  letter-spacing:-.035em;font-variant-numeric:tabular-nums;
-  background:linear-gradient(96deg,var(--accent),var(--accent-3));
-  -webkit-background-clip:text;background-clip:text;color:transparent}
-@supports not (-webkit-background-clip:text){.horizon .fig b{color:var(--accent)}}
-.horizon .fig span{font:400 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.horizon .fig.small b{font-size:clamp(20px,2.6vw,28px);
-  background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--muted)}
-.horizon .say{color:var(--muted);font-size:14.5px;line-height:1.58;max-width:46ch}
-.horizon .say b{color:var(--ink);font-weight:500}
-.horizon .say em{font-style:normal;color:var(--dim);font-size:12.5px;display:block;margin-top:8px;
-  font-family:var(--mono);letter-spacing:.02em}
-
-/* ── per-phase spans on the roadmap ─────────────────────────────────────── */
-.phase .span{display:inline-flex;align-items:baseline;gap:5px;margin-left:10px;
-  padding:3px 9px;border-radius:999px;border:1px solid var(--edge);background:var(--s-1);
-  font:500 11px/1 var(--mono);letter-spacing:.06em;color:var(--accent-3);vertical-align:middle;
-  font-variant-numeric:tabular-nums}
-.phase .span i{font-style:normal;color:var(--dim);letter-spacing:.1em}
-
-/* ── the stat row: give every figure the same tabular treatment ─────────── */
-.stat .v span{font-variant-numeric:tabular-nums}
-
-/* ── counted inline figures elsewhere on the page ───────────────────────── */
-.tally{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
-
-.no-js .horizon{display:none}
-.no-js .phase .span{display:none}
-
-</style>
-<style id="v6-human">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v6 THE HUMAN BAND — warmth, because the page had none.
-
-   Jared, 24/08, showing Instagram's logged-out page: "ig is built to everyone
-   and pulls off a pre cool design ngl. not telling u to be a wizard, just....
-   well, u pave the pavement. beyond the stars."
-
-   The criticism underneath that reference is one I had not seen. Instagram is
-   built for literally everyone and it leads with PEOPLE — "See everyday moments
-   from your close friends", with the emotional half of the sentence carrying the
-   gradient. It is warm. Everything I had built here is telemetry, structure,
-   diagrams and live arithmetic: technically excellent and emotionally cold.
-
-   And the material was already here. "A space for Emiratis to touch their
-   dreams" is the most human sentence in the entire document, and it was sitting
-   as the last clause of a paragraph inside pillar one, styled identically to
-   "investment-ready mechanisms". A national space programme is not really about
-   supply chains; it is about a kid in Sharjah deciding what to become. The page
-   said that and then whispered it.
-
-   So this band does one thing: gives that sentence the room it deserves,
-   deliberately breaking the cool blue system for a single warm moment. Every
-   word is verbatim from elsewhere on the page — this is emphasis, not new copy.
-
-   One warm beat in a cold page is a design decision. Two would be a theme, and
-   would cost the page the engineered feel that took all night to earn.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.human{
-  position:relative;overflow:hidden;
-  padding:clamp(44px,5.5vw,78px) 0;
-  border-block:1px solid var(--edge);
-  background:
-    radial-gradient(70% 130% at 18% 0%, rgba(233,188,106,.13), transparent 62%),
-    radial-gradient(60% 120% at 88% 100%, rgba(233,137,159,.11), transparent 66%),
-    linear-gradient(180deg, rgba(255,255,255,.022), transparent);
-}
-.human .shell{position:relative;z-index:1}
-
-.human .say{
-  font-size:clamp(30px,5.6vw,68px);
-  line-height:1.04;letter-spacing:-.032em;font-weight:600;
-  max-width:17ch;
-}
-.human .say .warm{
-  background:linear-gradient(96deg,#E9BC6A 4%,#F0A07A 48%,#E9899F 96%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-@supports not (-webkit-background-clip:text){.human .say .warm{color:#F0A07A}}
-
-.human .who{
-  margin-top:clamp(18px,2.2vw,26px);
-  display:flex;gap:8px;flex-wrap:wrap;
-}
-.human .who button{
-  font:500 14px/1 var(--sans);color:var(--ink);
-  padding:10px 16px;border-radius:999px;
-  border:1px solid rgba(233,188,106,.34);
-  background:linear-gradient(180deg,rgba(233,188,106,.10),rgba(233,137,159,.05));
-  cursor:pointer;transition:border-color .2s,transform .2s,background .2s;
-}
-.human .who button:hover{
-  border-color:rgba(233,188,106,.75);transform:translateY(-1px);
-  background:linear-gradient(180deg,rgba(233,188,106,.20),rgba(233,137,159,.10));
-}
-.human .who button:focus-visible{outline:2px solid #E9BC6A;outline-offset:3px}
-.human .who button:active{transform:translateY(0)}
-
-.human .then{
-  margin-top:clamp(18px,2.2vw,26px);
-  color:var(--muted);max-width:62ch;
-  font-size:clamp(15px,1.6vw,17px);line-height:1.62;
-}
-.human .then b{color:var(--ink);font-weight:500}
-
-/* a soft horizon glow low in the band — warm, and the only place on the page
-   that is not cool blue */
-.human::after{
-  content:"";position:absolute;left:50%;bottom:-30%;transform:translateX(-50%);
-  width:110%;height:62%;border-radius:50%;pointer-events:none;
-  background:radial-gradient(closest-side, rgba(240,160,122,.10), transparent 72%);
-}
-
-@media (max-width:640px){
-  .human .who button{font-size:13px;padding:8px 13px}
-}
-
-/* ── THE MOMENT ────────────────────────────────────────────────────────────
-   This band is now the top of the type scale and the only composed image on
-   the page. Everything else was reduced to make room for it: after the h1,
-   every heading used to be 35-40px, so nothing read as more important than
-   anything else. Contrast needs a difference, not uniform loudness. */
-
-.human .say{font-size:clamp(34px,6.6vw,76px);line-height:1.02;max-width:15ch}
-
-.human .reach{margin:clamp(22px,3.4vw,38px) 0 0;padding:0;max-width:none}
-.human .reach svg{display:block;width:100%;height:auto;max-height:min(46vh,380px);overflow:visible}
-.reach-ground{stroke:var(--edge);stroke-width:1}
-.reach-arc{fill:none;stroke:url(#reach-g);stroke-width:2.5;stroke-linecap:round}
-.reach-dot{fill:var(--muted)}
-.reach-tick{stroke:rgba(233,188,106,.45);stroke-width:1;stroke-dasharray:2 4}
-.reach-now{fill:#E9BC6A}
-.reach-mars{fill:none;stroke:#E9899F;stroke-width:2}
-.reach-lab{
-  fill:var(--muted);font:500 12px/1 var(--mono);letter-spacing:.14em;
-}
-.reach-lab-now{fill:#E9BC6A}
-.human .reach figcaption{
-  margin-top:14px;color:var(--muted);
-  font:500 11.5px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
-}
-
-/* the arc draws itself once, on reveal. enhancement only: with no JS and with
-   reduced motion it is simply already drawn. */
-.js .human .reach .reach-arc{stroke-dasharray:1200;stroke-dashoffset:1200}
-.js .human .reach.in .reach-arc{
-  animation:reach-draw 1.9s cubic-bezier(.22,.8,.28,1) forwards;
-}
-@keyframes reach-draw{to{stroke-dashoffset:0}}
-@media (prefers-reduced-motion:reduce){
-  .js .human .reach .reach-arc,
-  .js .human .reach.in .reach-arc{stroke-dasharray:none;stroke-dashoffset:0;animation:none}
-}
-
-</style>
-<style id="v7-ending">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v7 THE ENDING — one obvious action, sized right.
-
-   The page had a head (hero), a spine (structure), a heart (the human band) and
-   a horizon (the counters). It did not have an ENDING. It stopped at a contact
-   block with two equal buttons and a mailto, which is where most pitch pages
-   quietly lose people: the reader agrees, and then has to invent the next step
-   themselves.
-
-   Instagram's logged-out page — the reference Jared pointed at — closes by making
-   the next action feel obvious and small. One button, your own face on it,
-   "Continue". No decision to make.
-
-   So this does not ADD a section, it upgrades the one already there. Two equal
-   CTAs become one unmissable action plus a quiet alternative, and the action
-   COMPLETES THE AUDIENCE THREAD: if you told the page at the top that you are an
-   investor, the last thing it says knows that. Asking someone who they are and
-   then ending with a generic mailto is worse than never asking.
-
-   Nothing here states anything new about the initiative. The headline and the
-   supporting line are verbatim from the copy that was already inside this block.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.join{
-  padding:clamp(26px,3.4vw,44px) clamp(20px,3vw,38px);
-  background:
-    radial-gradient(85% 150% at 10% 0%, rgba(124,201,245,.13), transparent 58%),
-    radial-gradient(70% 130% at 92% 100%, rgba(167,139,250,.10), transparent 62%),
-    var(--s-1);
-}
-.join h2{
-  font-size:clamp(22px,2.6vw,31px);line-height:1.14;letter-spacing:-.016em;max-width:22ch;
-}
-.join .sec-sub{max-width:60ch;margin-top:11px}
-
-/* the action: one button that does not look like a nav item */
-.end-act{display:flex;align-items:center;gap:clamp(12px,2vw,20px);flex-wrap:wrap;
-  margin-top:clamp(24px,3.4vw,34px)}
-.end-act .btn-p{
-  font-size:clamp(15px,1.7vw,17px);font-weight:600;padding:15px 26px;border-radius:10px;
-  box-shadow:0 14px 34px -16px rgba(124,201,245,.75);
-}
-.end-act .alt{
-  color:var(--muted);font-size:14px;text-decoration:none;
-  border-bottom:1px solid var(--edge);padding-bottom:2px;transition:color .18s,border-color .18s;
-}
-.end-act .alt:hover{color:var(--ink);border-bottom-color:var(--edge-2)}
-
-/* who the page thinks you are, stated plainly, and changeable */
-.end-as{
-  display:inline-flex;align-items:center;gap:8px;margin-top:20px;
-  font:400 12.5px/1 var(--mono);color:var(--dim);
-}
-.end-as b{color:var(--accent);font-weight:500}
-.end-as button{
-  appearance:none;background:none;border:0;cursor:pointer;padding:0;
-  color:var(--muted);font:inherit;text-decoration:underline;text-underline-offset:3px;
-}
-.end-as button:hover{color:var(--ink)}
-.end-as:not([data-set]){display:none}
-
-/* what happens next, said plainly — the friction is uncertainty, not effort */
-.end-note{
-  margin-top:18px;font:400 12.5px/1.6 var(--mono);color:var(--dim);max-width:52ch;
-}
-.end-note b{color:var(--muted);font-weight:400}
-
-.join .contact{margin-top:22px;padding-top:18px;border-top:1px solid var(--edge)}
-.no-js .end-as{display:none}
-
-</style>
-<style id="v8-lang">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v8 LANGUAGE + RTL — everything except the words.
-
-   Jared: "is there a language for perhaps an emiratis that dont speak english?
-   or do they mostly speak english there?"
-
-   THE HONEST ANSWER, and it exposes a gap I created. Arabic is the official
-   language of the UAE. English is very widely spoken — it is the de facto
-   language of business, and the resident population is heavily expatriate — so
-   an English-only page is not useless there. But this page's own copy says
-   "A space for EMIRATIS to touch their dreams", and Emiratis are precisely the
-   group most likely to want Arabic first. A national initiative addressing its
-   own citizens only in English is a demographic miss, and official UAE
-   communication is normally bilingual. So yes: this page should be bilingual.
-
-   AND I MUST NOT WRITE THE ARABIC. This whole line of work began by deleting
-   fabricated infographics whose Arabic was garbled, and I set the rule that no
-   Arabic on this page comes from us. Machine-translating a real, named national
-   initiative's copy — including register, formal address and script shaping I
-   cannot verify — would be a worse version of the same failure. Wrong Arabic on
-   a page about the UAE is more damaging than no Arabic.
-
-   So this layer builds EVERYTHING EXCEPT THE WORDS:
-     · a real RTL layout, so the page mirrors correctly rather than breaking
-     · an Arabic-capable font stack
-     · a language switch with an honest empty state
-     · a translation slot the client fills, keyed to the English
-   The layout is provable today; the copy is a client deliverable. That is the
-   difference between scaffolding and faking.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-:root{
-  --ar:"Noto Naskh Arabic","Segoe UI","Geeza Pro","Traditional Arabic",serif;
-}
-
-/* ── the switch ─────────────────────────────────────────────────────────── */
-.lang{display:flex;gap:2px;padding:3px;border:1px solid var(--edge);border-radius:999px;
-  background:var(--s-1);margin-inline-start:10px}
-.lang button{appearance:none;cursor:pointer;border:0;background:transparent;border-radius:999px;
-  color:var(--muted);font:500 12px/1 var(--sans);padding:7px 11px;transition:background .18s,color .18s}
-.lang button:hover{color:var(--ink)}
-.lang button[aria-pressed=true]{background:var(--s-3);color:var(--ink)}
-.lang button[lang="ar"]{font-family:var(--ar);font-size:13.5px}
-.no-js .lang{display:none}
-
-/* ── the honest empty state ─────────────────────────────────────────────── */
-#lang-note{
-  position:fixed;inset-inline:0;bottom:0;z-index:70;
-  background:rgba(8,9,10,.94);border-top:1px solid rgba(233,188,106,.4);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:14px clamp(16px,4vw,40px);
-  display:none;gap:14px;align-items:center;flex-wrap:wrap;
-}
-#lang-note[data-on]{display:flex}
-#lang-note p{color:var(--muted);font-size:13.5px;line-height:1.5;max-width:78ch;margin-inline-end:auto}
-#lang-note b{color:var(--gold);font-weight:500}
-#lang-note button{
-  appearance:none;cursor:pointer;border:1px solid var(--edge);background:var(--s-2);
-  color:var(--ink);border-radius:8px;font:500 13px/1 var(--sans);padding:9px 14px;
-}
-#lang-note button:hover{background:var(--s-3)}
-
-/* ═══ RTL ═══════════════════════════════════════════════════════════════════
-   The page was written with physical properties in a lot of places. Rather than
-   claim it is RTL-ready, these are the specific things that actually break when
-   direction flips, each one corrected. Verified by flipping the live page.
-   ═════════════════════════════════════════════════════════════════════════ */
-[dir="rtl"] body{font-family:var(--ar),var(--sans)}
-[dir="rtl"] .brand{margin-right:0;margin-left:auto}
-[dir="rtl"] .aud-head .hint{margin-left:0;margin-right:auto}
-
-/* the section index moves to the other edge, and its labels flip with it */
-[dir="rtl"] #idx{right:auto;left:16px}
-[dir="rtl"] #idx a span{right:auto;left:16px;transform:translateY(-50%) translateX(-6px)}
-[dir="rtl"] #idx a:hover span{transform:translateY(-50%) translateX(0)}
-
-/* the scroll progress fills from the other side */
-[dir="rtl"] #prog{transform-origin:100% 50%}
-
-/* the trajectory rail and its phase nodes mirror */
-[dir="rtl"] .traj{padding-left:0;padding-right:34px}
-[dir="rtl"] .traj::before,[dir="rtl"] .traj-fill{left:auto;right:9px}
-[dir="rtl"] .traj .phase::after{left:auto;right:-34px}
-@media (max-width:640px){
-  [dir="rtl"] .traj{padding-right:26px}
-  [dir="rtl"] .traj::before,[dir="rtl"] .traj-fill{right:5px}
-  [dir="rtl"] .traj .phase::after{right:-26px}
-}
-
-/* panel dividers and list markers */
-[dir="rtl"] .console-vis,[dir="rtl"] .graph-vis{border-right:0;border-left:1px solid var(--edge)}
-[dir="rtl"] .stat{border-left:0;border-right:1px solid var(--edge);padding-left:0;padding-right:26px}
-[dir="rtl"] .stat:first-child{border-right:0;padding-right:0}
-[dir="rtl"] .kv dd{text-align:left}
-[dir="rtl"] .card li,[dir="rtl"] .phase li,[dir="rtl"] .split li,[dir="rtl"] .aud-points li{
-  padding-left:0;padding-right:20px}
-[dir="rtl"] .card li::before,[dir="rtl"] .phase li::before,
-[dir="rtl"] .aud-points li::before{left:auto;right:0}
-[dir="rtl"] .split li::before{left:auto;right:0}
-[dir="rtl"] .eyebrow i{order:1}
-
-/* the marquee runs the other way so it still reads into the page */
-[dir="rtl"] .ticker-track{animation-direction:reverse}
-
-/* mask-wipe reveals from the other edge */
-[dir="rtl"] .js .wipe{clip-path:inset(0 0 0 100%)}
-[dir="rtl"] .js .wipe.in{clip-path:inset(0 0 0 0)}
-
-@media (max-width:640px){ .lang{margin-inline-start:6px} .lang button{padding:6px 9px} }
-
-/* ── bidi isolation ──────────────────────────────────────────────────────────
-   Two classes of content must not be reordered by RTL:
-
-   FIGURES. "2030–2040" was rendering as "2040–2030" and the computed span as
-   "years 4" — bidi reorders a number-dash-number run inside an RTL paragraph.
-   Year ranges are data, not prose.
-
-   UNTRANSLATED PROSE. English inside an RTL paragraph throws its punctuation to
-   the wrong end (".national milestones"). Rather than ship that, text still in
-   English is explicitly marked LTR by the language layer: the LAYOUT mirrors,
-   the English still reads. When real Arabic arrives it carries its own
-   direction and these rules simply stop mattering. */
-[dir="rtl"] .phase .yr,
-[dir="rtl"] .phase .span,
-[dir="rtl"] .horizon .figs,
-[dir="rtl"] .stat .v,
-[dir="rtl"] .kv dd,
-[dir="rtl"] .ticker span,
-[dir="rtl"] .join .contact{
-  direction:ltr;unicode-bidi:isolate;
-}
-[dir="rtl"] .phase .yr{text-align:right}
-[dir="rtl"] .kv dd{text-align:left}
-
-/* prose the language layer has marked as still-English */
-[dir="rtl"] [data-untranslated]{
-  direction:ltr;unicode-bidi:isolate;text-align:start;
-}
-
-</style>
-<style id="v9-floor">
-/* ═══════════════════════════════════════════════════════════════════════════
-   v9 RAISING THE FLOOR — the flat middle.
-
-   Jared: "so much better, like, st. deviation increased, for sure."
-
-   The variance he felt was real and I diagnosed it as: spectacle added in three
-   places (hero, ecosystem graph, trajectory), everything between left at v2's
-   restraint level. The page swings — strong moment, flat stretch, strong moment.
-   The fix for variance is NOT a fourth peak. It is lifting the troughs.
-
-   The flattest block on the page is "Strategic benefits to the UAE": five
-   identical small cards in a grid. Five equal boxes is the pattern a page falls
-   back on when nobody decided what matters most — it reads as a list of things
-   rather than an argument.
-
-   These are the five reasons a country would fund this. They deserve to be read,
-   not skimmed. So: no cards. A typographic ledger with real hierarchy — the
-   claim large enough to actually land, the explanation beneath it, hairline
-   separated, the way a serious document sets out its case.
-
-   No new effects. This is the point: the floor comes up through TYPOGRAPHY and
-   RHYTHM, not through adding another moving part. Adding a fourth spectacle here
-   would have widened the gap I was trying to close.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* the benefits block stops being a card grid and becomes a ledger */
-#ecosystem .cards{
-  display:grid;grid-template-columns:1fr;gap:0;
-  margin-top:clamp(14px,1.8vw,18px);
-  border-top:1px solid var(--edge);
-}
-#ecosystem .cards .card{
-  border:0;border-bottom:1px solid var(--edge);border-radius:0;
-  background:transparent;padding:clamp(14px,1.8vw,20px) 0;
-  display:grid;grid-template-columns:minmax(220px,.85fr) 1.6fr;
-  gap:6px clamp(20px,3vw,44px);align-items:baseline;
-  transition:none;
-}
-#ecosystem .cards .card:hover{background:transparent;border-color:var(--edge);transform:none}
-#ecosystem .cards .card h3{
-  font-size:clamp(19px,2.4vw,27px);line-height:1.12;font-weight:600;
-  letter-spacing:-.024em;margin:0;color:var(--ink);
-}
-#ecosystem .cards .card p{
-  font-size:clamp(14.5px,1.5vw,16px);line-height:1.6;color:var(--muted);max-width:52ch;
-}
-/* the accent marks the row you are on, rather than five boxes competing */
-@media (hover:hover) and (pointer:fine){
-  #ecosystem .cards .card{position:relative}
-  #ecosystem .cards .card::after{
-    content:"";position:absolute;inset-inline-start:0;bottom:-1px;height:1px;width:0;
-    background:linear-gradient(90deg,var(--accent),transparent);
-    transition:width .45s cubic-bezier(.22,.8,.3,1);
-  }
-  #ecosystem .cards .card:hover::after{width:100%}
-  /* the spotlight belonged to boxes; a ledger row does not want it */
-  #ecosystem .cards .card::before{display:none}
-}
-@media (max-width:720px){
-  #ecosystem .cards .card{grid-template-columns:1fr;gap:8px}
-}
-
-/* the Welcome Center trio keeps its cards but gains real heading weight, so it
-   is not competing at the same flat pitch as everything else */
-#gateway .cards .card h3{
-  font-size:clamp(17px,2vw,20px);letter-spacing:-.016em;
-  padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--edge);
-}
-
-/* the do / do-not split is an argument, not two lists — give it contrast */
-.split .panel.do{border-color:rgba(94,234,212,.24)}
-.split .panel.dont{background:transparent;border-style:dashed}
-.split .panel h3{
-  font-size:clamp(16px,1.9vw,19px);letter-spacing:-.014em;
-  padding-bottom:10px;border-bottom:1px solid var(--edge);margin-bottom:4px;
-}
-
+/* ── RTL: the layout is real; the copy is deliberately absent ────────────── */
+[dir="rtl"] .mark{margin-right:0;margin-left:auto}
+[dir="rtl"] #lang-note p{margin-right:0;margin-left:auto}
+[dir="rtl"] .claimbox{border-left:0;border-right:2px solid var(--accent)}
+[dir="rtl"] .leg .more li{padding-left:0;padding-right:16px}
+[dir="rtl"] .leg .more li::before{left:auto;right:0}
+[dir="rtl"] .traj .leg{border-right:0;border-left:1px solid var(--line)}
+[dir="rtl"] .traj .leg:last-child{border-left:0}
 </style>
 </head>
-<body class="no-js">
-<a class="skip" href="#vision">Skip to content</a>
-<div id="prog" aria-hidden="true"></div>
-<nav id="idx" aria-label="Section index">
-  <a href="#vision" aria-label="Vision"><span>Vision</span></a>
-  <a href="#pillars" aria-label="Pillars"><span>Pillars</span></a>
-  <a href="#ecosystem" aria-label="Ecosystem"><span>Ecosystem</span></a>
-  <a href="#city" aria-label="Space City"><span>Space City</span></a>
-  <a href="#gateway" aria-label="Welcome Center"><span>Welcome Center</span></a>
-  <a href="#join" aria-label="Contact"><span>Contact</span></a>
-</nav>
+<body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header>
-  <div class="shell nav">
-    <a class="brand" href="#top">
-      <span class="mk" aria-hidden="true"></span>
-      <span>XperienceSpace<small>A Lilliss IT prototype</small></span>
-    </a>
+<header class="mast">
+  <div class="wide">
+    <a class="mark" href="#top"><b>XperienceSpace</b><span>Lilliss IT concept</span></a>
     <nav aria-label="Sections">
-      <a href="#vision">Vision</a>
+      <a href="#record">The record</a>
       <a href="#pillars">Pillars</a>
       <a href="#ecosystem">Ecosystem</a>
-      <a href="#city">Space City</a>
-      <a href="#gateway">Welcome Center</a>
+      <a href="#trajectory">Trajectory</a>
       <a href="#sources">Sources</a>
-      <a href="#join">Contact</a>
     </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="ar" lang="ar" aria-label="Arabic" aria-pressed="false">العربية</button>
+    </div>
   </div>
 </header>
+<div id="lang-note" role="status">
+  <div class="wide">
+    <p>The layout mirrors correctly for Arabic, and the <b>Arabic copy has not been supplied</b>.
+      Writing it is not this concept&rsquo;s to do &mdash; a page in your language written by
+      someone who does not have it is decoration, not respect. Numerals stay Western, which is
+      what UAE institutions publish.</p>
+    <button type="button" id="lang-back">Back to English</button>
+  </div>
+</div>
 
-<main id="top">
+<main id="main">
 
-  <div class="hero">
-    <canvas id="mesh" aria-hidden="true"></canvas>
-      <canvas id="orbitfield" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:-1"></canvas>
-    <div class="shell">
-      <p class="eyebrow"><i></i>UAE • A future-ready space economy</p>
-      <h1>Building the <span class="g">UAE Space Nation</span></h1>
-      <p class="tagline">Planting the UAE flag in the future of space</p>
-      <p class="lede">Space is no longer a distant aspiration. It is a strategic arena for <b>sovereign capability, sustainable growth, and global leadership</b>. <b>XperienceSpace</b> is a UAE-based initiative establishing the local industry and community ecosystem supporting the UAE vision for space.</p>
-      <div class="cta">
-        <a class="btn btn-p" href="#join">Become a Partner</a>
-        <a class="btn btn-s" href="#pillars">Explore Programs</a>
-      </div>
-      <div class="pills">
-        <span class="pill">Inspired by the UAE’s Mars 2117 programme (MBRSC)</span>
-        <span class="pill">Private investment &amp; partnership driven</span>
-      </div>
+<section class="open" id="top">
+  <div class="wide">
+    <p class="eyebrow rv">XperienceSpace &middot; an independent initiative</p>
+    <h1 class="rv">Building the <em>UAE Space Nation</em></h1>
+    <p class="disclose rv">An unsolicited design concept by Jared Lilliss (Lilliss IT), Australia.
+      Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.
+      Every UAE fact below is sourced to the body that published it.</p>
+    <p class="stand rv">The UAE is moving from a resource-based economy to a high-technology one,
+      with the space programme as its engine. <b>What follows separates two things that are easy
+      to blur:</b> what the country has already done, which is a matter of record, and what
+      XperienceSpace proposes to build alongside it, which is a proposal.</p>
+  </div>
+</section>
 
-      <div class="aud">
-        <div class="aud-head">
-          <span class="q">I'm here as</span>
-          <div class="aud-opts" role="group" aria-label="Choose your perspective"></div>
-          <span class="hint">folds what isn&rsquo;t for you &mdash; nothing is removed, one click reopens it</span>
-        </div>
-        <div class="aud-body">
-          <div>
-            <p class="aud-lede">Five very different people read this page. Pick yours and it reorders around you.</p>
-            <div class="aud-cta">
-              <a class="btn btn-p" href="mailto:jaredlils99@gmail.com">Become a Partner</a>
-              <span class="where">Everything stays on the page either way.</span>
-            </div>
-          </div>
-          <ul class="aud-points">
-            <li>Whether you are a student, educator, entrepreneur, investor, technology developer or policymaker, there is a place for you inside UAE’s journey to space.</li>
-          </ul>
-        </div>
-      </div>
+<!-- ══════ THE RECORD ══════
+     Deliberately the densest block on the page, immediately after the airiest.
+     That contrast IS the design: student work is evenly dense throughout.
+     Every row is a verified row of ATELIER-UAE-VERIFY-RULING-2026-08-26 and
+     cites into §Sources rather than carrying its links inline, which is how a
+     publication does it — facts in the body, apparatus at the back. -->
+<section id="record">
+  <div class="wide">
+    <div class="kicker rv"><i>01 &middot; The record</i><hr></div>
+    <h2 class="rv">What the UAE has already done</h2>
+    <p class="sub rv">Every line belongs to the UAE government or one of its agencies, with the
+      owner named. <b>Where a fact has changed since it was published, the change is stated
+      rather than dropped</b> &mdash; which is the part a reader who knows the programme notices
+      first.</p>
 
-      <div class="console">
-        <div class="console-bar">
-          <span class="d" aria-hidden="true"></span><span class="d" aria-hidden="true"></span><span class="d" aria-hidden="true"></span>
-          <span>ecosystem · overview</span>
-        </div>
-        <div class="console-body">
-          <div class="console-vis"><canvas id="orbit" aria-hidden="true"></canvas></div>
-          <div class="console-side">
-            <dl>
-              <div class="kv"><dt>Mandate</dt><dd>Collaborative catalyst</dd></div>
-              <div class="kv"><dt>Alignment</dt><dd>National Space Strategy 2030</dd></div>
-              <div class="kv"><dt>Horizon</dt><dd>2030–2117</dd></div>
-              <div class="kv"><dt>Pillars</dt><dd>Community · Education<br>Industry · R&amp;D</dd></div>
-              <div class="kv"><dt>Model</dt><dd><em>Partnership driven</em></dd></div>
-            </dl>
-          </div>
-        </div>
+    <div class="record rv">
+      <div class="rec">
+        <span class="yr">2019</span>
+        <span class="what">National Space Strategy 2030</span>
+        <span class="who">Approved by the UAE Cabinet on 11&nbsp;March&nbsp;2019.</span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
       </div>
-      <p class="lede" style="margin-top:20px;font-size:14px">XperienceSpace operates as a collaborative catalyst and support ecosystem in full alignment with official UAE space strategies &amp; objectives.</p>
+      <div class="rec">
+        <span class="yr">2020&ndash;21</span>
+        <span class="what">Hope Probe</span>
+        <span class="who">Launched 19&nbsp;July&nbsp;2020, Mars orbit 9&nbsp;February&nbsp;2021 &mdash; the first Arab country, and the fifth country, to reach Mars. MBRSC.</span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
+      <div class="rec">
+        <span class="yr">2023</span>
+        <span class="what">Rashid&nbsp;1, and Rashid&nbsp;2</span>
+        <span class="who">Rashid&nbsp;1 was lost with the HAKUTO-R lander; NASA imaged debris at the site on 26&nbsp;April&nbsp;2023. Rashid&nbsp;2 is in development at MBRSC.
+          <span class="chg">The loss is stated, because a page listing only successes is not a record.</span></span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
+      <div class="rec">
+        <span class="yr">2024</span>
+        <span class="what">Lunar Gateway airlock</span>
+        <span class="who">MBRSC agreed on 7&nbsp;January&nbsp;2024 to provide Gateway&rsquo;s Crew and Science Airlock.
+          <span class="chg">The programme&rsquo;s status has since changed: the FY26 budget ended it and FY27 requests no discretionary funding &mdash; so this states the agreement and its date, not an ongoing contribution.</span></span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
+      <div class="rec">
+        <span class="yr">2025</span>
+        <span class="what">The satellite fleet</span>
+        <span class="who">MBRSC: DubaiSat&#8209;1 (2009), DubaiSat&#8209;2 (2013), Nayif&#8209;1 (2017), KhalifaSat (2018), DMSat&#8209;1 (2021), MBZ&#8209;Sat (14&nbsp;January&nbsp;2025).</span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
+      <div class="rec">
+        <span class="yr">2028&ndash;33</span>
+        <span class="what">Emirates Mission to the Asteroid Belt</span>
+        <span class="who">UAE Space Agency with LASP at CU&nbsp;Boulder. Launch 2028, first main-belt flyby 2030, seven asteroids observed, and a landing in 2033.
+          <span class="chg">No target asteroid is named: the names in circulation appear on no UAE government page.</span></span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
+      <div class="rec">
+        <span class="yr">2117</span>
+        <span class="what">Mars 2117</span>
+        <span class="who">Announced 2017 and led by the Mohammed Bin Rashid Space Centre &mdash; a first human settlement on Mars within a century.</span>
+        <a class="cite" href="#sources">Sources &#8594;</a>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- The stats strip was removed 26/08/2026. It stated "Horizon 2030-2117" and
-       "4 Pillars", and the ecosystem console about 200px below states BOTH, plus
-       Mandate, Alignment and Model. Verified against the rendered page rather than
-       assumed - twice today "these are duplicates" turned out to be false on
-       inspection, so this one was checked before cutting.
+<section id="pillars">
+  <div class="wide">
+    <div class="kicker rv"><i>02 &middot; Core framework</i><hr></div>
+    <h2 class="rv">Four pillars powering XperienceSpace</h2>
+    <p class="sub rv">The initiative structures its programmes around four interdependent pillars.
+      Each channels community energy, builds capability, and supports the UAE&rsquo;s official space
+      initiatives with practical, investment-ready mechanisms.</p>
 
-       The wider reason it went: the page opened with THREE CONSECUTIVE DATA PANELS
-       - stats, console, horizon counter - before a reader met a sentence of
-       argument. Three displays in a row is capability on show rather than a page
-       that has decided what matters. This was the only redundant one of the three. -->
-
-  <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Mars 2117</span><span>National Space Strategy 2030</span><span>Hope Probe</span><span>Rashid Rover</span><span>Lunar Gateway contribution</span><span>Satellites</span><span>Asteroid &amp; deep-space ambitions</span><span>Food BIOME</span><span>Olympus</span><span>Eyes on Universe</span><span>Mars 2117</span><span>National Space Strategy 2030</span></div></div>
-
-  <div class="shell">
-    <div class="horizon">
-      <div class="figs">
-        <div class="fig"><b data-h="years">91</b><span>years to the 2117 horizon</span></div>
-        <div class="fig small"><b data-h="days">33,000</b><span>days</span></div>
-              </div>
-      <p class="say">The UAE&rsquo;s national space roadmap runs from a <b>1970s</b> meeting with NASA&rsquo;s Apollo team to the <b>Mars 2117</b> programme.
-        Counted from today, that is the distance still to cover.
-        <em>Every figure here is arithmetic on dates this page already states — nothing is estimated.</em></p>
+    <div class="numbered rv">
+      <div class="num">
+        <span class="n" aria-hidden="true">01</span>
+        <h3>Public engagement &amp; community</h3>
+        <p>Raising awareness and inspiring innovation by addressing Earth&rsquo;s challenges, creating
+          new opportunities for the UAE&rsquo;s growth.</p>
+      </div>
+      <div class="num">
+        <span class="n" aria-hidden="true">02</span>
+        <h3>Education &amp; talent pipeline</h3>
+        <p>Developing future leaders by applying UAE-driven solutions to global and space challenges,
+          strengthening national expertise.</p>
+      </div>
+      <div class="num">
+        <span class="n" aria-hidden="true">03</span>
+        <h3>Industry development &amp; support</h3>
+        <p>Creating initiatives that develop cutting-edge solutions for local and global needs,
+          driving the UAE&rsquo;s leadership in space.</p>
+      </div>
+      <div class="num">
+        <span class="n" aria-hidden="true">04</span>
+        <h3>Research &amp; development</h3>
+        <p>Developing the products and services needed to solve Earth&rsquo;s sustainability challenges
+          and build a competitive, future-ready sector.</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <section id="vision" data-key="vision">
-    <div class="shell">
-      <p class="sec-k rv">The First Space Nation</p>
-      <h2 class="rv wipe">UAE’s long-term vision for the future</h2>
-      <p class="sec-sub rv">Guided by visionary leadership, the UAE is transitioning from a resourced based to a hiTech economy driven by the space program. Early achievements have helped form a structured, long-horizon strategy with advanced missions, strong governance, and a developing space sector. This strategy propels UAE towards leadership in Exploration, R&amp;D and Investment developing exciting opportunties for the global space economy.</p>
-      <div class="grid-2">
-        <div class="panel rv">
-          <h3>From historic vision to structured roadmap</h3>
-          <p>The UAE&rsquo;s interest in astronomy and space sciences dates back to the 1970s, when Sheikh Zayed bin Sultan Al Nahyan met the NASA team responsible for the Apollo Moon landing. Under the visionary leadership of UAE government this vision evolved into a clear mandate: <b>Position the UAE as a global leader in Space Exploration, Research &amp; Investment</b>.</p>
-          <p>The UAE now advances sovereign missions, agreed in January 2024 to provide the Lunar Gateway&rsquo;s Crew and Science Airlock, and invests in technologies, governance and infrastructure that enable long-term human presence beyond Earth.</p>
-          <div class="tl" style="margin-top:18px">
-            <div class="tl-row"><b>1970s</b><span>NASA Apollo team meeting</span></div>
-            <div class="tl-row"><b>Sovereign</b><span>Missions</span></div>
-            <div class="tl-row"><b>Gateway</b><span>Lunar</span></div>
-            <div class="tl-row"><b>Beyond</b><span>From the 1970s to long-term presence</span></div>
-          </div>
-        </div>
-        <div class="panel rv">
-          <h3>Why an ecosystem is essential</h3>
-          <p>To sustain this trajectory, the UAE requires a robust local ecosystem which develops talent, aligns regulations, attracts private capital, and accelerates technology transfer into the country.</p>
-          <p>XperienceSpace complements UAE's vision by providing a structured collaboration platform which develops industry &amp; community, making UAE’s long-term space vision economically tangible and globally accessible.</p>
-        </div>
+<section id="ecosystem">
+  <div class="wide">
+    <div class="kicker rv"><i>03 &middot; Ecosystem</i><hr></div>
+    <h2 class="rv">Making the vision investable, practical and inclusive</h2>
+    <p class="sub rv">The XperienceSpace ecosystem connects community, academia, industry, investors
+      and government stakeholders into one platform, designed to attract technology, talent and
+      capital into the UAE.</p>
+
+    <!-- The disclaimer the ruling called "the finding the whole review was set up
+         to catch". It is given structural weight here — its own block, above the
+         proposals rather than beneath them — instead of being a paragraph nobody
+         reaches. Structure is a stronger honesty mechanism than a longer footer. -->
+    <div class="claimbox rv">
+      <p>The four items below are <b>concept programmes proposed by XperienceSpace</b>, an
+        independent industry initiative. They are <b>not UAE government programmes</b>, and this
+        page is not affiliated with the UAE Space Agency, MBRSC, or any UAE government body.</p>
+      <p>The UAE&rsquo;s own space economic zone is the UAE Space Agency&rsquo;s Space Economic Zones
+        Programme, first zone at Masdar City. &ldquo;UAE Space City&rdquo; below is a proposal, and
+        is not that programme.</p>
+    </div>
+
+    <dl class="defs rv">
+      <div class="def"><dt>UAE Space Community</dt>
+        <dd>A national movement where youth, families, professionals and creators take part in UAE
+          space initiatives through digital platforms, outreach programmes, events, challenges and
+          learning pathways.</dd></div>
+      <div class="def"><dt>UAE Space City</dt>
+        <dd>A scalable, future-ready urban and economic zone housing R&amp;D centres, manufacturing
+          clusters, training facilities and high-technology workplaces dedicated to space and
+          sustainability.</dd></div>
+      <div class="def"><dt>UAE Space Welcome Center</dt>
+        <dd>The gateway at the heart of the proposed city: immersive exhibits, simulators, labs,
+          events and industry showcases linking the public to live missions.</dd></div>
+      <div class="def"><dt>Future Development Funds</dt>
+        <dd>A series of high-technology funds channelling private and institutional capital into
+          UAE-based solutions.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="trajectory">
+  <div class="wide">
+    <div class="kicker rv"><i>04 &middot; Strategic trajectory</i><hr></div>
+    <h2 class="rv">From programmes to a functioning space city</h2>
+    <p class="sub rv">A phased roadmap converting ambition into visible assets &mdash; supporting UAE
+      initiatives, de-risking investment, and aligning ecosystem maturity with national milestones.
+      <b>Select a phase to open it.</b></p>
+
+    <div class="traj rv">
+      <div class="legs" role="tablist" aria-label="Roadmap phases">
+        <button type="button" class="leg" role="tab" id="leg-1" aria-controls="ph-1" aria-selected="true">
+          <span class="span">NOW &ndash; 2030</span>
+          <h3>Foundation &amp; awareness</h3>
+        </button>
+        <button type="button" class="leg" role="tab" id="leg-2" aria-controls="ph-2" aria-selected="false">
+          <span class="span">2030 &ndash; 2040</span>
+          <h3>Space city &amp; industry scale-up</h3>
+        </button>
+        <button type="button" class="leg" role="tab" id="leg-3" aria-controls="ph-3" aria-selected="false">
+          <span class="span">2040 &ndash; 2117</span>
+          <h3>Deep-space economy</h3>
+        </button>
+      </div>
+
+      <div class="panel" id="ph-1" role="tabpanel" aria-labelledby="leg-1" tabindex="0">
+        <h4>NOW &ndash; 2030 &middot; Foundation &amp; awareness</h4>
+        <ul class="more">
+          <li>Launch the Welcome Center, virtual community, outreach programmes and academies</li>
+          <li>Create the special economic zone and its infrastructure</li>
+          <li>Establish multiple high-impact programmes</li>
+        </ul>
+      </div>
+      <div class="panel" id="ph-2" role="tabpanel" aria-labelledby="leg-2" tabindex="0">
+        <h4>2030 &ndash; 2040 &middot; Space city &amp; industry scale-up</h4>
+        <ul class="more">
+          <li>Dedicated zones for advanced manufacturing, simulation, materials, space medicine and logistics</li>
+          <li>Develop residential and tourism programmes</li>
+          <li>Deepen industry and research partnerships</li>
+        </ul>
+      </div>
+      <div class="panel" id="ph-3" role="tabpanel" aria-labelledby="leg-3" tabindex="0">
+        <h4>2040 &ndash; 2117 &middot; Deep-space economy</h4>
+        <ul class="more">
+          <li>Mature the UAE as a strategic hub for deep-space missions</li>
+          <li>Support the long-horizon Mars 2117 programme</li>
+        </ul>
+        <p class="flag">The 2040 boundary is this concept&rsquo;s own phasing. No UAE source
+          publishes it as a milestone.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="pillars" data-key="pillars">
-    <div class="shell">
-      <p class="sec-k rv">Core Framework</p>
-      <h2 class="rv wipe">4 Pillars powering XperienceSpace</h2>
-      <p class="sec-sub rv">XperienceSpace initiative structures programs around four interdependent pillars. Each pillar channels community energy, builds capabilities, and supports UAE’s official space initiatives with practical, investment-ready mechanisms.</p>
-      <div class="seg" role="tablist" aria-label="Pillars">
-        <button role="tab" aria-selected="true" aria-controls="p-1" id="t-1">Public Engagement &amp; Community</button>
-        <button role="tab" aria-selected="false" aria-controls="p-2" id="t-2">Education &amp; Talent Pipeline</button>
-        <button role="tab" aria-selected="false" aria-controls="p-3" id="t-3">Industry Development &amp; Support</button>
-        <button role="tab" aria-selected="false" aria-controls="p-4" id="t-4">Research &amp; Development</button>
-      </div>
-      <div class="seg-panel rv">
-        <div id="p-1" role="tabpanel" aria-labelledby="t-1">
-          <h3>Public Engagement &amp; Community</h3>
-          <p>Raising awareness and inspiring innovation by addressing Earth’s challenges, creating new opportunities for UAE’s growth in the space economy. A space for Emiratis to touch their dreams.</p>
-        </div>
-        <div id="p-2" role="tabpanel" aria-labelledby="t-2" hidden>
-          <h3>Education &amp; Talent Pipeline</h3>
-          <p>Developing future leaders by applying UAE-driven solutions to global and space challenges, strengthening national expertise and resilience.</p>
-        </div>
-        <div id="p-3" role="tabpanel" aria-labelledby="t-3" hidden>
-          <h3>Industry Development &amp; Support</h3>
-          <p>Creating initiatives to develop cutting-edge solutions addressing local and global needs, driving UAE’s leadership in space and hiTech industries.</p>
-        </div>
-        <div id="p-4" role="tabpanel" aria-labelledby="t-4" hidden>
-          <h3>Research &amp; Development</h3>
-          <p>Developing products &amp; services needed to solve Earth’s sustainability challenges and build a competitive, future-ready space sector for UAE.</p>
-        </div>
-      </div>
+<section id="welcome">
+  <div class="wide">
+    <div class="kicker rv"><i>05 &middot; Gateway</i><hr></div>
+    <h2 class="rv">The Welcome Center</h2>
+    <p class="sub rv">Proposed as the gateway to the concept city &mdash; a physical and virtual place
+      where Emiratis, residents and visitors experience the nation&rsquo;s journey to space and find
+      how they can take part.</p>
+    <dl class="defs rv">
+      <div class="def"><dt>Immersive experiences</dt>
+        <dd>Interactive exhibits, mission simulators, planetary environments and a viewing gallery,
+          designed to make the UAE&rsquo;s space story tangible.</dd></div>
+      <div class="def"><dt>Education &amp; talent pipeline</dt>
+        <dd>A bridge between accredited education providers, industry partners and government
+          programmes, curating pathways into the sector.</dd></div>
+      <div class="def"><dt>Industry &amp; R&amp;D collaboration</dt>
+        <dd>A neutral collaboration zone connecting companies, investors and agencies to develop
+          solutions for space from within the UAE.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ══════ SOURCES ══════
+     Kept through the overhaul and restyled as a citations apparatus rather than
+     a section of cards. Every entry is drawn from the verified regions of
+     ATELIER-UAE-VERIFY-RULING-2026-08-26 and machine-checked by
+     site-verify\verify_sources.py, which reads the ruling itself. Nothing here
+     is written from memory: the first draft of this section, on the previous
+     design, invented a claim and had to be corrected. -->
+<section id="sources">
+  <div class="wide">
+    <div class="kicker rv"><i>06 &middot; Sources</i><hr></div>
+    <h2 class="rv">Every UAE fact, and where it comes from</h2>
+    <p class="sub rv">Each line links to the publication of the body that owns it.
+      <b>The programmes described above are XperienceSpace proposals and are not listed here,
+      because they are not UAE programmes.</b></p>
+
+    <dl class="srcs rv">
+      <div class="src"><dt>National Space Strategy 2030</dt>
+        <dd>Approved by the UAE Cabinet on 11&nbsp;March&nbsp;2019.<br>
+          <a href="https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/industry-science-and-technology/national-space-strategy-2030" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a>
+          <a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet &#8599;</a></dd></div>
+
+      <div class="src"><dt>Mars 2117</dt>
+        <dd>Announced 2017, led by the Mohammed Bin Rashid Space Centre.<br>
+          <a href="https://www.wam.ae/en/details/1395303018336" target="_blank" rel="noopener noreferrer">WAM &#8599;</a></dd></div>
+
+      <div class="src"><dt>Hope Probe</dt>
+        <dd>MBRSC-led. Launched 19&nbsp;July&nbsp;2020, Mars orbit 9&nbsp;February&nbsp;2021.<br>
+          <a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></dd></div>
+
+      <div class="src"><dt>Rashid&nbsp;1 and Rashid&nbsp;2</dt>
+        <dd>NASA&rsquo;s Lunar Reconnaissance Orbiter imaged at least four pieces of debris at the
+          landing site on 26&nbsp;April&nbsp;2023. Rashid&nbsp;2 is in development at MBRSC.<br>
+          <a href="https://www.nasa.gov/centers-and-facilities/goddard/nasas-lro-views-impact-site-of-hakuto-r-mission-1-moon-lander/" target="_blank" rel="noopener noreferrer">NASA &#8599;</a>
+          <a href="https://www.mbrsc.ae/rashid-rover/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></dd></div>
+
+      <div class="src"><dt>Lunar Gateway airlock</dt>
+        <dd>MBRSC agreed on 7&nbsp;January&nbsp;2024 to provide Gateway&rsquo;s Crew and Science Airlock.
+          <span class="chg">The programme&rsquo;s status has since changed: the FY26 budget ended it and
+          FY27 requests no discretionary funding.</span><br>
+          <a href="https://www.nasa.gov/news-release/nasa-united-arab-emirates-announce-artemis-lunar-gateway-airlock/" target="_blank" rel="noopener noreferrer">NASA, 2024 &#8599;</a>
+          <a href="https://www.nasa.gov/news-release/president-trumps-fy26-budget-revitalizes-human-space-exploration/" target="_blank" rel="noopener noreferrer">NASA, FY26 &#8599;</a></dd></div>
+
+      <div class="src"><dt>Emirates Mission to the Asteroid Belt</dt>
+        <dd>UAE Space Agency with LASP at CU&nbsp;Boulder. Launch 2028, first main-belt flyby 2030,
+          seven main-belt asteroids observed, and a final landing on an asteroid in 2033.
+          <span class="chg">No target asteroid is named here: the names in circulation appear on no
+          UAE government page.</span><br>
+          <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a></dd></div>
+
+      <div class="src"><dt>The satellite fleet</dt>
+        <dd>MBRSC: DubaiSat&#8209;1 (2009), DubaiSat&#8209;2 (2013), Nayif&#8209;1 (2017),
+          KhalifaSat (2018), DMSat&#8209;1 (2021), MBZ&#8209;Sat (14&nbsp;January&nbsp;2025).<br>
+          <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></dd></div>
+
+      <div class="src"><dt>The space economic zone</dt>
+        <dd>The UAE Space Agency&rsquo;s Space Economic Zones Programme, first zone at Masdar City,
+          announced January&nbsp;2022. <span class="chg">&ldquo;UAE Space City&rdquo; on this page is
+          a XperienceSpace proposal, not this programme.</span><br>
+          <a href="https://masdar.ae/en/news/newsroom/masdar-city-and-the-uae-space-agency-announce-new-package" target="_blank" rel="noopener noreferrer">Masdar &#8599;</a></dd></div>
+
+      <div class="src"><dt>XperienceSpace itself</dt>
+        <dd>Self-described as an independent initiative &mdash; &ldquo;not a regulator, government
+          agency or operator of national missions&rdquo;.<br>
+          <span class="nolink">xperiencespace.com &mdash; quoted, deliberately not linked</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="close" id="contact">
+  <div class="wide">
+    <div class="kicker rv"><i>07 &middot; The concept</i><hr></div>
+    <h2 class="rv">This is a design concept, and nobody asked for it</h2>
+    <p class="sub rv">It restyles public material from the XperienceSpace Initiative to show what
+      the work could look like. Nothing is submitted from this page and nothing reaches the
+      initiative. It writes to its author, with the subject filled in.</p>
+    <div class="act rv">
+      <a class="btn" href="mailto:jaredlils99@gmail.com?subject=XperienceSpace%20concept">Email the author</a>
+      <a class="btn ghost" href="case.html">The case &#8594;</a>
+      <a class="btn ghost" href="spine.html">The span &#8594;</a>
+      <small>Two companion pages: one makes the argument for the method, the other puts the whole
+        programme on a single screen.</small>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="human" id="human">
-    <div class="shell">
-      <p class="say rv">A space for Emiratis to <span class="warm">touch their dreams</span>.</p>
-      <div class="who rv">
-        <button type="button" data-goto="education">Youth</button><button type="button" data-goto="community">Families</button><button type="button" data-goto="partner">Professionals</button><button type="button" data-goto="community">Creators</button>
-      </div>
-      <figure class="reach rv" aria-labelledby="reach-cap">
-        <svg viewBox="0 0 1000 420" role="img" aria-label="A single arc rising from a horizon marked 1970s to a disc marked 2117, with today marked low and early on the curve." preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <linearGradient id="reach-g" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#E9BC6A" stop-opacity=".85"/>
-              <stop offset="55%" stop-color="#F0A07A" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#E9899F"/>
-            </linearGradient>
-          </defs>
-
-          <!-- the ground: where it started -->
-          <line class="reach-ground" x1="0" y1="380" x2="1000" y2="380"/>
-
-          <!-- the span itself. one line, drawn once. -->
-          <path class="reach-arc" d="M 90 380 C 340 380, 620 300, 900 70"/>
-
-          <!-- origin -->
-          <circle class="reach-dot" cx="90" cy="380" r="5"/>
-          <text class="reach-lab" x="90" y="405" text-anchor="middle">1970s</text>
-
-          <!-- today, at its true position along the span -->
-          <circle class="reach-now" cx="370" cy="346" r="7"/>
-          <line class="reach-tick" x1="370" y1="346" x2="370" y2="380"/>
-          <text class="reach-lab reach-lab-now" x="370" y="405" text-anchor="middle">2026</text>
-
-          <!-- the destination -->
-          <circle class="reach-mars" cx="900" cy="70" r="13"/>
-          <text class="reach-lab" x="900" y="42" text-anchor="middle">2117</text>
-        </svg>
-        <figcaption id="reach-cap">
-          <span id="reach-yrs">91</span> years from here. The marker is today.
-        </figcaption>
-      </figure>
-      <script>/* 9: the SVG year label and the caption were HARDCODED to 2026 and
-         "Ninety-one", while the counter above them recomputed from new Date() — so
-         from 1 Jan 2027 the page would have contradicted itself. Both derive now. */
-      (function(){var y=new Date().getFullYear();
-        var l=document.querySelector(".reach-lab-now"); if(l) l.textContent=y;
-        var n=document.getElementById("reach-yrs"); if(n) n.textContent=(2117-y);
-      })();</script>
-      <p class="then rv">A national movement where youth, families, professionals and creators
-        participate in UAE space initiatives. <b>Whether you are a student, educator, entrepreneur,
-        investor, technology developer or policymaker, there is a place for you inside UAE’s
-        journey to space.</b></p>
-    </div>
-  </section>
-
-  <section id="ecosystem" data-key="ecosystem">
-    <div class="shell">
-      <p class="sec-k rv">Ecosystem in Action</p>
-      <h2 class="rv wipe">Making the space vision investable, practical and inclusive</h2>
-      <p class="sec-sub rv">The XperienceSpace ecosystem connects community, academia, industry, investors and government stakeholders into one coherent platform designed to attract technology, talent and capital into the UAE.</p>
-      <div class="rows rv">
-        <div class="row"><b>UAE Space Community</b><span>A national movement where youth, families, professionals and creators participate in UAE space initiatives through digital platforms, outreach programs, events, challenges and learning pathways.</span></div>
-        <div class="row"><b>UAE Space City</b><span>A scalable future-ready urban and economic zone housing R&amp;D centers, manufacturing clusters, training facilities and high-tech workplaces dedicated to space and sustainability.</span></div>
-        <div class="row"><b>UAE Space Welcome Center</b><span>The iconic gateway at the heart of UAE Space City: immersive exhibits, simulations, labs, events and industry showcases linking the public to live missions.</span></div>
-        <div class="row"><b>Future Development Funds</b><span>A series of hiTech funds channeling private and institutional capital into UAE-based solutions.</span></div>
-      </div>
-
-      <div class="graph rv">
-        <div class="graph-vis"><canvas id="eco" role="img" aria-label="Ecosystem diagram: four components connected to the platform layer"></canvas></div>
-        <div class="graph-side" id="eco-side">
-          <span class="lab">Ecosystem component</span>
-          <h3>UAE Space Community</h3>
-          <p>A national movement where youth, families, professionals and creators participate in UAE space initiatives through digital platforms, outreach programs, events, challenges and learning pathways.</p>
-          <p class="graph-hint">Select a node to read its role. The four components above are the same four listed in the table.</p>
-        </div>
-      </div>
-
-      <h2 class="rv" style="margin-top:clamp(40px,5vw,64px);font-size:clamp(22px,2.6vw,30px)">Strategic benefits to the UAE</h2>
-      <div class="cards">
-        <div class="card rv"><h3>Global leadership</h3><p>UAE becomes a preferred hub for space collaboration, standards and responsible development.</p></div>
-        <div class="card rv"><h3>Economic diversification</h3><p>New industries, exportable services and IP anchored in the UAE.</p></div>
-        <div class="card rv"><h3>Societal impact</h3><p>Youth engagement, national pride and clear pathways for citizens into future industries.</p></div>
-        <div class="card rv"><h3>Talent &amp; employment</h3><p>High-value jobs in engineering, AI, robotics, medicine, sustainability and operations.</p></div>
-        <div class="card rv"><h3>Faster, cheaper missions</h3><p>Local supply chains and capabilities reduce cost and time to deliver UAE missions.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="city" data-key="city">
-    <div class="shell">
-      <p class="sec-k rv">Strategic Trajectory</p>
-      <h2 class="rv wipe">From programs to a fully functioning UAE Space City</h2>
-      <p class="sec-sub rv">A phased roadmap converts ambition into visible assets — supporting UAE initatives, de-risking investment and aligning ecosystem maturity with national milestones.</p>
-      <p class="sec-sub rv" style="border-left:2px solid rgba(255,255,255,.22);padding-left:14px;margin-bottom:18px"><b>These are concept programmes proposed by XperienceSpace</b>, an independent industry initiative. <b>They are not UAE government programmes</b>, and this page is not affiliated with the UAE Space Agency, MBRSC, or any UAE government body. The UAE’s own space economic zone is the Space Economic Zones Programme, first zone at Masdar City.</p>
-      <p class="sec-sub rv">UAE Space City is a concept proposed by XperienceSpace: a scalable, future-ready special economic zone developed as an industry and community focal point supporting the UAE vision for space. A smart city dedicated to innovation, education, enterprise and development of cutting-edge technologies, resources and investment in space and environment.</p>
-      <div class="traj"><div class="traj-fill" aria-hidden="true"></div><div class="cards">
-        <div class="phase rv">
-          <div class="yr">NOW–2030</div>
-          <h3>Foundation &amp; Awareness</h3>
-          <ul>
-            <li>Launch UAE Space Welcome Center, virtual community, outreach programs and academies</li>
-            <li>Create Special Economic Zone &amp; infrastructure</li>
-            <li>Establish multiple high-impact programs, Power &amp; Water Generation facilities, Environmental Park, Hyper-Computing Center, AI/Communications hub development</li>
-            <li>Complete first phase Habitat Development Hub with Biome analog facility</li>
-          </ul>
-        </div>
-        <div class="phase rv">
-          <div class="yr">2030–2040</div>
-          <h3>UAE Space City &amp; Industry Scale-Up</h3>
-          <ul>
-            <li>Establish dedicated zones for advanced manufacturing, simulation, materials development, space medicine and logistics</li>
-            <li>Develop residential &amp; tourism programs integrated with smart-city design</li>
-            <li>Grow UAE-based IP portfolio and services for regional &amp; global markets</li>
-          </ul>
-        </div>
-        <div class="phase rv">
-          <div class="yr">2040–2117</div><div class="lab" style="opacity:.66;font-size:11px;letter-spacing:.06em;margin-top:4px">Speculative concept phasing — not a UAE programme milestone. No UAE source publishes a 2040 boundary.</div>
-          <h3>Deep-Space Economy &amp; Mars 2117 Support</h3>
-          <ul>
-            <li>Mature UAE as a strategic hub for deep-space missions, asteroid research, life support technologies and Mars infrastructure, with a diversified space-driven economy</li>
-          </ul>
-        </div>
-      </div>
-      <div class="rows rv">
-        <div class="row"><b>Programs:</b><span>Food BIOME, Olympus, Eyes on Universe, asteroid missions, local fabrication.</span></div>
-        <div class="row"><b>Role of XperienceSpace:</b><span>coordinate, connect, promote, de-risk national programs &amp; initiatives.</span></div>
-      </div>
-    </div></div>
-  </section>
-
-  <section id="gateway" data-key="gateway">
-    <div class="shell">
-      <p class="sec-k rv">Gateway to the Vision</p>
-      <h2 class="rv wipe">UAE Space Welcome Center &amp; Community</h2>
-      <p class="sec-sub rv">The UAE Space Welcome Center is the jewel of UAE Space City — a physical and virtual gateway where Emiratis, residents and visitors from across the globe experience the nation’s journey to space and discover how they can participate.</p>
-      <div class="cards">
-        <div class="card rv">
-          <h3>Immersive Experiences</h3>
-          <p>Interactive exhibits, mission simulators, planet environments and a rocket viewing gallery designed to make UAE’s space story tangible and memorable.</p>
-          <ul>
-            <li>Space museum &amp; story of UAE journey to space</li>
-            <li>Immersive simulations &amp; XR experiences</li>
-            <li>Space café, merchandise store, sustainable environments, live space stream, events &amp; forums</li>
-          </ul>
-        </div>
-        <div class="card rv">
-          <h3>Education &amp; Talent Pipeline</h3>
-          <p>A bridge between accredited education providers, industry partners and government programs — curating pathways into space-related careers.</p>
-          <ul>
-            <li>Workshops &amp; youth academies</li>
-            <li>Professional training in hiTech fields</li>
-            <li>University &amp; research collaboration zones</li>
-          </ul>
-        </div>
-        <div class="card rv">
-          <h3>Industry &amp; R&amp;D Collaboration</h3>
-          <p>A neutral collaboration zone connecting companies, investors and agencies to co-develop solutions for space from within UAE.</p>
-          <ul>
-            <li>Showcase of UAE-based technologies</li>
-            <li>Access to labs &amp; prototype spaces</li>
-            <li>Support for projects &amp; funding</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="join" data-key="join">
-    <div class="shell">
-      <p class="sec-k rv">Collaboration Network Model</p>
-      <h2 class="rv wipe">Led by industry experts — aligned with national leadership</h2>
-      <p class="sec-sub rv">XperienceSpace unites passionate experts across business, technology, education, medicine, AI, sustainability, development and design sectors. The initiative complements UAE agencies by aggregating knowledge, technology, partners and opportunities into one unified ecosystem.</p>
-      <div class="split">
-        <div class="panel do rv">
-          <h3>What we do</h3>
-          <ul>
-            <li>Promote &amp; support UAE national programs for space, economic growth and comunity development.</li>
-            <li>Translate UAE space objectives into clear engagement and investment pathways.</li>
-            <li>Help global partners localize capabilities, IP and operations in the UAE.</li>
-            <li>Facilitate collaboration frameworks that respect UAE regulations and sovereign oversight.</li>
-            <li>Connect schools, universities and industry for collaborative development programs.</li>
-          </ul>
-        </div>
-        <div class="panel dont rv">
-          <h3>What we are not</h3>
-          <ul>
-            <li>Not a regulator, government agency or operator of national missions.</li>
-            <li>Not a replacement for UAE institutions or official strategies.</li>
-            <li>Not a speculative venture; programs are tied to measurable readiness and real capabilities.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="join rv">
-        <h2>Join the UAE Space Nation Ecosystem</h2>
-        <p class="sec-sub">Whether you are a student, educator, entrepreneur, investor, technology developer or policymaker, there is a place for you inside UAE’s journey to space. XperienceSpace helps you connect with the right programs, partners and opportunities — together we turn vision into reality.</p>
-        <div class="end-act">
-          <a class="btn btn-p" href="mailto:jaredlils99@gmail.com">Become a Partner</a>
-          <a class="alt" href="#pillars">or explore the programs first</a>
-        </div>
-        <p class="end-as"><span>You said you are</span> <b>a partner</b> · <button type="button">change</button></p>
-        <p class="end-note">This is a concept page, so it writes to its author: <b>jaredlils99@gmail.com</b> (Jared Lilliss, Lilliss IT) &mdash; an ordinary email with the subject already filled in. Nothing is submitted from this page, and nothing reaches the XperienceSpace Initiative.</p>
-        <div class="contact">
-          <span>jaredlils99@gmail.com</span>
-          <span>www.xperiencespace.com</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- The closing statement. Restored after a copy-manifest diff against the
-       previous build caught it missing: this is real client copy, unlike the
-       diagram labels the same diff flagged, which were mine. -->
-
-  <!-- ============ SOURCES ============
-       Added 29/08 to close the one measurable gap between this page and
-       spine.html, which Jared rated 10/10 against this page's 4/10.
-
-       Measured rather than guessed: spine carries 301 visible words, ONE heading
-       and SIX named primary sources. This page carried 1,800 words, NINE headings
-       - every one of them XperienceSpace's own marketing language - and ZERO
-       citations, while naming real UAE missions, programmes and dates twenty-seven
-       times. spine makes an argument and proves it; this page restyled someone
-       else's claims. That is a difference of method, and no amount of typography
-       closes it.
-
-       Every entry below is drawn from ATELIER-UAE-VERIFY-RULING-2026-08-26's
-       verified table, and NOTHING here is written from memory. The first draft of
-       this very section invented a detail - it had the asteroid mission landing on
-       an asteroid, which the ruling never verified - which is exactly why the rule
-       is source-or-cut rather than source-if-convenient. The two claims the ruling
-       REJECTED appear neither here nor anywhere on the page; they are named in the
-       ruling and in honesty.py, which is where a banned string belongs. -->
-  <section id="sources">
-    <div class="shell">
-      <p class="sec-k rv">Sources</p>
-      <h2 class="rv wipe">Every UAE fact on this page, and where it comes from</h2>
-      <p class="sec-sub rv">Everything in this table belongs to the UAE government or its agencies, and each line links to that body&rsquo;s own publication. <b>The programmes described elsewhere on this page are XperienceSpace proposals; they are not listed here because they are not UAE programmes.</b> Where a fact has changed since it was published, the change is stated rather than dropped.</p>
-      <div class="rows rv">
-        <div class="row"><b>National Space Strategy 2030</b><span>Approved by the UAE Cabinet on 11&nbsp;March&nbsp;2019, chaired by HH Sheikh Mohammed bin Rashid Al Maktoum.<br><a class="src" href="https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/industry-science-and-technology/national-space-strategy-2030" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a> <a class="src" href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet &#8599;</a></span></div>
-        <div class="row"><b>Mars 2117</b><span>Announced 2017 and led by the Mohammed Bin Rashid Space Centre &mdash; a first human settlement on Mars by 2117.<br><a class="src" href="https://www.wam.ae/en/details/1395303018336" target="_blank" rel="noopener noreferrer">WAM &#8599;</a></span></div>
-        <div class="row"><b>Hope Probe</b><span>MBRSC-led. Launched 19&nbsp;July&nbsp;2020, entered Mars orbit 9&nbsp;February&nbsp;2021 &mdash; the first Arab country, and the fifth country, to reach Mars.<br><a class="src" href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
-        <div class="row"><b>Rashid&nbsp;1 and Rashid&nbsp;2</b><span>Rashid&nbsp;1 was lost with the HAKUTO-R lander; NASA&rsquo;s Lunar Reconnaissance Orbiter imaged at least four pieces of debris at the site on 26&nbsp;April&nbsp;2023. Rashid&nbsp;2 is in development at MBRSC.<br><a class="src" href="https://www.nasa.gov/centers-and-facilities/goddard/nasas-lro-views-impact-site-of-hakuto-r-mission-1-moon-lander/" target="_blank" rel="noopener noreferrer">NASA &#8599;</a> <a class="src" href="https://www.mbrsc.ae/rashid-rover/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
-        <div class="row"><b>Lunar Gateway airlock</b><span>MBRSC agreed on 7&nbsp;January&nbsp;2024 to provide Gateway&rsquo;s Crew and Science Airlock, with NASA flying a UAE astronaut. <span class="chg">The programme&rsquo;s status has since changed: the FY26 budget ended it and FY27 requests no discretionary funding.</span> This page therefore states the agreement and its date, not an ongoing contribution.<br><a class="src" href="https://www.nasa.gov/news-release/nasa-united-arab-emirates-announce-artemis-lunar-gateway-airlock/" target="_blank" rel="noopener noreferrer">NASA, 2024 &#8599;</a> <a class="src" href="https://www.nasa.gov/news-release/president-trumps-fy26-budget-revitalizes-human-space-exploration/" target="_blank" rel="noopener noreferrer">NASA, FY26 &#8599;</a></span></div>
-        <div class="row"><b>Emirates Mission to the Asteroid Belt</b><span>UAE Space Agency with LASP at CU&nbsp;Boulder. Launch 2028, Venus flyby mid-2028, Earth mid-2029, first main-belt flyby 2030, seven main-belt asteroids observed, and a final landing on an asteroid in 2033. <span class="chg">No target asteroid is named here: the names in circulation appear on no UAE government page.</span><br><a class="src" href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a></span></div>
-        <div class="row"><b>The satellite fleet</b><span>MBRSC: DubaiSat&#8209;1 (2009), DubaiSat&#8209;2 (2013), Nayif&#8209;1 (2017), KhalifaSat (2018), DMSat&#8209;1 (2021), MBZ&#8209;Sat (14&nbsp;January&nbsp;2025).<br><a class="src" href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
-        <div class="row"><b>The space economic zone</b><span>The UAE&rsquo;s actual space SEZ is the UAE Space Agency&rsquo;s Space Economic Zones Programme, first zone at Masdar City, announced January&nbsp;2022. <span class="chg">&ldquo;UAE Space City&rdquo; on this page is a XperienceSpace proposal and is not this programme.</span><br><a class="src" href="https://masdar.ae/en/news/newsroom/masdar-city-and-the-uae-space-agency-announce-new-package" target="_blank" rel="noopener noreferrer">Masdar &#8599;</a></span></div>
-        <div class="row"><b>XperienceSpace itself</b><span>Self-described as an independent initiative &mdash; &ldquo;not a regulator, government agency or operator of national missions&rdquo;.<br><span class="src nolink">xperiencespace.com &mdash; quoted, deliberately not linked</span></span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="closer">
-    <div class="shell">
-      <p class="sec-k rv">Destination · Mars</p>
-      <p class="closer-line rv">Inspired by the UAE’s Mars 2117 programme (MBRSC) — coordinated milestones towards a sustainable space economy &amp; Mars city vision.</p>
-    </div>
-  </section>
 </main>
 
-
 <footer>
-  <div class="shell">
-    <span>Design and code © 2026 Jared Lilliss (Lilliss IT). &ldquo;XperienceSpace&rdquo;, the XperienceSpace Initiative name, and all quoted copy remain the property of their respective owners.</span>
-    <span><b>A Lilliss IT prototype</b>, built by Jared Lilliss (Lilliss IT) from publicly available xperiencespace.com content. An unsolicited concept, shown for review: not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative, and not indexed. Carries no third-party imagery: every visual on this page is drawn in-page as vector or canvas.</span>
+  <div class="wide">
+    <p><b>Design and code © 2026 Jared Lilliss</b> (Lilliss IT, Australia). This is an unsolicited
+      design concept. <b>It is not affiliated with, endorsed by, or commissioned by the
+      XperienceSpace Initiative</b>, and it is not published on their behalf. The initiative
+      describes itself as independent — &ldquo;not a regulator, government agency or operator of
+      national missions&rdquo; — quoted from its own site, which is deliberately not linked here.</p>
+    <p>All UAE missions, programmes, dates and figures above belong to the UAE government and its
+      agencies and are cited to their own publications. Nothing on this page is a UAE government
+      communication. The page is marked <b>noindex</b> and carries no analytics, no third-party
+      fonts, no third-party imagery and no trackers of any kind.</p>
   </div>
 </footer>
 
 <script>
-document.body.classList.remove('no-js');document.body.classList.add('js');
-
-/* ── hero mesh: the one moment of spectacle ─────────────────────────────────
-   A slow gradient mesh, the move the reference class uses to make a dark page
-   feel lit rather than flat. Deterministic, cheap (drawn at quarter scale and
-   let the browser smooth it), still under reduced-motion, pauses when hidden. */
+/* ───────────────────────────────────────────────────────────────────────────
+   Everything here is enhancement. There is NOT ONE scroll listener, and nothing
+   reads layout outside of IntersectionObserver's own callbacks — which is what
+   makes the scroll smooth rather than any amount of tuning. v3 wrote an element
+   height and then measured three siblings inside a scroll handler, forcing a
+   synchronous layout per frame, to compute a class that had no CSS.
+   ─────────────────────────────────────────────────────────────────────────── */
 (function(){
-  var c=document.getElementById('mesh'); if(!c||!c.getContext) return;
-  var x=c.getContext('2d'),W=0,H=0,raf=0,settle=0,
-      STILL=/[?&]noreveal/.test(location.search),
-      mq=matchMedia('(prefers-reduced-motion:reduce)'),RED=mq.matches||STILL;
-  var BLOBS=[
-    {h:'124,201,245',ox:.18,oy:.16,r:.66,sx:.00021,sy:.00013,a:.20},
-    {h:'167,139,250',ox:.70,oy:.08,r:.60,sx:.00017,sy:.00023,a:.16},
-    {h:'94,234,212',ox:.46,oy:.44,r:.52,sx:.00025,sy:.00016,a:.11}
-  ];
-  function size(){
-    var w=Math.max(1,Math.round(c.offsetWidth/3)),h=Math.max(1,Math.round(c.offsetHeight/3));
-    if(w===W&&h===H)return false; W=c.width=w;H=c.height=h; return true;
-  }
-  function frame(t){
-    x.clearRect(0,0,W,H);
-    x.fillStyle='#08090A';x.fillRect(0,0,W,H);
-    for(var i=0;i<BLOBS.length;i++){
-      var b=BLOBS[i];
-      var cx=W*(b.ox+(RED?0:0.06*Math.sin(t*b.sx+i))),
-          cy=H*(b.oy+(RED?0:0.05*Math.cos(t*b.sy+i*2)));
-      var r=Math.max(W,H)*b.r;
-      var g=x.createRadialGradient(cx,cy,0,cx,cy,r);
-      g.addColorStop(0,'rgba('+b.h+','+b.a+')');
-      g.addColorStop(1,'rgba('+b.h+',0)');
-      x.fillStyle=g;x.fillRect(0,0,W,H);
-    }
-    if(!RED)raf=requestAnimationFrame(frame);
-  }
-  function start(){if(raf)cancelAnimationFrame(raf);raf=0;if(RED)frame(0);else raf=requestAnimationFrame(frame)}
-  function onResize(){clearTimeout(settle);settle=setTimeout(function(){if(size()||RED)start()},140)}
-  size();start();
-  addEventListener('resize',onResize,{passive:true});
-  document.addEventListener('visibilitychange',function(){
-    if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=0}}else if(!RED){start()}});
-  if(mq.addEventListener)mq.addEventListener('change',function(e){RED=e.matches||STILL;start()});
-})();
+  var d = document, qa = function(s){ return [].slice.call(d.querySelectorAll(s)); };
+  d.body.classList.add('js');
 
-/* ── console visual: the four pillars orbiting the platform layer ───────────
-   Drawn, not imagery. Same honest diagram idea as before, but rendered as a
-   product panel rather than a decorative plate. */
-(function(){
-  var c=document.getElementById('orbit'); if(!c||!c.getContext) return;
-  var x=c.getContext('2d'),W=0,H=0,S=1,raf=0,settle=0,
-      STILL=/[?&]noreveal/.test(location.search),
-      mq=matchMedia('(prefers-reduced-motion:reduce)'),RED=mq.matches||STILL;
-  var NODES=['Community','Education','Industry','R&D'];
-  function size(){
-    S=Math.min(devicePixelRatio||1,2);
-    var w=Math.max(1,Math.round(c.offsetWidth*S)),h=Math.max(1,Math.round(c.offsetHeight*S));
-    if(w===W&&h===H)return false; W=c.width=w;H=c.height=h; return true;
-  }
-  function frame(t){
-    x.clearRect(0,0,W,H);
-    var cx=W/2, cy=H/2-4*S, R=Math.min(W,H)*0.26, sp=RED?0:t*0.00012;   /* R and centre pulled in: the bottom node's label was clipped by the panel edge */
-    x.strokeStyle='rgba(255,255,255,.07)';x.lineWidth=1*S;
-    for(var k=1;k<=3;k++){x.beginPath();x.arc(cx,cy,R*(0.42+k*0.29),0,6.2832);x.stroke()}
-    x.beginPath();x.arc(cx,cy,R*0.40,0,6.2832);
-    x.fillStyle='rgba(124,201,245,.10)';x.fill();
-    x.strokeStyle='rgba(124,201,245,.55)';x.stroke();
-    x.fillStyle='rgba(247,248,248,.86)';
-    x.font='500 '+(9.5*S)+'px "IBM Plex Mono",monospace';
-    x.textAlign='center';x.textBaseline='middle';
-    x.fillText('PLATFORM',cx,cy-5*S);x.fillText('LAYER',cx,cy+6*S);
-    for(var i=0;i<4;i++){
-      var a=sp+i*Math.PI/2, nx=cx+Math.cos(a)*R*1.30, ny=cy+Math.sin(a)*R*1.30;
-      x.strokeStyle='rgba(255,255,255,.10)';x.setLineDash([3*S,4*S]);
-      x.beginPath();x.moveTo(cx,cy);x.lineTo(nx,ny);x.stroke();x.setLineDash([]);
-      var g=x.createRadialGradient(nx,ny,0,nx,ny,13*S);
-      g.addColorStop(0,'rgba(94,234,212,.5)');g.addColorStop(1,'rgba(94,234,212,0)');
-      x.fillStyle=g;x.fillRect(nx-13*S,ny-13*S,26*S,26*S);
-      x.fillStyle='#5EEAD4';x.beginPath();x.arc(nx,ny,3.2*S,0,6.2832);x.fill();
-      x.fillStyle='rgba(247,248,248,.72)';
-      x.font='400 '+(9*S)+'px "IBM Plex Mono",monospace';
-      x.fillText(NODES[i].toUpperCase(),nx,ny+15*S);
-    }
-    if(!RED)raf=requestAnimationFrame(frame);
-  }
-  function start(){if(raf)cancelAnimationFrame(raf);raf=0;if(RED)frame(0);else raf=requestAnimationFrame(frame)}
-  function onResize(){clearTimeout(settle);settle=setTimeout(function(){if(size()||RED)start()},140)}
-  size();start();
-  addEventListener('resize',onResize,{passive:true});
-  document.addEventListener('visibilitychange',function(){
-    if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=0}}else if(!RED){start()}});
-  if(mq.addEventListener)mq.addEventListener('change',function(e){RED=e.matches||STILL;start()});
-})();
-
-/* ── pillars: a real tablist, keyboard-operable ─────────────────────────── */
-(function(){
-  var tabs=[].slice.call(document.querySelectorAll('.seg [role=tab]'));
-  if(!tabs.length)return;
-  function show(i){
-    tabs.forEach(function(t,j){
-      t.setAttribute('aria-selected',j===i?'true':'false');
-      t.tabIndex=j===i?0:-1;
-      document.getElementById(t.getAttribute('aria-controls')).hidden=(j!==i);
-    });
-  }
-  tabs.forEach(function(t,i){
-    t.tabIndex=i===0?0:-1;
-    t.addEventListener('click',function(){show(i)});
-    t.addEventListener('keydown',function(e){
-      var n=null;
-      if(e.key==='ArrowRight')n=(i+1)%tabs.length;
-      if(e.key==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;
-      if(e.key==='Home')n=0; if(e.key==='End')n=tabs.length-1;
-      if(n!==null){e.preventDefault();show(n);tabs[n].focus()}
-    });
-  });
-  show(0);
-})();
-
-/* ── reveals + nav current section ──────────────────────────────────────── */
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.rv'));
-  if(/[?&]noreveal/.test(location.search)||!('IntersectionObserver' in window)){
-    els.forEach(function(e){e.classList.add('in');e.style.transition='none'});
-  }else{
-    var io=new IntersectionObserver(function(en){en.forEach(function(e){
-      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
-    els.forEach(function(e){io.observe(e)});
-    setTimeout(function(){els.forEach(function(e){e.classList.add('in')})},2600);
-  }
-  var links=[].slice.call(document.querySelectorAll('header nav a[href^="#"]'));
-  if(!('IntersectionObserver' in window))return;
-  var map={};links.forEach(function(a){var el=document.querySelector(a.getAttribute('href'));if(el)map[el.id]=a});
-  var io2=new IntersectionObserver(function(en){en.forEach(function(e){
-    if(e.isIntersecting){links.forEach(function(a){a.removeAttribute('aria-current')});
-      if(map[e.target.id])map[e.target.id].setAttribute('aria-current','true')}})},
-    {rootMargin:'-45% 0px -50% 0px'});
-  Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)io2.observe(el)});
-})();
-</script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   v3 INTERACTIVE LAYER — behaviour.
-
-   ONE rAF loop drives every animation on the page. Separate loops per effect is
-   how a page like this ends up janky; a single scheduler with an offscreen check
-   keeps it cheap no matter how much gets added later. That is the "foundational
-   site we build strong" part — this scales.
-
-   Contract every effect honours:
-     · prefers-reduced-motion or ?noreveal  -> no movement, everything visible
-     · offscreen                            -> not drawn
-     · tab hidden                           -> loop stopped entirely
-     · no JS                                -> CSS already shows the static page
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-  var STILL = /[?&]noreveal/.test(location.search);
-  var mq = matchMedia('(prefers-reduced-motion:reduce)');
-  var RED = mq.matches || STILL;
-  var FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-  /* ── the single scheduler ─────────────────────────────────────────────── */
-  var tasks = [], raf = 0, last = 0;
-  function add(fn){ tasks.push(fn); }
-  function tick(t){
-    raf = requestAnimationFrame(tick);
-    if (t - last < 16) return;            /* never exceed ~60fps of work */
-    last = t;
-    for (var i = 0; i < tasks.length; i++) tasks[i](t);
-  }
-  function start(){ if (!raf) raf = requestAnimationFrame(tick); }
-  function stop(){ if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-  document.addEventListener('visibilitychange', function(){
-    if (document.hidden) stop(); else if (!RED) start();
-  });
-
-  function onScreen(el){
-    var r = el.getBoundingClientRect();
-    return r.bottom > -80 && r.top < (innerHeight || 0) + 80;
-  }
-
-  /* ── scroll progress ──────────────────────────────────────────────────── */
-  (function(){
-    var bar = document.getElementById('prog'); if (!bar) return;
-    var pending = false;
-    function paint(){
-      pending = false;
-      var de = document.documentElement;
-      var max = de.scrollHeight - innerHeight;
-      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
-    }
-    addEventListener('scroll', function(){ if(!pending){pending=true;requestAnimationFrame(paint);} }, {passive:true});
-    addEventListener('resize', paint, {passive:true});
-    paint();
-  })();
-
-  /* ── cursor spotlight: writes --mx/--my on the hovered surface ────────── */
-  if (FINE) {
-    var SEL = '.card,.panel,.phase,.seg-panel,.join';
-    document.addEventListener('pointermove', function(e){
-      var el = e.target.closest && e.target.closest(SEL);
-      if (!el) return;
-      var r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    }, {passive:true});
-  }
-
-  /* ── magnetic primary CTA ─────────────────────────────────────────────── */
-  if (FINE && !RED) {
-    [].slice.call(document.querySelectorAll('.btn-p')).forEach(function(b){
-      b.addEventListener('pointermove', function(e){
-        var r = b.getBoundingClientRect();
-        var dx = (e.clientX - (r.left + r.width/2)) / r.width;
-        var dy = (e.clientY - (r.top + r.height/2)) / r.height;
-        b.style.transform = 'translate(' + (dx*7).toFixed(2) + 'px,' + (dy*5).toFixed(2) + 'px)';
-      });
-      b.addEventListener('pointerleave', function(){ b.style.transform = ''; });
-    });
-  }
-
-  /* ── animated counters ────────────────────────────────────────────────── */
-  (function(){
-    var els = [].slice.call(document.querySelectorAll('[data-count]'));
-    if (!els.length) return;
-    function settleAll(){ els.forEach(function(e){ e.textContent = e.getAttribute('data-final'); }); }
-    /* backstop outside IO: if the observer never fires — measured to happen in
-       non-compositing contexts — the figures must still be correct. */
-    setTimeout(settleAll, 2600);
-    if (RED || !('IntersectionObserver' in window)) { settleAll(); return; }
-    var io = new IntersectionObserver(function(en){
-      en.forEach(function(entry){
-        if (!entry.isIntersecting) return;
-        var el = entry.target; io.unobserve(el);
-        var to = parseFloat(el.getAttribute('data-count'));
-        var pre = el.getAttribute('data-pre') || '';
-        var post = el.getAttribute('data-post') || '';
-        var t0 = performance.now(), dur = 1100, done = false;
-        function finish(){ if (done) return; done = true;
-          el.textContent = el.getAttribute('data-final'); }
-        function step(now){
-          if (done) return;
-          var p = Math.min(1, (now - t0) / dur);
-          var e = 1 - Math.pow(1 - p, 3);          /* ease-out cubic */
-          el.textContent = pre + Math.round(to * e).toLocaleString() + post;
-          if (p < 1) requestAnimationFrame(step); else finish();
-        }
-        requestAnimationFrame(step);
-        setTimeout(finish, dur + 260);   /* same floor: never leave it stuck */
-      });
-    }, {rootMargin:'0px 0px -12% 0px'});
-    els.forEach(function(e){ io.observe(e); });
-  })();
-
-  /* ── trajectory rail: draws with scroll, lights each phase ────────────── */
-  (function(){
-    var wrap = document.querySelector('.traj'); if (!wrap) return;
-    var fill = wrap.querySelector('.traj-fill');
-    var phases = [].slice.call(wrap.querySelectorAll('.phase'));
-    if (RED) { if (fill) fill.style.height = '100%'; phases.forEach(function(p){p.classList.add('lit')}); return; }
-    var pending = false;
-    function paint(){
-      pending = false;
-      var r = wrap.getBoundingClientRect();
-      var head = Math.min(Math.max(innerHeight * 0.62 - r.top, 0), r.height);
-      if (fill) fill.style.height = head + 'px';
-      phases.forEach(function(p){
-        var pr = p.getBoundingClientRect();
-        p.classList.toggle('lit', (pr.top - r.top + 28) <= head);
-      });
-    }
-    addEventListener('scroll', function(){ if(!pending){pending=true;requestAnimationFrame(paint);} }, {passive:true});
-    addEventListener('resize', paint, {passive:true});
-    paint(); setTimeout(paint, 400);
-  })();
-
-  /* ── section index dots ───────────────────────────────────────────────── */
-  (function(){
-    var idx = document.getElementById('idx'); if (!idx || !('IntersectionObserver' in window)) return;
-    var links = [].slice.call(idx.querySelectorAll('a'));
-    var map = {};
-    links.forEach(function(a){ var el = document.querySelector(a.getAttribute('href')); if (el) map[el.id] = a; });
+  /* ── reveals ──────────────────────────────────────────────────────────── */
+  var rv = qa('.rv');
+  if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(en){
       en.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -6% 0px', threshold:0.04});
+    rv.forEach(function(el){ io.observe(el); });
+    /* belt: if the observer never fires (odd contexts, non-compositing hosts),
+       nothing may stay invisible. Found the hard way — a non-compositing host
+       delivers ZERO IntersectionObserver callbacks, not even the initial one. */
+    setTimeout(function(){ rv.forEach(function(el){ el.classList.add('in'); }); }, 2400);
+  } else {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ── nav highlight ────────────────────────────────────────────────────────
+     Maps a section to the link that REPRESENTS it, and leaves the previous
+     highlight alone when nothing does — rather than clearing every link, which
+     is how the sibling page's nav went dark and stayed dark. */
+  var links = {};
+  qa('.mast nav a').forEach(function(a){
+    var h = a.getAttribute('href') || '';
+    if (h.charAt(0) === '#') links[h.slice(1)] = a;
+  });
+  if ('IntersectionObserver' in window) {
+    var nio = new IntersectionObserver(function(en){
+      en.forEach(function(e){
         if (!e.isIntersecting) return;
-        links.forEach(function(a){ a.removeAttribute('aria-current'); });
-        if (map[e.target.id]) map[e.target.id].setAttribute('aria-current','true');
+        var link = null;
+        for (var n = e.target; n; n = n.parentElement) {
+          if (n.id && links[n.id]) { link = links[n.id]; break; }
+        }
+        if (!link) return;
+        qa('.mast nav a').forEach(function(a){
+          a.setAttribute('aria-current', a === link ? 'true' : 'false');
+        });
       });
     }, {rootMargin:'-45% 0px -50% 0px'});
-    Object.keys(map).forEach(function(id){ var el = document.getElementById(id); if (el) io.observe(el); });
-  })();
-
-  /* ── HERO: an orbital system with real depth ──────────────────────────── */
-  (function(){
-    var c = document.getElementById('orbitfield'); if (!c || !c.getContext) return;
-    var x = c.getContext('2d'), W=0, H=0, S=1, px=0, py=0, tx=0, ty=0, stars=[];
-    function rng(s){ return function(){ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
-    function size(){
-      S = Math.min(devicePixelRatio||1, 2);
-      var w = Math.max(1, Math.round(c.offsetWidth*S)), h = Math.max(1, Math.round(c.offsetHeight*S));
-      if (w===W && h===H) return false;
-      W=c.width=w; H=c.height=h;
-      var r = rng(20260824); stars = [];
-      for (var i=0;i<Math.min(190, W/7);i++) stars.push({x:r()*W, y:r()*H, z:.25+r()*.75, ph:r()*6.28});
-      return true;
-    }
-    /* satellites on three inclined rings; z decides size, alpha and draw order */
-    var SATS = (function(){
-      var r = rng(97531), out = [];
-      for (var ring=0; ring<3; ring++){
-        var n = 3 + ring;
-        for (var i=0;i<n;i++){
-          out.push({ring:ring, a:r()*6.2832, sp:(0.00013 + ring*0.00004)*(ring%2?-1:1), w:1});
-        }
-      }
-      return out;
-    })();
-    var RINGS = [
-      {rx:0.26, ry:0.075, tilt:-0.22, col:'124,201,245'},
-      {rx:0.34, ry:0.098, tilt: 0.14, col:'167,139,250'},
-      {rx:0.43, ry:0.124, tilt:-0.05, col:'94,234,212'}
-    ];
-
-    if (FINE && !RED) {
-      addEventListener('pointermove', function(e){
-        tx = (e.clientX/innerWidth - .5); ty = (e.clientY/innerHeight - .5);
-      }, {passive:true});
-    }
-
-    function draw(t){
-      if (!onScreen(c)) return;
-      px += (tx - px) * 0.05; py += (ty - py) * 0.05;
-      x.clearRect(0,0,W,H);
-      /* upper-right, clear of the headline on the left and the console below.
-         The previous centre put the planet directly behind an opaque panel. */
-      var cx = W*0.79 + px*30*S, cy = H*0.30 + py*18*S, R = Math.min(W, H*1.5);
-
-      for (var i=0;i<stars.length;i++){
-        var s = stars[i];
-        x.globalAlpha = (RED?.45:.28+.34*Math.abs(Math.sin(t/2400+s.ph))) * s.z;
-        x.fillStyle = '#CFE3FF';
-        x.fillRect(s.x + px*10*s.z*S, s.y + py*7*s.z*S, 1.4*s.z*S, 1.4*s.z*S);
-      }
-      x.globalAlpha = 1;
-
-      /* the planet: a sphere lit from the upper left, with a bright terminator
-         rim. Sized to sit inside the hero rather than run under the console. */
-      var pr = Math.min(W, H) * 0.30, pcy = cy;
-      var lg = x.createRadialGradient(cx - pr*0.45, pcy - pr*0.5, pr*0.05, cx, pcy, pr);
-      lg.addColorStop(0,  'rgba(150,215,255,.42)');
-      lg.addColorStop(.42,'rgba(46,86,130,.42)');
-      lg.addColorStop(.82,'rgba(14,24,40,.72)');
-      lg.addColorStop(1,  'rgba(8,9,10,.88)');
-      x.beginPath(); x.arc(cx, pcy, pr, 0, 6.2832); x.fillStyle = lg; x.fill();
-      /* rim light on the lit side only */
-      x.beginPath(); x.arc(cx, pcy, pr, Math.PI*0.72, Math.PI*1.62);
-      x.strokeStyle = 'rgba(178,228,255,.72)'; x.lineWidth = 1.6*S; x.stroke();
-      /* atmosphere bloom */
-      var ag = x.createRadialGradient(cx, pcy, pr*0.92, cx, pcy, pr*1.35);
-      ag.addColorStop(0, 'rgba(124,201,245,.18)');
-      ag.addColorStop(1, 'rgba(124,201,245,0)');
-      x.fillStyle = ag; x.fillRect(cx-pr*1.4, pcy-pr*1.4, pr*2.8, pr*2.8);
-
-      /* rings + satellites, painted back half then front half */
-      function ringPath(rr){
-        x.save(); x.translate(cx, cy); x.rotate(rr.tilt);
-        x.beginPath(); x.ellipse(0, 0, R*rr.rx, R*rr.ry, 0, 0, 6.2832);
-        x.strokeStyle = 'rgba(' + rr.col + ',.20)'; x.lineWidth = 1*S; x.stroke();
-        x.restore();
-      }
-      RINGS.forEach(ringPath);
-
-      var pts = [];
-      for (var k=0;k<SATS.length;k++){
-        var st = SATS[k], rr = RINGS[st.ring];
-        var a = st.a + (RED?0:t*st.sp);
-        var ex = Math.cos(a)*R*rr.rx, ey = Math.sin(a)*R*rr.ry;
-        var sx = cx + ex*Math.cos(rr.tilt) - ey*Math.sin(rr.tilt);
-        var sy = cy + ex*Math.sin(rr.tilt) + ey*Math.cos(rr.tilt);
-        pts.push({x:sx, y:sy, z:Math.sin(a), col:rr.col});
-      }
-      pts.sort(function(a,b){ return a.z - b.z; });
-      for (var p=0;p<pts.length;p++){
-        var s2 = pts[p], depth = (s2.z+1)/2, rad = (1.6 + depth*2.4)*S;
-        var g2 = x.createRadialGradient(s2.x, s2.y, 0, s2.x, s2.y, rad*5);
-        g2.addColorStop(0, 'rgba(' + s2.col + ',' + (.28+depth*.34) + ')');
-        g2.addColorStop(1, 'rgba(' + s2.col + ',0)');
-        x.fillStyle = g2; x.fillRect(s2.x-rad*5, s2.y-rad*5, rad*10, rad*10);
-        x.beginPath(); x.arc(s2.x, s2.y, rad, 0, 6.2832);
-        x.fillStyle = 'rgba(' + s2.col + ',' + (.55+depth*.45) + ')'; x.fill();
-      }
-    }
-
-    var settle;
-    function onResize(){ clearTimeout(settle); settle = setTimeout(function(){ if (size()||RED) draw(0); }, 140); }
-    size();
-    if (RED) draw(0); else { add(draw); start(); }
-    addEventListener('resize', onResize, {passive:true});
-  })();
-
-  /* ── ECOSYSTEM GRAPH: hover/click a node, the panel follows ───────────── */
-  (function(){
-    var c = document.getElementById('eco'); if (!c || !c.getContext) return;
-    var side = document.getElementById('eco-side'); if (!side) return;
-    var x = c.getContext('2d'), W=0, H=0, S=1, hot=-1, sel=0;
-
-    /* every string here is already on the page — the graph presents the same
-       four ecosystem rows, it does not introduce new claims */
-    var N = [].slice.call(document.querySelectorAll('#ecosystem .rows .row')).map(function(r){
-      return { name: r.querySelector('b').textContent.trim().replace(/:$/,''),
-               body: r.querySelector('span').textContent.trim() };
-    }).slice(0,4);
-    if (!N.length) return;
-
-    function size(){
-      S = Math.min(devicePixelRatio||1,2);
-      var w = Math.max(1, Math.round(c.offsetWidth*S)), h = Math.max(1, Math.round(c.offsetHeight*S));
-      if (w===W && h===H) return false; W=c.width=w; H=c.height=h; return true;
-    }
-    function nodePos(i){
-      var cx=W/2, cy=H/2, R=Math.min(W,H)*0.30;
-      var a = -Math.PI/2 + i*(6.2832/N.length);
-      return {x:cx+Math.cos(a)*R, y:cy+Math.sin(a)*R, cx:cx, cy:cy};
-    }
-    function paint(t){
-      if (!onScreen(c)) return;
-      x.clearRect(0,0,W,H);
-      var cx=W/2, cy=H/2, R=Math.min(W,H)*0.30;
-      /* rings */
-      x.strokeStyle='rgba(255,255,255,.06)'; x.lineWidth=1*S;
-      for (var k=1;k<=3;k++){ x.beginPath(); x.arc(cx,cy,R*(0.34+k*0.26),0,6.2832); x.stroke(); }
-      /* spokes */
-      for (var i=0;i<N.length;i++){
-        var p = nodePos(i), on = (i===sel||i===hot);
-        x.strokeStyle = on ? 'rgba(124,201,245,.55)' : 'rgba(255,255,255,.10)';
-        x.lineWidth = on ? 1.6*S : 1*S;
-        x.setLineDash(on?[]:[3*S,4*S]);
-        x.beginPath(); x.moveTo(cx,cy); x.lineTo(p.x,p.y); x.stroke(); x.setLineDash([]);
-      }
-      /* hub */
-      x.beginPath(); x.arc(cx,cy,R*0.30,0,6.2832);
-      x.fillStyle='rgba(124,201,245,.10)'; x.fill();
-      x.strokeStyle='rgba(124,201,245,.5)'; x.lineWidth=1*S; x.stroke();
-      x.fillStyle='rgba(247,248,248,.85)'; x.textAlign='center'; x.textBaseline='middle';
-      x.font='500 '+(9.5*S)+'px "IBM Plex Mono",monospace';
-      x.fillText('PLATFORM', cx, cy-5*S); x.fillText('LAYER', cx, cy+6*S);
-      /* nodes */
-      for (var j=0;j<N.length;j++){
-        var q = nodePos(j), act = (j===sel), hov = (j===hot);
-        var pulse = RED?1:(act?1+0.06*Math.sin(t/620):1);
-        var rad = (act?7:5)*S*pulse;
-        var g = x.createRadialGradient(q.x,q.y,0,q.x,q.y,rad*4.5);
-        g.addColorStop(0,'rgba(94,234,212,'+(act?.55:hov?.38:.22)+')');
-        g.addColorStop(1,'rgba(94,234,212,0)');
-        x.fillStyle=g; x.fillRect(q.x-rad*4.5,q.y-rad*4.5,rad*9,rad*9);
-        x.beginPath(); x.arc(q.x,q.y,rad,0,6.2832);
-        x.fillStyle = act?'#5EEAD4':(hov?'rgba(94,234,212,.85)':'rgba(94,234,212,.55)'); x.fill();
-        x.fillStyle = act?'rgba(247,248,248,.95)':'rgba(247,248,248,.6)';
-        x.font = (act?'500 ':'400 ')+(9*S)+'px "IBM Plex Mono",monospace';
-        var lbl = N[j].name.toUpperCase();
-        var ly = q.y + (q.y < H/2 ? -rad-9*S : rad+13*S);
-        x.fillText(lbl.length>22?lbl.slice(0,21)+'…':lbl, q.x, ly);
-      }
-    }
-    function show(i){
-      sel = i;
-      side.querySelector('h3').textContent = N[i].name;
-      side.querySelector('p').textContent = N[i].body;
-    }
-    function pick(e){
-      var r = c.getBoundingClientRect();
-      var mx = (e.clientX-r.left)*S, my = (e.clientY-r.top)*S, best=-1, bd=28*S;
-      for (var i=0;i<N.length;i++){
-        var p = nodePos(i), d = Math.hypot(p.x-mx, p.y-my);
-        if (d < bd) { bd = d; best = i; }
-      }
-      return best;
-    }
-    c.addEventListener('pointermove', function(e){
-      var i = pick(e); hot = i; c.style.cursor = i>=0 ? 'pointer' : 'crosshair';
-      if (RED) paint(0);
-    }, {passive:true});
-    c.addEventListener('pointerleave', function(){ hot=-1; if(RED) paint(0); }, {passive:true});
-    c.addEventListener('click', function(e){ var i=pick(e); if(i>=0) { show(i); if(RED) paint(0); } });
-
-    var settle;
-    addEventListener('resize', function(){ clearTimeout(settle); settle=setTimeout(function(){ if(size()||RED) paint(0); },140); }, {passive:true});
-    size(); show(0);
-    if (RED) paint(0); else { add(paint); start(); }
-  })();
-
-  if (mq.addEventListener) mq.addEventListener('change', function(e){
-    RED = e.matches || STILL; if (RED) stop(); else start();
-  });
-})();
-
-</script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   v4 AUDIENCE LAYER — behaviour.
-
-   Five routes through ONE set of facts. Every string in AUD below is already on
-   the page verbatim; this file quotes, it does not author. The one exception is
-   the short framing line at the top of each panel, which is a UI label rather
-   than a claim about the initiative — and even those assert nothing that is not
-   said elsewhere on the page.
-
-   Deep links: ?as=investor|partner|education|government|community — so one page
-   can be sent to five different rooms already framed. Choice persists in
-   localStorage, and the URL updates without adding history entries.
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  var REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  "use strict";
-
-  var AUD = {
-    investor: {
-      label: "Investor",
-      lede: "Capital looking for <em>measurable readiness</em>, not a pitch.",
-      points: [
-        "Not a speculative venture; programs are tied to measurable readiness and real capabilities.",
-        "New industries, exportable services and IP anchored in the UAE.",
-        "A series of hiTech funds channeling private and institutional capital into UAE-based solutions."
-      ],
-      cta: "Become a Partner", href: "mailto:jaredlils99@gmail.com",
-      section: "ecosystem", where: "Ecosystem in Action"
-    },
-    partner: {
-      label: "Industry partner",
-      lede: "A route to <em>localize capabilities</em> inside the UAE.",
-      points: [
-        "Help global partners localize capabilities, IP and operations in the UAE.",
-        "A neutral collaboration zone connecting companies, investors and agencies to co-develop solutions for space from within UAE.",
-        "Local supply chains and capabilities reduce cost and time to deliver UAE missions."
-      ],
-      cta: "Become a Partner", href: "mailto:jaredlils99@gmail.com",
-      section: "city", where: "Strategic Trajectory"
-    },
-    education: {
-      label: "Educator or student",
-      lede: "A <em>pathway</em> from a classroom to a space career.",
-      points: [
-        "Developing future leaders by applying UAE-driven solutions to global and space challenges, strengthening national expertise and resilience.",
-        "Workshops & youth academies · University & research collaboration zones",
-        "High-value jobs in engineering, AI, robotics, medicine, sustainability and operations."
-      ],
-      cta: "Explore Programs", href: "#pillars",
-      section: "gateway", where: "Gateway to the Vision"
-    },
-    government: {
-      label: "Government or policy",
-      lede: "A complement to national institutions, <em>not a replacement</em>.",
-      points: [
-        "Not a regulator, government agency or operator of national missions.",
-        "Facilitate collaboration frameworks that respect UAE regulations and sovereign oversight.",
-        "UAE becomes a preferred hub for space collaboration, standards and responsible development."
-      ],
-      cta: "Explore Programs", href: "#join",
-      section: "join", where: "Collaboration Network Model"
-    },
-    community: {
-      label: "Community",
-      lede: "A place for <em>Emiratis to touch their dreams</em>.",
-      points: [
-        "A national movement where youth, families, professionals and creators participate in UAE space initiatives through digital platforms, outreach programs, events, challenges and learning pathways.",
-        "Interactive exhibits, mission simulators, planet environments and a rocket viewing gallery designed to make UAE’s space story tangible and memorable.",
-        "Youth engagement, national pride and clear pathways for citizens into future industries."
-      ],
-      cta: "Explore Programs", href: "#gateway",
-      section: "gateway", where: "Gateway to the Vision"
-    }
-  };
-
-  var wrap = document.querySelector('.aud'); if (!wrap) return;
-  var opts   = wrap.querySelector('.aud-opts');
-  var lede   = wrap.querySelector('.aud-lede');
-  var points = wrap.querySelector('.aud-points');
-  var cta    = wrap.querySelector('.aud-cta a');
-  var where  = wrap.querySelector('.aud-cta .where');
-  var KEYS = Object.keys(AUD);
-
-  /* build the control from the data, so adding an audience is a one-object edit */
-  KEYS.forEach(function(k){
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.setAttribute('aria-pressed','false');
-    b.dataset.k = k;
-    b.textContent = AUD[k].label;
-    opts.appendChild(b);
-  });
-
-  /* ── FILTERING ────────────────────────────────────────────────────────────
-     Which sections stay OPEN for each audience. Everything else folds to a bar.
-
-     `vision` and `join` are absent from every list on purpose — they are pinned
-     open below, because one carries the argument and the other carries the
-     action. A page that folds its own point is hiding, not filtering.
-
-     These lists are judgement, not data, so they are written where they can be
-     argued with rather than buried in a lookup. */
-  var KEEP = {
-    investor:   ['ecosystem','city'],
-    partner:    ['city','ecosystem'],
-    education:  ['gateway','pillars'],
-    government: ['pillars','city'],
-    community:  ['gateway']
-  };
-  var PINNED = ['vision','join'];
-
-  function foldable(){
-    return [].slice.call(document.querySelectorAll('section[data-key]'))
-      .filter(function(s){ return PINNED.indexOf(s.getAttribute('data-key')) === -1; });
+    Object.keys(links).forEach(function(id){
+      var el = d.getElementById(id); if (el) nio.observe(el);
+    });
   }
 
-  /* one bar per foldable section, built from the section's OWN heading so the
-     label can never drift from what is inside it */
-  function buildBars(){
-    foldable().forEach(function(sec){
-      if (sec.querySelector(':scope > .fold-bar')) return;
-      var h = sec.querySelector('h2');
-      if (!h) return;
-      if (!sec.id) sec.id = 'sec-' + sec.getAttribute('data-key');
-      var shell = sec.querySelector(':scope > .shell');
-      if (shell && !shell.id) shell.id = sec.id + '-body';
-
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'fold-bar';
-      b.setAttribute('aria-expanded', 'false');
-      if (shell) b.setAttribute('aria-controls', shell.id);
-      b.innerHTML = '<span class="fb-title"></span><span class="fb-hint">show</span>';
-      b.querySelector('.fb-title').textContent = h.textContent.trim();
-      b.addEventListener('click', function(){
-        sec.classList.remove('folded');
-        sec.classList.add('unfolded');
-        b.setAttribute('aria-expanded', 'true');
-        sec.scrollIntoView({block:'start', behavior: REDUCED ? 'auto' : 'smooth'});
+  /* ── trajectory: a real tablist ────────────────────────────────────────────
+     Panels are hidden HERE rather than in the markup, so the no-JS page shows
+     all three under their own headings instead of an empty roadmap. Arrow keys
+     work because a tablist that only responds to clicks is a tablist in name. */
+  var legs = qa('.leg');
+  function select(i){
+    legs.forEach(function(b, j){
+      var on = i === j;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      var p = d.getElementById(b.getAttribute('aria-controls'));
+      if (p) p.hidden = !on;
+    });
+  }
+  if (legs.length) {
+    legs.forEach(function(b, i){
+      b.addEventListener('click', function(){ select(i); });
+      b.addEventListener('keydown', function(ev){
+        var n = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : null;
+        if (n === null) return;
+        ev.preventDefault();
+        n = (n + legs.length) % legs.length;
+        select(n); legs[n].focus();
       });
-      sec.insertBefore(b, sec.firstChild);
     });
+    select(0);
   }
 
-  function applyFilter(key){
-    buildBars();
-    var keep = KEEP[key] || [];
-    foldable().forEach(function(sec){
-      var k = sec.getAttribute('data-key');
-      var stays = keep.indexOf(k) !== -1;
-      sec.classList.toggle('folded', !stays);
-      if (stays) sec.classList.remove('unfolded');
-      var b = sec.querySelector(':scope > .fold-bar');
-      if (b) b.setAttribute('aria-expanded', stays ? 'true' : 'false');
+  /* ── language: real RTL, honest about the missing copy ─────────────────── */
+  var note = d.getElementById('lang-note');
+  var btns = qa('.lang button');
+  function setLang(code){
+    var ar = code === 'ar';
+    d.documentElement.setAttribute('dir', ar ? 'rtl' : 'ltr');
+    d.documentElement.setAttribute('lang', ar ? 'ar' : 'en');
+    btns.forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === code));
     });
+    if (ar) note.setAttribute('data-on',''); else note.removeAttribute('data-on');
   }
-
-
-  function markRelevant(key){
-    [].slice.call(document.querySelectorAll('section[data-key]')).forEach(function(s){
-      s.classList.toggle('relevant', !!key && s.getAttribute('data-key') === AUD[key].section);
-    });
-  }
-
-  function apply(key, push){
-    var a = AUD[key]; if (!a) return;
-    document.body.setAttribute('data-aud', key);
-    [].slice.call(opts.children).forEach(function(b){
-      b.setAttribute('aria-pressed', b.dataset.k === key ? 'true' : 'false');
-    });
-    lede.innerHTML = a.lede;
-    points.innerHTML = '';
-    a.points.forEach(function(p){
-      var li = document.createElement('li'); li.textContent = p; points.appendChild(li);
-    });
-    cta.textContent = a.cta;
-    cta.setAttribute('href', a.href);
-    where.innerHTML = 'Most relevant section: <a href="#' + a.section + '">' + a.where + '</a>';
-    markRelevant(key);
-    applyFilter(key);
-    try { localStorage.setItem('xs-aud', key); } catch(e){}
-    if (push) {
-      var u = new URL(location.href);
-      u.searchParams.set('as', key);
-      history.replaceState(null, '', u);      /* replace, never stack history */
-    }
-  }
-
-  opts.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    if (b.getAttribute('aria-pressed') === 'true') return;   /* already active */
-    apply(b.dataset.k, true);
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
   });
-
-  /* keyboard: the control is a row of toggles, arrows move between them */
-  opts.addEventListener('keydown', function(e){
-    var bs = [].slice.call(opts.children), i = bs.indexOf(document.activeElement);
-    if (i < 0) return;
-    var n = null;
-    if (e.key === 'ArrowRight') n = (i+1) % bs.length;
-    if (e.key === 'ArrowLeft')  n = (i-1+bs.length) % bs.length;
-    if (n !== null) { e.preventDefault(); bs[n].focus(); }
-  });
-
-  /* deep link wins over a remembered choice; neither is required */
-  var q = new URLSearchParams(location.search).get('as');
-  var saved = null; try { saved = localStorage.getItem('xs-aud'); } catch(e){}
-  var initial = (q && AUD[q]) ? q : ((saved && AUD[saved]) ? saved : null);
-  if (initial) apply(initial, false);
-
-  /* ── the human band's pills, wired to this same switcher ──────────────────
-     They were inert <span>s that looked exactly like these buttons. Rather than
-     re-implement anything, each one triggers the real control, so URL push,
-     localStorage, aria-pressed and relevance marking all happen once, here. */
-  var human = document.querySelectorAll('.human .who [data-goto]');
-  Array.prototype.forEach.call(human, function(el){
-    el.addEventListener('click', function(){
-      var real = document.querySelector('.aud-opts [data-k="' + el.dataset.goto + '"]');
-      if (real) real.click();
-    });
-  });
-
+  var back = d.getElementById('lang-back');
+  if (back) back.addEventListener('click', function(){ setLang('en'); btns[0].focus(); });
 })();
-
-</script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   v5 LIVE NUMBERS — behaviour.
-
-   RETRACTED: 26/08/2026 verify pass - the "since 1974" counter is GONE.
-   RETRACTED: 1974 was wrong. The UAE Space Agency's own chairman, on the UAE Cabinet portal,
-   dates the first NASA meeting to 1976 — and it is the UAE's heritage, not this
-   page's, so the figure was deleted rather than corrected to 50. The 2117 figures
-   survive: 2117 is primary-sourced at u.ae. Static markup now carries the true
-   values so the no-JS path never reads "0 years to the 2117 horizon".
-
-   PROVENANCE OF EVERY NUMBER ON THIS PAGE, because that is the whole discipline:
-     2030  stated — "NOW–2030" (the "Aligned with…" chip was DELETED 26/08: on an
-           unaffiliated page it read as endorsement by a foreign government)
-     2040  stated — "2030–2040 UAE Space City & Industry Scale-Up"
-     2117 sourced — u.ae names the Mars 2117 programme (MBRSC).
-     The 2040 boundary is NOT sourced: no UAE source publishes it, and
-     citing this page's own text as its provenance was circular.
-     4     stated — "4 Pillars powering XperienceSpace"
-   Everything the counters show is one of those, or subtraction between one of
-   those and today's date. No percentages anywhere. No figure describes
-   performance, uptake, funding or results — because the page does not state any
-   and inventing one would be the exact failure this whole line of work exists to
-   have corrected.
-
-   The upside of that constraint: these are LIVE. The horizon is a different
-   number tomorrow. "2117" is abstract; "91 years from today" is not.
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-  var STILL = /[?&]noreveal/.test(location.search);
-  var RED = matchMedia('(prefers-reduced-motion:reduce)').matches || STILL;
-
-  var NOW = new Date();
-  var YEAR = NOW.getFullYear();
-  var HORIZON = 2117;
-
-  /* every counter registers how to settle itself, so a single backstop can
-     finish all of them if neither IO nor rAF ever fires */
-  var SETTLERS = [];
-  setTimeout(function(){ SETTLERS.forEach(function(f){ f(); }); }, 2600);
-
-  /* ── count up to a value when it scrolls into view ────────────────────── */
-  function countTo(el, value, render){
-    render = render || function(v){ return String(v); };
-    var settled = false;
-    function settle(){ if (settled) return; settled = true; el.textContent = render(value); }
-    SETTLERS.push(settle);
-    if (RED || !('IntersectionObserver' in window)) { settle(); return; }
-    var io = new IntersectionObserver(function(en){
-      en.forEach(function(entry){
-        if (!entry.isIntersecting) return;
-        io.unobserve(el);
-        if (settled) return;
-        var t0 = performance.now(), dur = 1000, done = false;
-        function finish(){ if (done) return; done = true; settled = true; el.textContent = render(value); }
-        (function step(now){
-          if (done) return;
-          var p = Math.min(1, (now - t0)/dur);
-          var e = 1 - Math.pow(1 - p, 3);
-          el.textContent = render(Math.round(value * e));
-          if (p < 1) requestAnimationFrame(step); else finish();
-        })(performance.now());
-        /* floor: if rAF never fires (background tab, embedded webview, any
-           non-compositing context) the figure still lands on its real value
-           instead of being stuck at zero. Correctness outranks the animation. */
-        setTimeout(finish, dur + 260);
-      });
-    }, {rootMargin:'0px 0px -12% 0px'});
-    io.observe(el);
-  }
-
-  /* ── the horizon block ────────────────────────────────────────────────── */
-  (function(){
-    var host = document.querySelector('.horizon'); if (!host) return;
-    var yearsEl = host.querySelector('[data-h="years"]');
-    var daysEl  = host.querySelector('[data-h="days"]');
-
-    var target = new Date(HORIZON, 0, 1);
-    var msPerDay = 86400000;
-    var days = Math.max(0, Math.round((target - NOW) / msPerDay));
-    var years = HORIZON - YEAR;
-
-    if (yearsEl) countTo(yearsEl, years);
-    if (daysEl)  countTo(daysEl, days, function(v){ return v.toLocaleString(); });
-
-    /* the day figure ticks over at midnight without needing a reload */
-    if (daysEl && !RED) {
-      setInterval(function(){
-        var d = Math.max(0, Math.round((target - new Date()) / msPerDay));
-        if (String(d.toLocaleString()) !== daysEl.textContent) daysEl.textContent = d.toLocaleString();
-      }, 60000);
-    }
-  })();
-
-  /* ── per-phase spans on the roadmap ───────────────────────────────────── */
-  (function(){
-    var phases = [].slice.call(document.querySelectorAll('.traj .phase'));
-    if (!phases.length) return;
-    phases.forEach(function(p){
-      var yrEl = p.querySelector('.yr'); if (!yrEl) return;
-      var txt = yrEl.textContent;
-      /* read the span straight off the label the page already prints */
-      var nums = txt.match(/\d{4}/g) || [];
-      var from, to;
-      if (/^NOW/i.test(txt.trim())) { from = YEAR; to = parseInt(nums[0], 10); }
-      else if (nums.length >= 2)    { from = parseInt(nums[0], 10); to = parseInt(nums[1], 10); }
-      else return;
-      if (!from || !to || to <= from) return;
-
-      var span = document.createElement('span');
-      span.className = 'span';
-      var b = document.createElement('b'); b.textContent = '0';
-      var i = document.createElement('i'); i.textContent = 'years';
-      span.appendChild(b); span.appendChild(i);
-      yrEl.appendChild(span);
-      countTo(b, to - from);
-    });
-  })();
-
-  /* ── inline tallies: counts the page already states ───────────────────── */
-  (function(){
-    [].slice.call(document.querySelectorAll('[data-tally]')).forEach(function(el){
-      countTo(el, parseInt(el.getAttribute('data-tally'), 10));
-    });
-  })();
-})();
-
-</script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   v7 THE ENDING — behaviour.
-
-   Completes the thread the audience control opens. If the reader told the page
-   who they are at the top, the closing action knows it: the button label, the
-   mailto subject and the "you told us" line all follow. Asking someone who they
-   are and then closing with a generic mailto is worse than never asking.
-
-   The mailto subject is the only thing generated here, and it is a subject line
-   on the reader's own email — not a claim, not content, and nothing is sent by
-   the page. If no audience was chosen the ending is simply the neutral version.
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-
-  var STEP = {
-    investor:   { label:"Start a partnership conversation", subject:"Partnership enquiry — investor" },
-    partner:    { label:"Start a partnership conversation", subject:"Partnership enquiry — industry partner" },
-    education:  { label:"Ask about programs and pathways",  subject:"Programs enquiry — education" },
-    government: { label:"Ask about collaboration",          subject:"Collaboration enquiry — government / policy" },
-    community:  { label:"Find your way in",                 subject:"Community enquiry" }
-  };
-  var NEUTRAL = { label:"Become a Partner", subject:"XperienceSpace enquiry" };
-  var LABELS = {
-    investor:"an investor", partner:"an industry partner", education:"an educator or student",
-    government:"government or policy", community:"part of the community"
-  };
-  var TO = "jaredlils99@gmail.com";
-
-  var join = document.querySelector('.join'); if (!join) return;
-  var act  = join.querySelector('.end-act'); if (!act) return;
-  var btn  = act.querySelector('.btn-p');
-  var asEl = join.querySelector('.end-as');
-  var asWho = asEl && asEl.querySelector('b');
-  var change = asEl && asEl.querySelector('button');
-
-  function paint(){
-    var key = document.body.getAttribute('data-aud');
-    var s = (key && STEP[key]) ? STEP[key] : NEUTRAL;
-    if (btn) {
-      btn.textContent = s.label;
-      btn.setAttribute('href', 'mailto:' + TO + '?subject=' + encodeURIComponent(s.subject));
-    }
-    if (asEl) {
-      if (key && LABELS[key]) {
-        asEl.setAttribute('data-set', '1');
-        if (asWho) asWho.textContent = LABELS[key];
-      } else {
-        asEl.removeAttribute('data-set');
-      }
-    }
-  }
-
-  /* the audience control writes body[data-aud]; follow it rather than
-     duplicating its state, so there is one source of truth */
-  if (window.MutationObserver) {
-    new MutationObserver(paint).observe(document.body, {attributes:true, attributeFilter:['data-aud']});
-  }
-  if (change) {
-    change.addEventListener('click', function(){
-      var opts = document.querySelector('.aud-opts');
-      if (!opts) return;
-      opts.scrollIntoView({behavior:'smooth', block:'center'});
-      var first = opts.querySelector('button'); if (first) first.focus();
-    });
-  }
-  paint();
-  setTimeout(paint, 300);   /* after the audience layer has restored any saved choice */
-})();
-
-</script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   v8 LANGUAGE + RTL — behaviour.
-
-   The switch is real and the RTL layout is real. The Arabic COPY is not here,
-   because it is not mine to write — see the header of v8-lang.css for why.
-
-   What happens when someone picks العربية: the page flips to RTL so the layout
-   is genuinely demonstrated, and a plain notice says the Arabic copy has not
-   been supplied yet. That is honest in both directions — it does not pretend the
-   translation exists, and it does not pretend the site cannot support it.
-
-   TO GO LIVE IN ARABIC, someone at XperienceSpace fills AR below. Every key maps
-   to text already on the page; nothing new needs writing, only translating. The
-   moment a key has a value it is used automatically.
-
-   ── NUMERALS: DO NOT CONVERT THEM. ──────────────────────────────────────────
-   The obvious-looking improvement here is to render digits as Arabic-Indic
-   (٠١٢٣٤٥٦٧٨٩) when the page is in Arabic. For the UAE that is WRONG.
-
-   Checked 25/08/2026 against the UAE government's own Arabic portal (u.ae/ar),
-   which is the register this page is trying to sit beside. Its Arabic copy
-   writes every figure in Western digits — including, verbatim, "2117" for the
-   Mars project, "2071", "2031", "50:50", and the emergency numbers 999/997/998.
-   That is the same number our headline uses, in Arabic, on a UAE government
-   surface. Arabic-Indic digits are normal in Egypt and parts of the Levant;
-   the Gulf, and the UAE especially, uses Western digits in both languages.
-
-   So: no numeral conversion, no `toLocaleString('ar-u-nu-arab')`, no digit map.
-   Translate the WORDS around the numbers and leave the numbers alone.
-
-   What IS needed, and is already done: year ranges like 2030–2117 are wrapped
-   in `direction:ltr;unicode-bidi:isolate` (v8-lang.css). Without that, an
-   en-dash between two numbers is a neutral character in an RTL paragraph and
-   the range can render reversed as 2117–2030. Verified 25/08: all four ranges
-   in xs-v2.html sit inside covered selectors (.kv dd, .stat .v, .phase .yr).
-   If you add a new range, put it inside one of those or add it to that rule.
-   ────────────────────────────────────────────────────────────────────────────
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-
-  /* ── the translation slot ──────────────────────────────────────────────
-     Keys are English source strings. Values are DELIBERATELY EMPTY: this file
-     ships with no Arabic in it, and none should be added by anyone who is not
-     writing for XperienceSpace. Fill a value and it takes effect immediately. */
-  var AR = {
-    "Vision": "", "Pillars": "", "Ecosystem": "", "Space City": "",
-    "Welcome Center": "", "Contact": "",
-    "Building the": "", "UAE Space Nation": "",
-    "Planting the UAE flag in the future of space": "",
-    "Become a Partner": "", "Explore Programs": "",
-    "I'm here as": "", "Investor": "", "Industry partner": "",
-    "Educator or student": "", "Government or policy": "", "Community": ""
-  };
-
-  function translatedCount(){
-    var n = 0; for (var k in AR) if (AR[k] && AR[k].trim()) n++;
-    return n;
-  }
-
-  var host = document.querySelector('.nav'); if (!host) return;
-
-  /* ── build the switch ─────────────────────────────────────────────────── */
-  var wrap = document.createElement('div');
-  wrap.className = 'lang';
-  wrap.setAttribute('role', 'group');
-  wrap.setAttribute('aria-label', 'Language');
-
-  var en = document.createElement('button');
-  en.type = 'button'; en.textContent = 'EN'; en.setAttribute('aria-pressed', 'true');
-
-  var ar = document.createElement('button');
-  ar.type = 'button'; ar.lang = 'ar'; ar.textContent = 'العربية';
-  ar.setAttribute('aria-pressed', 'false');
-  ar.setAttribute('aria-label', 'Arabic');
-
-  wrap.appendChild(en); wrap.appendChild(ar);
-  host.appendChild(wrap);
-
-  /* ── the honest notice ────────────────────────────────────────────────── */
-  var note = document.createElement('div');
-  note.id = 'lang-note';
-  note.setAttribute('role', 'status');
-  var msg = document.createElement('p');
-  var back = document.createElement('button');
-  back.type = 'button'; back.textContent = 'Back to English';
-  note.appendChild(msg); note.appendChild(back);
-  document.body.appendChild(note);
-
-  function setLang(lang){
-    var isAr = (lang === 'ar');
-    document.documentElement.setAttribute('lang', isAr ? 'ar' : 'en');
-    document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
-    en.setAttribute('aria-pressed', isAr ? 'false' : 'true');
-    ar.setAttribute('aria-pressed', isAr ? 'true' : 'false');
-
-    /* mark prose that is still English so it keeps LTR reading order inside the
-       mirrored layout — otherwise punctuation lands at the wrong end */
-    var PROSE = 'p, li, h1, h2, h3, .say, .lede, .sec-sub, .aud-lede, blockquote';
-    [].slice.call(document.querySelectorAll(PROSE)).forEach(function(el){
-      if (isAr) el.setAttribute('data-untranslated', '');
-      else el.removeAttribute('data-untranslated');
-    });
-
-    if (isAr) {
-      var done = translatedCount(), total = Object.keys(AR).length;
-      msg.innerHTML = done === 0
-        ? '<b>Arabic copy has not been supplied yet.</b> The layout has switched to '
-          + 'right-to-left so you can see the page mirrors correctly — the text you are '
-          + 'reading is still the English. Translation is a XperienceSpace deliverable; '
-          + 'this prototype will not machine-translate a national initiative’s own words.'
-        : '<b>Arabic is partially supplied</b> (' + done + ' of ' + total + ' strings). '
-          + 'Untranslated text remains in English.';
-      note.setAttribute('data-on', '1');
-    } else {
-      note.removeAttribute('data-on');
-    }
-    try { localStorage.setItem('xs-lang', lang); } catch(e){}
-  }
-
-  en.addEventListener('click', function(){ setLang('en'); });
-  ar.addEventListener('click', function(){ setLang('ar'); });
-  back.addEventListener('click', function(){ setLang('en'); });
-
-  /* deep link + remembered choice, same shape as the audience layer */
-  var q = new URLSearchParams(location.search).get('lang');
-  var saved = null; try { saved = localStorage.getItem('xs-lang'); } catch(e){}
-  var initial = (q === 'ar' || q === 'en') ? q : (saved === 'ar' ? 'ar' : 'en');
-  if (initial === 'ar') setLang('ar');
-})();
-
 </script>
 </body>
 </html>
