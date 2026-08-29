@@ -205,7 +205,12 @@ body{
    Hover grows the mark; clicking travels to it. Kept well under the .on scale of
    1.82 so arrival still clearly outranks pointing. */
 .stop{cursor:pointer}
-.stop:not(.on):hover svg{transform:scale(1.26)}
+/* A focus ring that survives the recession: a keyboard user landing on a stop
+   dimmed to .24 could otherwise not see where they were. */
+.stop:focus-visible{outline:2px solid var(--now);outline-offset:10px;border-radius:4px}
+.rail.focusing .stop:not(.on):focus-visible{opacity:1}
+.rail.focusing .stop:not(.on):focus-visible .txt{opacity:1}
+.stop:not(.on):hover svg,.stop:not(.on):focus-visible svg{transform:scale(1.26)}
 .stop:not(.on):hover .nm{color:var(--now)}
 .stop .yr{
   display:block;
@@ -747,7 +752,16 @@ body{
          list. One sentence per stop, so a screen reader gets the milestone
          whole rather than three orphaned fragments. */
       el.setAttribute('role', 'listitem');
-      el.setAttribute('aria-label', s.yr + '. ' + s.nm + '. ' + s.no + '.');
+      /* Focusable, because it is now operable. Adding cursor:pointer and a click
+         handler without this made the milestones mouse-only: they looked
+         pressable and could not be reached any other way. Seven stops is seven
+         tab stops, and on a page whose whole subject IS these objects, tabbing
+         through them is the natural keyboard reading order rather than noise.
+         role stays listitem so the list is not broken; the label carries the
+         action so a screen reader announces what pressing it does. */
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-label', s.yr + '. ' + s.nm + '. ' + s.no
+                                  + '. Press to travel here.');
       el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
       el.innerHTML = MARKS[s.mark] +
         '<b class="disp">' + (BIG[s.at] || s.at) + '</b>' +
@@ -1016,6 +1030,17 @@ body{
      a stop would teleport you somewhere you did not ask for. Keyboard
      equivalence is the documented Left/Right/Home/End, so fifteen new tab stops
      are deliberately not added. */
+  /* Enter and Space operate a focused milestone, matching the click path. */
+  world.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var el = e.target.closest && e.target.closest('.stop');
+    if (!el) return;
+    e.preventDefault();
+    for (var i = 0; i < STOPEL.length; i++) {
+      if (STOPEL[i].el === el) { go(STOPEL[i].at - innerWidth / 2); return; }
+    }
+  });
+
   world.addEventListener('click', function(e){
     if (moved) return;
     var el = e.target.closest && e.target.closest('.stop');
