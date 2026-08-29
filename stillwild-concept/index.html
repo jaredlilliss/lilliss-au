@@ -203,6 +203,17 @@ body{counter-reset:band}
 }
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0) scale(.98)}
+/* The magnetic CTAs used to write style.transform inline, and an inline style
+   beats every stylesheet rule - so :active press feedback never reached the two
+   buttons carrying it, the enquiry Send among them. The offset now travels as
+   custom properties and the press state composes with it instead of losing to
+   it. Two classes plus a pseudo-class, so order does not matter. */
+.btn.mag{transform:translate(var(--mx,0px),var(--my,0px))}
+/* .btn.mag and .btn:hover have EQUAL specificity (0-2-0) and this block comes
+   later, so without an explicit hover rule the magnetic buttons would silently
+   lose the -2px lift every other button has. Composed rather than replaced. */
+.btn.mag:hover{transform:translate(var(--mx,0px),calc(var(--my,0px) - 2px))}
+.btn.mag:active{transform:translate(var(--mx,0px),var(--my,0px)) scale(.98)}
 .btn-primary{background:var(--text);color:var(--bg)}
 .btn-primary:hover{background:#000;box-shadow:0 12px 26px -12px rgba(24,36,32,.5)}
 .btn-ghost{background:transparent;color:var(--text)}
@@ -689,6 +700,443 @@ section[aria-labelledby="why-h"],#safety{display:none}
 main>section[aria-labelledby="why-h"]{order:4}
 main>#safety{order:7}
 
+</style>", base, re.S)
+       themed = base[:m.start()] + "<style>" + css + "</style>" + base[m.end():]
+
+   It does not append, and it does not merge. So nothing you change in here ever
+   reaches a visitor - it only affects this file opened directly as a preview.
+   The shipped stylesheet is themes/ridgeline.css.
+
+   This cost three separate edits on 29/08 that built cleanly, changed nothing,
+   and looked correct in the source every time. JS edits DO come through, which
+   is what makes it convincing: half your change lands and half vanishes. */
+/* ---------------------------------------------------------------------------
+   Still Wild — prototype landing page. Single file, no external resources.
+   Palette taken from the site's own subject matter: floodlit sandstone,
+   eucalypt, night sky. Type is a system stack so nothing is fetched.
+--------------------------------------------------------------------------- */
+:root{
+  --bg:#0b0d0c;
+  --bg-deep:#070908;
+  --surface:#121614;
+  --surface-2:#19201d;
+  --line:rgba(236,231,219,.13);
+  --line-strong:rgba(236,231,219,.26);
+  --text:#ece7db;
+  --muted:#9fa79c;
+  /* #767f76 measured 4.40:1 on --surface, under AA 4.5. Lifted to 4.65:1. */
+  --muted-2:#7a837a;
+  --ember:#e07a3c;
+  --ember-soft:rgba(224,122,60,.14);
+  --gum:#9db97f;
+  --gum-soft:rgba(157,185,127,.14);
+  --radius:14px;
+  --radius-lg:22px;
+  --maxw:1140px;
+  --pad:clamp(1.15rem,4vw,2rem);
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1rem,.97rem + .18vw,1.075rem);
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+h1,h2,h3,h4{line-height:1.12;margin:0;letter-spacing:-.02em;font-weight:650}
+p{margin:0 0 1em}
+p:last-child{margin-bottom:0}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+section{scroll-margin-top:84px}
+.eyebrow{
+  font:600 .72rem/1.2 var(--mono);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ember);
+  margin:0 0 .9rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--ember);flex:none}
+.lede{font-size:clamp(1.05rem,1rem + .4vw,1.28rem);color:var(--muted);max-width:62ch}
+
+/* --- prototype markers ---------------------------------------------------- */
+/* .ribbon removed 29/08 - markup long gone, rules still shipping. */
+.ph{
+  display:inline-block;vertical-align:baseline;
+  font:600 .62rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;
+  color:#f0b98c;background:var(--ember-soft);border:1px dashed rgba(224,122,60,.5);
+  padding:.28em .5em;border-radius:5px;margin-left:.4em;white-space:nowrap;
+}
+
+/* --- header --------------------------------------------------------------- */
+.site-head{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,13,12,.86);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.site-head .wrap{display:flex;align-items:center;gap:1.4rem;min-height:66px}
+.brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;flex:none}
+.brand b{font:750 1.06rem/1 var(--sans);letter-spacing:.13em}
+.brand span{font:500 .58rem/1 var(--mono);letter-spacing:.22em;color:var(--muted-2);margin-top:.42rem}
+.nav{display:flex;gap:1.35rem;margin-left:auto;align-items:center}
+.nav a{
+  text-decoration:none;color:var(--muted);font-size:.9rem;
+  padding-block:.35rem;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav a:hover{color:var(--text);border-bottom-color:var(--ember)}
+.lang{display:flex;border:1px solid var(--line-strong);border-radius:99px;overflow:hidden;flex:none}
+.lang span,.lang a{
+  font:600 .72rem/1 var(--mono);letter-spacing:.06em;
+  padding:.5rem .68rem;text-decoration:none;color:var(--muted-2);
+}
+.lang .on{background:var(--surface-2);color:var(--text)}
+.lang .off{cursor:not-allowed;opacity:.6}
+.cta-short{display:none}
+
+/* Tablet and phone: the nav drops to its own full-width row under the brand and
+   scrolls sideways, rather than disappearing and leaving a phone with no way in. */
+@media (max-width:860px){
+  .site-head .wrap{flex-wrap:wrap;gap:.9rem;min-height:0;padding-block:.7rem 0}
+  .lang{margin-left:auto}
+  .nav{
+    order:3;width:100%;margin-left:0;gap:1.3rem;
+    overflow-x:auto;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none;
+    border-top:1px solid var(--line);
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{white-space:nowrap;flex:none;padding-block:.62rem}
+  .nav a:first-child{scroll-margin-left:var(--pad)}
+  section{scroll-margin-top:116px}
+}
+
+/* Small phones: at 320px the brand tagline, the language pill and a long CTA
+   label cannot all fit on one line. Trim each rather than let the head scroll. */
+@media (max-width:520px){
+  .site-head .wrap{gap:.7rem;padding-inline:.85rem}
+  .brand b{font-size:.98rem;letter-spacing:.09em}
+  .brand span{display:none}
+  .lang span,.lang a{font:600 .66rem/1 var(--mono);padding:.42rem .52rem}
+  .site-head .btn-sm{padding:.55rem .85rem;font-size:.78rem}
+  .cta-long{display:none}
+  .cta-short{display:inline}
+}
+
+/* --- buttons -------------------------------------------------------------- */
+.btn{
+  display:inline-flex;align-items:center;gap:.55rem;
+  font:600 .93rem/1 var(--sans);text-decoration:none;
+  padding:.92rem 1.35rem;border-radius:99px;border:1px solid transparent;
+  transition:transform .16s,background .18s,border-color .18s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--ember);color:#160c05;border-color:var(--ember)}
+.btn-primary:hover{background:#eb8b4f}
+.btn-ghost{border-color:var(--line-strong);color:var(--text)}
+.btn-ghost:hover{border-color:var(--text)}
+.btn-sm{padding:.6rem 1rem;font-size:.83rem}
+
+/* --- hero ----------------------------------------------------------------- */
+.hero{position:relative;overflow:hidden;background:var(--bg-deep);isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;opacity:.55}
+.hero-scrim{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(7,9,8,.94) 0%,rgba(7,9,8,.52) 32%,rgba(7,9,8,.80) 72%,var(--bg) 100%),
+    radial-gradient(120% 80% at 12% 30%,rgba(7,9,8,.86),transparent 60%);
+}
+.hero .wrap{padding-block:clamp(4.2rem,13vh,8rem) clamp(3rem,7vh,4.6rem)}
+.hero h1{
+  font-size:clamp(2.35rem,1.6rem + 3.6vw,4.35rem);
+  font-weight:700;max-width:16ch;margin-bottom:1.15rem;
+  text-shadow:0 2px 30px rgba(0,0,0,.6);
+}
+.hero h1 em{font-style:normal;color:var(--ember)}
+.hero .lede{max-width:56ch;color:#cfd2c8}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}
+.hero-note{margin-top:1.1rem;font:.8rem/1.5 var(--sans);color:var(--muted-2)}
+
+/* --- trust strip ---------------------------------------------------------- */
+.trust{border-block:1px solid var(--line);background:var(--surface)}
+.trust ul{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+}
+.trust li{
+  padding:1.15rem var(--pad);border-left:1px solid var(--line);
+  font-size:.87rem;color:var(--muted);display:flex;gap:.6rem;align-items:flex-start;
+}
+.trust li:first-child{border-left:0}
+.trust li b{color:var(--text);font-weight:600}
+.tick{flex:none;width:15px;height:15px;margin-top:.28rem;color:var(--gum)}
+
+/* --- generic section ------------------------------------------------------ */
+.band{padding-block:clamp(3.6rem,9vh,6.2rem)}
+.band-alt{background:var(--surface);border-block:1px solid var(--line)}
+.band-head{max-width:66ch;margin-bottom:2.6rem}
+.band-head h2{font-size:clamp(1.75rem,1.35rem + 1.7vw,2.6rem);margin-bottom:.9rem}
+
+/* --- three pillars -------------------------------------------------------- */
+.pillars{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+.pillar{border-top:2px solid var(--ember);padding-top:1.15rem}
+.pillar h3{font-size:1.12rem;margin-bottom:.6rem}
+.pillar p{color:var(--muted);font-size:.94rem}
+
+/* --- trips ---------------------------------------------------------------- */
+.trips{display:grid;gap:1.3rem;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));align-items:start}
+.trip{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:1.6rem 1.5rem;display:flex;flex-direction:column;gap:1rem;height:100%;
+}
+.trip.feature{border-color:rgba(224,122,60,.55);background:linear-gradient(180deg,rgba(224,122,60,.07),var(--surface) 55%)}
+.trip-tag{font:600 .66rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gum)}
+.trip.feature .trip-tag{color:var(--ember)}
+.trip h3{font-size:1.42rem}
+.trip-meta{font:.83rem/1.4 var(--mono);color:var(--muted-2)}
+.trip p{color:var(--muted);font-size:.94rem}
+.trip .price{
+  font:700 1.5rem/1 var(--sans);color:var(--text);
+  display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;
+}
+.trip .price small{font:500 .78rem/1 var(--sans);color:var(--muted-2)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;margin:0;padding:0}
+.chips li{
+  font:.75rem/1 var(--sans);color:var(--muted);
+  border:1px solid var(--line);border-radius:99px;padding:.42rem .68rem;
+}
+.trip .spacer{margin-top:auto}
+
+/* --- destinations mosaic -------------------------------------------------- */
+.mosaic{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.tile{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:var(--surface-2);
+  min-height:230px;display:flex;
+}
+.tile.tall{grid-row:span 2;min-height:480px}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile figcaption{
+  position:relative;margin-top:auto;width:100%;
+  padding:2.6rem 1.1rem 1.05rem;
+  background:linear-gradient(180deg,transparent,rgba(6,8,7,.9) 55%);
+}
+.tile h3{font-size:1.03rem;margin-bottom:.28rem}
+.tile p{font-size:.83rem;color:#c3c8bd;margin:0}
+.place-note{margin-top:1.4rem;font-size:.85rem;color:var(--muted-2);max-width:70ch}
+.more-places{margin-top:1.6rem}
+.more-places h3{font-size:.78rem;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:.8rem;font-weight:600}
+
+/* --- included / not included --------------------------------------------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.6rem 1.5rem}
+.panel.out{background:transparent}
+.panel h3{font-size:1.05rem;margin-bottom:1rem;display:flex;align-items:center;gap:.55rem}
+.panel ul{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.panel li{display:flex;gap:.65rem;font-size:.93rem;color:var(--muted);align-items:flex-start}
+.panel li b{color:var(--text);font-weight:600}
+.cross{flex:none;width:15px;height:15px;margin-top:.28rem;color:var(--muted-2)}
+
+/* --- crew ----------------------------------------------------------------- */
+.crew{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(238px,1fr))}
+.person{border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem;background:var(--surface)}
+.person .portrait{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:1rem}
+.person h3{font-size:1.08rem}
+.person .role{font:600 .68rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:.4rem 0 .8rem}
+.person p{font-size:.9rem;color:var(--muted);margin-bottom:.9rem}
+
+/* --- safety --------------------------------------------------------------- */
+.safety{display:grid;gap:2rem;grid-template-columns:minmax(0,1fr)}
+@media (min-width:840px){ .safety{grid-template-columns:1.05fr .95fr;gap:3rem} }
+.safety ol{margin:0;padding-left:1.15rem;display:grid;gap:.7rem;color:var(--muted);font-size:.94rem}
+.safety ol b{color:var(--text)}
+.callout{
+  border:1px solid rgba(224,122,60,.4);background:var(--ember-soft);
+  border-radius:var(--radius-lg);padding:1.5rem;
+}
+.callout h3{font-size:1.05rem;margin-bottom:.7rem}
+.callout p{font-size:.93rem;color:#dcd3c6}
+
+/* --- enquiry -------------------------------------------------------------- */
+.enquire-grid{display:grid;gap:1.6rem;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){ .enquire-grid{grid-template-columns:1.15fr .85fr;gap:2.4rem} }
+.form-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.7rem 1.6rem}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font:600 .78rem/1.3 var(--sans);margin-bottom:.45rem}
+.field .hint{display:block;font-weight:400;color:var(--muted-2);font-size:.78rem;margin-top:.2rem}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:10px;
+  color:var(--text);font:inherit;font-size:.93rem;padding:.72rem .85rem;
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted-2)}
+.field-row{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.form-foot{display:flex;gap:.9rem;align-items:center;flex-wrap:wrap;margin-top:.4rem}
+.disabled-note{font:.78rem/1.4 var(--mono);color:var(--muted-2)}
+
+/* --- faq ------------------------------------------------------------------ */
+.faq{max-width:74ch}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  cursor:pointer;list-style:none;padding:1.05rem 2rem 1.05rem 0;position:relative;
+  font-weight:600;font-size:1rem;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";position:absolute;right:.2rem;top:.95rem;
+  font:400 1.4rem/1 var(--sans);color:var(--ember);
+}
+.faq details[open] summary::after{content:"\2212"}
+.faq .answer{padding:0 0 1.15rem;color:var(--muted);font-size:.94rem;max-width:66ch}
+
+/* --- footer --------------------------------------------------------------- */
+.site-foot{border-top:1px solid var(--line);background:var(--bg-deep);padding-block:2.8rem 2.2rem;font-size:.87rem;color:var(--muted-2)}
+.foot-grid{display:grid;gap:1.8rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:2rem}
+.foot-grid h4{font:600 .66rem/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.foot-grid a{color:var(--muted);text-decoration:none}
+.foot-grid a:hover{color:var(--text)}
+.foot-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.foot-legal{border-top:1px solid var(--line);padding-top:1.4rem;display:grid;gap:.5rem;font-size:.79rem;line-height:1.6}
+
+/* ---------------------------------------------------------------------------
+   v2 layer (17 Aug 2026): iOS compatibility + interaction. Everything below is
+   progressive enhancement - with JS off the page stays complete and readable.
+--------------------------------------------------------------------------- */
+html{-webkit-text-size-adjust:100%}
+/* the hidden attribute must always win, even over explicit display rules —
+   found 18/08 when .qr-mock's display:inline-block was overriding [hidden].
+   STILL LOAD-BEARING after .qr-* was deleted 29/08: its successor .wx-mock also
+   sets display:inline-block and is hidden via the property when the real QR
+   loads, so without this rule the mock never disappears. The original receipt is
+   kept and the live class named, because a receipt pointing at a class that no
+   longer exists teaches the next reader nothing. */
+[hidden]{display:none!important}
+:root{--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,"Noto Sans",sans-serif}
+/* iOS: backdrop-filter needs the -webkit- prefix; notch phones need safe areas */
+.site-head{-webkit-backdrop-filter:blur(12px);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+.site-foot{padding-bottom:calc(2.2rem + env(safe-area-inset-bottom))}
+a,button{-webkit-tap-highlight-color:transparent}
+.btn:active{transform:translateY(0) scale(.97)}
+/* The magnetic CTAs used to write style.transform inline, and an inline style
+   beats every stylesheet rule - so :active press feedback never reached the two
+   buttons that carry it, including the enquiry Send. The offset now travels as
+   custom properties and the press state composes with it. Two classes plus a
+   pseudo-class, so this outranks the theme sheets' own .btn:active without
+   depending on source order. */
+.btn.mag{transform:translate(var(--mx,0px),var(--my,0px))}
+.btn.mag:active{transform:translate(var(--mx,0px),var(--my,0px)) scale(.98)}
+/* iOS zooms the page when a focused field is under 16px - keep inputs at 1rem */
+.field input,.field textarea,.field select{font-size:1rem}
+.faq summary::marker{content:""}
+
+/* language pills are real buttons now */
+.lang button{appearance:none;-webkit-appearance:none;background:none;border:0;cursor:pointer;font:600 .72rem/1 var(--mono);letter-spacing:.06em;padding:.5rem .68rem;color:var(--muted-2)}
+.lang button.on{background:var(--surface-2);color:var(--text)}
+.lang button:not(.on):hover{color:var(--text)}
+@media (max-width:520px){ .lang button{font:600 .66rem/1 var(--mono);padding:.42rem .52rem} }
+
+/* scroll-reveal: JS tags elements .rv, then .in as they enter the viewport */
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease var(--rvd,0s),transform .55s ease var(--rvd,0s)}
+.js .rv.in{opacity:1;transform:none}
+/* hero drifts very slowly so the page feels alive */
+.js .hero-bg img{animation:sw-kb 26s ease-in-out infinite alternate}
+@keyframes sw-kb{from{transform:scale(1)}to{transform:scale(1.055)}}
+/* current section is highlighted in the nav */
+.nav a.active{color:var(--text);border-bottom-color:var(--ember)}
+
+/* destination tiles open a lightbox */
+.js .tile{cursor:zoom-in}
+/* touch-action reserves horizontal for the swipe handler; vertical scroll and
+   pinch-zoom stay with the browser. Without it a vertically-drifting swipe is
+   claimed by native panning and arrives as pointercancel. Zoom stays: this is a
+   photo viewer. */
+.lightbox{border:0;padding:0;background:transparent;margin:auto;max-width:min(94vw,1100px);
+  touch-action:pan-y pinch-zoom}
+.lightbox::backdrop{background:rgba(4,6,5,.88)}
+.lightbox figure{margin:0;background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--radius-lg);overflow:hidden}
+.lightbox img{max-width:min(92vw,1060px);max-height:74vh;width:auto;height:auto;display:block;margin-inline:auto;background:var(--bg-deep)}
+.lightbox figcaption{padding:.9rem 1.1rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between}
+.lightbox h3{font-size:1rem;margin:0 0 .2rem}
+.lightbox figcaption p{font-size:.84rem;color:var(--muted);margin:0}
+.lb-close{appearance:none;-webkit-appearance:none;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--text);border-radius:99px;width:38px;height:38px;flex:none;cursor:pointer;font-size:1rem;line-height:1}
+.lb-close:hover{border-color:var(--text)}
+
+/* "Build your own" chips become a picker */
+#build-chips li{cursor:pointer;user-select:none;-webkit-user-select:none;transition:border-color .15s,background .15s,color .15s}
+#build-chips li.on{border-color:var(--gum);color:var(--text);background:var(--gum-soft)}
+
+@media (prefers-reduced-motion:reduce){
+  .js .rv{opacity:1;transform:none;transition:none}
+  .js .hero-bg img{animation:none}
+}
+
+/* ---------------------------------------------------------------------------
+   v3 layer (17 Aug 2026, late): design elevation pass — editorial type scale,
+   numbered sections, ticker, grain, hover choreography — plus 日本語/한국어 and
+   the WeChat QR tile. Same rules as v2: single file, no network, system fonts,
+   progressive enhancement.
+--------------------------------------------------------------------------- */
+::selection{background:var(--ember);color:#160c05}
+/* bigger, tighter display type */
+.hero h1{font-size:clamp(2.6rem,1.5rem + 5vw,5.4rem);font-weight:760;letter-spacing:-.028em;line-height:1.04}
+.band-head h2{font-size:clamp(1.9rem,1.3rem + 2.6vw,3.3rem);letter-spacing:-.025em}
+/* CJK + Korean: negative tracking hurts, and each language wants its own stack */
+html[lang^="zh"] h1,html[lang^="zh"] h2,html[lang^="zh"] h3,
+html[lang="ja"] h1,html[lang="ja"] h2,html[lang="ja"] h3,
+html[lang="ko"] h1,html[lang="ko"] h2,html[lang="ko"] h3{letter-spacing:0}
+html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line-height:1.18;font-size:clamp(2.3rem,1.4rem + 4vw,4.4rem)}
+html[lang="ja"] body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",Roboto,sans-serif}
+html[lang="ko"] body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",Roboto,sans-serif}
+/* numbered section eyebrows with a full-bleed rule */
+body{counter-reset:band}
+.band{counter-increment:band}
+.band .eyebrow::before{content:"0" counter(band);width:auto;height:auto;background:none;color:var(--ember);opacity:.7;letter-spacing:.06em}
+.band .eyebrow::after{content:"";flex:1;height:1px;background:var(--line);min-width:36px}
+/* gradient ink on the hero emphasis */
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero h1 em{background:linear-gradient(94deg,#f2b077 0%,var(--ember) 45%,#c95f2a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+}
+/* activities ticker (decorative, real activity/place names only) */
+.ticker{overflow:hidden;border-block:1px solid var(--line);background:var(--bg-deep);padding-block:.62rem;position:relative}
+.ticker-track{display:flex;width:max-content;animation:sw-tick 46s linear infinite}
+.ticker-track span{flex:none;font:600 .72rem/1 var(--mono);letter-spacing:.22em;color:var(--muted-2);padding-right:.5rem;white-space:nowrap}
+.ticker-track b{color:var(--ember);font-weight:600}
+@keyframes sw-tick{to{transform:translateX(-50%)}}
+/* hover choreography (pointer devices only) */
+@media (hover:hover){
+  .trip,.person,.panel{transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+  .trip:hover,.person:hover{transform:translateY(-5px);border-color:var(--line-strong);box-shadow:0 18px 44px -18px rgba(0,0,0,.55)}
+  .trip.feature:hover{border-color:rgba(224,122,60,.8);box-shadow:0 18px 50px -16px rgba(224,122,60,.22)}
+  .tile img{transition:transform .5s ease}
+  .tile:hover img{transform:scale(1.055)}
+  .btn-primary{box-shadow:0 10px 28px -12px rgba(224,122,60,.45)}
+  .btn-primary:hover{box-shadow:0 14px 34px -12px rgba(224,122,60,.6)}
+  .nav a{border-bottom:0;background:linear-gradient(var(--ember),var(--ember)) bottom left/0% 1px no-repeat;transition:color .18s,background-size .28s ease}
+  .nav a:hover,.nav a.active{background-size:100% 1px}
+}
+.nav a.active{color:var(--text)}
+/* film grain */
+body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.026;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* scroll progress */
+.progress{position:fixed;top:0;left:0;width:100%;height:2px;z-index:90;transform:scaleX(0);transform-origin:0 0;background:linear-gradient(90deg,var(--ember),#f0b98c);pointer-events:none}
+/* lightbox pop */
+.lightbox[open]{animation:sw-pop .28s ease}
+@keyframes sw-pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+/* .qr-* removed 29/08 - superseded by .wx-*, which is styled elsewhere. */
+@media (prefers-reduced-motion:reduce){
+  .ticker-track{animation:none}
+  .lightbox[open]{animation:none}
+}
 </style>
 </head>
 <body>
@@ -1656,7 +2104,12 @@ if(chips){
 /* ---------- 6. The enquiry drafts a real email (mailto only) ----------- */
 var send=d.getElementById('f-send');
 if(send){
-  send.addEventListener('click',function(){
+  /* The href used to be built on click alone, so middle-click, iOS
+     long-press-copy and right-click -> Copy link address all handed over the
+     bare subject-only mailto without any of the answers just typed. Compose on
+     everything that PRECEDES an activation, and as the reader types. */
+  var sendBare=send.getAttribute('href');
+  var compose=function(){
     var v=function(id){ var el=d.getElementById(id); return el&&el.value?el.value.trim():'—'; };
     var L={
       en:['What we want to do','Days','People','When','Reply to','Still Wild adventure enquiry'],
@@ -1671,8 +2124,22 @@ if(send){
       '',
       '(Sent from the Still Wild concept-page prototype)'
     ];
-    send.href='mailto:IamWild@stillwild.com.au?subject='+encodeURIComponent(L[5])
-      +'&body='+encodeURIComponent(lines.join('\n'));
+    /* An empty form restores the bare mailto. Composing regardless would hand
+       anyone who copies the link before typing a body of five dashes - a link
+       that performs completeness it does not have. */
+    var filled=['f-what','f-days','f-people','f-when','f-contact'].some(function(id){
+      var el=d.getElementById(id); return el && el.value && el.value.trim();
+    });
+    send.setAttribute('href', filled
+      ? 'mailto:IamWild@stillwild.com.au?subject='+encodeURIComponent(L[5])
+        +'&body='+encodeURIComponent(lines.join('\n'))
+      : sendBare);
+  };
+  ['pointerdown','pointerenter','focus','click'].forEach(function(ev){
+    send.addEventListener(ev, compose);
+  });
+  ['f-what','f-days','f-people','f-when','f-contact'].forEach(function(id){
+    var el=d.getElementById(id); if(el) el.addEventListener('input', compose);
   });
 }
 
@@ -1683,12 +2150,18 @@ qa('.faq details').forEach(function(el){ el.setAttribute('name','sw-faq'); });
 try{
   if(matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches){
     qa('.hero-cta .btn-primary, #f-send').forEach(function(b){
+      b.classList.add('mag');
       b.addEventListener('pointermove',function(e){
         var r=b.getBoundingClientRect();
         var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-        b.style.transform='translate('+(x*8).toFixed(1)+'px,'+(y*6).toFixed(1)+'px)';
+        /* custom properties, NOT style.transform - an inline transform would
+           override .btn:active and swallow the press feedback */
+        b.style.setProperty('--mx',(x*8).toFixed(1)+'px');
+        b.style.setProperty('--my',(y*6).toFixed(1)+'px');
       });
-      b.addEventListener('pointerleave',function(){ b.style.transform=''; });
+      b.addEventListener('pointerleave',function(){
+        b.style.removeProperty('--mx'); b.style.removeProperty('--my');
+      });
     });
   }
 }catch(_e){}
