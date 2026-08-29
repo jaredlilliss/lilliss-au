@@ -62,11 +62,11 @@
    IBM Plex Mono is STATIC: one file PER WEIGHT. Declaring a range on a static
    face gets you synthetic bold. Trap named by central, who hit it first. */
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
-  src:url('fonts/inter.woff2') format('woff2')}
+  src:url('/fonts/inter.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('fonts/plexmono-400.woff2') format('woff2')}
+  src:url('/fonts/plexmono-400.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
-  src:url('fonts/plexmono-500.woff2') format('woff2')}
+  src:url('/fonts/plexmono-500.woff2') format('woff2')}
 </style>
 <style>
 :root{
@@ -233,6 +233,19 @@ h2{font-size:clamp(21px,2.3vw,27px);line-height:1.16;letter-spacing:-.014em;font
 .row:hover{background:var(--s-2)}
 .row b{font-weight:500;font-size:14.5px}
 .row span{color:var(--muted);font-size:14px;line-height:1.58}
+
+/* Citation links, added 29/08. This page's ONLY anchor rule is a{color:inherit},
+   so a link in prose here renders identically to the text beside it. That is
+   survivable for the one contact link in .join; it is fatal in a sources list,
+   where following the link IS the point. Coloured AND underlined, because colour
+   alone fails WCAG 1.4.1 - and this is the one block on the page a sceptical
+   reader is explicitly invited to check. --accent on --bg measures 10.9:1. */
+.row .src{display:inline-block;margin:8px 14px 0 0;padding:2px 0;
+  font:500 13px/1.45 var(--mono);color:var(--accent);text-decoration:underline;
+  text-underline-offset:3px;text-decoration-color:rgba(124,201,245,.45)}
+.row .src:hover{text-decoration-color:var(--accent)}
+.row .nolink{color:var(--dim);text-decoration:none;cursor:default}
+.row .chg{color:var(--ink);font-weight:500}
 @media (max-width:660px){.row{grid-template-columns:1fr;gap:4px}}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(12px,1.4vw,16px);margin-top:clamp(16px,2vw,22px)}
@@ -1050,6 +1063,7 @@ body[data-aud] section.unfolded > .shell{
       <a href="#ecosystem">Ecosystem</a>
       <a href="#city">Space City</a>
       <a href="#gateway">Welcome Center</a>
+      <a href="#sources">Sources</a>
       <a href="#join">Contact</a>
     </nav>
   </div>
@@ -1150,7 +1164,7 @@ body[data-aud] section.unfolded > .shell{
         <div class="panel rv">
           <h3>From historic vision to structured roadmap</h3>
           <p>The UAE&rsquo;s interest in astronomy and space sciences dates back to the 1970s, when Sheikh Zayed bin Sultan Al Nahyan met the NASA team responsible for the Apollo Moon landing. Under the visionary leadership of UAE government this vision evolved into a clear mandate: <b>Position the UAE as a global leader in Space Exploration, Research &amp; Investment</b>.</p>
-          <p>The UAE now advances sovereign missions, contributes to the Lunar Gateway, and invests in technologies, governance and infrastructure that enable long-term human presence beyond Earth.</p>
+          <p>The UAE now advances sovereign missions, agreed in January 2024 to provide the Lunar Gateway&rsquo;s Crew and Science Airlock, and invests in technologies, governance and infrastructure that enable long-term human presence beyond Earth.</p>
           <div class="tl" style="margin-top:18px">
             <div class="tl-row"><b>1970s</b><span>NASA Apollo team meeting</span></div>
             <div class="tl-row"><b>Sovereign</b><span>Missions</span></div>
@@ -1410,6 +1424,45 @@ body[data-aud] section.unfolded > .shell{
   <!-- The closing statement. Restored after a copy-manifest diff against the
        previous build caught it missing: this is real client copy, unlike the
        diagram labels the same diff flagged, which were mine. -->
+
+  <!-- ============ SOURCES ============
+       Added 29/08 to close the one measurable gap between this page and
+       spine.html, which Jared rated 10/10 against this page's 4/10.
+
+       Measured rather than guessed: spine carries 301 visible words, ONE heading
+       and SIX named primary sources. This page carried 1,800 words, NINE headings
+       - every one of them XperienceSpace's own marketing language - and ZERO
+       citations, while naming real UAE missions, programmes and dates twenty-seven
+       times. spine makes an argument and proves it; this page restyled someone
+       else's claims. That is a difference of method, and no amount of typography
+       closes it.
+
+       Every entry below is drawn from ATELIER-UAE-VERIFY-RULING-2026-08-26's
+       verified table, and NOTHING here is written from memory. The first draft of
+       this very section invented a detail - it had the asteroid mission landing on
+       an asteroid, which the ruling never verified - which is exactly why the rule
+       is source-or-cut rather than source-if-convenient. The two claims the ruling
+       REJECTED appear neither here nor anywhere on the page; they are named in the
+       ruling and in honesty.py, which is where a banned string belongs. -->
+  <section id="sources">
+    <div class="shell">
+      <p class="sec-k rv">Sources</p>
+      <h2 class="rv wipe">Every UAE fact on this page, and where it comes from</h2>
+      <p class="sec-sub rv">Everything in this table belongs to the UAE government or its agencies, and each line links to that body&rsquo;s own publication. <b>The programmes described elsewhere on this page are XperienceSpace proposals; they are not listed here because they are not UAE programmes.</b> Where a fact has changed since it was published, the change is stated rather than dropped.</p>
+      <div class="rows rv">
+        <div class="row"><b>National Space Strategy 2030</b><span>Approved by the UAE Cabinet on 11&nbsp;March&nbsp;2019, chaired by HH Sheikh Mohammed bin Rashid Al Maktoum.<br><a class="src" href="https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/industry-science-and-technology/national-space-strategy-2030" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a> <a class="src" href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet &#8599;</a></span></div>
+        <div class="row"><b>Mars 2117</b><span>Announced 2017 and led by the Mohammed Bin Rashid Space Centre &mdash; a first human settlement on Mars by 2117.<br><a class="src" href="https://www.wam.ae/en/details/1395303018336" target="_blank" rel="noopener noreferrer">WAM &#8599;</a></span></div>
+        <div class="row"><b>Hope Probe</b><span>MBRSC-led. Launched 19&nbsp;July&nbsp;2020, entered Mars orbit 9&nbsp;February&nbsp;2021 &mdash; the first Arab country, and the fifth country, to reach Mars.<br><a class="src" href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
+        <div class="row"><b>Rashid&nbsp;1 and Rashid&nbsp;2</b><span>Rashid&nbsp;1 was lost with the HAKUTO-R lander; NASA&rsquo;s Lunar Reconnaissance Orbiter imaged at least four pieces of debris at the site on 26&nbsp;April&nbsp;2023. Rashid&nbsp;2 is in development at MBRSC.<br><a class="src" href="https://www.nasa.gov/centers-and-facilities/goddard/nasas-lro-views-impact-site-of-hakuto-r-mission-1-moon-lander/" target="_blank" rel="noopener noreferrer">NASA &#8599;</a> <a class="src" href="https://www.mbrsc.ae/rashid-rover/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
+        <div class="row"><b>Lunar Gateway airlock</b><span>MBRSC agreed on 7&nbsp;January&nbsp;2024 to provide Gateway&rsquo;s Crew and Science Airlock, with NASA flying a UAE astronaut. <span class="chg">The programme&rsquo;s status has since changed: the FY26 budget ended it and FY27 requests no discretionary funding.</span> This page therefore states the agreement and its date, not an ongoing contribution.<br><a class="src" href="https://www.nasa.gov/news-release/nasa-united-arab-emirates-announce-artemis-lunar-gateway-airlock/" target="_blank" rel="noopener noreferrer">NASA, 2024 &#8599;</a> <a class="src" href="https://www.nasa.gov/news-release/president-trumps-fy26-budget-revitalizes-human-space-exploration/" target="_blank" rel="noopener noreferrer">NASA, FY26 &#8599;</a></span></div>
+        <div class="row"><b>Emirates Mission to the Asteroid Belt</b><span>UAE Space Agency with LASP at CU&nbsp;Boulder. Launch 2028, Venus flyby mid-2028, Earth mid-2029, first asteroid flyby 2030, seven main-belt asteroids.<br><a class="src" href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae &#8599;</a></span></div>
+        <div class="row"><b>The satellite fleet</b><span>MBRSC: DubaiSat&#8209;1 (2009), DubaiSat&#8209;2 (2013), Nayif&#8209;1 (2017), KhalifaSat (2018), DMSat&#8209;1 (2021), MBZ&#8209;Sat (14&nbsp;January&nbsp;2025).<br><a class="src" href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC &#8599;</a></span></div>
+        <div class="row"><b>The space economic zone</b><span>The UAE&rsquo;s actual space SEZ is the UAE Space Agency&rsquo;s Space Economic Zones Programme, first zone at Masdar City, announced January&nbsp;2022. <span class="chg">&ldquo;UAE Space City&rdquo; on this page is a XperienceSpace proposal and is not this programme.</span><br><a class="src" href="https://masdar.ae/en/news/newsroom/masdar-city-and-the-uae-space-agency-announce-new-package" target="_blank" rel="noopener noreferrer">Masdar &#8599;</a></span></div>
+        <div class="row"><b>XperienceSpace itself</b><span>Self-described as an independent initiative &mdash; &ldquo;not a regulator, government agency or operator of national missions&rdquo;.<br><span class="src nolink">xperiencespace.com &mdash; quoted, deliberately not linked</span></span></div>
+      </div>
+    </div>
+  </section>
+
   <section class="closer">
     <div class="shell">
       <p class="sec-k rv">Destination · Mars</p>
@@ -1417,6 +1470,7 @@ body[data-aud] section.unfolded > .shell{
     </div>
   </section>
 </main>
+
 
 <footer>
   <div class="shell">
