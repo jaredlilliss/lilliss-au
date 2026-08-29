@@ -184,6 +184,29 @@ body{
    year colliding with its neighbours' labels. */
 .stop{transition:opacity .4s ease}
 .rail.focusing .stop:not(.on){opacity:.24}
+/* MEASURED: the focused numeral is 233-255px wide while neighbouring stops sit
+   193px apart at 1990px and 155px at 1536px — so it is wider than the gap and
+   MUST overlap its neighbours' labels. It did, twice, at every position tested,
+   through the opacity .24 that was meant to prevent it. Recession is not
+   occlusion: dimmed type still reads through a numeral.
+   So the LABELS step aside and the GLYPHS stay. Recession exists to show where
+   the other objects ARE, and that survives; the clutter was three lines of type
+   behind a 108px year, never the marks. */
+.rail.focusing .stop:not(.on) .txt{opacity:0;transition:opacity .3s ease}
+/* ...unless you point at one. Pointing lifts a receded stop back out, which is
+   the same "approach an object, it opens" behaviour the page already has —
+   extended from arriving to merely looking. */
+.rail.focusing .stop:not(.on):hover{opacity:1}
+.rail.focusing .stop:not(.on):hover .txt{opacity:1}
+
+/* (4) THE CURSOR NOW DOES SOMETHING. Measured before: .stop was a div with
+   cursor:auto, no tabindex, no click handler and no hover rule anywhere — so
+   "zero interactivity beyond tracking the cursor's position" was literally true.
+   Hover grows the mark; clicking travels to it. Kept well under the .on scale of
+   1.82 so arrival still clearly outranks pointing. */
+.stop{cursor:pointer}
+.stop:not(.on):hover svg{transform:scale(1.26)}
+.stop:not(.on):hover .nm{color:var(--now)}
 .stop .yr{
   display:block;
   font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--muted);
@@ -735,7 +758,7 @@ body{
           '<b class="src">' + srcHTML(s.at) + '</b>' +
         '</span>';
       rail.appendChild(el);
-      STOPEL.push({el:el, at:PAD + frac(s.at) * SPANPX});
+      STOPEL.push({el:el, at:PAD + frac(s.at) * SPANPX, yr:s.at});
     });
 
     /* today */
@@ -825,7 +848,7 @@ body{
   }
 
   /* ── travel ──────────────────────────────────────────────────────────── */
-  var x = 0, target = 0, maxX = 0, raf = 0, FOCUS = null;
+  var x = 0, target = 0, maxX = 0, raf = 0, FOCUS = null, FOCUSREC = null;
 
   function clampX(v){ return Math.max(0, Math.min(maxX, v)); }
 
@@ -840,7 +863,15 @@ body{
        starting in 1982, contradicting 'THE 1970s' on screen beneath it. */
     /* narrow screens drop the span half - it will not fit beside the wordmark in
        339px. The PROVENANCE sub-line is never touched at any width. */
-    var lbl = (yr <= 1979 ? 'THE 1970s' : yr);
+    /* (2) ONE CLOCK. The header used to read the position year while the big
+       numeral read the focused stop's year, so the page OPENED saying "AT 2026"
+       beside a giant "2025" — measured disagreeing at 61 of 61 sampled
+       positions. Arriving at a milestone now makes the header say so; between
+       milestones it reverts to position. Two different years on one screen is
+       not a defensible distinction. */
+    var fy = (FOCUSREC && FOCUSREC.yr) ? FOCUSREC.yr : null;
+    var shown = fy || yr;
+    var lbl = (shown <= 1979 ? 'THE 1970s' : shown);
     /* the readout counts what is DRAWN, milestones + record */
     count.textContent = innerWidth < 620 ? ('AT ' + lbl)
                                          : ('AT ' + lbl + '  ·  SPAN 1970s–2117');
@@ -862,16 +893,27 @@ body{
     /* whichever milestone is nearest the centre of the screen is the one you
        have arrived at. Within roughly a quarter-screen, or nothing is focused -
        crossing the empty stretches should feel empty. */
-    var centre = x + innerWidth / 2, near = null, best = innerWidth * 0.26;
+    /* (3) HYSTERESIS. The threshold was a single hard innerWidth*0.26, and
+       rail.focusing re-opacities EVERY stop when it flips — so travelling slowly
+       across the boundary could enlarge, shrink and globally dim on repeat.
+       A stop is now ACQUIRED at 0.26 and only RELEASED at 0.42, so the boundary
+       you leave by is not the one you arrived by.
+       HONEST NOTE: the flapping itself was never reproduced here — headless
+       throttles rAF hard enough that a scripted walk does not actually travel.
+       This is a hard boundary on a hand-driven control, which is a defect on
+       reading; the fix is four lines and cannot make anything worse. */
+    var centre = x + innerWidth / 2, rec = null, best = innerWidth * 0.26;
     for (var i = 0; i < STOPEL.length; i++) {
       var d = Math.abs(STOPEL[i].at - centre);
-      if (d < best) { best = d; near = STOPEL[i].el; }
+      if (d < best) { best = d; rec = STOPEL[i]; }
     }
+    if (!rec && FOCUSREC && Math.abs(FOCUSREC.at - centre) < innerWidth * 0.42) rec = FOCUSREC;
+    var near = rec ? rec.el : null;
     if (near !== FOCUS) {
       if (FOCUS) FOCUS.classList.remove('on');
       if (near) near.classList.add('on');
       rail.classList.toggle('focusing', !!near);
-      FOCUS = near;
+      FOCUS = near; FOCUSREC = rec;
     }
     /* NOTHING ON SCREEN? Say so, and offer both edges. The empty stretches are
        this page's argument — a 142-year span whose objects sit only where a
@@ -967,6 +1009,22 @@ body{
     queue();
   }
 
+  /* (4) CLICK A MILESTONE TO TRAVEL TO IT. There was no click handler in the
+     file at all, so a visible, obviously-significant object did nothing when
+     pressed. Delegated from .world so it costs one listener and covers stops
+     added later. The drag guard matters: without it, releasing a drag on top of
+     a stop would teleport you somewhere you did not ask for. Keyboard
+     equivalence is the documented Left/Right/Home/End, so fifteen new tab stops
+     are deliberately not added. */
+  world.addEventListener('click', function(e){
+    if (moved) return;
+    var el = e.target.closest && e.target.closest('.stop');
+    if (!el || el.querySelector('.src') && e.target.closest('.src')) return;
+    for (var i = 0; i < STOPEL.length; i++) {
+      if (STOPEL[i].el === el) { go(STOPEL[i].at - innerWidth / 2); return; }
+    }
+  });
+
   world.addEventListener('wheel', function(e){
     var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (!d) return;
@@ -974,13 +1032,14 @@ body{
     go(target + d * 1.5);
   }, {passive:false});
 
-  var down = false, startX = 0, startT = 0;
+  var down = false, startX = 0, startT = 0, moved = false;
   world.addEventListener('pointerdown', function(e){
-    down = true; startX = e.clientX; startT = target;
+    down = true; moved = false; startX = e.clientX; startT = target;
     world.setPointerCapture(e.pointerId);
   });
   world.addEventListener('pointermove', function(e){
     if (!down) return;
+    if (Math.abs(e.clientX - startX) > 4) moved = true;
     go(startT - (e.clientX - startX) * 1.6);
   });
   ['pointerup','pointercancel'].forEach(function(ev){
