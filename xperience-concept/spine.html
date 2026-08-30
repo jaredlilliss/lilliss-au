@@ -265,6 +265,17 @@ body{
   width:max-content;max-width:16ch;pointer-events:auto}
 .stem svg{display:block;margin:0 auto 4px;overflow:visible;opacity:.86;
   width:clamp(48px,4.4vw,68px);height:auto}
+/* Record stems are ANNOTATION, not objects — hairlines that must never
+   intercept a pointer aimed at the milestone beneath them. Found 30/08 by the
+   new overlay sweep, and it is a regression of my own making: stems have always
+   overlapped the glyphs, but the glyphs only BECAME controls the night before,
+   when stops were made focusable and clickable. 40 sample points — 1.7% of the
+   viewport — where a click aimed at a milestone hit a hairline instead.
+   The container goes transparent; the source link inside stays live, exactly as
+   the void panel's buttons do. :focus-within is unaffected, because focus is not
+   a pointer. */
+.stem{pointer-events:none}
+.stem .ss a{pointer-events:auto}
 .stem svg .mark{stroke-width:1}
 .stem i{display:block;width:1px;height:20px;margin:0 auto;
   background:linear-gradient(180deg,rgba(238,241,248,.40),rgba(238,241,248,.10))}
