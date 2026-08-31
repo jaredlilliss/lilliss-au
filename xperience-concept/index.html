@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Xperience Space — concept index</title>
+<meta name="description" content="Index of the Xperience Space design concept: every page in this folder, what it is, and every section inside it.">
+<style>
+@font-face{font-family:'Inter';src:url('/fonts/inter.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Fraunces';src:url('/fonts/fraunces.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/plexmono-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/plexmono-500.woff2') format('woff2');font-weight:500;font-display:swap}
+
+:root{
+  --bg:#05070d; --ink:#eceff5; --muted:#8d96aa; --dim:#7b8498;
+  --ember:#ff8c4a; --ember-deep:#c85c22; --live:#5fd39a;
+  --line:#1b2130; --surface:#0b0f18;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 15px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  padding:clamp(1.4rem,5vw,4rem) clamp(1.1rem,5vw,2rem) 5rem;
+}
+.wrap{max-width:74ch;margin:0 auto}
+
+.eyebrow{
+  font:500 .7rem/1 var(--mono); letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ember); margin:0 0 .9rem;
+}
+h1{
+  font:400 clamp(2rem,6vw,3rem)/1.08 var(--serif); margin:0 0 .8rem;
+  letter-spacing:-.015em; text-wrap:balance;
+}
+.lede{color:var(--muted); max-width:62ch; margin:0 0 .6rem}
+/* Running prose, so it is set in the reading face. Mono is for the addresses
+   inside it — this is the paragraph that answers the question the page exists
+   for, and it was costing legibility to look technical. */
+.note{
+  font:400 .93rem/1.65 var(--sans); color:var(--muted);
+  border-left:2px solid var(--ember-deep); padding:.55rem 0 .55rem .95rem;
+  margin:1.6rem 0 0; max-width:62ch;
+}
+.note b{color:var(--ink);font-weight:600}
+.note a{color:var(--ember)}
+.note code{font:400 .86em/1.4 var(--mono);color:var(--dim)}
+
+hr{border:0;border-top:1px solid var(--line);margin:2.6rem 0}
+
+.page{
+  border:1px solid var(--line); border-radius:10px; background:var(--surface);
+  padding:1.15rem 1.2rem; margin:0 0 1rem;
+}
+.page-head{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:.55rem .8rem; margin-bottom:.4rem;
+}
+.page-head a.name{
+  font:500 1rem/1.2 var(--mono); color:var(--ember); text-decoration:none;
+  border-bottom:1px solid transparent;
+}
+.page-head a.name:hover,.page-head a.name:focus-visible{border-bottom-color:var(--ember)}
+.chip{
+  font:500 .63rem/1 var(--mono); letter-spacing:.1em; text-transform:uppercase;
+  padding:.3rem .5rem; border-radius:99px; border:1px solid currentColor; flex:none;
+}
+.chip.live{color:var(--live)}
+.chip.archive{color:var(--dim)}
+.chip.draft{color:var(--ember-deep)}
+.page p{margin:0 0 .75rem; color:var(--muted); font-size:.93rem; max-width:60ch}
+.page p b{color:var(--ink); font-weight:600}
+
+.anchors{
+  display:flex; flex-wrap:wrap; gap:.34rem;
+  padding-top:.7rem; border-top:1px dashed var(--line);
+}
+.anchors a{
+  font:400 .74rem/1 var(--mono); color:var(--dim); text-decoration:none;
+  padding:.32rem .5rem; border:1px solid var(--line); border-radius:5px;
+}
+.anchors a:hover,.anchors a:focus-visible{color:var(--ink);border-color:var(--dim)}
+.anchors .none{font:400 .74rem/1.4 var(--mono);color:var(--dim);padding:.32rem 0}
+
+/* Touch targets. Measured at 24px tall — the bare WCAG 2.5.8 floor, and far
+   too small for the thing this page exists to do, which is tap an anchor.
+   44px on any coarse pointer or narrow screen; the mouse keeps the compact set. */
+@media (pointer:coarse),(max-width:640px){
+  .anchors{gap:.45rem}
+  .anchors a{min-height:44px;display:inline-flex;align-items:center;padding:.3rem .7rem}
+}
+
+footer{margin-top:2.8rem;color:var(--dim);font:400 .78rem/1.6 var(--mono)}
+footer a{color:var(--ember)}
+a:focus-visible,.anchors a:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">lilliss.au / xperience-concept</p>
+  <h1>Xperience Space — concept index</h1>
+  <p class="lede">Every page in this folder, what it is, and every section inside it. Unlisted and set to <span style="font-family:var(--mono);font-size:.86em">noindex</span> — this is a working index, not a public page.</p>
+
+  <p class="note"><b>If you arrived from an old link:</b> this folder used to serve its concept page at the bare
+  <code>/xperience-concept/</code> address, so a bookmark to <code>/xperience-concept/#sources</code> now lands
+  here instead of on the sources. That page was kept, not deleted — it is
+  <a href="olddesign.html">olddesign.html</a>, and the section you wanted is
+  <a href="olddesign.html#sources">olddesign.html#sources</a>.</p>
+
+  <hr>
+
+  <article class="page">
+    <div class="page-head">
+      <a class="name" href="spine.html">spine.html</a>
+      <span class="chip live">live · linked</span>
+    </div>
+    <p><b>The design bar for the whole estate.</b> A single horizontal timeline you scrub through — the concept's world, its ground line, and the void beyond it. Deep-links with <span style="font-family:var(--mono);font-size:.88em">?at=</span> (try <span style="font-family:var(--mono);font-size:.88em">?at=2021</span>, <span style="font-family:var(--mono);font-size:.88em">?at=start</span>, <span style="font-family:var(--mono);font-size:.88em">?at=end</span>), and falls back to a plain sourced list with no JavaScript.</p>
+    <div class="anchors">
+      <a href="spine.html#boot">#boot</a><a href="spine.html#world">#world</a><a href="spine.html#rail">#rail</a><a href="spine.html#ground">#ground</a><a href="spine.html#line">#line</a><a href="spine.html#void">#void</a><a href="spine.html#void-h">#void-h</a><a href="spine.html#ticks">#ticks</a>
+    </div>
+  </article>
+
+  <article class="page">
+    <div class="page-head">
+      <a class="name" href="brochure.html">brochure.html</a>
+      <span class="chip live">live · linked</span>
+    </div>
+    <p><b>The bilingual brochure.</b> English and Arabic side by side, set in the government-document register rather than the concept register. Self-hosted faces, no third-party requests, nothing loaded from outside this domain.</p>
+    <div class="anchors"><span class="none">no section anchors — it reads as one continuous document</span></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head">
+      <a class="name" href="case.html">case.html</a>
+      <span class="chip archive">archive · unlinked</span>
+    </div>
+    <p><b>The working record of what changed.</b> Splits the concept into what was true, what was proposed, and what was removed — the reasoning trail behind the other pages. Useful precisely because it keeps the discarded parts visible.</p>
+    <div class="anchors">
+      <a href="case.html#main">#main</a><a href="case.html#top">#top</a><a href="case.html#accord">#accord</a><a href="case.html#true">#true</a><a href="case.html#proposed">#proposed</a><a href="case.html#removed">#removed</a>
+    </div>
+  </article>
+
+  <article class="page">
+    <div class="page-head">
+      <a class="name" href="ascent.html">ascent.html</a>
+      <span class="chip draft">draft · unfinished</span>
+    </div>
+    <p><b>An earlier full-page treatment, and the one Jared has called out as still not good enough.</b> Kept on purpose: it is the most complete record of the direction that did not win, and the reason spine.html looks the way it does. Not a candidate to ship in this state.</p>
+    <div class="anchors">
+      <a href="ascent.html#vision">#vision</a><a href="ascent.html#pillars">#pillars</a><a href="ascent.html#eco">#eco</a><a href="ascent.html#city">#city</a><a href="ascent.html#gate">#gate</a><a href="ascent.html#join">#join</a><a href="ascent.html#mars">#mars</a><a href="ascent.html#hud">#hud</a>
+    </div>
+  </article>
+
+  <article class="page">
+    <div class="page-head">
+      <a class="name" href="olddesign.html">olddesign.html</a>
+      <span class="chip archive">archive · superseded</span>
+    </div>
+    <p><b>The original page that used to live at this address</b>, moved here rather than deleted, at Jared's instruction. Everything an old bookmark points at is still inside it — including <a href="olddesign.html#sources" style="color:var(--ember)">#sources</a>.</p>
+    <div class="anchors">
+      <a href="olddesign.html#record">#record</a><a href="olddesign.html#pillars">#pillars</a><a href="olddesign.html#ecosystem">#ecosystem</a><a href="olddesign.html#trajectory">#trajectory</a><a href="olddesign.html#welcome">#welcome</a><a href="olddesign.html#sources">#sources</a><a href="olddesign.html#contact">#contact</a><a href="olddesign.html#lang-note">#lang-note</a>
+    </div>
+  </article>
+
+  <footer>
+    <p>The rest of the estate: <a href="/">lilliss.au</a> · <a href="/privacy.html">privacy</a> · <a href="/stillwild-concept/">stillwild-concept</a></p>
+    <p>Concept work. Not a description of services offered, and not indexed.</p>
+  </footer>
+
+</div>
+</body>
+</html>
