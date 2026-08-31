@@ -141,7 +141,18 @@ body{counter-reset:band}
    and around them. A numeral that counts a set the reader cannot see is
    decoration wearing structure's clothes. The dashed rule and the eyebrow
    already mark each band. Restore this only alongside a numbering that
-   covers every visible block. */
+   covers every visible block — AND re-add
+   `.band .band-head.sub-head::before{content:none}` at the same time. Two heads
+   in this theme carry the `sub-head` class precisely because they are NOT their
+   band's numbered head: the crew inset merged into #places, and the WeChat
+   block inside #safety. Both still carry it in the template. Without that rule,
+   restoring numbering restores the duplicate the owner reported twice.
+
+   Recorded here rather than kept as a live rule because nothing sets content on
+   .band-head::before any more, so the suppression would be dead CSS — and the
+   commit that removed the numerals claimed the suppression "stays" while its
+   own code deleted it. The claim was false; this is the correction, placed
+   where the person restoring numbering will be standing. */
 
 
 
