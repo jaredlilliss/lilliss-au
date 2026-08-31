@@ -882,9 +882,50 @@ footer b{color:var(--dim)}
   "use strict";
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- reveals FIRST, and defended ----------------------------------
+     Every word on this page is .rv{opacity:0} and appears only when this runs.
+     It used to live 4,156 characters downstream of an unguarded canvas init, so
+     one null context hid the whole page. Measured on the served build, stubbing
+     getContext both plausible ways: 0 of 50 revealed when it returns null, 0 of
+     50 when it throws, 50 of 50 healthy.
+
+     The force-reveal timer this page already had was registered downstream of
+     that throw too — so it never ran. A BACKSTOP UPSTREAM OF A THROW IS A
+     BACKSTOP; DOWNSTREAM OF ONE IT IS DECORATION. Checking that a safety net
+     exists is not checking that it is reachable.
+
+     Content first, in its own try, with the timer registered here where nothing
+     above it can prevent it. ---------------------------------------------- */
+  try{
+    var rvAll=[].slice.call(document.querySelectorAll(".rv"));
+    var rvShow=function(el){el.classList.add("in")};
+    if(/[?&]noreveal/.test(location.search)){
+      var st0=document.createElement("style");
+      st0.textContent=".rv{opacity:1!important;transform:none!important;transition:none!important}";
+      document.head.appendChild(st0); rvAll.forEach(rvShow); rvAll=[];
+    } else if(reduced||!("IntersectionObserver" in window)){
+      rvAll.forEach(rvShow);
+    } else {
+      var ro0=new IntersectionObserver(function(es){
+        es.forEach(function(e){if(e.isIntersecting){rvShow(e.target);ro0.unobserve(e.target)}});
+      },{rootMargin:"0px 0px -8% 0px",threshold:.05});
+      rvAll.forEach(function(el){ro0.observe(el)});
+      setTimeout(function(){rvAll.forEach(rvShow)},2600);
+    }
+  }catch(e){
+    [].forEach.call(document.querySelectorAll(".rv"),function(el){el.classList.add("in")});
+  }
+
   /* ---------- seeded starfield: 3 parallax depths, ground→Mars tint ---------- */
   function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-  var cv=document.getElementById("stars"),cx=cv.getContext("2d"),stars=[],W=0,H=0;
+  /* getContext can return null OR throw — Lockdown Mode, memory pressure, a
+     hardened browser. Chained onto getElementById it did both silently and took
+     the rest of the script with it. Guarded: no context means no starfield, and
+     the page is untouched. */
+  var cv=document.getElementById("stars");
+  var cx=null; try{ cx = (cv&&cv.getContext) ? cv.getContext("2d") : null; }catch(e){ cx=null; }
+  if(!cx){ if(cv&&cv.parentNode) cv.parentNode.removeChild(cv); }
+  var stars=[],W=0,H=0;
   function sizeCanvas(){
     /* 3 -> 2. At DPR 3 a 1920x1080 viewport is a 5760x3240 backing store,
        repainted every frame for points a few pixels across. Not taken to the
@@ -976,21 +1017,9 @@ footer b{color:var(--dim)}
     phases.forEach(function(s){po.observe(s)});
   }
 
-  /* ---------- reveals + force-reveal backstop ---------- */
-  var rvs=document.querySelectorAll(".rv");
-  if(/[?&]noreveal/.test(location.search)){
-    var st=document.createElement("style");st.textContent=".rv{opacity:1!important;transform:none!important;transition:none!important}";
-    document.head.appendChild(st);rvs.forEach(function(el){el.classList.add("in")});rvs=[];
-  }
-  if(reduced||!("IntersectionObserver" in window)){
-    rvs.forEach(function(el){el.classList.add("in")});
-  }else{
-    var ro=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}});
-    },{rootMargin:"0px 0px -8% 0px",threshold:.05});
-    rvs.forEach(function(el){ro.observe(el)});
-    setTimeout(function(){rvs.forEach(function(el){el.classList.add("in")})},2600);
-  }
+  /* reveals and their backstop now run at the TOP of this IIFE — see the note
+     there. Leaving them here made every word on the page depend on the starfield
+     initialising successfully. */
 
   /* capture helpers: ?jump=<id> scrolls there; ?solo=1 hides everything above the join/Mars finale */
   var jm=location.search.match(/[?&]jump=([a-z]+)/);
