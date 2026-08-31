@@ -484,6 +484,40 @@ body{
   .rail{transition:none!important}
   .hint{animation:none}
 }
+
+/* ── PHONE: the bottom band was carrying four things at once ────────────────
+   Measured at a true 390x800 viewport, before this rule existed:
+
+       .foot   (disclaimer)      650 -> 748
+       TODAY - 2026 marker       712 -> 722   inside the disclaimer
+       .scrub  (the control)     746 -> 790   two pixels into the disclaimer
+       .hint   (drag - scroll)   764 -> 774   on top of the control it names
+
+   Four things in the last 150 pixels, while the top 280 were empty: the
+   masthead ends near y=65 and nothing else appears until the focused year at
+   y=370. So the small print moves to where the space is, and the hint clears
+   the control it describes.
+
+   THIS SITS AT THE END OF THE STYLESHEET ON PURPOSE. The first attempt put it
+   inside the existing 620px block and neither rule took: `.foot` is overridden
+   by a later rule in that same block, and `.hint`'s base rule is DECLARED AFTER
+   the media query, so it wins on document order. Last word beats arguing with
+   the cascade, and it cannot be undone by an edit in the middle.
+
+   Desktop is deliberately untouched - none of this collides there, and
+   "fixing" a layout that is already correct is a regression in a fix's
+   clothes. ---------------------------------------------------------------- */
+@media (max-width:620px){
+  .foot{
+    top:calc(env(safe-area-inset-top, 0px) + 60px) !important;
+    bottom:auto !important;
+    left:16px !important; right:16px !important;
+    max-width:none !important;
+    text-align:left !important;
+    font-size:9.5px; line-height:1.55;
+  }
+  .hint{ bottom:calc(56px + env(safe-area-inset-bottom, 0px)) !important; }
+}
 </style>
 </head>
 <body class="no-js">
