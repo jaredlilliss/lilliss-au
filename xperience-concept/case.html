@@ -638,6 +638,15 @@ footer a{color:var(--muted)}
     });
   }, {rootMargin:'0px 0px -8% 0px', threshold:0.05});
   els.forEach(function(e){ io.observe(e); });
+  /* BELT. An IntersectionObserver that never fires leaves every block at
+     opacity 0 forever, and the branch above only covers the observer being
+     ABSENT — not present-but-silent. That is not theoretical: a non-compositing
+     host delivers ZERO callbacks, not even the initial one, which is how a
+     working page reads as blank.
+     Added 30/08 after a sweep found this page was the only one of six missing
+     it — its own sibling xs-v4.html has carried one since the overhaul. I wrote
+     both, a day apart, and only remembered once. */
+  setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 2400);
 })();
 </script>
 </body>
