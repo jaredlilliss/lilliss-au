@@ -710,6 +710,36 @@ main>#safety{order:7}
    correct if the sections are ever reordered — a :first-of-type selector
    would silently do the wrong thing the day someone moves one. */
 
+/* ── PHONE HEADER: give a phone reader the page instead of the chrome ───────
+   Measured on the live page: the header was 159px tall and the first sentence
+   began at y=449 on a 390x800 screen - 56% of it spent before a word was read,
+   60% at 360px - with THREE calls to action on the first screen, two of them
+   the same action.
+
+   Both changes here are subtractive.
+
+   The header CTA goes, because .wx-dock is fixed to the bottom from 700px down
+   and already carries Enquire permanently, in thumb reach. Two calls to one
+   action compete, and the one that is always visible should win.
+
+   The language switcher then moves up beside the wordmark rather than claiming
+   a row of its own. Its 44px tap targets are kept - that was a deliberate
+   accessibility decision and is not being traded away - they simply stop
+   costing a whole row now that the CTA has vacated the space beside the brand.
+
+   At the end of the stylesheet because the rules being overridden are spread
+   across the 860, 700 and 520 breakpoints; last word is cheaper than threading
+   an override through three places. ------------------------------------- */
+@media (max-width:700px){
+  .site-head .btn,.site-head .btn-sm{display:none}
+}
+@media (max-width:520px){
+  .lang{ order:2; width:auto; margin-left:auto; border-radius:99px; }
+  .lang button{ flex:0 0 auto; min-height:44px; padding:.8rem .62rem; }
+}
+@media (max-width:400px){
+  .lang button{ padding:.8rem .48rem; font-size:.72rem; }
+}
 
 </style>
 </head>
