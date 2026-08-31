@@ -1196,7 +1196,15 @@ body{
        same way every ?at=<year> already centres its milestone. */
     if (v === 'end')   return clampX(ENDX - innerWidth / 2);
     var y = parseInt(v, 10);
-    if (!y || y < ORIGIN || y > END) return null;
+    /* Not a year at all - NaN or 0 - is ignored, exactly as documented above.
+       A year OUTSIDE the span is CLAMPED to the nearest end of it, which is
+       what the comment above always promised and what the code did not do:
+       `y > END` used to return null, so ?at=9999 fell back to today instead of
+       landing on 2117. Out of range is a reader aiming past the edge, not a
+       reader typing nonsense, and those deserve different answers. */
+    if (!y) return null;
+    if (y < ORIGIN) y = ORIGIN;
+    if (y > END) y = END;
     return clampX(PAD + frac(y) * SPANPX - innerWidth / 2);
   }
 
