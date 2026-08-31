@@ -700,6 +700,14 @@ section[aria-labelledby="why-h"],#safety{display:none}
 main>section[aria-labelledby="why-h"]{order:4}
 main>#safety{order:7}
 
+/* A head nested inside a band is not that band's numbered head. The counter
+   belongs to the SECTION; painting it on every descendant head rendered 03
+   twice in #places (the merged crew inset) and 04 twice in #safety (the
+   WeChat block). Suppressed by CLASS rather than by position, so it stays
+   correct if the sections are ever reordered — a :first-of-type selector
+   would silently do the wrong thing the day someone moves one. */
+.band .band-head.sub-head::before{content:none}
+
 </style>
 </head>
 <body>
@@ -961,7 +969,7 @@ main>#safety{order:7}
     </div>
 
     <div id="crew" class="crew-merged">
-    <div class="band-head">
+    <div class="band-head sub-head">
       <p class="eyebrow">The crew</p>
       <h2 id="crew-h">Four of the core crew</h2>
       <p class="lede">These are the people who will be helping you have the most fantastic adventure you could wish for.</p>
@@ -1037,7 +1045,7 @@ main>#safety{order:7}
 <!-- ============================ FOOTER (interactive, 23/08) ============ -->
 <footer class="site-foot" id="enquire">
   <div class="wrap">
-    <div class="band-head foot-head">
+    <div class="band-head sub-head foot-head">
       <p class="eyebrow">Talk to us</p>
       <h2 id="enq-h">Questions? We're on WeChat</h2>
       <p class="lede">Scan a code up top or search the IDs &mdash; or use the details here.</p>
