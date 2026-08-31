@@ -133,14 +133,17 @@ body{counter-reset:band}
 .band .eyebrow::before{display:none}
 .band .eyebrow::after{content:"";flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 8px,transparent 8px 16px);min-width:40px;opacity:.5}
 .band .band-head{position:relative}
-.band .band-head::before{
-  content:"0" counter(band);
-  position:absolute;top:-.52em;right:-.06em;z-index:0;
-  font:800 clamp(7rem,15vw,14rem)/1 var(--mono);letter-spacing:-.05em;
-  color:transparent;-webkit-text-stroke:1.5px rgba(24,36,32,.13);
-  pointer-events:none;user-select:none;
-}
-@supports not (-webkit-text-stroke:1px black){.band .band-head::before{color:rgba(24,36,32,.07)}}
+/* The band numerals were REMOVED 31/08/2026, twice-reported by the owner.
+   Not because they were wrong - because they were meaningless. This theme
+   deliberately hides two of the four numbered bands (see "less pages"
+   above), and a CSS counter only increments on rendered elements, so the
+   visible bands read 01 and 02 while three unnumbered blocks sit between
+   and around them. A numeral that counts a set the reader cannot see is
+   decoration wearing structure's clothes. The dashed rule and the eyebrow
+   already mark each band. Restore this only alongside a numbering that
+   covers every visible block. */
+
+
 
 /* prototype markers */
 .ph{
@@ -362,7 +365,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 
 /* crew: the night band — around the fire */
 #crew{background:var(--night);color:#E7E1CE;border-top:0}
-#crew .band-head::before{-webkit-text-stroke-color:rgba(231,225,206,.14)}
+
 #crew .eyebrow{color:#F2A65A}
 #crew .eyebrow::after{background:repeating-linear-gradient(90deg,rgba(231,225,206,.35) 0 8px,transparent 8px 16px)}
 #crew h2{color:#F5F0DF}
@@ -484,7 +487,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
   .hero h1{font-size:clamp(2.3rem,11vw,3.2rem)}
   .band{padding-block:2.5rem}
   .band-head{margin-bottom:1.8rem}
-  .band .band-head::before{font-size:3.4rem;top:-.4em}
+  
   .trips{padding-bottom:0}
   body{padding-bottom:calc(66px + env(safe-area-inset-bottom))} /* room for the dock + home indicator */
 }
@@ -665,7 +668,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
    the template. Values ~25-35% tighter than the defaults they override. */
 .band{padding-block:clamp(2rem,4.8vh,3.2rem)}
 .band-head{margin-bottom:1.7rem}
-@media (min-width:701px){.band .band-head::before{font-size:clamp(5.5rem,11vw,10rem)}}
+@media (min-width:701px){}
 .hero .wrap{padding-block:clamp(2.4rem,6.5vh,4.4rem) clamp(2rem,4.5vh,3rem)}
 @media (max-width:700px){.hero{min-height:62svh}}
 .wx-band{padding-block:clamp(1.7rem,4.2vh,2.5rem)}
@@ -706,7 +709,7 @@ main>#safety{order:7}
    WeChat block). Suppressed by CLASS rather than by position, so it stays
    correct if the sections are ever reordered — a :first-of-type selector
    would silently do the wrong thing the day someone moves one. */
-.band .band-head.sub-head::before{content:none}
+
 
 </style>
 </head>
