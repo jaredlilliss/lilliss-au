@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Brochure — XperienceSpace | Lilliss IT concept</title>
+<meta name="description" content="An unsolicited Lilliss IT design concept: a one-page bilingual brochure for XperienceSpace, English and Arabic, built to the UAE Design System's palette. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<!-- noindex for the same reason as the rest of this suite: it restyles public
+     content belonging to someone else. Discoverable by link, not by search. -->
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
+<meta name="theme-color" content="#FBFAF7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lilliss IT — concept prototype">
+<meta property="og:title" content="The Brochure — XperienceSpace | Lilliss IT concept">
+<meta property="og:description" content="An unsolicited Lilliss IT design concept: a one-page bilingual brochure for XperienceSpace, English and Arabic, built to the UAE Design System's palette. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<meta property="og:url" content="https://lilliss.au/xperience-concept/brochure.html">
+<meta property="og:locale" content="en_AU">
+<meta property="og:locale:alternate" content="ar_AE">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   A ONE-PAGE BROCHURE FOR XPERIENCESPACE — concept, unbuilt, not affiliated.
+
+   PALETTE is AEGOV's, read off designsystem.gov.ae itself rather than taken
+   from anyone's description of it: gold #92722A as the primary, flag green and
+   flag red kept as SEMANTIC colours only, over a cool-grey neutral ramp. Gold
+   on warm paper with green and red reserved for meaning is specifically the
+   Emirati government register — it is not a palette anyone reaches for by
+   default, which is the point.
+
+   TYPE IS THE READER'S OWN SYSTEM STACK, and that is a decision rather than a
+   default. This page was drawn for IBM Plex Sans Arabic — one superfamily whose
+   Latin and Arabic were drawn together, so both editions would be literally the
+   same voice instead of two fonts pretending. Serving it here would mean
+   fetching it from a font network, and privacy.html on this domain tells the
+   reader that "its fonts are served from this domain rather than from a font
+   network" and invites them to check in the network tab. A promise that dares
+   you to verify it is the last promise to break for a typeface. So the face
+   falls back to the platform's own Arabic and Latin, which was rendered and
+   checked before shipping: the layout, the direction and the corrected
+   2030–2117 are all unaffected. Self-hosting the family would restore the
+   argument and keep the promise — that is a decision about adding files to this
+   repository, and it belongs to its owner.
+
+   THE LANGUAGE TOGGLE RUNS WITHOUT JAVASCRIPT. Both editions are in the
+   document; a hidden radio switches which is shown and flips `direction` on the
+   page root. That matters here more than anywhere: this brochure exists to
+   demonstrate a bidi fix, and a language button that needs a script to work
+   would be the same class of defect it is arguing against.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  --paper:#FBFAF7;
+  --panel:#FFFFFF;
+  --ink:#1B1D21;
+  --body:#3E4046;
+  --muted:#5F646D;
+  --rule:#E1E3E5;
+  --rule-2:#C9CDD2;
+  --gold:#92722A;
+  --gold-lt:#CBA344;
+  --gold-wash:#92722A12;
+  --green:#24432B;
+  --green-mid:#3F8E50;
+  --red:#7C2320;
+  --shadow:0 1px 2px #1b1d2110, 0 8px 24px -18px #1b1d2130;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131417;
+    --panel:#191B1F;
+    --ink:#F2F3F4;
+    --body:#C7CACE;
+    --muted:#9BA0A7;
+    --rule:#2A2D33;
+    --rule-2:#3B3F46;
+    --gold:#CBA344;
+    --gold-lt:#E0C173;
+    --gold-wash:#CBA34418;
+    --green:#6FB97F;
+    --green-mid:#6FB97F;
+    --red:#F47A75;
+    --shadow:0 1px 2px #0006, 0 8px 24px -18px #0009;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131417;
+  --panel:#191B1F;
+  --ink:#F2F3F4;
+  --body:#C7CACE;
+  --muted:#9BA0A7;
+  --rule:#2A2D33;
+  --rule-2:#3B3F46;
+  --gold:#CBA344;
+  --gold-lt:#E0C173;
+  --gold-wash:#CBA34418;
+  --green:#6FB97F;
+  --green-mid:#6FB97F;
+  --red:#F47A75;
+  --shadow:0 1px 2px #0006, 0 8px 24px -18px #0009;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font:400 17px/1.65 "Segoe UI","Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Arabic Typesetting",system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.doc{max-width:1120px;margin:0 auto;padding:0 26px 110px}
+
+/* ── the language switch, CSS only ──────────────────────────────────────── */
+#lang-en,#lang-ar{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.ar{display:none}
+#lang-ar:checked ~ .doc .ar{display:revert}
+#lang-ar:checked ~ .doc .en{display:none}
+#lang-ar:checked ~ .doc{direction:rtl}
+.switch{display:inline-flex;border:1px solid var(--rule-2);border-radius:2px;overflow:hidden}
+.switch label{
+  font:500 12px/1 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.12em;
+  padding:9px 14px;cursor:pointer;color:var(--muted);background:transparent;
+  user-select:none;transition:background .15s,color .15s;
+}
+.switch label:hover{color:var(--ink);background:var(--gold-wash)}
+#lang-en:checked ~ .doc .sw-en,
+#lang-ar:checked ~ .doc .sw-ar{background:var(--gold);color:#fff}
+#lang-en:focus-visible ~ .doc .sw-en,
+#lang-ar:focus-visible ~ .doc .sw-ar{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ── masthead ───────────────────────────────────────────────────────────── */
+.top{
+  display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px;
+  padding:26px 0 20px;border-bottom:1px solid var(--rule);
+}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand b{font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink)}
+.brand span{
+  font:500 11px/1 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);
+}
+.top .spacer{margin-inline-start:auto}
+
+/* ── hero ───────────────────────────────────────────────────────────────── */
+.hero{padding:64px 0 8px}
+.eyebrow{
+  font:500 11.5px/1.5 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:20px;
+}
+h1{
+  font-weight:600;font-size:clamp(38px,6vw,66px);line-height:1.06;
+  letter-spacing:-.025em;color:var(--ink);margin:0;max-width:15ch;text-wrap:balance;
+}
+/* `.ar h1` was a DESCENDANT selector and the class sits on the h1 ITSELF, so
+   none of the Arabic typography was applying — the Arabic headline was running
+   with Latin tracking (-.025em) and a 1.06 line-height, both wrong for a script
+   with these ascenders. Caught in the render, not the source: the page looked
+   plausible and the rule was simply never matching anything.
+   Arabic wants no negative tracking and more leading than Latin. */
+h1.ar,.eyebrow.ar,h2.ar,h3.ar{letter-spacing:0}
+h1.ar{font-size:clamp(32px,5vw,54px);line-height:1.3}
+.tag{
+  margin:22px 0 0;font-size:clamp(18px,2.1vw,22px);line-height:1.5;
+  color:var(--gold);max-width:34ch;font-weight:500;
+}
+.lede{margin:26px 0 0;max-width:62ch;font-size:18px;color:var(--body)}
+.lede strong{color:var(--ink);font-weight:600}
+
+/* ── the rule that carries the flag colours, used once ──────────────────── */
+.flagrule{
+  height:3px;margin:52px 0 0;border-radius:2px;
+  background:linear-gradient(90deg,var(--green) 0 33%,var(--red) 33% 42%,var(--gold) 42% 100%);
+}
+#lang-ar:checked ~ .doc .flagrule{
+  background:linear-gradient(270deg,var(--green) 0 33%,var(--red) 33% 42%,var(--gold) 42% 100%);
+}
+
+/* ── snapshot figures ───────────────────────────────────────────────────── */
+.snap{
+  display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr;margin:44px 0 0;border-radius:3px;overflow:hidden;
+}
+@media (min-width:760px){.snap{grid-template-columns:repeat(3,1fr)}}
+.snap > div{background:var(--panel);padding:26px 24px}
+.snap .k{
+  font:600 clamp(26px,3.4vw,36px)/1.1 "Segoe UI","Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Arabic Typesetting",system-ui,-apple-system,sans-serif;
+  color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+}
+.snap .v{margin-top:10px;font-size:15px;line-height:1.55;color:var(--muted);max-width:34ch}
+
+/* ── sections ───────────────────────────────────────────────────────────── */
+section{padding:66px 0 0}
+h2{
+  font-weight:600;font-size:clamp(25px,3vw,34px);line-height:1.2;letter-spacing:-.018em;
+  color:var(--ink);margin:0 0 18px;max-width:24ch;text-wrap:balance;
+}
+h2.ar{line-height:1.42}
+/* Arabic has no uppercase, so a text-transform meant for Latin labels does
+   nothing to it — but the wide tracking that makes a Latin label read as a
+   label makes Arabic read as damaged. Both are switched off per script. */
+.eyebrow.ar,.snap .k.ar,.pillar .n.ar,.badge.ar,.next .rk.ar{letter-spacing:0;text-transform:none}
+.tag.ar{line-height:1.55}
+.lede.ar,.place p.ar,.pillar p.ar,.snap .v.ar,.next .rv p.ar,.align .txt.ar{line-height:1.85}
+p{margin:0 0 16px;max-width:64ch}
+p:last-child{margin-bottom:0}
+
+/* pillars */
+.pillars{display:grid;gap:14px;grid-template-columns:1fr;margin-top:8px}
+@media (min-width:720px){.pillars{grid-template-columns:repeat(2,1fr)}}
+.pillar{
+  background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+  padding:22px 24px;box-shadow:var(--shadow);
+  border-inline-start:3px solid var(--gold);
+}
+.pillar h3{
+  margin:0 0 6px;font-weight:600;font-size:17.5px;color:var(--ink);letter-spacing:-.005em;
+}
+.pillar p{margin:0;font-size:15.5px;color:var(--muted)}
+.pillar .n{
+  font:500 11px/1 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.14em;
+  color:var(--gold);display:block;margin-bottom:10px;
+}
+
+/* the two places */
+.places{display:grid;gap:18px;grid-template-columns:1fr;margin-top:10px}
+@media (min-width:860px){.places{grid-template-columns:1.15fr 1fr}}
+.place{
+  background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+  padding:28px 28px;box-shadow:var(--shadow);
+}
+.place h3{margin:0 0 12px;font-weight:600;font-size:21px;color:var(--ink)}
+.place p{font-size:16px;color:var(--body)}
+.place .badge{
+  display:inline-block;margin-bottom:14px;
+  font:500 10.5px/1 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green);background:#3F8E5016;
+  padding:6px 9px;border-radius:2px;
+}
+
+/* the alignment strip — where the bidi work shows */
+.align{
+  margin-top:12px;border:1px solid var(--rule);border-radius:3px;background:var(--panel);
+  overflow:hidden;
+}
+.align .row{
+  display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;
+  padding:15px 22px;border-top:1px solid var(--rule);
+}
+.align .row:first-child{border-top:0}
+.align .yr{
+  font:500 14px/1.4 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;color:var(--gold);
+  font-variant-numeric:tabular-nums;flex:0 0 auto;min-width:9ch;
+}
+.align .txt{flex:1 1 300px;min-width:0;font-size:16px;color:var(--body)}
+
+/* next steps */
+.next{
+  margin-top:14px;border:1px solid var(--rule-2);border-radius:3px;background:var(--panel);
+  overflow:hidden;
+}
+.next .row{display:flex;flex-wrap:wrap;gap:6px 24px;padding:20px 24px;border-top:1px solid var(--rule)}
+.next .row:first-child{border-top:0}
+.next .rk{
+  flex:0 0 150px;
+  font:500 11.5px/1.6 ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--gold);
+}
+.next .rv{flex:1 1 280px;min-width:0}
+.next .rv p{margin:0;max-width:52ch;font-size:16px}
+
+/* contact */
+.contact{
+  margin-top:66px;padding:34px 30px;border-radius:3px;
+  background:var(--gold-wash);border:1px solid var(--gold);
+}
+.contact h2{margin-bottom:10px}
+.contact a{color:var(--gold);font-weight:600;text-underline-offset:3px}
+.contact a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* disclosure */
+.disclose{
+  margin-top:64px;padding-top:24px;border-top:1px solid var(--rule);
+  font-size:13.5px;line-height:1.6;color:var(--muted);max-width:70ch;
+}
+.disclose b{color:var(--ink);font-weight:600}
+
+@media (max-width:620px){
+  .doc{padding-inline:18px}
+  .next .rk{flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<input type="radio" name="lang" id="lang-en" checked>
+<input type="radio" name="lang" id="lang-ar">
+
+<div class="doc">
+
+  <header class="top">
+    <div class="brand">
+      <b>XperienceSpace</b>
+      <span class="en">A new way to experience space</span>
+      <span class="ar">طريقة جديدة لتجربة الفضاء</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="switch">
+      <label for="lang-en" class="sw-en">ENGLISH</label>
+      <label for="lang-ar" class="sw-ar">عربي</label>
+    </div>
+  </header>
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div class="eyebrow en">UAE &middot; A future-ready space economy</div>
+    <div class="eyebrow ar">الإمارات العربية المتحدة &middot; اقتصاد فضائي جاهز للمستقبل</div>
+
+    <h1 class="en">Building the UAE Space Nation</h1>
+    <h1 class="ar">بناء دولة الإمارات الفضائية</h1>
+
+    <p class="tag en">Planting the UAE flag in the future of space</p>
+    <p class="tag ar">غرس علم الإمارات العربية المتحدة في مستقبل الفضاء</p>
+
+    <p class="lede en">Space is no longer a distant aspiration. It is a strategic
+    arena for sovereign capability, sustainable growth and global leadership.
+    <strong>XperienceSpace is a UAE-based initiative establishing the local
+    industry and community ecosystem supporting the UAE vision for space.</strong></p>
+
+    <p class="lede ar">لم يعد الفضاء طموحاً بعيد المنال. إنها ساحة استراتيجية
+    للقدرة السيادية والنمو المستدام والقيادة العالمية.
+    <strong>XperienceSpace هي مبادرة مقرها الإمارات العربية المتحدة تعمل على
+    إنشاء بيئة صناعية ومجتمعية محلية تدعم رؤية الإمارات العربية المتحدة
+    للفضاء.</strong></p>
+
+    <div class="flagrule"></div>
+  </div>
+
+  <!-- ═══ SNAPSHOT ═══ -->
+  <div class="snap">
+    <div>
+      <div class="k en">40+ years</div>
+      <div class="k ar">أكثر من ٤٠ عاماً</div>
+      <div class="v en">A legacy dating to <bdi>1974</bdi> and early engagement
+      with NASA, now a national space roadmap.</div>
+      <div class="v ar">إرث يعود إلى عام <bdi>1974</bdi> والمشاركة المبكرة مع
+      وكالة ناسا، وهو اليوم خارطة طريق وطنية للفضاء.</div>
+    </div>
+    <div>
+      <div class="k"><bdi>2030&ndash;2117</bdi></div>
+      <div class="v en">Coordinated milestones towards a sustainable space
+      economy and the Mars city vision.</div>
+      <div class="v ar">مراحل منسقة نحو اقتصاد فضائي مستدام ورؤية مدينة على
+      المريخ.</div>
+    </div>
+    <div>
+      <div class="k en">4 pillars</div>
+      <div class="k ar">أربع ركائز</div>
+      <div class="v en">Community, education, industry and R&amp;D, integrated
+      into one ecosystem.</div>
+      <div class="v ar">المجتمع، والتعليم، والصناعة، والبحث والتطوير، كلها
+      متكاملة في نظام بيئي واحد.</div>
+    </div>
+  </div>
+
+  <!-- ═══ PILLARS ═══ -->
+  <section>
+    <h2 class="en">Four programmes, one ecosystem</h2>
+    <h2 class="ar">أربعة برامج، نظام بيئي واحد</h2>
+
+    <p class="en">Programme development incentivises industry and R&amp;D to
+    locate to the UAE, driving the transfer of technology and talent to the
+    region.</p>
+    <p class="ar">يساهم تطوير البرامج في تحفيز الصناعة والبحث والتطوير على
+    الاستقرار في دولة الإمارات، بما يدفع نقل التكنولوجيا والمواهب إلى
+    المنطقة.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <span class="n">01</span>
+        <h3 class="en">Community engagement</h3>
+        <h3 class="ar">المشاركة المجتمعية</h3>
+        <p class="en">Bringing the national space effort within reach of the
+        people it is being built for.</p>
+        <p class="ar">جعل الجهد الوطني للفضاء في متناول الناس الذين يُبنى من
+        أجلهم.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">02</span>
+        <h3 class="en">Education &amp; talent pipeline</h3>
+        <h3 class="ar">مسار التعليم والمواهب</h3>
+        <p class="en">A route from classroom to industry, so the capability
+        stays in the country that grew it.</p>
+        <p class="ar">مسار من الفصل الدراسي إلى الصناعة، لتبقى القدرات في
+        البلد الذي أنشأها.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">03</span>
+        <h3 class="en">Industry development &amp; support</h3>
+        <h3 class="ar">تطوير ودعم الصناعة</h3>
+        <p class="en">Conditions that make it rational for global partners to
+        build here rather than visit.</p>
+        <p class="ar">ظروف تجعل من المنطقي للشركاء العالميين أن يبنوا هنا بدلاً
+        من الزيارة فقط.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">04</span>
+        <h3 class="en">Research &amp; development</h3>
+        <h3 class="ar">البحث والتطوير</h3>
+        <p class="en">Work that produces capability the UAE owns, not licences
+        it rents.</p>
+        <p class="ar">عمل ينتج قدرات تملكها الإمارات، لا تراخيص تستأجرها.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ THE TWO PLACES ═══ -->
+  <section>
+    <h2 class="en">Where it happens</h2>
+    <h2 class="ar">أين يحدث ذلك</h2>
+
+    <div class="places">
+      <div class="place">
+        <span class="badge en">Special economic zone</span>
+        <span class="badge ar">منطقة اقتصادية خاصة</span>
+        <h3 class="en">UAE Space City</h3>
+        <h3 class="ar">مدينة الفضاء الإماراتية</h3>
+        <p class="en">A scalable, future-ready economic zone dedicated to
+        innovation, education, enterprise and the development of cutting-edge
+        technologies. As a smart city it concentrates the technologies that
+        serve the UAE's strategies for the economy, the environment and the
+        space programme &mdash; a zone supporting the establishment of the UAE
+        Space Nation.</p>
+        <p class="ar">منطقة اقتصادية قابلة للتوسع ومستعدة للمستقبل، مخصصة
+        للابتكار والتعليم وريادة الأعمال وتطوير التقنيات المتقدمة. وباعتبارها
+        مدينة ذكية، تركّز التقنيات التي تخدم استراتيجيات الإمارات للاقتصاد
+        والبيئة وبرنامج الفضاء &mdash; منطقة تدعم إنشاء دولة الإمارات الفضائية.</p>
+      </div>
+      <div class="place">
+        <span class="badge en">Public gateway</span>
+        <span class="badge ar">بوابة الجمهور</span>
+        <h3 class="en">UAE Space Welcome Centre</h3>
+        <h3 class="ar">مركز الترحيب الفضائي الإماراتي</h3>
+        <p class="en">At the heart of Space City, the Welcome Centre is the
+        gateway to the nation's vision for space &mdash; more than a visitor
+        centre: a showcase of innovation, a bridge to public engagement and
+        industry collaboration, and somewhere the next generation can see the
+        thing being built.</p>
+        <p class="ar">في قلب مدينة الفضاء، يمثل مركز الترحيب بوابةً لرؤية الدولة
+        للفضاء &mdash; وهو أكثر من مركز زوار: منصة للابتكار، وجسر للتواصل مع
+        الجمهور والتعاون الصناعي، ومكان يرى فيه الجيل القادم ما يُبنى.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ THE ARC ═══ -->
+  <section>
+    <h2 class="en">The arc, in order</h2>
+    <h2 class="ar">المسار، بالترتيب</h2>
+
+    <p class="en">Every figure below reads in the same order in both editions.
+    That is not a detail &mdash; a date range that reverses itself in Arabic is
+    the first thing a reader notices and the last thing they mention.</p>
+    <p class="ar">كل رقم أدناه يُقرأ بالترتيب نفسه في كلتا النسختين. وهذه ليست
+    تفصيلاً بسيطاً &mdash; فالمدى الزمني الذي ينعكس ترتيبه في العربية هو أول ما
+    يلاحظه القارئ وآخر ما يذكره.</p>
+
+    <div class="align">
+      <div class="row">
+        <span class="yr"><bdi>1974</bdi></span>
+        <span class="txt en">Early engagement with NASA</span>
+        <span class="txt ar">المشاركة المبكرة مع وكالة ناسا</span>
+      </div>
+      <div class="row">
+        <span class="yr"><bdi>2030</bdi></span>
+        <span class="txt en">Aligned with the UAE National Space Strategy</span>
+        <span class="txt ar">يتماشى مع استراتيجية الإمارات الوطنية للفضاء</span>
+      </div>
+      <div class="row">
+        <span class="yr"><bdi>2030&ndash;2117</bdi></span>
+        <span class="txt en">Coordinated milestones towards a sustainable space economy</span>
+        <span class="txt ar">مراحل منسقة نحو اقتصاد فضائي مستدام</span>
+      </div>
+      <div class="row">
+        <span class="yr"><bdi>MARS-2117</bdi></span>
+        <span class="txt en">The long-term programme this ecosystem supports</span>
+        <span class="txt ar">البرنامج طويل الأمد الذي يدعمه هذا النظام البيئي</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WHAT HAPPENS NEXT ═══ -->
+  <section>
+    <h2 class="en">What happens next</h2>
+    <h2 class="ar">ما الخطوة التالية</h2>
+
+    <div class="next">
+      <div class="row">
+        <div class="rk en">Partners</div>
+        <div class="rk ar">الشركاء</div>
+        <div class="rv">
+          <p class="en">Global partners, UAE talent and investors co-develop
+          future space capability in support of national programmes.</p>
+          <p class="ar">يتعاون الشركاء العالميون والمواهب الإماراتية والمستثمرون
+          على تطوير قدرات فضائية مستقبلية دعماً للبرامج الوطنية.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rk en">Investment</div>
+        <div class="rk ar">الاستثمار</div>
+        <div class="rv">
+          <p class="en">Private investment and partnership driven, in full
+          alignment with official UAE space strategies and objectives.</p>
+          <p class="ar">مدفوعة بالاستثمار الخاص والشراكات، وبما يتماشى تماماً مع
+          استراتيجيات وأهداف الإمارات الرسمية في مجال الفضاء.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rk en">A conversation</div>
+        <div class="rk ar">محادثة</div>
+        <div class="rv">
+          <p class="en">Bring the question you actually have. The right first
+          meeting is thirty minutes, not a document.</p>
+          <p class="ar">أحضر السؤال الذي يشغلك فعلاً. اللقاء الأول المناسب مدته
+          ثلاثون دقيقة، وليس مستنداً.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <h2 class="en">Talk to XperienceSpace</h2>
+      <h2 class="ar">تواصل مع XperienceSpace</h2>
+      <p class="en">Write to <a href="mailto:info@xperiencespace.com">info@xperiencespace.com</a>
+      &mdash; the address published on xperiencespace.com.</p>
+      <p class="ar">راسلنا على <a href="mailto:info@xperiencespace.com">info@xperiencespace.com</a>
+      &mdash; وهو العنوان المنشور على موقع xperiencespace.com.</p>
+    </div>
+  </section>
+
+  <!-- ═══ DISCLOSURE ═══ -->
+  <p class="disclose">
+    <b>This page is a concept.</b> It is an unsolicited design study by Jared
+    Lilliss (Lilliss IT), restyling public content from xperiencespace.com at
+    the site owner's invitation to look at it. It is <b>not affiliated with,
+    endorsed by, or commissioned by the XperienceSpace Initiative</b>, and it is
+    not published on their behalf. Wording is drawn from their own pages in both
+    languages; the layout, the typography and the Arabic direction handling are
+    the proposal. Colours follow the UAE Design System (AEGOV), which is public
+    and MIT-licensed. Nothing here is a claim about the UAE space programme
+    beyond what xperiencespace.com already publishes. Built 31 August 2026.
+  </p>
+
+</div>
+
+<script>
+/* Progressive enhancement only, and deliberately thin. The switch above works
+   with scripting off; this adds the two things CSS cannot: the `dir` and `lang`
+   attributes on the document root, which is what actually tells the browser's
+   bidi algorithm and a screen reader which language and direction they are in.
+   If this never runs, the page still switches language and still reads
+   right-to-left — it simply announces itself less well. */
+(function(){
+  "use strict";
+  try{
+    var en = document.getElementById("lang-en");
+    var ar = document.getElementById("lang-ar");
+    if(!en || !ar) return;
+    var apply = function(){
+      var isAr = ar.checked;
+      var r = document.documentElement;
+      r.setAttribute("dir", isAr ? "rtl" : "ltr");
+      r.setAttribute("lang", isAr ? "ar" : "en");
+    };
+    en.addEventListener("change", apply);
+    ar.addEventListener("change", apply);
+    apply();
+  }catch(e){ /* the CSS switch is the real one; nothing to recover */ }
+})();
+</script>
+</body>
+</html>
