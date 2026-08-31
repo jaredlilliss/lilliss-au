@@ -163,7 +163,11 @@ nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transfo
   color:var(--muted);text-decoration:none;padding:7px 12px;border:1px solid transparent;
   border-radius:999px;white-space:nowrap;transition:color .25s,border-color .25s}
 nav a:hover{color:var(--ink);border-color:var(--edge)}
-nav a.me{color:var(--ember)}
+nav a.me{color:var(--muted)}
+/* The conversion is the brightest thing in the nav, not the exit. A cold reader
+   reported `Jared ->` as the most prominent item and followed it OFF the
+   business site to a personal portfolio. */
+nav a.cta{color:var(--ember)}
 /* On a phone the nav wraps to two rows. Without flex-wrap on the bar itself the
    brand stays vertically CENTRED against those two rows, so "LILLISS IT" sits
    BETWEEN them — half the nav above it, half beside it. It reads as a broken
@@ -338,7 +342,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       <a href="#how">How it runs</a>
       <a href="#work">Work</a>
       <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a class="cta" href="#contact">Contact</a>
       <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
     </nav>
   </div>
@@ -349,7 +353,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   <!-- ── hero ─────────────────────────────────────────────────────────── -->
   <section class="hero" id="top">
     <div class="kicker">
-      <span class="avail"><span class="dot"></span>Taking work now</span>
+      <span class="avail"><span class="dot"></span>Taking new work</span>
       <span id="clock">Sydney</span>
       <span>Bass Hill · Sydney &amp; regional NSW</span>
     </div>
@@ -565,7 +569,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       you'll get a straight answer about whether I can help and when — including when I can't.
     </p>
 
-    <a class="mail rv" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry">jared@lilliss.au</a>
+    <a class="mail rv" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry&amp;body=The%20fault%3A%0D%0A%0D%0AThe%20gear%3A%0D%0A%0D%0AUrgency%20%E2%80%94%20mid-service%2C%20today%2C%20or%20this%20week%3A%0D%0A%0D%0ASuburb%3A%0D%0A">jared@lilliss.au</a>
 
     <div class="links rv">
       <a class="btn" href="https://www.linkedin.com/in/jaredlilliss/">LinkedIn</a>
