@@ -5,32 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Still Wild — Ridgeline | concept theme</title>
 <meta name="description" content="Guided 4WD, hiking, camping and survival trips out of Brisbane. Usually two to four guests and larger groups by arrangement, a guide with more than 25 years organising adventures, and one price covering guide, fuel, permits and food.">
-<!-- Prototype: this page must never be indexed, and must never claim to be stillwild.com.au.
-     No canonical and no hreflang - those would point search engines at the real site. -->
+
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#F2ECDF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2316221E'/%3E%3Ccircle cx='40' cy='24' r='11' fill='%23F2A65A'/%3E%3Cpath d='M0 46 L22 30 L38 44 L52 36 L64 44 V64 H0 Z' fill='%23283B33'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
-<!-- og:* CORRECTED 28/08. These three fields are what a chat client renders,
-     and an unfurler prefers og:title over <title> - so the concept disclosure,
-     which lived ONLY in <title>, was stripped from every share. The card read
-     as Still Wild's own site, published from Jared's domain, which is the one
-     thing the comment above says this page must never do. -->
+
 <meta property="og:site_name" content="Lilliss IT — concept prototype">
 <meta property="og:locale" content="en_AU">
 <meta property="og:locale:alternate" content="zh_CN">
 <meta property="og:title" content="Still Wild — an unsolicited concept site by Lilliss IT">
 <meta property="og:description" content="A design concept for Still Wild Survival Adventures, built by Jared Lilliss (Lilliss IT) from their published photographs, with permission, for prototyping. This is not the real site — stillwild.com.au is.">
-<!-- No og:image: no share card image exists in the scrape, and inventing a path
-     on stillwild.com.au would be a claim about a file nobody has verified. -->
+
 <meta name="twitter:card" content="summary">
-<!-- Structured data, deliberately reduced.
-     The two TouristTrip nodes that used to sit here described "The Long Weekend"
-     and "The Survival Week" - invented placeholder products that appear nowhere on
-     stillwild.com.au. Published, they would have attributed made-up trips to Paul's
-     real business, so they are gone rather than merely marked. What remains is only
-     organisation detail that the scrape actually evidences (name, address, phone,
-     email, languages, Facebook and Weibo), and it is marked as prototype markup. -->
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -133,26 +121,7 @@ body{counter-reset:band}
 .band .eyebrow::before{display:none}
 .band .eyebrow::after{content:"";flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 8px,transparent 8px 16px);min-width:40px;opacity:.5}
 .band .band-head{position:relative}
-/* The band numerals were REMOVED 31/08/2026, twice-reported by the owner.
-   Not because they were wrong - because they were meaningless. This theme
-   deliberately hides two of the four numbered bands (see "less pages"
-   above), and a CSS counter only increments on rendered elements, so the
-   visible bands read 01 and 02 while three unnumbered blocks sit between
-   and around them. A numeral that counts a set the reader cannot see is
-   decoration wearing structure's clothes. The dashed rule and the eyebrow
-   already mark each band. Restore this only alongside a numbering that
-   covers every visible block — AND re-add
-   `.band .band-head.sub-head::before{content:none}` at the same time. Two heads
-   in this theme carry the `sub-head` class precisely because they are NOT their
-   band's numbered head: the crew inset merged into #places, and the WeChat
-   block inside #safety. Both still carry it in the template. Without that rule,
-   restoring numbering restores the duplicate the owner reported twice.
 
-   Recorded here rather than kept as a live rule because nothing sets content on
-   .band-head::before any more, so the suppression would be dead CSS — and the
-   commit that removed the numerals claimed the suppression "stays" while its
-   own code deleted it. The claim was false; this is the correction, placed
-   where the person restoring numbering will be standing. */
 
 
 
@@ -201,7 +170,7 @@ body{counter-reset:band}
   .site-head .wrap{gap:.7rem;padding-inline:.85rem}
   .brand b{font-size:.98rem;letter-spacing:.08em}
   .brand span{display:none}
-  /* Dino: 44px tap targets — pills get taller and take their own wrapped row */
+
   .lang{order:4;margin-left:0;width:100%;justify-content:stretch;border-radius:12px}
   .lang button{flex:1;font:700 .78rem/1 var(--mono);padding:.85rem .5rem;min-height:44px}
   .site-head .btn-sm{padding:.7rem 1rem;font-size:.82rem;min-height:44px}
@@ -387,8 +356,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
   background:var(--night-2);transition:transform .3s ease,border-color .3s ease;
 }
 @media (hover:hover){.person:hover{transform:translateY(-4px);border-color:rgba(242,166,90,.5)}}
-/* crew portrait collages — real photos from the crew's own site, framed as
-   field-journal snapshots (provenance pass 23/08) */
+
 .person .portrait{
   display:block;width:100%;height:auto;margin:0 0 1rem;
   border:6px solid #F6F1E4;border-radius:3px;background:#F6F1E4;
@@ -458,8 +426,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 .foot-legal{border-top:1px solid rgba(231,225,206,.18);padding-top:1.4rem;display:grid;gap:.5rem;font-size:.79rem;line-height:1.6;color:#7B8474}
 .foot-legal b{color:#C9C3AE!important}
 
-/* --- section order (Dino's note, synthesised with Jared's "top" order):
-       trust facts come first, THEN the WeChat ask — both still top-of-page --- */
+
 main{display:flex;flex-direction:column}
 main>.hero{order:1}
 main>.ticker{order:2}
@@ -515,9 +482,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
 }
 .wx-dock a.dock-cta{background:var(--ember);border-color:var(--ember);color:#FFF6EC}
 
-/* WeChat contact block. The .contact-card ordering rules that lived here were
-   removed 29/08 with their markup; [hidden] below is load-bearing, because
-   .wx-mock sets display:inline-block and is hidden via the property. */
+
 [hidden]{display:none!important}
 .builder-line b{color:var(--ember)}
 
@@ -548,7 +513,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
   .lightbox[open]{animation:none}
 }
 
-/* --- density + playable-photos pass (18/08 late, Jared's spec) ------------- */
+
 .band{padding-block:clamp(2.6rem,6.5vh,4.2rem)}
 .band-head{margin-bottom:1.9rem}
 .band-head h2{font-size:clamp(1.8rem,1.2rem + 2.4vw,3rem)}
@@ -564,19 +529,14 @@ section[aria-labelledby="why-h"],#safety{display:none}
 /* included panels: tighter */
 .panel,.panel.out{padding:1.3rem 1.25rem}
 @media (hover:hover) and (pointer:fine){ .tile{transform-style:preserve-3d;will-change:transform} }
-/* (dead mobile band rule removed 24/08 — the compaction clamp governs all widths) */
-/* (23/08: the old "form goes, WeChat only" ruling is reversed — the enquiry
-   composer is now the interactive footer's centerpiece, styled below) */
+
+
 /* the safety section is hidden in this theme, so its links go too */
 .nav a[href="#safety"]{display:none}
 .foot-grid a[href="#safety"]{display:none}
 .foot-grid li:has(a[href="#safety"]){display:none}
 
-/* ===========================================================================
-   23/08 refinement pass (Jared's brief): crew merged into places as a night
-   inset · matte-free crew collages · wx contact strip · interactive footer
-   that carries the enquiry
-=========================================================================== */
+
 
 /* crew: an inset night band inside the (light) places section — dusk falls
    at the end of the day's driving; #crew's night palette rules carry over */
@@ -640,8 +600,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
   .foot-wordmark,.foot-wordmark em,.foot-grid a::after,.wx-contact a{transition:none}
 }
 
-/* === 24/08 Day One pass: real-number count-ups, the photo wall, dusk falls
-   over the places band as the day runs out === */
+
 #places{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 46%,#EFE3CB 70%,#E5CFAC 89%,#DCC29E 100%)}
 
 .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border-block:1px solid var(--line);margin:2.2rem 0 2.6rem}
@@ -663,7 +622,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
   .shot-w:hover img{transform:scale(1.04)}
 }
 
-/* === 24/08 route cards: each trip carries its own hand-drawn track === */
+
 .trip .route{width:100%;height:auto;margin:.9rem 0 1.05rem;display:block}
 .trip .route .rt{stroke:var(--ember);stroke-width:2;stroke-dasharray:6 6;stroke-linecap:round}
 .trip .route .rt-branch{stroke:var(--muted-2);stroke-width:1.5;stroke-dasharray:3 5;opacity:.65}
@@ -674,9 +633,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
   @keyframes rt-march{to{stroke-dashoffset:-24}}
 }
 
-/* === 24/08 compaction pass (Jared: "compact the website more seamlessly") ===
-   Tighter vertical rhythm everywhere; the pre-launch numbers row is gone from
-   the template. Values ~25-35% tighter than the defaults they override. */
+
 .band{padding-block:clamp(2rem,4.8vh,3.2rem)}
 .band-head{margin-bottom:1.7rem}
 @media (min-width:701px){}
@@ -699,14 +656,14 @@ section[aria-labelledby="why-h"],#safety{display:none}
 .foot-wordmark{margin:.4rem 0 1.7rem}
 .foot-grid{margin-bottom:1.4rem}
 
-/* === 24/08 lightbox gallery nav === */
+
 .lb-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;appearance:none;-webkit-appearance:none;background:rgba(22,34,30,.6);border:1.5px solid rgba(231,225,206,.4);color:#F5F0DF;font:700 1.7rem/1 var(--sans);width:46px;height:46px;border-radius:50%;cursor:pointer;display:grid;place-items:center;padding:0 0 4px}
 .lb-prev{left:14px}
 .lb-next{right:14px}
 .lb-nav:hover{background:var(--ember);border-color:var(--ember)}
 @media (max-width:560px){.lb-nav{width:40px;height:40px;font-size:1.4rem}.lb-prev{left:8px}.lb-next{right:8px}}
 
-/* === 24/08 tech-audit fixes: anchor offsets for non-section targets === */
+
 .site-foot,.crew-merged{scroll-margin-top:86px}
 @media (max-width:860px){section,.site-foot,.crew-merged{scroll-margin-top:120px}}
 @media (max-width:520px){section,.site-foot,.crew-merged{scroll-margin-top:168px}}
@@ -756,9 +713,8 @@ main>#safety{order:7}
 </head>
 <body>
 
-<!-- ============================ HEADER ================================== -->
-<!-- (PROTOTYPE ribbon removed 23/08 on Jared's explicit instruction; the
-     concept disclosure lives in .foot-legal, and the page stays noindex) -->
+
+
 <header class="site-head">
   <div class="wrap">
     <a class="brand" href="#top"><b>STILL WILD</b><span>SURVIVAL ADVENTURES</span></a>
@@ -780,7 +736,7 @@ main>#safety{order:7}
 
 <main id="top">
 
-<!-- ============================ HERO ==================================== -->
+
 <section class="hero" aria-labelledby="hero-h">
   <div class="hero-bg">
     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Two swimmers in a dark rock pool beneath a waterfall pouring through the roof of a cave" width="550" height="364">
@@ -798,7 +754,7 @@ main>#safety{order:7}
   </div>
 </section>
 
-<!-- ============================ WECHAT BAND ============================= -->
+
 <section class="wx-band" id="wechat" aria-labelledby="wx-h">
   <div class="wrap">
     <div class="wx-head">
@@ -821,7 +777,7 @@ main>#safety{order:7}
   </div>
 </section>
 
-<!-- ============================ TICKER ================================== -->
+
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
     <span>4WD <b>·</b> HIKING <b>·</b> CAMPING <b>·</b> DIVING <b>·</b> SNORKELLING <b>·</b> BOATING <b>·</b> SURVIVAL <b>·</b> FORAGING <b>·</b> CLIMBING <b>·</b> FARM STAYS <b>·</b> WINE COUNTRY <b>·</b> K'GARI <b>·</b> ULURU <b>·</b> THE REEF <b>·</b> BLUE MOUNTAINS <b>·</b> SYDNEY <b>·</b> PERTH <b>·</b>&nbsp;</span>
@@ -829,7 +785,7 @@ main>#safety{order:7}
   </div>
 </div>
 
-<!-- ============================ TRUST STRIP ============================= -->
+
 <div class="trust">
   <div style="max-width:var(--maxw);margin-inline:auto">
     <ul>
@@ -841,7 +797,7 @@ main>#safety{order:7}
   </div>
 </div>
 
-<!-- ============================ PILLARS ================================= -->
+
 <section class="band" aria-labelledby="why-h">
   <div class="wrap">
     <div class="band-head">
@@ -866,7 +822,7 @@ main>#safety{order:7}
   </div>
 </section>
 
-<!-- ============================ TRIPS =================================== -->
+
 <section class="band band-alt" id="trips" aria-labelledby="trips-h">
   <div class="wrap">
     <div class="band-head">
@@ -928,7 +884,7 @@ main>#safety{order:7}
   </div>
 </section>
 
-<!-- ============================ PLACES ================================== -->
+
 <section class="band" id="places" aria-labelledby="places-h">
   <div class="wrap">
     <div class="band-head">
@@ -1057,7 +1013,7 @@ main>#safety{order:7}
   </div>
 </section>
 
-<!-- ============================ SAFETY ================================== -->
+
 <section class="band band-alt" id="safety" aria-labelledby="safety-h">
   <div class="wrap">
     <div class="band-head">
@@ -1086,7 +1042,7 @@ main>#safety{order:7}
 
 </main>
 
-<!-- ============================ FOOTER (interactive, 23/08) ============ -->
+
 <footer class="site-foot" id="enquire">
   <div class="wrap">
     <div class="band-head sub-head foot-head">
@@ -1208,18 +1164,7 @@ main>#safety{order:7}
 </footer>
 
 <script>
-/* ===========================================================================
-   v2 interaction layer (17 Aug 2026). Vanilla JS, no network, no libraries.
-   Progressive enhancement only: with JS off, the page is complete in English.
 
-   LANGUAGES. 简体 strings reuse Paul's own zh copy from the archived site
-   (research/scrape/pages/) wherever a real source exists; everything else is
-   concept translation with the same invented status as the English it mirrors.
-   繁體 is a written-Traditional rendering for Cantonese-reading visitors —
-   it deliberately claims nothing about spoken-language service. The live
-   Still Wild site is EN + 简体 only.
-===========================================================================
-   (clean_dead_i18n applied 24/08) */
 (function(){
 'use strict';
 var d=document, root=d.documentElement;
@@ -1782,7 +1727,7 @@ try{
 }catch(_e){}
 
 /* ---------- 8. WeChat QRs: show real images where the build embedded one - */
-/* (contact-card QR copy branch removed 24/08 — the band card embeds its own token) */
+
 qa('.wx-card').forEach(function(c){
   var im=c.querySelector('.wx-real img');
   if(im && im.getAttribute('src')){
@@ -1844,11 +1789,7 @@ if(hero){
         +Math.sin((x/L.len)*6.283+L.off+t*L.drift*.05)*L.amp
         +Math.sin((x/(L.len*.37))*6.283-L.off*2+t*L.drift*.032)*L.amp*.32;
     };
-    /* HARDENED 24/08 (routed from Inbox via central): reallocate the bitmap on
-       width change, or on a height change that has SETTLED — an iOS URL bar
-       collapsing changes clientHeight every frame, and re-allocating per frame
-       burns battery and re-scales the scene mid-gesture. The canvas is CSS-
-       stretched in the meantime, invisible on a soft gradient scene. */
+
     var lastRs=0;
     rd=function(t){
       var nw=hero.clientWidth,nh=hero.clientHeight,ms=(t||0)*1000;
@@ -1972,9 +1913,7 @@ try{
 
 /* ---------- one shared clock ---------- */
 if(reduce && window.ResizeObserver){
-  /* HARDENED 24/08: under reduced motion the scene is drawn ONCE, so a layout
-     change that never fires a window resize (language switch, FAQ opening)
-     would leave a stretched still frame. Redraw on element resize instead. */
+
   var ro=new ResizeObserver(function(){
     if(rd){ if(rd.resize)rd.resize(); rd(0); }
     if(es){ if(es.resize)es.resize(); es(0); }
@@ -1984,27 +1923,7 @@ if(reduce && window.ResizeObserver){
 }
 if(reduce){ if(rd)rd(0); if(es)es(0); }
 else{
-  /* GATED 28/08 (Atelier), closing the deferred perf NOTE in the 24/08 handover.
-     Both scenes previously redrew EVERY FRAME FOREVER, on screen or not. The
-     hero draw is not cheap: a full-canvas radial gradient, four ridge polygons
-     of ~W/7 points each, and six birds — running the whole time the reader is
-     down at the enquiry form. The footer embers ran from the moment the page
-     loaded, while the footer sat a metre below the fold.
 
-     Three gates, in increasing order of how much they save:
-       1. draw a canvas only while its own element is near the viewport
-       2. stop the loop outright when NEITHER is
-       3. stop it when the tab is hidden
-     Same shape as the fix that went onto jaredlilliss.github.io today.
-
-     Time stays wall-clock (t = now - t0) rather than freezing while paused, so
-     scrolling back finds the sun and the birds where they would have been. The
-     scene is a slow drift; a frozen clock would be the more noticeable lie.
-
-     If IntersectionObserver is missing, both flags stay true and this is exactly
-     the old always-on behaviour — degrade to the previous cost, never to a blank
-     hero. One frame is drawn immediately either way, so nothing can flash empty
-     while the observer makes up its mind. */
   if(rd)rd(0); if(es)es(0);
   var vis={hero:true,foot:true},t0=null,running=false;
   var tick=function(now){

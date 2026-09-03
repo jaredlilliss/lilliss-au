@@ -15,87 +15,9 @@
 <meta name="twitter:title" content="XperienceSpace &mdash; building the UAE Space Nation | Lilliss IT concept">
 <meta name="twitter:description" content="An unsolicited design concept by Jared Lilliss (Lilliss IT). Not affiliated with the XperienceSpace Initiative.">
 <meta name="theme-color" content="#0C0B09">
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     v4 — A COMPLETE OVERHAUL. 29/08/2026.
 
-     JARED'S RULING, verbatim: "the current design is not up to standard and
-     looks like a Year 12 HSC project. Please scrap the current aesthetic and
-     elevate the design to a highly professional, modern standard."
-
-     WHY v3 READ AS STUDENT WORK — diagnosed before anything was drawn, because
-     "make it better" is not actionable:
-
-       · It was a CATALOGUE OF EFFECTS. Four always-on canvases, eleven rAF call
-         sites, a ticker, horizon counters, a magnetic CTA, a cursor spotlight, a
-         scroll-progress bar, a trajectory rail, an audience switcher and a
-         section-index rail. Eleven mechanisms, none of them load-bearing. The
-         problem was never that it lacked effects — it had nothing but effects.
-       · The palette was the default dark-tech gradient: blue, purple AND teal
-         accents on blue-black. Three accents is no accent.
-       · Everything was a card in a grid, so every section had identical rhythm.
-       · Nine headings, every one a marketing slogan.
-
-     WHAT REPLACES IT: an institutional prospectus. The subject is a national
-     programme with a ninety-year horizon; the register should be editorial
-     gravitas, not startup-tech. Concretely —
-
-       · ONE accent (burnt gold, which also carries the UAE thread honestly),
-         on a WARM near-black rather than the blue-black every template uses.
-       · A serif display face. Fraunces was already self-hosted at /fonts/ for
-         the front door, so this costs no new asset and instantly separates the
-         page from the uniformly all-sans template look.
-       · RHYTHM AS STRUCTURE. An airy hero, then a deliberately DENSE record of
-         what the UAE has actually done, then wide editorial sections. Student
-         work is evenly dense; professional work contrasts dense against empty.
-       · Interactions that answer rather than acknowledge.
-
-     THE TWO BUGS HE REPORTED, both fixed by construction:
-
-     1. "the cursor doesn't trigger any state changes ... zero interactivity
-        beyond tracking the cursor's position."
-        TRUE, and measurably so. v3 ran a document-level pointermove writing
-        --mx/--my onto every hovered surface, and exactly ONE rule consumed them:
-        a radial-gradient at rgba(...,.10) fading out by 42%, over a #08090A
-        ground. .panel:hover and .phase:hover had ZERO rules of their own. So the
-        page paid for continuous pointer tracking and returned a highlight that
-        is very nearly invisible, plus a 2px lift. He experienced that as
-        nothing, which is a fair reading of it.
-        HERE: no pointer tracking at all. Hover and focus produce a real change —
-        the hairline takes the accent, the block lifts, and the trajectory phases
-        genuinely enlarge, which is the behaviour he named.
-
-     2. "scrolling is glitchy and currently behaves as if it is dependent on
-        which elements are enlarged."
-        The trajectory handler ran on every scroll frame and did this:
-            fill.style.height = head + 'px';        // layout WRITE
-            phases.forEach(p => p.getBoundingClientRect())  // layout READ
-        A write followed by reads in a loop forces a synchronous layout per
-        iteration — classic thrash — and it then toggled a class named `lit`
-        which has ZERO CSS rules anywhere in the file. All that cost, no result.
-        HERE: there is not one scroll listener. Nothing reads layout during
-        scroll. Progress and reveals are IntersectionObserver only, and every
-        animated property is transform or opacity, which the compositor handles
-        without touching layout. The sticky masthead carries NO backdrop-filter,
-        because a blurred backdrop is re-composited every single frame.
-
-     UNCHANGED RAILS: noindex · the unsolicited/no-affiliation disclosure · the
-     authorship line · the ecosystem disclaimer · the sources table with all
-     eleven citation URLs · no outbound link to the subject's own site · fonts
-     absolute from /fonts/ · no third-party anything. Machine-checked by
-     honesty.py and site-verify\verify_sources.py before publish.
-
-     ARABIC: the RTL layout is real and the copy is deliberately absent, because
-     it is not mine to write. Unchanged in principle from v3, rebuilt smaller.
-     Numerals stay Western — that is what UAE institutions publish.
-
-     DEGRADES: everything is in the HTML. JavaScript adds reveals, the language
-     toggle and the trajectory's click-to-expand. With it off the page is a
-     complete, readable document with every phase already open.
-     ═══════════════════════════════════════════════════════════════════════════ -->
 <style>
-/* Self-hosted, absolute. Nothing third-party is ever fetched. Absolute because
-   this page lives in a subdirectory and relative paths resolved to nothing here
-   for days without raising a single error (found 29/08). */
+
 @font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/fraunces.woff2') format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
@@ -289,8 +211,7 @@ h2{font-family:var(--display);font-weight:300;letter-spacing:-.02em;
   .legs .leg{border:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
   .legs .leg:last-child{border-right:0}
 }
-/* The response Jared named: the block ENLARGES. On transform, so the compositor
-   does it without a single layout pass. */
+
 .leg:hover,.leg:focus-visible{
   background:var(--surface-2);border-color:var(--line-2);
   transform:scale(1.03);z-index:2;position:relative;
@@ -417,12 +338,7 @@ footer b{color:var(--muted);font-weight:500}
   </div>
 </section>
 
-<!-- ══════ THE RECORD ══════
-     Deliberately the densest block on the page, immediately after the airiest.
-     That contrast IS the design: student work is evenly dense throughout.
-     Every row is a verified row of ATELIER-UAE-VERIFY-RULING-2026-08-26 and
-     cites into §Sources rather than carrying its links inline, which is how a
-     publication does it — facts in the body, apparatus at the back. -->
+
 <section id="record">
   <div class="wide">
     <div class="kicker rv"><i>01 &middot; The record</i><hr></div>
@@ -527,10 +443,7 @@ footer b{color:var(--muted);font-weight:500}
       and government stakeholders into one platform, designed to attract technology, talent and
       capital into the UAE.</p>
 
-    <!-- The disclaimer the ruling called "the finding the whole review was set up
-         to catch". It is given structural weight here — its own block, above the
-         proposals rather than beneath them — instead of being a paragraph nobody
-         reaches. Structure is a stronger honesty mechanism than a longer footer. -->
+
     <div class="claimbox rv">
       <p>The four items below are <b>concept programmes proposed by XperienceSpace</b>, an
         independent industry initiative. They are <b>not UAE government programmes</b>, and this
@@ -633,13 +546,7 @@ footer b{color:var(--muted);font-weight:500}
   </div>
 </section>
 
-<!-- ══════ SOURCES ══════
-     Kept through the overhaul and restyled as a citations apparatus rather than
-     a section of cards. Every entry is drawn from the verified regions of
-     ATELIER-UAE-VERIFY-RULING-2026-08-26 and machine-checked by
-     site-verify\verify_sources.py, which reads the ruling itself. Nothing here
-     is written from memory: the first draft of this section, on the previous
-     design, invented a claim and had to be corrected. -->
+
 <section id="sources">
   <div class="wide">
     <div class="kicker rv"><i>06 &middot; Sources</i><hr></div>

@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Brochure — XperienceSpace | Lilliss IT concept</title>
 <meta name="description" content="An unsolicited Lilliss IT design concept: a one-page bilingual brochure for XperienceSpace, English and Arabic, built to the UAE Design System's palette. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
-<!-- noindex for the same reason as the rest of this suite: it restyles public
-     content belonging to someone else. Discoverable by link, not by search. -->
+
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
 <meta name="theme-color" content="#FBFAF7">
@@ -32,47 +31,7 @@
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
   src:url('/fonts/plexmono-500.woff2') format('woff2')}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   A ONE-PAGE BROCHURE FOR XPERIENCESPACE — concept, unbuilt, not affiliated.
 
-   PALETTE is AEGOV's, read off designsystem.gov.ae itself rather than taken
-   from anyone's description of it: gold #92722A as the primary, flag green and
-   flag red kept as SEMANTIC colours only, over a cool-grey neutral ramp. Gold
-   on warm paper with green and red reserved for meaning is specifically the
-   Emirati government register — it is not a palette anyone reaches for by
-   default, which is the point.
-
-   TYPE — CORRECTED 31/08. This page was drawn for IBM Plex Sans Arabic, one
-   superfamily whose Latin and Arabic were drawn together so both editions would
-   be the same voice rather than two fonts pretending. Serving it would mean
-   fetching from a font network, and privacy.html on this domain tells the reader
-   that "its fonts are served from this domain rather than from a font network"
-   and invites them to check in the network tab. A promise that dares you to
-   verify it is the last promise to break for a typeface. So the Arabic face was
-   dropped, correctly.
-
-   THE MISTAKE WAS LETTING THE LATIN GO WITH IT. Inter and IBM Plex Mono are
-   ALREADY in this repository and already served from this origin — spine.html
-   loads all three files and has all along. They were never the privacy problem;
-   only the Arabic face was. Shipping without them left the page rendering in
-   Segoe UI, measured live as document.fonts.size === 0, which is the whole
-   visible gap between this page and spine. They are now declared above.
-
-   Arabic still falls through to the platform's own faces, and that stays right:
-   Inter carries no Arabic glyphs, so the browser skips it for Arabic text
-   without being told to. Zero cross-origin requests either way — verify it in
-   the network tab, as the privacy page invites.
-
-   The lesson, kept because it is worth more than the fix: a correct deletion
-   still needs its blast radius measured. One thing was removed for a good
-   reason and a second thing went with it that nobody checked for.
-
-   THE LANGUAGE TOGGLE RUNS WITHOUT JAVASCRIPT. Both editions are in the
-   document; a hidden radio switches which is shown and flips `direction` on the
-   page root. That matters here more than anywhere: this brochure exists to
-   demonstrate a bidi fix, and a language button that needs a script to work
-   would be the same class of defect it is arguing against.
-   ═══════════════════════════════════════════════════════════════════════════ */
 
 :root{
   --paper:#FBFAF7;
@@ -332,7 +291,7 @@ p:last-child{margin-bottom:0}
     </div>
   </header>
 
-  <!-- ═══ HERO ═══ -->
+
   <div class="hero">
     <div class="eyebrow en">UAE &middot; A future-ready space economy</div>
     <div class="eyebrow ar">الإمارات العربية المتحدة &middot; اقتصاد فضائي جاهز للمستقبل</div>
@@ -357,7 +316,7 @@ p:last-child{margin-bottom:0}
     <div class="flagrule"></div>
   </div>
 
-  <!-- ═══ SNAPSHOT ═══ -->
+
   <div class="snap">
     <div>
       <div class="k en">40+ years</div>
@@ -384,7 +343,7 @@ p:last-child{margin-bottom:0}
     </div>
   </div>
 
-  <!-- ═══ PILLARS ═══ -->
+
   <section>
     <h2 class="en">Four programmes, one ecosystem</h2>
     <h2 class="ar">أربعة برامج، نظام بيئي واحد</h2>
@@ -435,7 +394,7 @@ p:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <!-- ═══ THE TWO PLACES ═══ -->
+
   <section>
     <h2 class="en">Where it happens</h2>
     <h2 class="ar">أين يحدث ذلك</h2>
@@ -474,7 +433,7 @@ p:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <!-- ═══ THE ARC ═══ -->
+
   <section>
     <h2 class="en">The arc, in order</h2>
     <h2 class="ar">المسار، بالترتيب</h2>
@@ -510,7 +469,7 @@ p:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <!-- ═══ WHAT HAPPENS NEXT ═══ -->
+
   <section>
     <h2 class="en">What happens next</h2>
     <h2 class="ar">ما الخطوة التالية</h2>
@@ -558,7 +517,7 @@ p:last-child{margin-bottom:0}
     </div>
   </section>
 
-  <!-- ═══ DISCLOSURE ═══ -->
+
   <p class="disclose">
     <b>This page is a concept.</b> It is an unsolicited design study by Jared
     Lilliss (Lilliss IT), restyling public content from xperiencespace.com at

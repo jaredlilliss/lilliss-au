@@ -7,10 +7,7 @@
 <title>The Ascent — XperienceSpace | Lilliss IT prototype</title>
 <meta name="description" content="THE ASCENT — a Lilliss IT flagship module restyling public content from xperiencespace.com. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative. Not indexed.">
 <style>
-/* == Self-hosted faces. Added 28/08/2026: Space Grotesk + IBM Plex Mono were
-   fetched from Google at RENDER time, making this the last page in the estate
-   still doing so. SIL Open Font License 1.1. Loaded by RELATIVE path against
-   the served directory. == */
+
 /* vietnamese */
 @font-face {
   font-family: 'Space Grotesk';
@@ -193,8 +190,7 @@
   --aurora:#8FE3FF; --aurora-deep:#3AA0D8; --gold:#E9BC6A; --mars:#E0714A; --mars-deep:#8C2F14;
   --hair:rgba(143,227,255,.15); --hair-2:rgba(143,227,255,.32);
   --glass:rgba(10,18,36,.55);
-  /* the Mars closer: tokenised 24/08 so every rendition steers it. These were
-     hardcoded rgba and ignored the theme entirely. */
+
   --close-wash:rgba(224,113,74,.5); --close-wash-2:rgba(140,47,20,.22);
   --close-year:var(--mars);
 }
@@ -484,8 +480,7 @@ footer b{color:var(--dim)}
 @media (prefers-reduced-motion:reduce){.frame img,.pillar,.btn,.rail i{transition:none}}
 @supports not (-webkit-background-clip:text){.launch .row.ice,.flagline{background:none;color:var(--ink)}}
 
-/* scene graft (central 24/08, Jared-approved "idm the canvas") — Earth-limb
-   orbit canvas in the LAUNCH PAD hero; script near the end of body */
+
 #scene{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #pad{overflow:hidden;isolation:isolate}
 #pad .shell{position:relative;z-index:1}
@@ -516,7 +511,7 @@ footer b{color:var(--dim)}
 
 <main>
 
-<!-- ============ WP·00 LAUNCH PAD ============ -->
+
 <section class="wp" id="pad" data-phase="LAUNCH PAD" data-alt="ALT 0 KM">
   <div class="shell">
     <div class="hero-eyebrow rv">UAE • A future-ready space economy</div>
@@ -579,7 +574,7 @@ footer b{color:var(--dim)}
   </div>
 </div>
 
-<!-- ============ WP·01 VISION ============ -->
+
 <section class="wp" id="vision" data-phase="ASCENT" data-alt="ALT 12 KM">
   <div class="shell">
     <div class="sec-rule" aria-hidden="true"></div><div class="eyebrow rv">The First Space Nation</div>
@@ -652,7 +647,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ WP·02 PILLARS ============ -->
+
 <section class="wp" id="pillars" data-phase="ORBIT" data-alt="ALT 400 KM">
   <div class="shell">
     <div class="sec-rule" aria-hidden="true"></div><div class="eyebrow rv">Core Framework</div>
@@ -667,7 +662,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ WP·03 ECOSYSTEM ============ -->
+
 <section class="wp" id="eco" data-phase="STATION" data-alt="ALT 36,000 KM">
   <div class="shell">
     <div class="sec-rule" aria-hidden="true"></div><div class="eyebrow rv">Ecosystem in Action</div>
@@ -696,7 +691,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ WP·04 SPACE CITY — MISSION TIMELINE ============ -->
+
 <section class="wp" id="city" data-phase="SPACE CITY" data-alt="LUNAR 384,400 KM">
   <div class="shell">
     <div class="head-grid">
@@ -754,7 +749,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ WP·05 WELCOME CENTER ============ -->
+
 <section class="wp" id="gate" data-phase="GATEWAY" data-alt="DEEP SPACE">
   <div class="shell">
     <div class="head-grid">
@@ -803,7 +798,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ WP·06 JOIN ============ -->
+
 <section class="wp" id="join" data-phase="MARS TRANSFER" data-alt="225M KM">
   <div class="shell">
     <div class="sec-rule" aria-hidden="true"></div><div class="eyebrow rv">Collaboration Network Model</div>
@@ -849,7 +844,7 @@ footer b{color:var(--dim)}
   </div>
 </section>
 
-<!-- ============ MARS CLOSER ============ -->
+
 <section id="mars" data-phase="MARS APPROACH" data-alt="ARRIVAL">
   <div class="shell">
     <span class="yr rv">2117</span>
@@ -1038,9 +1033,7 @@ footer b{color:var(--dim)}
 </script>
 
 <script id="scene-graft-js">
-/* SCENE GRAFT (central 24/08, ported into the template so rebuilds keep it).
-   Earth-limb + streak-stars + gold satellite in the LAUNCH PAD hero.
-   Deterministic; still frame under reduced-motion or ?noreveal; self-heals. */
+
 (function(){
   var pad=document.getElementById('pad');if(!pad)return;
   var c=document.createElement('canvas');c.id='scene';c.setAttribute('aria-hidden','true');
@@ -1051,8 +1044,7 @@ footer b{color:var(--dim)}
       SG_RED=matchMedia('(prefers-reduced-motion:reduce)').matches||SG_STILL;
   function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
   function build(keepZ){
-    /* HARDENED 24/08: keepZ preserves each star's animated depth so a resize
-       (iOS URL bar) does not snap the starfield back to its seeded state. */
+
     var oldZ=(keepZ&&stars.length)?stars.map(function(s){return s.z}):null;
     DPR=Math.min(devicePixelRatio||1,2);
     W=c.width=c.offsetWidth*DPR;H=c.height=c.offsetHeight*DPR;

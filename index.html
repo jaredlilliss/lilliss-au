@@ -20,14 +20,7 @@
 <meta name="twitter:title" content="Lilliss IT — small-business IT support, Sydney">
 <meta name="twitter:description" content="One person from fault intake to fix. POS and EFTPOS, Windows, networks, CCTV and AV.">
 
-<!-- Fonts are served from this origin, not from a font network. That is a
-     deliberate choice, not a micro-optimisation: it means this page makes ZERO
-     third-party requests, so no one but the host sees a visitor's IP — and the
-     privacy policy can state that as a fact rather than disclose an exception.
-     Fraunces, Inter and IBM Plex Mono are all SIL Open Font Licence, which
-     permits redistribution. Latin subset only, 187 KB for all five files.
-     Fraunces and Inter are variable (wght 100-900), so one file covers every
-     weight; IBM Plex Mono is static and needs one file per weight. -->
+
 <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -81,12 +74,7 @@
   --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
 
-  /* Grow past the design width instead of stranding on wide screens, but keep a
-     ceiling — prose has an optimal measure and "wider" is not "better". The FLOOR is
-     this page's own design width (1080), never a number borrowed from another surface:
-     at Jared's 1536px screen 68vw resolves to 1044, so a shared floor would have made
-     this page NARROWER than designed. Inner prose caps (.lede, .sec-sub) are separate,
-     so widening the container never widens a line of text. */
+
   --maxw:clamp(1080px, 68vw, 1560px);
   --pad:clamp(20px,4.4vw,44px);
   --rail:clamp(0px,4vw,68px);   /* the cable's column, collapses to 0 on phones */
@@ -164,9 +152,7 @@ nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transfo
   border-radius:999px;white-space:nowrap;transition:color .25s,border-color .25s}
 nav a:hover{color:var(--ink);border-color:var(--edge)}
 nav a.me{color:var(--muted)}
-/* The conversion is the brightest thing in the nav, not the exit. A cold reader
-   reported `Jared ->` as the most prominent item and followed it OFF the
-   business site to a personal portfolio. */
+
 nav a.cta{color:var(--ember)}
 /* On a phone the nav wraps to two rows. Without flex-wrap on the bar itself the
    brand stays vertically CENTRED against those two rows, so "LILLISS IT" sits
@@ -350,7 +336,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 
 <main class="wrap">
 
-  <!-- ── hero ─────────────────────────────────────────────────────────── -->
+
   <section class="hero" id="top">
     <div class="kicker">
       <span class="avail"><span class="dot"></span>Taking new work</span>
@@ -382,7 +368,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── services ─────────────────────────────────────────────────────── -->
+
   <section id="services">
     <p class="sec-k rv">Services</p>
     <h2 class="rv">What I do</h2>
@@ -415,13 +401,13 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── pull quote ───────────────────────────────────────────────────── -->
+
   <blockquote class="pull rv">
     <p>A fault isn't fixed when it stops showing.<br>It's fixed when it's <em>written down</em> —
     what broke, what fixed it, and what to watch for next time.</p>
   </blockquote>
 
-  <!-- ── the handoff ──────────────────────────────────────────────────── -->
+
   <section id="how">
     <p class="sec-k rv">How it runs</p>
     <h2 class="rv">Count the handoffs</h2>
@@ -460,7 +446,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── about ────────────────────────────────────────────────────────── -->
+
   <section id="work">
   <div class="wrap">
     <p class="sec-k rv">Work</p>
@@ -560,7 +546,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </section>
 
-  <!-- ── contact ──────────────────────────────────────────────────────── -->
+
   <section id="contact">
     <p class="sec-k rv">Contact</p>
     <h2 class="rv">Describe the fault.<br>You'll get a straight answer.</h2>

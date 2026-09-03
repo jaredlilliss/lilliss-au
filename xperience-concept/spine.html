@@ -12,45 +12,10 @@
 <meta property="og:site_name" content="Lilliss IT">
 <meta name="twitter:card" content="summary">
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     THE SPINE — step 1 of the XperienceSpace rebuild. Brief:
-     XPERIENCE-REBUILD-PLAN-2026-08-27.md
 
-     This is deliberately NOT a page. It is one screen you travel.
-
-     WHY IT EXISTS: the old page failed because it was a document — heading,
-     paragraph, scroll, repeat — while both of Jared's reference sites (k95.it,
-     ode.partners) are image-led and type-quiet. Measured, not described: 67
-     images between them, ~2,400 characters of copy, largest heading 32px.
-     The old page could never get there because build_v3.py forbids the img tag
-     outright. Jared's ruling unlocked it: original imagery he owns is allowed.
-
-     TWO DECISIONS, both taken FROM THE CONTENT rather than from taste:
-
-     1. THE GROUND SHIFTS ALONG THE SPAN. Night-blue at the 1970s end, Mars-rust
-        at 2117. k95's power is one committed colour; here the colour carries the
-        journey, so travelling it feels like going somewhere.
-
-     2. TRUE DATE POSITIONS, NOT EVEN SPACING. Every milestone sits at its real
-        fraction of a 142-year span. The consequence is that everything clusters
-        between 31% and 46% — and then there is NOTHING until 2117. That vast
-        emptiness is the honest shape of the story and the most truthful thing
-        on the screen. Even spacing would have been a lie that looked tidier.
-
-     EVERY OBJECT TRACES TO A VERIFIED FACT (ATELIER-UAE-VERIFY-RULING-2026-08-26).
-     Nothing here is estimated, and the excluded set is excluded on purpose:
-     no 6/21/79 strategy structure (two official UAE sources contradict each
-     other); RETRACTED: no Arkisys (a US company with no documented UAE tie);
-     nothing whose only source is a language model.
-
-     DEGRADES: with JavaScript off this is a plain vertical list carrying every
-     date, name and note. Spatial navigation that strands people is worse than
-     the page it replaces.
-     ═══════════════════════════════════════════════════════════════════════════ -->
 
 <style>
-/* Self-hosted. The estate loads nothing third-party; do not reintroduce a
-   Google Fonts request. Inter is VARIABLE (one file). */
+
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/inter.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
@@ -225,8 +190,7 @@ body{
   font:400 11px/1.4 var(--mono);color:var(--faint);
 }
 .stop.lost .nm{color:rgba(238,241,248,.68)}
-/* The honesty layer, made visible: arriving at a milestone shows where it came
-   from. Every one traces to a named primary source in the 26/08 ruling. */
+
 /* visibility:hidden, not just clipping: a clipped link is still in the tab
    order, so tabbing walked into source links on stops nobody could see. */
 .src{
@@ -265,16 +229,7 @@ body{
   width:max-content;max-width:16ch;pointer-events:auto}
 .stem svg{display:block;margin:0 auto 4px;overflow:visible;opacity:.86;
   width:clamp(48px,4.4vw,68px);height:auto;transition:transform .35s ease,opacity .35s ease}
-/* 30/08: stems were made pointer-events:none so their hairlines could not
-   intercept a click aimed at a milestone beneath them (40 sample points, 1.7% of
-   the viewport). 03/09, Jared: "2030 and its icon are not clickable while 2028
-   is" — and he was right. An element with pointer-events:none can never be
-   :hover'ed, and :hover was the only thing that revealed a stem's source, so
-   every record stem was dead by mouse and by touch; only Tab reached them.
-   The overlap is now settled by STACKING ORDER instead: milestones sit above
-   stems (z-index 2 over 1), so a click that lands on both still goes to the
-   milestone, and a stem is a live object everywhere else — hoverable, focusable,
-   pressable, and it travels like a milestone does. */
+
 .stem{pointer-events:auto;z-index:1;cursor:pointer}
 .stop{z-index:2}
 .stem:focus-visible{outline:2px solid var(--now);outline-offset:6px;border-radius:4px}
@@ -304,10 +259,7 @@ body{
   transition:opacity .3s ease,max-height .3s ease,visibility .3s}
 .stem.tight:hover .sn,.stem.tight:focus-within .sn{opacity:1;max-height:4em;
   visibility:visible;margin-top:6px}
-/* 03/09, Jared: "click on icon, icon is bigger and timeline is in correct place".
-   A clicked (or centred) stem is the ACTIVE object: glyph up, year up, name and
-   source shown - the milestone treatment at stem scale, placed AFTER the .tight
-   rules so it wins on the year, and the two classes still read as two classes. */
+
 .stem.on{z-index:3}
 .stem.on svg{transform:scale(1.7);opacity:1}
 .stem.on .sy{font-size:clamp(20px,2.4vw,30px);letter-spacing:.06em;color:var(--ink);margin:14px auto 0;
@@ -543,12 +495,7 @@ body{
 <body class="no-js">
 <script>document.body.classList.remove('no-js')</script>
 
-<!-- The entrance. Tied to document.fonts.ready because that is a REAL wait on
-     this page (inter.woff2 is 34KB plus two Plex Mono weights); it is not a
-     fake loader holding an instant page back to look busy. The figure is the
-     orbit ellipse the Hope Probe milestone already uses - the closest thing
-     this page has to an emblem. Never shown with JS off, so it can never
-     cover the static fallback with something that cannot clear itself. -->
+
 <div class="boot" id="boot" aria-hidden="true">
   <svg viewBox="0 0 120 76" role="presentation">
     <ellipse class="boot-ring" cx="60" cy="38" rx="52" ry="22"/>
@@ -557,9 +504,7 @@ body{
   </svg>
 </div>
 
-<!-- The interactive view had NO heading and NO landmark: the only h1 lived in
-     .fallback, which display:none removes from the accessibility tree the moment
-     JS runs. Visually hidden, but present for assistive tech. -->
+
 <h1 class="sr">The Span — the UAE’s space programme, from the 1970s to 2117</h1>
 
 <header class="top">
@@ -572,8 +517,7 @@ body{
     <div class="ground" id="ground"></div>
     <div class="line" id="line"></div>
   </div>
-  <!-- stars sit ABOVE the ground. When .ground moved into .rail it became an
-       opaque gradient painted over .grain, and the starfield silently vanished. -->
+
   <div class="grain"></div>
   <div class="haze"></div>
 </main>
@@ -601,17 +545,12 @@ body{
   Initiative. Every date shown is sourced; nothing is estimated.
 </p>
 
-<!-- Everything above is enhancement. This is the page without JavaScript. -->
+
 <div class="fallback">
   <p class="fb-h">The Span</p>
   <p class="sub">The UAE&rsquo;s space programme, from the 1970s to 2117. Every date
     below is drawn from a named primary source.</p>
-  <!-- STATIC on purpose. This list was previously built by STOPS.forEach() in
-       the same script that is absent when this fallback is needed, so with JS
-       off the page printed "Every date below is drawn from a named primary
-       source" above an EMPTY list. A no-JS path built by JS is not a no-JS
-       path. Generated from the page's own STOPS/SRC data - if you edit those,
-       re-run scratchpad/atelier/fix_spine_nojs.py or the two WILL drift. -->
+
     <ul id="fb">
       <li><span class="y">THE 1970s</span><span class="n">A meeting with NASA’s Apollo team</span><span class="d">The Agency names no year</span><span class="s">Source: <a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">UAE Cabinet portal ↗</a></span></li>
       <li><span class="y">2009</span><span class="n">DubaiSat‑1</span><span class="d">MBRSC satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
@@ -670,10 +609,7 @@ body{
   var REDUCED = false;
   try { REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches); } catch (e) {}
 
-  /* ── THE FACTS. Every one verified 26/08/2026 against a named primary source
-        (ATELIER-UAE-VERIFY-RULING-2026-08-26.md). `at` is the real year, so
-        positions are true rather than tidy. `mark` names the drawn form; each
-        one means something about its own event rather than decorating it. ── */
+
   var ORIGIN = 1975, END = 2117;
   var STOPS = [
     {at:1975, yr:'THE 1970s', nm:'A meeting with NASA’s Apollo team',
@@ -696,17 +632,11 @@ body{
   var frac = function(y){ return (y - ORIGIN) / SPAN; };
 
   /* the drawn forms. no clip art: each is a line that means its own event. */
-  /* THE RECORD. Sourced facts the page owns and had never drawn - a different
-     object class from a milestone: hairlines, no focus, no swell. Both are in
-     the 26/08 ruling's verified table on ONE source, mbrsc.ae/satellites/.
-     Two, deliberately, not eight: this tests whether a stem reads as WORK
-     before six more follow. */
+
   var RECORD = [
     {at:2009, nm:'DubaiSat‑1',              mk:'sat', own:'MBRSC satellite programme'},
     {at:2013, nm:'DubaiSat‑2',              mk:'sat', own:'MBRSC satellite programme'},
-    /* u.ae, read directly 28/08: "first fly-by of a main asteroid belt object
-       in 2030" and "final landing on an asteroid ... in 2033".
-       RETRACTED: the 2034 date reported elsewhere is NOT used - u.ae says 2033. */
+
     {at:2017, nm:'Nayif‑1',                mk:'sat', own:'MBRSC satellite programme'},
     {at:2018, nm:'KhalifaSat',             mk:'sat', own:'MBRSC satellite programme'},
     {at:2020, nm:'Hope Probe launch',      mk:'lch', own:'Emirates Mars Mission, MBRSC'},
@@ -721,10 +651,7 @@ body{
   var BIG = {1975:'1970s', 2019:'2019', 2021:'2021', 2023:'2023',
              2025:'2025', 2028:'2028', 2117:'2117'};
 
-  /* Primary sources, taken from the 26/08 verify ruling's own verified table.
-     Where the ruling names a source but gives no URL (Rashid-1), the source is
-     NAMED and NOT linked - inventing a plausible link is the same failure as
-     inventing a date. */
+
   var SRC = {
     1975:['UAE Cabinet portal','https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency'],
     2019:['UAE Government Media Office','https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030'],
@@ -882,10 +809,7 @@ body{
     t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
     rail.appendChild(t);
 
-    /* The ending. One action, one address. Placed past the last milestone so it
-       is somewhere you arrive, not a footer you were always looking at.
-       jaredlils99@gmail.com deliberately: contact@lilliss.au was submitted twice
-       and never minted, so it does not exist, and index.html already uses this. */
+
     var e = document.createElement('div');
     e.className = 'ending';
     e.style.left = (PAD + SPANPX + 350) + 'px';
@@ -937,11 +861,7 @@ body{
       STEMEL.push({el:el, at:rx, yr:r.at});
     });
 
-    /* ONE gap label, DERIVED rather than hardcoded. Both previous labels were
-       deleted 27/08 for being FALSE against this page's own ruling. This one is
-       computed from the last dated item before 2117, so it cannot go stale the
-       way a hardcoded string did - and it is TRUE: checked against the ruling's
-       verified table, nothing is sourced between 2033 and 2117. */
+
     var lastBefore = 0;
     STOPS.concat(RECORD).forEach(function(o){ if (o.at < END && o.at > lastBefore) lastBefore = o.at; });
     if (END - lastBefore > 40) {
@@ -1020,8 +940,7 @@ body{
        throttles rAF hard enough that a scripted walk does not actually travel.
        This is a hard boundary on a hand-driven control, which is a defect on
        reading; the fix is four lines and cannot make anything worse. */
-    /* Stems are in the search too (03/09): travelling to 2030 used to light up
-       2028 and the header said so - a centred object the page would not name. */
+
     var centre = x + innerWidth / 2, rec = null, best = innerWidth * 0.26;
     var ALLEL = STOPEL.concat(STEMEL);
     for (var i = 0; i < ALLEL.length; i++) {
@@ -1094,10 +1013,7 @@ body{
   function buildTicks(){
     var t = document.getElementById('ticks');
     if (!t || !maxX) return;
-    /* Built with DOM methods rather than an innerHTML string. Concatenating
-       `class="` inside a script made the estate's class-resolution guard read
-       JavaScript as markup and report `(OBJ[i].rec` as an undefined CSS class —
-       a false alarm, but the fix is also just better code. */
+
     t.textContent = '';
     for (var i = 0; i < OBJ.length; i++) {
       var f = (OBJ[i].x - innerWidth / 2) / maxX;
@@ -1130,14 +1046,7 @@ body{
     queue();
   }
 
-  /* (4) CLICK AN OBJECT TO TRAVEL TO IT. There was no click handler in the
-     file at all, so a visible, obviously-significant object did nothing when
-     pressed. Delegated from .world so it costs one listener and covers objects
-     added later. The drag guard matters: without it, releasing a drag on top of
-     a stop would teleport you somewhere you did not ask for. Since 03/09 the
-     record stems are objects too (they were dead by mouse and touch), so a
-     press on either kind travels; a press on a source LINK inside either kind
-     is left to the link. */
+
   function objectAt(el){
     for (var i = 0; i < STOPEL.length; i++) if (STOPEL[i].el === el) return STOPEL[i];
     for (var j = 0; j < STEMEL.length; j++) if (STEMEL[j].el === el) return STEMEL[j];
