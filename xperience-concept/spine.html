@@ -265,17 +265,22 @@ body{
   width:max-content;max-width:16ch;pointer-events:auto}
 .stem svg{display:block;margin:0 auto 4px;overflow:visible;opacity:.86;
   width:clamp(48px,4.4vw,68px);height:auto}
-/* Record stems are ANNOTATION, not objects — hairlines that must never
-   intercept a pointer aimed at the milestone beneath them. Found 30/08 by the
-   new overlay sweep, and it is a regression of my own making: stems have always
-   overlapped the glyphs, but the glyphs only BECAME controls the night before,
-   when stops were made focusable and clickable. 40 sample points — 1.7% of the
-   viewport — where a click aimed at a milestone hit a hairline instead.
-   The container goes transparent; the source link inside stays live, exactly as
-   the void panel's buttons do. :focus-within is unaffected, because focus is not
-   a pointer. */
-.stem{pointer-events:none}
-.stem .ss a{pointer-events:auto}
+/* 30/08: stems were made pointer-events:none so their hairlines could not
+   intercept a click aimed at a milestone beneath them (40 sample points, 1.7% of
+   the viewport). 03/09, Jared: "2030 and its icon are not clickable while 2028
+   is" — and he was right. An element with pointer-events:none can never be
+   :hover'ed, and :hover was the only thing that revealed a stem's source, so
+   every record stem was dead by mouse and by touch; only Tab reached them.
+   The overlap is now settled by STACKING ORDER instead: milestones sit above
+   stems (z-index 2 over 1), so a click that lands on both still goes to the
+   milestone, and a stem is a live object everywhere else — hoverable, focusable,
+   pressable, and it travels like a milestone does. */
+.stem{pointer-events:auto;z-index:1;cursor:pointer}
+.stop{z-index:2}
+.stem:focus-visible{outline:2px solid var(--now);outline-offset:6px;border-radius:4px}
+.stem:hover .sn,.stem:focus-visible .sn,.stem.on .sn{color:var(--now)}
+.stem.on .ss{opacity:.9;max-height:4em}
+.stem.tight.on .sn{opacity:1;max-height:4em;visibility:visible;margin-top:6px}
 .stem svg .mark{stroke-width:1}
 .stem i{display:block;width:1px;height:20px;margin:0 auto;
   background:linear-gradient(180deg,rgba(238,241,248,.40),rgba(238,241,248,.10))}
@@ -813,6 +818,7 @@ body{
   var ENDX = PAD + SPANPX + 350;
 
   var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
+  var STEMEL = [];   /* the record stems, same shape - operable since 03/09 */
 
   function build(){
     rail.setAttribute('role', 'list');
@@ -905,7 +911,10 @@ body{
          Emirates Mission to the Asteroid Belt entries, which the ruling assigns to
          the UAE Space Agency. The visible layer was right the whole time; only the
          layer nobody screenshots was wrong. */
-      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. ' + r.own + '.');
+      /* Operable, so focusable - the same reasoning as the milestones above.
+         Eight more tab stops, on a page whose subject IS these objects. */
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. ' + r.own + '. Press to travel here.');
       var rx = PAD + frac(r.at) * SPANPX;
       el.style.left = rx + 'px';
       if (nearestGap(rx) < 130) el.classList.add('tight');
@@ -915,6 +924,7 @@ body{
         '<b class="sn">' + r.nm + '</b>' +
         '<b class="ss">' + srcHTML(r.at) + '</b>';
       rail.appendChild(el);
+      STEMEL.push({el:el, at:rx, yr:r.at});
     });
 
     /* ONE gap label, DERIVED rather than hardcoded. Both previous labels were
@@ -1000,10 +1010,13 @@ body{
        throttles rAF hard enough that a scripted walk does not actually travel.
        This is a hard boundary on a hand-driven control, which is a defect on
        reading; the fix is four lines and cannot make anything worse. */
+    /* Stems are in the search too (03/09): travelling to 2030 used to light up
+       2028 and the header said so - a centred object the page would not name. */
     var centre = x + innerWidth / 2, rec = null, best = innerWidth * 0.26;
-    for (var i = 0; i < STOPEL.length; i++) {
-      var d = Math.abs(STOPEL[i].at - centre);
-      if (d < best) { best = d; rec = STOPEL[i]; }
+    var ALLEL = STOPEL.concat(STEMEL);
+    for (var i = 0; i < ALLEL.length; i++) {
+      var d = Math.abs(ALLEL[i].at - centre);
+      if (d < best) { best = d; rec = ALLEL[i]; }
     }
     if (!rec && FOCUSREC && Math.abs(FOCUSREC.at - centre) < innerWidth * 0.42) rec = FOCUSREC;
     var near = rec ? rec.el : null;
@@ -1107,31 +1120,33 @@ body{
     queue();
   }
 
-  /* (4) CLICK A MILESTONE TO TRAVEL TO IT. There was no click handler in the
+  /* (4) CLICK AN OBJECT TO TRAVEL TO IT. There was no click handler in the
      file at all, so a visible, obviously-significant object did nothing when
-     pressed. Delegated from .world so it costs one listener and covers stops
+     pressed. Delegated from .world so it costs one listener and covers objects
      added later. The drag guard matters: without it, releasing a drag on top of
-     a stop would teleport you somewhere you did not ask for. Keyboard
-     equivalence is the documented Left/Right/Home/End, so fifteen new tab stops
-     are deliberately not added. */
-  /* Enter and Space operate a focused milestone, matching the click path. */
+     a stop would teleport you somewhere you did not ask for. Since 03/09 the
+     record stems are objects too (they were dead by mouse and touch), so a
+     press on either kind travels; a press on a source LINK inside either kind
+     is left to the link. */
+  function objectAt(el){
+    for (var i = 0; i < STOPEL.length; i++) if (STOPEL[i].el === el) return STOPEL[i];
+    for (var j = 0; j < STEMEL.length; j++) if (STEMEL[j].el === el) return STEMEL[j];
+    return null;
+  }
+  /* Enter and Space operate a focused object, matching the click path. */
   world.addEventListener('keydown', function(e){
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    var el = e.target.closest && e.target.closest('.stop');
-    if (!el) return;
+    var el = e.target.closest && e.target.closest('.stop,.stem');
+    if (!el || (e.target.closest && e.target.closest('a'))) return;
     e.preventDefault();
-    for (var i = 0; i < STOPEL.length; i++) {
-      if (STOPEL[i].el === el) { go(STOPEL[i].at - innerWidth / 2); return; }
-    }
+    var o = objectAt(el); if (o) go(o.at - innerWidth / 2);
   });
 
   world.addEventListener('click', function(e){
     if (moved) return;
-    var el = e.target.closest && e.target.closest('.stop');
-    if (!el || el.querySelector('.src') && e.target.closest('.src')) return;
-    for (var i = 0; i < STOPEL.length; i++) {
-      if (STOPEL[i].el === el) { go(STOPEL[i].at - innerWidth / 2); return; }
-    }
+    var el = e.target.closest && e.target.closest('.stop,.stem');
+    if (!el || (e.target.closest && e.target.closest('a'))) return;
+    var o = objectAt(el); if (o) go(o.at - innerWidth / 2);
   });
 
   world.addEventListener('wheel', function(e){
