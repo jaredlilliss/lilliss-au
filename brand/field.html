@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lilliss IT &mdash; brand direction 3: Field</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Brand direction 3 of 3 for Lilliss IT: The field notebook. Unlinked working page.">
+<style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
+:root{--ground:#F2F5EF;--ink:#0F2E24;--muted:#4E6259;--rule:#C9D6CC;--accent:#1F7A4D;--accent-ink:#FFFFFF;--panel:#FFFFFF;--grid:#DCE6DE;
+  --display:'IBM Plex Mono',ui-monospace,Consolas,monospace;--body:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#0E1613;--ink:#E3EEE7;--muted:#9DB3A8;--rule:#23332C;--accent:#5FC48E;--accent-ink:#0E1613;--panel:#131E19;--grid:#182520}}
+:root[data-theme="dark"]{--ground:#0E1613;--ink:#E3EEE7;--muted:#9DB3A8;--rule:#23332C;--accent:#5FC48E;--accent-ink:#0E1613;--panel:#131E19;--grid:#182520}
+:root[data-theme="light"]{--ground:#F2F5EF;--ink:#0F2E24;--muted:#4E6259;--rule:#C9D6CC;--accent:#1F7A4D;--accent-ink:#FFFFFF;--panel:#FFFFFF;--grid:#DCE6DE}
+body{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.band{border-bottom:2px solid var(--accent);padding:.6rem 0;font:500 .76rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.band .wrap{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:space-between}
+h1{font:500 clamp(2.2rem,6.4vw,4.8rem)/1.05 var(--display);letter-spacing:-.03em;margin:0}
+.kicker{font:500 .8rem/1 var(--mono);letter-spacing:.18em;color:var(--accent);margin:0 0 .9rem;border:1px solid var(--accent);display:inline-block;padding:.35rem .5rem}
+.rule{height:2px;background:var(--accent);margin:1.6rem 0}
+h2{font:500 1.35rem/1.2 var(--display);letter-spacing:-.01em;margin:2.6rem 0 .8rem}
+h2::before{content:'// ';color:var(--accent)}
+.svc li{background:var(--panel);border:1px solid var(--rule);padding:.85rem 1rem;margin:0 0 .6rem;border-left:4px solid var(--accent)}
+.svc b{display:block;font:500 1rem/1.25 var(--display);margin-bottom:.2rem}
+.btn{background:var(--accent);color:var(--accent-ink);font:500 .95rem/1 var(--mono);letter-spacing:.06em;padding:.9rem 1.2rem;display:inline-block;text-decoration:none;border-radius:2px}
+.card{background:var(--panel);border:1px solid var(--rule);padding:1rem 1.1rem;border-left:4px solid var(--accent)}
+nav.sample a{font:500 .88rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.2rem}
+main{padding:2.4rem 0 5rem}
+p{max-width:64ch;margin:0 0 1rem}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.lede{font-size:1.15rem;max-width:58ch;margin-top:1.4rem}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media (min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+ul{list-style:none;margin:0;padding:0}
+.says li,.share li{padding:.7rem 0;border-top:1px solid var(--rule)}
+.says b,.share b{display:block;font-weight:600}
+.share li[data-k="Not shared"] b{color:var(--accent)}
+.tag{font:500 .72rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.samples{display:grid;gap:1rem;grid-template-columns:1fr;margin-top:1rem}
+@media (min-width:760px){.samples{grid-template-columns:1fr 1fr}}
+nav.sample{display:flex;gap:1.2rem;flex-wrap:wrap;padding:.8rem 0;border-bottom:1px solid var(--rule)}
+nav.sample a{text-decoration:none}
+footer{border-top:1px solid var(--rule);padding:1.4rem 0;font-size:.86rem;color:var(--muted)}
+.pick li{padding:.4rem 0 .4rem 1.4rem;position:relative}
+.pick li::before{content:'\2192';position:absolute;left:0;color:var(--accent)}
+.dirs a{display:block;text-decoration:none;border:1px solid var(--rule);padding:1rem 1.1rem;margin:0 0 .8rem;border-radius:2px}
+.dirs a:hover{border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="band"><div class="wrap"><span>Brand direction 3 of 3 &middot; The field notebook</span><span>Unlinked &middot; not indexed &middot; for the owner&rsquo;s pick &middot; <a href="/brand/">all three</a></span></div></div>
+<main class="wrap">
+  <p class="kicker">JOB CARD &middot; 0001</p>
+  <h1>Site. Fault.<br>Fix. Written up.</h1>
+  <p class="lede">Four lines on every job, and the fourth is the one you keep. Lilliss IT is Jared Lilliss, an IT support and field technician across Sydney and regional NSW &mdash; hospitality venues and small businesses, often mid-service.</p>
+  <p><a class="btn" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry">Open a job card</a></p>
+  <div class="rule"></div>
+  <p class="muted"><b>Thesis.</b> The engineer&rsquo;s job card. Grid paper, green ink, a mono hand. It reads like the notes Jared actually leaves on site, which is the thing nobody else offers.</p>
+
+  <h2>What I do</h2>
+  <ul class="svc"><li><b>POS &amp; EFTPOS</b><span class="muted">Rollouts, replacements and fault resolution for point-of-sale and payment terminals. Getting the tills taking money again is the job.</span></li><li><b>Windows support</b><span class="muted">Endpoint and hardware support for Windows machines &mdash; setup, repair, migration, and the recurring faults nobody has had time to chase down.</span></li><li><b>Networks</b><span class="muted">Structured cabling, switching and Wi-Fi for small sites. Tidy racks, labelled runs, and documentation you can hand to the next person.</span></li><li><b>CCTV &amp; AV</b><span class="muted">Camera and audio-visual installation and troubleshooting for venues and shopfronts, from mounting to configuration.</span></li><li><b>Small-business IT</b><span class="muted">The rest of it &mdash; email, printers, backups, vendor wrangling. If it plugs in and the business depends on it, it&rsquo;s in scope.</span></li></ul>
+  <p class="muted" style="margin-top:1rem">Trading since 2019, registered 2026 &middot; ABN 78 576 434 613 &middot; Bass Hill, Sydney &amp; regional NSW &middot; Taking new work</p>
+
+  <div class="grid">
+    <section>
+      <h2>What lilliss.au says that jaredlilliss.github.io does not</h2>
+      <ul class="says"><li><b>An offer with a scope</b>Five named services and who they are for: hospitality venues and small businesses, often mid-service.</li><li><b>A place and a state</b>Bass Hill, Sydney and regional NSW. Taking new work. The personal site has a city; the business has a service area and a status.</li><li><b>A trading identity</b>Trading since 2019, registered 2026, ABN 78 576 434 613. Facts a customer or an accountant needs and a portfolio reader does not.</li><li><b>A promise about handoffs</b>One person, no handoffs: the person who takes the call scopes it, installs it, documents it, and answers when it breaks.</li><li><b>A way to engage</b>A business address and a contact form of intent (the fault, the gear, the urgency, the suburb). Whether a phone number joins it is the owner&rsquo;s decision.</li><li><b>A privacy page for a business</b>What is collected when someone writes in, and what is not. The personal site&rsquo;s privacy page speaks for a portfolio.</li></ul>
+    </section>
+    <section>
+      <h2>What the two sites may share</h2>
+      <ul class="share"><li data-k="Shared"><span class="tag">Shared</span><b>The person. One name, one face, one GitHub and one LinkedIn. Two sites, one Jared.</b></li><li data-k="Shared"><span class="tag">Shared</span><b>The receipts ethic, in one sentence: what broke, what fixed it, what to watch for next time. It is the reason to trust either site.</b></li><li data-k="Shared"><span class="tag">Shared</span><b>The Aussie Health Utility card &mdash; the same facts on both sites, framed as work on one and as proof of reliability on the other.</b></li><li data-k="Shared"><span class="tag">Shared</span><b>The privacy page skeleton and the footer legal line. Boring components should be identical; only their dress changes.</b></li><li data-k="Not shared"><span class="tag">Not shared</span><b>Palette, typefaces, hero, voice, nav order. A visitor who lands on both should feel two different rooms in the same house.</b></li></ul>
+    </section>
+  </div>
+
+  <h2>Components, in this dress</h2>
+  <div class="samples">
+    <div><span class="tag">Navigation</span><nav class="sample" aria-label="Sample navigation"><a href="#">Services</a><a href="#">How it runs</a><a href="#">Work</a><a href="#">About</a><a href="#">Contact</a></nav></div>
+    <div><span class="tag">Primary action</span><p style="margin-top:.6rem"><a class="btn" href="#">Open a job card</a></p></div>
+    <div><span class="tag">Service card</span><div class="card" style="margin-top:.6rem"><b>POS &amp; EFTPOS</b><p class="muted" style="margin:.3rem 0 0">Rollouts, replacements and fault resolution for point-of-sale and payment terminals. Getting the tills taking money again is the job.</p></div></div>
+    <div><span class="tag">Work card, shared with the personal site</span><div class="card" style="margin-top:.6rem"><b>Aussie Health Utility</b><p class="muted" style="margin:.3rem 0 0">A collector taking a reading from every NSW emergency department publishing a live count, every fifteen minutes, unattended on a small Melbourne server. Same facts on both sites; only the frame changes.</p></div></div>
+  </div>
+
+  <h2>If you pick this</h2>
+  <ul class="pick"><li>The front door becomes a job card on grid paper: green ink, mono headings, the handoff diagram redrawn as a wiring sketch.</li><li>Services become numbered notebook entries; the contact form&rsquo;s four fields (fault, gear, urgency, suburb) become the visible spine of the page.</li><li>The personal site keeps the aurora; this one is daylight and paper &mdash; the same hand, a different book.</li></ul>
+  <p class="muted">Other directions: <a href="/brand/counter.html">1 Counter</a> &middot; <a href="/brand/ledger.html">2 Ledger</a></p>
+</main>
+<footer><div class="wrap">Lilliss IT &middot; Jared Lilliss &middot; a working page for choosing a direction, not a published design. Nothing here is a price, a response time or a promise beyond what the front door already states.</div></footer>
+</body>
+</html>

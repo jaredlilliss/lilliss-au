@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lilliss IT &mdash; three brand directions</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
+:root{--ground:#FAFAF8;--ink:#17191C;--muted:#5B6068;--rule:#E3E3DF;--accent:#17191C;--body:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#121316;--ink:#EDEEF0;--muted:#A3A7AE;--rule:#2A2C31;--accent:#EDEEF0}}
+:root[data-theme="dark"]{--ground:#121316;--ink:#EDEEF0;--muted:#A3A7AE;--rule:#2A2C31;--accent:#EDEEF0}
+:root[data-theme="light"]{--ground:#FAFAF8;--ink:#17191C;--muted:#5B6068;--rule:#E3E3DF;--accent:#17191C}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.2rem}
+main{padding:2.4rem 0 5rem}
+p{max-width:64ch;margin:0 0 1rem}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.lede{font-size:1.15rem;max-width:58ch;margin-top:1.4rem}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media (min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+ul{list-style:none;margin:0;padding:0}
+.says li,.share li{padding:.7rem 0;border-top:1px solid var(--rule)}
+.says b,.share b{display:block;font-weight:600}
+.share li[data-k="Not shared"] b{color:var(--accent)}
+.tag{font:500 .72rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.samples{display:grid;gap:1rem;grid-template-columns:1fr;margin-top:1rem}
+@media (min-width:760px){.samples{grid-template-columns:1fr 1fr}}
+nav.sample{display:flex;gap:1.2rem;flex-wrap:wrap;padding:.8rem 0;border-bottom:1px solid var(--rule)}
+nav.sample a{text-decoration:none}
+footer{border-top:1px solid var(--rule);padding:1.4rem 0;font-size:.86rem;color:var(--muted)}
+.pick li{padding:.4rem 0 .4rem 1.4rem;position:relative}
+.pick li::before{content:'\2192';position:absolute;left:0;color:var(--accent)}
+.dirs a{display:block;text-decoration:none;border:1px solid var(--rule);padding:1rem 1.1rem;margin:0 0 .8rem;border-radius:2px}
+.dirs a:hover{border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+h1{font:600 2rem/1.15 var(--body);letter-spacing:-.02em;margin:0 0 .5rem}
+.dirs b{display:block;font-weight:600;margin-bottom:.2rem}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="tag">Unlinked &middot; not indexed &middot; 04/09/2026</p>
+  <h1>Three brand directions for Lilliss IT</h1>
+  <p class="muted">Each page is the same facts in a different dress, and each states what the business site says that the personal site does not, and which components the two may share. Pick one; the front door is rebuilt from it.</p>
+  <div class="dirs">
+    <a href="/brand/counter.html"><b>1 &middot; Counter &mdash; The trade counter</b><span class="muted">A local trade, not a tech brand. It reads like the good sparky&rsquo;s van: one colour, black type, a number you can read from across the road.</span></a>
+    <a href="/brand/ledger.html"><b>2 &middot; Ledger &mdash; The letterhead</b><span class="muted">The reliable local firm. Cream stock, a serif that has been to work, tabular figures. It reads like a letter you keep, and it never raises its voice.</span></a>
+    <a href="/brand/field.html"><b>3 &middot; Field &mdash; The field notebook</b><span class="muted">The engineer&rsquo;s job card. Grid paper, green ink, a mono hand. It reads like the notes Jared actually leaves on site, which is the thing nobody else offers.</span></a>
+
+  </div>
+</main>
+<footer><div class="wrap">Lilliss IT &middot; working pages, not a published design.</div></footer>
+</body>
+</html>
