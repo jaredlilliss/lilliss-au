@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lilliss IT — small-business IT support, Sydney</title>
+<meta name="description" content="Lilliss IT is Jared Lilliss — IT support and field technician across Sydney and regional NSW. POS and EFTPOS, Windows, networks, CCTV and AV. One person from fault intake to fix.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141414">
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
+:root{
+  --ground:#FFFFFF;--ink:#111111;--muted:#5A5A5A;--rule:#E6E6E6;--accent:#CC4208;--accent-ink:#FFFFFF;--panel:#F6F6F6;--live:#1B7A3E;
+  --display:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,'Cascadia Mono',monospace;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--ground:#141414;--ink:#F4F4F4;--muted:#ABABAB;--rule:#2B2B2B;--accent:#FF7A47;--accent-ink:#141414;--panel:#1C1C1C;--live:#5FD39A}
+}
+:root[data-theme="dark"]{--ground:#141414;--ink:#F4F4F4;--muted:#ABABAB;--rule:#2B2B2B;--accent:#FF7A47;--accent-ink:#141414;--panel:#1C1C1C;--live:#5FD39A}
+:root[data-theme="light"]{--ground:#FFFFFF;--ink:#111111;--muted:#5A5A5A;--rule:#E6E6E6;--accent:#CC4208;--accent-ink:#FFFFFF;--panel:#F6F6F6;--live:#1B7A3E}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+p{margin:0 0 1rem;max-width:62ch}
+.wrap{max-width:74rem;margin:0 auto;padding:0 1.3rem}
+.skip{position:absolute;left:-999px;top:0;z-index:20;background:var(--accent);color:var(--accent-ink);padding:.6rem 1rem;font:800 .9rem var(--display);text-decoration:none}
+.skip:focus{left:1rem;top:1rem}
+
+/* the band: black strip, the one line of small type on the page */
+.band{background:#111111;color:#F4F4F4;font:500 .74rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.band .wrap{display:flex;gap:.4rem 1.6rem;flex-wrap:wrap;justify-content:space-between;padding-top:.55rem;padding-bottom:.55rem}
+.band .pv{color:#FF7A47}
+
+/* header */
+header{border-bottom:3px solid var(--ink)}
+.bar{display:flex;align-items:center;gap:.8rem 1.8rem;flex-wrap:wrap;padding-top:1.1rem;padding-bottom:1.1rem}
+.sig{font:900 1.35rem/1 var(--display);letter-spacing:-.03em;text-decoration:none;white-space:nowrap}
+.sig b{color:var(--accent);font-weight:900}
+nav{display:flex;gap:.2rem 1.3rem;flex-wrap:wrap;margin-inline-start:auto}
+nav a{font:700 .86rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:.5rem 0;border-bottom:3px solid transparent;white-space:nowrap}
+nav a:hover{border-bottom-color:var(--accent)}
+nav a.cta{color:var(--accent)}
+nav a.me{color:var(--muted)}
+
+/* hero */
+.hero{padding:clamp(2.4rem,6vw,5rem) 0 clamp(2rem,4vw,3rem)}
+.kicker{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;margin:0 0 1.6rem;max-width:none;font:700 .86rem/1.4 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kicker .avail{color:var(--live)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--live);margin-right:.5rem;vertical-align:.05em;animation:pulse 2.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font:900 clamp(2.5rem,10.2vw,8rem)/.92 var(--display);letter-spacing:-.045em;margin:0;text-wrap:balance}
+h1 .ln{display:block}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{font-size:clamp(1.1rem,1.9vw,1.35rem);line-height:1.5;max-width:36em;margin:2rem 0 0;color:var(--ink)}
+.lede strong{font-weight:800}
+.cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
+.btn{display:inline-block;font:800 1rem/1 var(--display);letter-spacing:.01em;padding:1.05rem 1.5rem;text-decoration:none;border:3px solid var(--ink);border-radius:0}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.hot{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.hot:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.facts{display:flex;flex-wrap:wrap;gap:.5rem 0;margin-top:2.6rem;border-top:3px solid var(--ink);padding-top:.9rem;font:700 .86rem/1.5 var(--display);letter-spacing:.02em}
+.facts span{padding:0 1.2rem;border-left:2px solid var(--rule)}
+.facts span:first-child{padding-left:0;border-left:0}
+.facts .abn{font-family:var(--mono);font-weight:500;letter-spacing:.06em}
+
+/* the rule: six pixels of orange between sections */
+.rule{height:6px;background:var(--accent);margin:clamp(2.6rem,6vw,4.5rem) 0 0}
+section{padding:clamp(2.4rem,5vw,4rem) 0 0}
+.k{font:800 .86rem/1.4 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 .8rem}
+h2{font:900 clamp(2rem,5.2vw,4rem)/.98 var(--display);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.sub{font-size:1.12rem;color:var(--muted);max-width:40em;margin:1.2rem 0 0}
+
+/* bold lists with black rules */
+.svc{list-style:none;margin:2.2rem 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 3rem}
+.svc li{border-top:3px solid var(--ink);padding:1rem 0 1.3rem}
+.svc b{display:block;font:800 1.35rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:.35rem}
+.svc p{margin:0;color:var(--muted);font-size:1rem}
+
+/* pull */
+.pull{margin:0;padding:clamp(2.4rem,6vw,4.5rem) 0 0}
+.pull p{font:800 clamp(1.5rem,3.6vw,2.7rem)/1.15 var(--display);letter-spacing:-.03em;max-width:24em;text-wrap:balance}
+.pull em{font-style:normal;color:var(--accent)}
+
+/* the count */
+.count{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;margin-top:2.4rem}
+.lane{border:3px solid var(--ink);padding:1.4rem 1.5rem 1.5rem;display:flex;flex-direction:column}
+.lane.here{border-color:var(--accent)}
+.lane .lk{font:800 .82rem/1.4 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.lane.here .lk{color:var(--accent)}
+.num{display:flex;align-items:baseline;gap:.6rem 1.2rem;flex-wrap:wrap;margin:.5rem 0 1.2rem}
+.num b{font:900 clamp(4rem,9vw,7rem)/.85 var(--display);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.lane.here .num b{color:var(--accent)}
+.num span{font:800 1.05rem/1.2 var(--display);letter-spacing:-.01em;max-width:12em}
+.chain{list-style:none;margin:0;padding:0;border-top:3px solid var(--ink)}
+.lane.here .chain{border-top-color:var(--accent)}
+.chain li{padding:.65rem 0;border-bottom:2px solid var(--rule);font-weight:600}
+.chain li.gap{padding:.35rem 0;border-bottom:0;font:700 .74rem/1.4 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.chain li.gap + li{border-top:2px solid var(--rule)}
+.lane .lf{margin:auto 0 0;padding-top:1rem;font:800 1.05rem/1.3 var(--display)}
+.lane.here .lf{color:var(--accent)}
+
+/* work */
+.work{list-style:none;margin:2.2rem 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 3rem}
+.work li{border-top:3px solid var(--ink);padding:1rem 0 1.4rem;display:flex;flex-direction:column}
+.work b{display:block;font:800 1.35rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:.4rem}
+.work p{margin:0 0 .8rem;color:var(--muted);font-size:1rem}
+.wf{margin-top:auto;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;align-items:baseline}
+.wl{font:800 .92rem/1.4 var(--display);text-decoration:none;color:var(--accent);border-bottom:3px solid var(--accent)}
+.wl:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.wn{flex-basis:100%;font:500 .78rem/1.5 var(--mono);color:var(--muted);margin-top:.3rem}
+
+/* about */
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:2rem 4rem;margin-top:2rem;align-items:start}
+.prose p{font-size:1.05rem;color:var(--ink)}
+.prose p strong{font-weight:800}
+.prose a{font-weight:800;color:var(--accent);text-decoration:none;border-bottom:3px solid var(--accent)}
+.prose a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.certs{border:3px solid var(--ink);padding:1.2rem 1.4rem}
+.certs h3{font:800 .82rem/1.4 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem}
+.cert{display:flex;justify-content:space-between;gap:1rem;padding:.65rem 0;border-top:2px solid var(--rule);font-weight:600}
+.cert:first-of-type{border-top:0}
+.cert span{font:800 .78rem/1.6 var(--display);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.cert span.held{color:var(--live)}
+.cert span.wip{color:var(--accent)}
+
+/* contact */
+.mail{display:inline-block;margin-top:2rem;font:900 clamp(1.6rem,5vw,4.2rem)/1 var(--display);letter-spacing:-.04em;text-decoration:none;border-bottom:6px solid var(--accent);padding-bottom:.25rem;overflow-wrap:anywhere}
+.mail:hover{color:var(--accent)}
+.links{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2.2rem}
+
+footer{margin-top:clamp(2.6rem,6vw,4.5rem);background:#111111;color:#F4F4F4;padding:1.6rem 0 2.6rem;font:500 .78rem/1.8 var(--mono);letter-spacing:.06em}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 1.6rem}
+footer a{text-decoration:none;border-bottom:1px solid var(--muted)}
+footer a:hover{color:#FF7A47;border-bottom-color:#FF7A47}
+
+@media (max-width:820px){
+  .svc,.work,.count{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  .count{gap:1rem}
+}
+@media (max-width:560px){
+  .wrap{padding:0 1rem}
+  .bar{gap:.6rem 1rem;padding-top:.9rem;padding-bottom:.9rem}
+  nav{width:100%;margin-inline-start:0;gap:0 .9rem}
+  nav a{font-size:.78rem;padding:.35rem 0}
+  nav a.me{display:none}
+  .sig{font-size:1.2rem}
+  .band .wrap{gap:.2rem 1rem}
+  .facts{flex-direction:column;gap:.4rem}
+  .facts span{padding:0;border-left:0}
+  .btn{padding:.95rem 1.2rem}
+  .lane{padding:1.1rem 1.1rem 1.2rem}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="band"><div class="wrap"><span>IT support &amp; field technician &middot; Sydney &amp; regional NSW</span><span class="pv">Brand preview &middot; not the live page</span></div></div>
+
+<header>
+  <div class="wrap bar">
+    <a class="sig" href="/"><b>LILLISS</b> IT</a>
+    <nav aria-label="Primary">
+      <a href="#services">Services</a>
+      <a href="#how">How it runs</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a class="cta" href="#contact">Contact</a>
+      <a class="me" href="https://jaredlilliss.github.io/">Jared</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <section class="hero" id="top">
+    <p class="kicker">
+      <span class="avail"><span class="dot"></span>Taking new work</span>
+      <span id="clock">Sydney</span>
+      <span>Bass Hill &middot; Sydney &amp; regional NSW</span>
+    </p>
+    <h1>
+      <span class="ln">When the tills</span>
+      <span class="ln">stop, you ring</span>
+      <span class="ln"><em>one person.</em></span>
+    </h1>
+    <p class="lede">Lilliss IT is <strong>Jared Lilliss</strong> &mdash; an IT support and field technician working across Sydney and regional NSW. The person who takes the call is the person who scopes it, installs it, documents it, and answers when it breaks.</p>
+    <div class="cta">
+      <a class="btn hot" href="#contact">Get in touch</a>
+      <a class="btn" href="#services">What I do</a>
+    </div>
+    <div class="facts">
+      <span>Trading since 2019, registered 2026</span>
+      <span class="abn">ABN 78 576 434 613</span>
+      <span>No call centre, no ticket queue</span>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="services">
+    <p class="k">Services</p>
+    <h2>What I do</h2>
+    <p class="sub">Mostly hospitality venues and small businesses &mdash; often mid-service, when it can&rsquo;t wait until Monday.</p>
+    <ul class="svc">
+      <li><b>POS &amp; EFTPOS</b><p>Rollouts, replacements and fault resolution for point-of-sale and payment terminals. Getting the tills taking money again is the job.</p></li>
+      <li><b>Windows support</b><p>Endpoint and hardware support for Windows machines &mdash; setup, repair, migration, and the recurring faults nobody has had time to chase down.</p></li>
+      <li><b>Networks</b><p>Structured cabling, switching and Wi-Fi for small sites. Tidy racks, labelled runs, and documentation you can hand to the next person.</p></li>
+      <li><b>CCTV &amp; AV</b><p>Camera and audio-visual installation and troubleshooting for venues and shopfronts, from mounting to configuration.</p></li>
+      <li><b>Small-business IT</b><p>The rest of it &mdash; email, printers, backups, vendor wrangling. If it plugs in and the business depends on it, it&rsquo;s in scope.</p></li>
+    </ul>
+  </section>
+
+  <blockquote class="pull">
+    <p>A fault isn&rsquo;t fixed when it stops showing. It&rsquo;s fixed when it&rsquo;s <em>written down</em> &mdash; what broke, what fixed it, and what to watch for next time.</p>
+  </blockquote>
+
+  <div class="rule"></div>
+
+  <section id="how">
+    <p class="k">How it runs</p>
+    <h2>Count the handoffs</h2>
+    <p class="sub">Every handoff is a place your context gets dropped and re-explained. That&rsquo;s the whole difference, and it&rsquo;s the reason this is a one-man operation on purpose.</p>
+    <div class="count">
+      <div class="lane">
+        <p class="lk">The usual way</p>
+        <p class="num"><b>3</b><span>handoffs, four people</span></p>
+        <ul class="chain">
+          <li>A call centre takes the details</li>
+          <li class="gap">handoff</li>
+          <li>A ticket joins a queue</li>
+          <li class="gap">handoff</li>
+          <li>A dispatcher assigns it out</li>
+          <li class="gap">handoff</li>
+          <li>A tech who&rsquo;s never seen your site arrives</li>
+        </ul>
+        <p class="lf">You explain it four times.</p>
+      </div>
+      <div class="lane here">
+        <p class="lk">Here</p>
+        <p class="num"><b>0</b><span>handoffs, one person</span></p>
+        <ul class="chain">
+          <li>You ring Jared</li>
+          <li>Jared scopes it</li>
+          <li>Jared fixes it</li>
+          <li>Jared writes it up</li>
+        </ul>
+        <p class="lf">You explain it once.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="work">
+    <p class="k">Work</p>
+    <h2>Some of it is still running.</h2>
+    <p class="sub">A live data pipeline, and two concept sites built to see how far a single HTML file can go. Everything here is either running right now or labelled as a concept on its own page.</p>
+    <ul class="work">
+      <li>
+        <b>Aussie Health Utility</b>
+        <p>A collector that takes a reading from every NSW emergency department publishing a live count, every fifteen minutes since July. It runs unattended on a small Melbourne server, backs itself up nightly, and publishes a board anyone can read &mdash; with the counting method written on the page, including what the data cannot support.</p>
+        <div class="wf"><a class="wl" href="https://jaredlilliss.github.io/queue-board/">The live board</a><a class="wl" href="https://github.com/jaredlilliss/aussie-health-utility">Public mirror</a><span class="wn">Public mirror &mdash; the working repository stays private.</span></div>
+      </li>
+      <li>
+        <b>Still Wild &mdash; concept</b>
+        <p>A concept site for a Brisbane adventure business, built as one self-contained HTML file: a live canvas dawn over layered ridges, five languages, and an honesty layer that labels every invented detail as invented rather than quietly leaving it in.</p>
+        <div class="wf"><a class="wl" href="/stillwild-concept/">See the concept</a><span class="wn">Built from the business&rsquo;s published photographs, with permission, for prototyping. Not affiliated with them.</span></div>
+      </li>
+      <li>
+        <b>XperienceSpace &mdash; concepts</b>
+        <p>A one-page brochure concept set entirely in the initiative&rsquo;s own published words, every figure marked as theirs and nothing firmed up &mdash; and a companion timeline where every date traces to a named government source, with the gaps left visibly empty rather than filled in.</p>
+        <div class="wf"><a class="wl" href="/brand/counter/brochure.html">The brochure</a><a class="wl" href="/xperience-concept/spine.html">The sourced timeline</a><span class="wn">An unsolicited concept. No affiliation with the organisation it depicts.</span></div>
+      </li>
+      <li>
+        <b>Everything else</b>
+        <p>Older builds, experiments, and the writing about how each one is put together &mdash; single-file sites, offline-capable, no frameworks.</p>
+        <div class="wf"><a class="wl" href="https://jaredlilliss.github.io/">The personal site</a></div>
+      </li>
+    </ul>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="about">
+    <p class="k">About</p>
+    <h2>Field tech hands, systems head</h2>
+    <div class="two">
+      <div class="prose">
+        <p>Lilliss IT is a one-man operation, on purpose. No handoffs between a sales rep, a dispatcher and a tech who&rsquo;s never seen your site &mdash; <strong>the person you first speak to is the person on the ladder.</strong></p>
+        <p>Day work keeps the standard honest. When a venue&rsquo;s tills stop mid-service the fix has to be real, fast, and documented, because the next person to touch that site deserves to know what happened.</p>
+        <p>Away from client work I build a privacy-by-design data platform over public Australian health datasets &mdash; a polling loop feeding an append-only PostgreSQL time series, with the privacy posture set at the schema level so no personal or health information is ever collected. It has been collecting since July 2026, and now runs unattended on a Melbourne server. <a href="https://jaredlilliss.github.io/">See the build</a></p>
+      </div>
+      <aside class="certs">
+        <h3>Certifications</h3>
+        <div class="cert"><span class="n">CompTIA A+</span><span class="held">Held</span></div>
+        <div class="cert"><span class="n">Microsoft Azure Fundamentals (AZ-900)</span><span class="held">Held</span></div>
+        <div class="cert"><span class="n">CompTIA Security+</span><span class="wip">In progress</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="contact">
+    <p class="k">Contact</p>
+    <h2>Describe the fault. You&rsquo;ll get a straight answer.</h2>
+    <p class="sub">Available across Sydney and regional NSW. Tell me the fault, the gear and the urgency, and you&rsquo;ll get a straight answer about whether I can help and when &mdash; including when I can&rsquo;t.</p>
+    <a class="mail" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry&amp;body=The%20fault%3A%0D%0A%0D%0AThe%20gear%3A%0D%0A%0D%0AUrgency%20%E2%80%94%20mid-service%2C%20today%2C%20or%20this%20week%3A%0D%0A%0D%0ASuburb%3A%0D%0A">jared@lilliss.au</a>
+    <div class="links">
+      <a class="btn" href="https://www.linkedin.com/in/jaredlilliss/">LinkedIn</a>
+      <a class="btn" href="https://github.com/jaredlilliss">GitHub</a>
+      <a class="btn" href="https://jaredlilliss.github.io/">Personal site</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="yr">2026</span> Lilliss IT &middot; ABN 78 576 434 613</span>
+    <span>Bass Hill NSW &middot; Sydney &amp; regional NSW</span>
+    <a href="/privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try {
+    var clock = document.getElementById('clock');
+    var tick = function(){
+      try{
+        var now = new Date().toLocaleTimeString('en-AU', {hour:'2-digit', minute:'2-digit', timeZone:'Australia/Sydney', timeZoneName:'shortOffset'});
+        clock.textContent = 'Sydney ' + now.replace('GMT','UTC');
+      }catch(e){ clock.textContent = 'Sydney, Australia'; }
+    };
+    if (clock) { tick(); setInterval(tick, 30000); }
+    var yr = document.getElementById('yr');
+    if (yr) yr.textContent = new Date().getFullYear();
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
