@@ -8,7 +8,7 @@
 
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
-<meta name="theme-color" content="#04070C">
+<meta name="theme-color" content="#241608">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT — concept prototype">
 <meta property="og:title" content="The Brochure — XperienceSpace | Lilliss IT concept">
@@ -23,7 +23,12 @@
 /* Latin faces, self-hosted from THIS domain — the same three files spine.html
    already serves. No font network is contacted; privacy.html's promise holds.
    Arabic is deliberately NOT in these files, so Arabic text falls through to
-   the platform faces later in each stack, which is the correct behaviour. */
+   the platform faces later in each stack, which is the correct behaviour.
+
+   ⚠️ The UAE Government Design System specifies Alexandria for Latin and Noto
+   Kufi Arabic for Arabic. Both are open-licensed and could be self-hosted here,
+   which would be the fully correct answer. Adding font binaries to this repo is
+   the owner's call, not mine, so this uses what is already served and says so. */
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/inter.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
@@ -31,210 +36,188 @@
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
   src:url('/fonts/plexmono-500.woff2') format('woff2')}
 
-/* ═══ THE CLIMB ═══════════════════════════════════════════════════════════════
-   Rebuilt 05/09/2026. The previous edition measured identically to eight pages
-   Jared rejected outright: zero translucent surfaces, seven solid bordered boxes,
-   no ground layer, no pointer or scroll handler, and two palettes with a theme
-   switch. That is the signature of flat printed matter — a deck slide — and it
-   sat one directory from spine.html, so the best page on this domain was one
-   click from its opposite.
+/* ═══ THE CONSTRUCTION ════════════════════════════════════════════════════════
+   Rebuilt 05/09/2026, and it is a rebuild rather than a repaint because the
+   previous edition was off-brief — mine was, not anyone else's.
 
-   Everything below derives from ONE scalar: altitude, read from the document's
-   own scroll. The sky darkens, the haze thins and the stars come out as you go,
-   because that is what actually happens on the way up — a physical fact doing
-   the work rather than an effect applied on top. The content's own arc runs
-   1974 → 2117; the page climbs with it.
+   THE BRIEF IS NOT MY OPINION. The UAE Government Design System publishes its
+   own illustration principles, and they read: "Geometric — create illustrations
+   using basic geometric shapes." "Solid colours — don't use gradients,
+   contouring, or soft transitions." "High contrast." "Less is more."
 
-   ONE committed palette. No prefers-color-scheme, no theme switch: a page that
-   ships two palettes has chosen neither. Surfaces are low-alpha WHITE over a
-   dark ground, which is the condition that rule was actually measured under —
-   on a light ground the same alpha produces a white box on a white page. */
+   The edition this replaces was a soft gradient horizon with haze. Every word of
+   that brief said no. So: solid fills, hard edges, no gradient anywhere on this
+   page, and a motif built from basic shapes.
+
+   THE MOTIF IS CONSTRUCTED, NOT BORROWED. The eight-pointed star — khatim — is
+   made by overlaying one square on the same square turned 45°, which is how it
+   has always been made, with compass and straightedge. Drawing it from maths is
+   therefore not a shortcut around having no assets; it is the actual method. The
+   page builds it as you read, and at the end it becomes a screen — which is what
+   the geometry is for in the architecture it comes from: light, filtered.
+
+   PALETTE IS THEIRS, taken from the design system's published core ramp rather
+   than sampled off a photograph. Every value below is quoted, not invented.
+
+   ONE committed palette, no theme switch. Nothing here interpolates. */
 :root{
-  --night:#04070C;          /* deep sky, where the page ends */
-  --dusk:#0B141E;
-  --haze:#16303B;           /* the warm band just above the limb */
-  --ink:#EDF2F6;
-  --ink-2:#9FB4C2;
-  --ink-3:#6B8393;
-  --line:rgba(237,242,246,.13);
-  --line-2:rgba(237,242,246,.26);
-  --surface:rgba(237,242,246,.045);
-  --surface-2:rgba(237,242,246,.085);
-  --gold:#E0AC4C;           /* STATE ONLY: where you are, what is live */
-  /* The flag's own colours, used once, on the rule that stands for the flag.
-     Never as decoration elsewhere — that is what makes them mean something. */
-  --flag-green:#00843D;
-  --flag-red:#C8102E;
+  /* AEGOV core palette — the published gold ramp, verbatim */
+  --g50:#F9F7ED;  --g100:#F2ECCF; --g200:#E6D7A2; --g300:#D7BC6D;
+  --g400:#CBA344; --g500:#B68A35; --g600:#92722A; --g700:#7C5E24;
+  --g800:#6C4527; --g900:#5D3B26; --g950:#361E12;
+  /* AEGOV semantic ramps — used ONCE each, on the flag rule, and nowhere else */
+  --red:#D83731; --green:#3F8E50;
+
+  --ground:#241608;          /* the deepest ground: one step under g950 */
+  --ink:#F9F7ED;             /* g50 */
+  --ink-2:#E6D7A2;           /* g200 */
+  --ink-3:#CBA344;           /* g400 — still 5:1+ on the ground, checked */
+  --edge:#5D3B26;            /* g900, for hard rules */
+  --edge-2:#7C5E24;          /* g700 */
+  --panel:#2E1B0B;           /* solid, never translucent — no soft transitions */
+  --panel-2:#3A230E;
   --mono:'IBM Plex Mono',ui-monospace,Consolas,'Cascadia Mono',monospace;
-  --sans:'Inter','Segoe UI','Noto Naskh Arabic','Noto Sans Arabic','Geeza Pro','Arabic Typesetting',system-ui,-apple-system,sans-serif;
+  --sans:'Inter','Segoe UI','Noto Kufi Arabic','Noto Naskh Arabic','Noto Sans Arabic','Geeza Pro','Arabic Typesetting',system-ui,-apple-system,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;background:var(--night);color:var(--ink);
+body{margin:0;background:var(--ground);color:var(--ink);
   font:400 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+:focus-visible{outline:2px solid var(--g300);outline-offset:3px}
 strong,b{font-weight:600;color:var(--ink)}
 
-/* ── the sky: one canvas, everything in it derived from altitude ─────────────
-   The canvas and the glow sit between the two language radios and .doc in the
-   markup, which keeps all of them siblings — the scripting-off language switch
-   is a sibling selector and breaks the moment anything is nested between them. */
+/* ── the screen: the construction itself, behind everything ───────────────── */
 #sky{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%;pointer-events:none}
-/* the limb's own glow, cheap and separate so the canvas never paints a big gradient */
-#glow{position:fixed;left:0;right:0;bottom:0;height:62vh;z-index:1;pointer-events:none;
-  background:radial-gradient(120% 100% at 50% 118%,
-    rgba(224,172,76,.30) 0%,rgba(22,48,59,.34) 42%,rgba(4,7,12,0) 78%);
-  opacity:var(--ha,1);transition:opacity .6s linear}
 .doc{position:relative;z-index:2}
 
 /* ── the language switch, unchanged in mechanism ────────────────────────────
    It works with scripting off, which is the whole point of doing it in CSS.
-   Only its appearance is restyled. */
+   The canvas sits between the radios and .doc so all of them stay siblings —
+   this is a sibling selector and breaks the moment anything nests between. */
 #lang-en,#lang-ar{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .ar{display:none}
 #lang-ar:checked ~ .doc .ar{display:revert}
 #lang-ar:checked ~ .doc .en{display:none}
 #lang-ar:checked ~ .doc{direction:rtl}
-/* gold on near-black, not gold on white: white text on this gold measured 1.9:1 */
 #lang-en:checked ~ .doc .sw-en,
-#lang-ar:checked ~ .doc .sw-ar{background:var(--gold);color:#0A0D12;border-color:var(--gold)}
+#lang-ar:checked ~ .doc .sw-ar{background:var(--g300);color:#241608;border-color:var(--g300)}
 #lang-en:focus-visible ~ .doc .sw-en,
-#lang-ar:focus-visible ~ .doc .sw-ar{outline:2px solid var(--gold);outline-offset:2px}
+#lang-ar:focus-visible ~ .doc .sw-ar{outline:2px solid var(--g300);outline-offset:2px}
 
-.wrapx{max-width:56rem;margin:0 auto;padding:0 1.5rem}
-
-/* ── masthead ──────────────────────────────────────────────────────────────── */
-.top{max-width:56rem;margin:0 auto;padding:1.15rem 1.5rem;display:flex;align-items:center;
-  gap:.8rem 1.2rem;flex-wrap:wrap}
+/* ── masthead, with a live clock in Dubai time ─────────────────────────────
+   Lifted from a Dubai studio's own site, where a live local time in the header
+   does more to place the work than the megabytes of 3D behind it. It costs
+   nothing and it is true. */
+.top{max-width:60rem;margin:0 auto;padding:1.1rem 1.5rem;display:flex;align-items:center;
+  gap:.7rem 1.2rem;flex-wrap:wrap;border-bottom:1px solid var(--edge)}
 .brand{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
 .brand b{font:600 1.02rem/1 var(--sans);letter-spacing:-.01em}
-.brand span{font:500 .66rem/1.5 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2)}
+.brand span{font:500 .64rem/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
 .spacer{flex:1 1 auto}
+#clock{font:500 .64rem/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
 .switch{display:flex;gap:.35rem}
-.switch label{cursor:pointer;font:500 .64rem/1 var(--mono);letter-spacing:.14em;
-  padding:.55rem .8rem;border:1px solid var(--line-2);border-radius:2px;color:var(--ink-2);
-  background:var(--surface);transition:color .25s ease,border-color .25s ease,background .25s ease}
-.switch label:hover{color:var(--ink);border-color:var(--ink-3)}
+.switch label{cursor:pointer;font:500 .62rem/1 var(--mono);letter-spacing:.14em;
+  padding:.55rem .78rem;border:1px solid var(--edge-2);color:var(--ink-2);background:transparent}
+.switch label:hover{color:var(--ink);border-color:var(--g300)}
 
-/* ── the hero ───────────────────────────────────────────────────────────────
-   A brochure is taken in at a glance, so this is the one place type is allowed
-   to be the whole event. Nothing else on the page competes with it. */
-.hero{max-width:56rem;margin:0 auto;padding:min(16vh,8.5rem) 1.5rem 3.2rem}
-.eyebrow{font:500 .68rem/1.6 var(--mono);letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);margin:0 0 1.4rem}
-h1{margin:0;font:600 clamp(2.6rem,7.2vw,5.4rem)/1.02 var(--sans);letter-spacing:-.04em;
-  max-width:15ch;text-wrap:balance;color:var(--ink)}
-h1.ar{line-height:1.24;letter-spacing:0}
-.tag{margin:1.1rem 0 0;font:400 clamp(1.05rem,2.3vw,1.4rem)/1.45 var(--sans);color:var(--gold);
-  max-width:32ch}
-.tag.ar{line-height:1.7}
-.lede{margin:1.5rem 0 0;max-width:46ch;color:var(--ink-2);font-size:1.06rem}
+/* ── the hero: one loud thing, and the page's only loud thing ────────────── */
+.hero{max-width:60rem;margin:0 auto;padding:min(15vh,7.5rem) 1.5rem 3rem}
+.eyebrow{font:500 .66rem/1.6 var(--mono);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--g300);margin:0 0 1.5rem}
+h1{margin:0;font:600 clamp(2.9rem,9.4vw,7.6rem)/.98 var(--sans);letter-spacing:-.045em;
+  max-width:14ch;text-wrap:balance;color:var(--ink)}
+h1.ar{line-height:1.2;letter-spacing:0}
+.tag{margin:1.2rem 0 0;font:400 clamp(1.05rem,2.2vw,1.45rem)/1.45 var(--sans);color:var(--g300);max-width:34ch}
+.tag.ar{line-height:1.75}
+.lede{margin:1.5rem 0 0;max-width:48ch;color:var(--ink-2);font-size:1.05rem}
 .lede.ar{line-height:1.85}
 .lede strong{color:var(--ink)}
-/* the flag, once, as a rule — the only place these three colours appear */
-.flagrule{height:2px;margin:2.6rem 0 0;max-width:22rem;
-  background:linear-gradient(90deg,var(--flag-green) 0 33.3%,var(--ink) 33.3% 66.6%,var(--flag-red) 66.6% 100%);
-  opacity:.85}
-#lang-ar:checked ~ .doc .flagrule{margin-inline:0 auto}
+/* the flag, once, as three SOLID blocks — not a gradient, because the brief
+   says no gradients and because a flag has edges, not blends */
+.flagrule{display:flex;height:3px;margin:2.6rem 0 0;max-width:21rem}
+.flagrule i{display:block;flex:1 1 0}
+.flagrule i:nth-child(1){background:var(--green)}
+.flagrule i:nth-child(2){background:var(--ink)}
+.flagrule i:nth-child(3){background:var(--red)}
 
-/* ── the three figures ─────────────────────────────────────────────────────── */
-.snap{max-width:56rem;margin:0 auto;padding:0 1.5rem;display:grid;gap:1px;
-  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));background:var(--line)}
-.snap > div{background:rgba(11,20,30,.55);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
-  padding:1.5rem 1.4rem 1.6rem}
-.snap .k{font:600 clamp(1.7rem,3.4vw,2.3rem)/1.1 var(--sans);letter-spacing:-.03em;color:var(--ink);
+/* ── the three figures: solid panels, hard 1px rules ─────────────────────── */
+.snap{max-width:60rem;margin:0 auto;padding:0 1.5rem;display:grid;gap:1px;
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));background:var(--edge)}
+.snap > div{background:var(--panel);padding:1.5rem 1.4rem 1.6rem}
+.snap .k{font:600 clamp(1.8rem,3.6vw,2.5rem)/1.05 var(--sans);letter-spacing:-.035em;color:var(--g300);
   font-variant-numeric:tabular-nums}
 .snap .k.ar{letter-spacing:0;line-height:1.35}
 .snap .v{margin-top:.6rem;font-size:.92rem;color:var(--ink-2)}
 
-/* ── sections ──────────────────────────────────────────────────────────────── */
-section{max-width:56rem;margin:0 auto;padding:5.5rem 1.5rem 0}
-h2{margin:0 0 1.1rem;font:600 clamp(1.6rem,3.2vw,2.15rem)/1.18 var(--sans);letter-spacing:-.028em;
+section{max-width:60rem;margin:0 auto;padding:5.5rem 1.5rem 0}
+h2{margin:0 0 1.1rem;font:600 clamp(1.7rem,3.4vw,2.3rem)/1.16 var(--sans);letter-spacing:-.03em;
   max-width:24ch;text-wrap:balance;color:var(--ink)}
-h2.ar{line-height:1.42;letter-spacing:0}
+h2.ar{line-height:1.4;letter-spacing:0}
 section > p{max-width:52ch;color:var(--ink-2)}
 section > p.ar{line-height:1.85}
 
-/* ── the four programmes ────────────────────────────────────────────────────
-   Not boxes. Each is a drawn mark on a hairline, and the hairline is the
-   ecosystem the copy claims they form. Proximity opens one and dims the rest,
-   with a release threshold wider than the grab. */
-/* 2 x 2, not 3 + 1. At 16rem the four fitted three across and orphaned the fourth
-   on its own row, which is a poor shape for anything and an actively wrong one for
-   a section whose own headline is "four programmes, one ecosystem". */
-.pillars{margin-top:2.4rem;display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
-.pillar{position:relative;padding:1.9rem 1.3rem 2rem;border-top:1px solid var(--line);
-  transition:background .45s ease,border-color .45s ease}
-.pillar.on{background:var(--surface);border-top-color:var(--gold)}
-.pillar .n{display:block;font:500 .66rem/1 var(--mono);letter-spacing:.18em;color:var(--ink-3);
-  transition:color .45s ease}
-.pillar.on .n{color:var(--gold)}
-.pillar .mk{display:block;width:38px;height:38px;margin:.9rem 0 .95rem;color:var(--ink-2);
-  transition:color .45s ease,transform .55s cubic-bezier(.2,.7,.3,1);transform-origin:20% 60%}
-.pillar.on .mk{color:var(--gold);transform:scale(1.1)}
-.mk svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.35;
-  stroke-linecap:round;stroke-linejoin:round;overflow:visible}
-.pillar h3{margin:0;font:600 1.12rem/1.28 var(--sans);letter-spacing:-.015em;color:var(--ink)}
+/* ── the four programmes: 2 x 2, hard-ruled, no rounded corners anywhere ─── */
+.pillars{margin-top:2.4rem;display:grid;gap:1px;background:var(--edge);
+  grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
+.pillar{position:relative;background:var(--panel);padding:1.9rem 1.4rem 2rem}
+.pillar.on{background:var(--panel-2)}
+.pillar .n{display:block;font:500 .64rem/1 var(--mono);letter-spacing:.2em;color:var(--ink-3)}
+.pillar.on .n{color:var(--g300)}
+.pillar .mk{display:block;width:40px;height:40px;margin:1rem 0 1rem;color:var(--ink-3)}
+.pillar.on .mk{color:var(--g300)}
+.mk svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;
+  stroke-linecap:butt;stroke-linejoin:miter;overflow:visible}
+.pillar h3{margin:0;font:600 1.14rem/1.28 var(--sans);letter-spacing:-.015em;color:var(--ink)}
 .pillar h3.ar{line-height:1.55;letter-spacing:0}
 .pillar p{margin:.55rem 0 0;font-size:.94rem;color:var(--ink-2)}
 .pillar p.ar{line-height:1.8}
 
-/* ── the two places ────────────────────────────────────────────────────────── */
-.places{margin-top:2.4rem;display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
-.place{position:relative;padding:1.7rem 1.5rem 1.8rem;background:var(--surface);
-  border-inline-start:2px solid var(--gold);
-  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
-.place .mk{display:block;width:44px;height:44px;margin:0 0 1rem;color:var(--gold)}
-.badge{display:inline-block;font:500 .62rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-3);border:1px solid var(--line-2);border-radius:2px;padding:.35rem .5rem;margin:0 0 .85rem}
-.place h3{margin:0 0 .6rem;font:600 1.3rem/1.2 var(--sans);letter-spacing:-.022em;color:var(--ink)}
+/* ── the two places ───────────────────────────────────────────────────────── */
+.places{margin-top:2.4rem;display:grid;gap:1px;background:var(--edge);
+  grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
+.place{background:var(--panel);padding:1.8rem 1.5rem}
+.place .mk{display:block;width:46px;height:46px;margin:0 0 1.1rem;color:var(--g300)}
+.badge{display:inline-block;font:500 .6rem/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ground);background:var(--g300);padding:.4rem .55rem;margin:0 0 .9rem}
+.place h3{margin:0 0 .6rem;font:600 1.3rem/1.2 var(--sans);letter-spacing:-.025em;color:var(--ink)}
 .place h3.ar{line-height:1.5;letter-spacing:0}
 .place p{margin:0;font-size:.95rem;color:var(--ink-2)}
 .place p.ar{line-height:1.85}
 
-/* ── the arc ───────────────────────────────────────────────────────────────
-   The years are the point, so they are set at a size that says so, tabular so
-   the column actually lines up, and wrapped in <bdi> in the markup so the range
-   never reverses itself in Arabic — which the copy itself calls out. */
-.align{margin-top:2.2rem;border-top:1px solid var(--line)}
-.align .row{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:.9rem 1.3rem;align-items:center;
-  padding:1.25rem .2rem;border-bottom:1px solid var(--line);
-  transition:background .4s ease}
-.align .row:hover{background:var(--surface)}
-.align .mk{width:30px;height:30px;color:var(--ink-3);grid-row:span 1}
-.align .yr{font:500 clamp(1.15rem,2.4vw,1.55rem)/1 var(--mono);letter-spacing:.02em;color:var(--gold);
+/* ── the arc ──────────────────────────────────────────────────────────────── */
+.align{margin-top:2.2rem;border-top:1px solid var(--edge)}
+.align .row{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:.9rem 1.3rem;
+  align-items:center;padding:1.3rem .2rem;border-bottom:1px solid var(--edge)}
+.align .mk{width:30px;height:30px;color:var(--ink-3)}
+.align .yr{font:500 clamp(1.2rem,2.5vw,1.6rem)/1 var(--mono);color:var(--g300);
   font-variant-numeric:tabular-nums;white-space:nowrap}
 .align .txt{font-size:1rem;color:var(--ink)}
 .align .txt.ar{line-height:1.8}
-.align .rowin{display:flex;align-items:center;gap:1rem}
 
-/* ── what happens next ─────────────────────────────────────────────────────── */
+/* ── what happens next ────────────────────────────────────────────────────── */
 .next{margin-top:2.2rem}
 .next .row{display:grid;grid-template-columns:minmax(9rem,14rem) minmax(0,1fr);gap:.5rem 1.6rem;
-  padding:1.5rem 0;border-top:1px solid var(--line)}
-.next .rk{font:500 .68rem/1.6 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:var(--gold)}
+  padding:1.5rem 0;border-top:1px solid var(--edge)}
+.next .rk{font:500 .66rem/1.6 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--g300)}
 .next .rk.ar{letter-spacing:.04em}
 .next .rv p{margin:0;color:var(--ink-2)}
 .next .rv p.ar{line-height:1.85}
 .next .mk{width:26px;height:26px;color:var(--ink-3);margin-bottom:.5rem}
 
-.contact{margin-top:3rem;padding:1.8rem 1.6rem;background:var(--surface-2);
-  border-inline-start:2px solid var(--ink-3);
-  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
-.contact h2{font-size:1.15rem;margin-bottom:.7rem}
+.contact{margin-top:3rem;padding:1.8rem 1.6rem;background:var(--panel);border-inline-start:3px solid var(--g300)}
+.contact h2{font-size:1.12rem;margin-bottom:.7rem}
 .contact p{margin:0;color:var(--ink-2);font-size:.95rem;max-width:56ch}
 .contact p.ar{line-height:1.85}
 
-/* ── the honesty layer ─────────────────────────────────────────────────────
-   Deliberately legible rather than fine print. Every word of it is carried
-   over unchanged: it is the part of this page that has to be true. */
-.disclose{max-width:56rem;margin:5rem auto 0;padding:2rem 1.5rem 5rem;
-  border-top:1px solid var(--line);font-size:.86rem;line-height:1.8;color:var(--ink-2)}
+/* ── the honesty layer: legible, never fine print. Carried over unchanged. ── */
+.disclose{max-width:60rem;margin:5rem auto 0;padding:2rem 1.5rem 5rem;
+  border-top:1px solid var(--edge);font-size:.86rem;line-height:1.8;color:var(--ink-2)}
 .disclose b{color:var(--ink)}
 
 @media (max-width:640px){
-  .hero{padding-top:min(11vh,5rem)}
+  .hero{padding-top:min(10vh,4.5rem)}
   section{padding-top:4rem}
   .next .row{grid-template-columns:1fr}
 }
@@ -259,6 +242,7 @@ section > p.ar{line-height:1.85}
       <span class="ar">طريقة جديدة لتجربة الفضاء</span>
     </div>
     <div class="spacer"></div>
+    <span id="clock" aria-hidden="true"></span>
     <div class="switch">
       <label for="lang-en" class="sw-en">ENGLISH</label>
       <label for="lang-ar" class="sw-ar">عربي</label>
@@ -287,7 +271,7 @@ section > p.ar{line-height:1.85}
     إنشاء بيئة صناعية ومجتمعية محلية تدعم رؤية الإمارات العربية المتحدة
     للفضاء.</strong></p>
 
-    <div class="flagrule"></div>
+    <div class="flagrule" aria-hidden="true"><i></i><i></i><i></i></div>
   </div>
 
 
@@ -517,50 +501,45 @@ section > p.ar{line-height:1.85}
 </div>
 
 <script>
-/* ═══ THE SKY ═════════════════════════════════════════════════════════════════
-   ONE scalar: altitude, read straight from the document's own scroll. The limb
-   drops away, the haze thins and the stars come out as you descend the page —
-   which is what actually happens on the way up, so the atmosphere is a physical
-   fact doing the work rather than an effect laid over the top. The content's own
-   arc runs 1974 → 2117; the page climbs with it.
+/* ═══ THE CONSTRUCTION ════════════════════════════════════════════════════════
+   ONE scalar: how far you have read. It drives a single thing — the completion
+   of a geometric construction — and the construction is the page's whole
+   atmosphere. There is nothing else moving.
 
-   Generated from maths, never from an asset: no image is fetched, so the "zero
-   external requests" law holds and the page still works with the cable pulled.
-   DPR capped, ~30fps, stopped when the tab is hidden, and never started at all
-   under prefers-reduced-motion — where the sky still renders, once, statically. */
+   WHAT IS BEING DRAWN, and why it is drawn rather than fetched. The eight-pointed
+   star is made by laying one square over the same square turned 45 degrees. That
+   is not an approximation of the figure; it is how the figure has always been
+   made, with compass and straightedge. So generating it from maths is the honest
+   method rather than a way around having no image files — and it means the page
+   still works with the network cable pulled.
+
+   The published design guidance for this context asks for basic geometric shapes,
+   solid colours with no gradients or soft transitions, and high contrast. Every
+   stroke below is a flat colour at a fixed alpha. Nothing interpolates, nothing
+   blurs, and there is not one gradient on this page.
+
+   As you read, the squares arrive, turn, and lock; then the figure repeats into a
+   lattice — which is what this geometry is for in the architecture it comes from:
+   a screen that filters light rather than a pattern that fills a wall.
+
+   Costs: DPR capped, ~30fps, redrawn only when the reading position has actually
+   moved, stopped while the tab is hidden, and never started under
+   prefers-reduced-motion — where the finished figure is drawn once, statically. */
 (function () {
   "use strict";
   var doc = document;
   var reduced = false; try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-  var fine = false; try { fine = matchMedia('(pointer: fine)').matches; } catch (e) {}
 
   var cv = doc.getElementById('sky');
   var cx = cv && cv.getContext ? cv.getContext('2d') : null;
-  var glow = doc.getElementById('glow');
   var pillars = [].slice.call(doc.querySelectorAll('.pillar'));
 
-  var alt = 0, W = 0, H = 0, dpr = 1, raf = 0, acc = 0, tPrev = 0, drift = 0;
-  var pxAim = 0, pxNow = 0, cur = -1, ticking = false;
-  var stars = [], seed = 7;
-  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  var W = 0, H = 0, dpr = 1, raf = 0, acc = 0, tPrev = 0;
+  var read = 0, drawn = -1, cur = -1;
 
-  function readAlt() {
+  function readPos() {
     var h = doc.documentElement.scrollHeight - innerHeight;
     return h > 0 ? Math.min(1, Math.max(0, (window.scrollY || doc.documentElement.scrollTop) / h)) : 0;
-  }
-
-  function sow() {
-    stars = [];
-    var n = Math.min(220, Math.round(innerWidth * innerHeight / 5200));
-    for (var i = 0; i < n; i++) {
-      stars.push({
-        x: rnd(), y: rnd(),
-        r: rnd() * 1.15 + 0.35,
-        /* how high you must be before this one is visible at all */
-        gate: rnd() * 0.72,
-        tw: rnd() * 6.28
-      });
-    }
   }
 
   function size() {
@@ -569,82 +548,98 @@ section > p.ar{line-height:1.85}
     if (!(innerWidth > 0 && innerHeight > 0)) { W = H = 0; return; }
     W = cv.width = Math.round(innerWidth * dpr);
     H = cv.height = Math.round(innerHeight * dpr);
-    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
-    if (!stars.length) sow();
+    cv.style.width = innerWidth + 'px';
+    cv.style.height = innerHeight + 'px';
+    drawn = -1;
   }
 
-  function paint(t) {
+  /* one cell of the figure: two squares, the second turned 45 degrees.
+     `turn` 0..1 rotates the second square into place; `grow` 0..1 opens both
+     from nothing to full size. Straight strokes, flat colour, no easing curve
+     baked in here — the easing is in how `turn` is fed. */
+  function cell(x, y, r, grow, turn, alpha, colour) {
+    if (grow <= 0.001 || alpha <= 0.004) return;
+    var s = r * grow;
+    cx.save();
+    cx.translate(x, y);
+    cx.globalAlpha = alpha;
+    cx.strokeStyle = colour;
+    cx.lineWidth = Math.max(2, 2.2 * dpr);
+    cx.beginPath();
+    cx.rect(-s, -s, s * 2, s * 2);
+    cx.stroke();
+    cx.rotate(turn * Math.PI / 4);
+    cx.beginPath();
+    cx.rect(-s, -s, s * 2, s * 2);
+    cx.stroke();
+    cx.restore();
+  }
+
+  function paint() {
     if (!cx || !(W > 0 && H > 0)) return;
     cx.clearRect(0, 0, W, H);
 
-    /* stars: each has its own altitude gate, so they do not all arrive together */
-    var par = (pxNow - 0.5) * 26 * dpr;
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i];
-      if (alt < s.gate) continue;
-      var a = Math.min(1, (alt - s.gate) / 0.22);
-      var tw = reduced ? 1 : 0.82 + 0.18 * Math.sin(t * 0.0011 + s.tw);
-      cx.globalAlpha = a * tw * 0.9;
-      cx.fillStyle = '#EDF2F6';
-      cx.beginPath();
-      cx.arc(s.x * W + par * (0.4 + s.r), s.y * H * 0.86, s.r * dpr, 0, 6.2832);
-      cx.fill();
+    /* the lattice spacing is fixed to the viewport's short side so the figure
+       keeps its proportions on a phone instead of turning into wallpaper */
+    var step = Math.max(96 * dpr, Math.min(W, H) / 5.2);
+    var r = step * 0.5;
+    var cols = Math.ceil(W / step) + 2;
+    var rows = Math.ceil(H / step) + 2;
+    var ox = (W - (cols - 1) * step) / 2;
+    var oy = (H - (rows - 1) * step) / 2;
+
+    /* cells arrive outward from the centre, so the figure builds rather than
+       fades. p is the reading position; each cell has its own threshold. */
+    var p = read;
+    var midc = (cols - 1) / 2, midr = (rows - 1) / 2;
+    var maxd = Math.sqrt(midc * midc + midr * midr) || 1;
+
+    for (var i = 0; i < cols; i++) {
+      for (var j = 0; j < rows; j++) {
+        var dx = i - midc, dy = j - midr;
+        var d = Math.sqrt(dx * dx + dy * dy) / maxd;      /* 0 centre .. 1 edge */
+        var gate = d * 0.62;                              /* outer cells arrive later */
+        /* +0.20 so the figure is already present on arrival and COMPLETES as you
+           read, rather than being absent for anyone who has not scrolled yet —
+           arrival is the one moment every reader sees */
+        var t = (p + 0.20 - gate) / 0.30;
+        if (t <= 0) continue;
+        if (t > 1) t = 1;
+        /* ease so the turn settles rather than stopping dead */
+        var e = 1 - Math.pow(1 - t, 3);
+        /* the published guidance asks for high contrast, and the first attempt
+           painted 1.18% of the canvas — technically present, effectively absent.
+           Raised until the figure is legible as a figure, and no further: it sits
+           behind reading text and must not compete with it. */
+        var alpha = 0.055 + 0.135 * e * (1 - d * 0.45);
+        cell(ox + i * step, oy + j * step, r, e, e, alpha, '#D7BC6D');
+      }
     }
-    cx.globalAlpha = 1;
-
-    /* the limb: a very large circle whose top edge is the horizon. It falls away
-       as you climb, which is the one thing on this page that is literally true
-       of the view it depicts. */
-    var R = W * 1.55;
-    var drop = H * (0.86 + alt * 0.95);
-    var cyc = drop + R;
-    var lift = 1 - alt;
-    cx.save();
-    cx.beginPath();
-    cx.arc(W / 2 + par * 0.5, cyc, R, 0, 6.2832);
-    cx.clip();
-    var g = cx.createLinearGradient(0, drop, 0, drop + H * 0.5);
-    g.addColorStop(0, 'rgba(224,172,76,' + (0.30 * lift + 0.05).toFixed(3) + ')');
-    g.addColorStop(0.35, 'rgba(22,48,59,' + (0.55 * lift + 0.12).toFixed(3) + ')');
-    g.addColorStop(1, 'rgba(4,7,12,0.92)');
-    cx.fillStyle = g;
-    cx.fillRect(0, drop - 2, W, H);
-    cx.restore();
-
-    /* the terminator line itself, thin and warm, fading as the air thins */
-    cx.globalAlpha = 0.5 * lift + 0.12;
-    cx.strokeStyle = 'rgba(224,172,76,.9)';
-    cx.lineWidth = Math.max(1, dpr);
-    cx.beginPath();
-    cx.arc(W / 2 + par * 0.5, cyc, R, Math.PI * 1.18, Math.PI * 1.82);
-    cx.stroke();
-    cx.globalAlpha = 1;
   }
 
-  /* which programme the reader is at: the one straddling a line a third down,
-     holding through the gap between two so a boundary cannot flicker */
+  /* which programme the reader is at — held through the gap between two, so a
+     boundary cannot flicker */
   function currentPillar() {
     if (!pillars.length) return -1;
-    var line = innerHeight * 0.42, nearest = 0, nd = Infinity;
+    var line = innerHeight * 0.42, nearest = -1, nd = Infinity;
     for (var i = 0; i < pillars.length; i++) {
-      var r = pillars[i].getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) continue;
-      if (r.top <= line && r.bottom >= line) return i;
-      var d = Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
+      var b = pillars[i].getBoundingClientRect();
+      if (b.bottom < 0 || b.top > innerHeight) continue;
+      if (b.top <= line && b.bottom >= line) return i;
+      var d = Math.min(Math.abs(b.top - line), Math.abs(b.bottom - line));
       if (d < nd) { nd = d; nearest = i; }
     }
     return nd < innerHeight * 0.5 ? nearest : cur;
   }
 
   function apply() {
-    alt = readAlt();
-    if (glow) glow.style.setProperty('--ha', (1 - alt * 0.88).toFixed(3));
+    read = readPos();
     var i = currentPillar();
     if (i !== cur) {
       cur = i;
       for (var k = 0; k < pillars.length; k++) pillars[k].classList.toggle('on', k === i);
     }
-    if (reduced) paint(0);
+    if (reduced) { drawn = -1; paint(); }
   }
 
   function tick(ts) {
@@ -652,37 +647,51 @@ section > p.ar{line-height:1.85}
     if (doc.hidden) return;
     if (!tPrev) tPrev = ts;
     var dt = Math.min(64, ts - tPrev); tPrev = ts;
-    if (Math.abs(pxAim - pxNow) > 0.001) pxNow += (pxAim - pxNow) * 0.06;
-    drift += dt;
     acc += dt; if (acc < 33) return; acc = 0;
-    paint(drift);
+    /* only repaint when the reading position has actually moved — a static
+       figure redrawn thirty times a second is thirty wasted frames */
+    if (Math.abs(read - drawn) < 0.0015) return;
+    drawn = read;
+    paint();
   }
   function start() { if (!raf && !reduced) { tPrev = 0; raf = requestAnimationFrame(tick); } }
   function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
 
+  var ticking = false;
   function onScroll() {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(function () { apply(); ticking = false; });
   }
 
+  /* ── the clock ────────────────────────────────────────────────────────────
+     Local time where the subject is, not where the reader is. It is computed
+     from the reader's own clock with a fixed offset rather than fetched, so it
+     stays true with the network gone; the UAE does not observe daylight saving,
+     so a fixed +04:00 is correct all year rather than correct today. */
+  var clockEl = doc.getElementById('clock');
+  function stamp() {
+    if (!clockEl) return;
+    try {
+      var d = new Date();
+      var uae = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + (4 * 3600000));
+      var hh = ('0' + uae.getHours()).slice(-2);
+      var mm = ('0' + uae.getMinutes()).slice(-2);
+      clockEl.textContent = 'Abu Dhabi ' + hh + ':' + mm;
+    } catch (e) { /* a header without a clock is still a header */ }
+  }
+
   try {
     size();
     apply();
-    paint(0);
+    paint();
+    stamp();
+    setInterval(stamp, 30000);
     addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', function () { size(); apply(); paint(drift); }, { passive: true });
+    addEventListener('resize', function () { size(); apply(); paint(); }, { passive: true });
     addEventListener('visibilitychange', function () {
       if (doc.hidden) stop(); else { apply(); start(); }
     });
-    if (fine && !reduced) {
-      /* the only pointer input, and it carries no state: it shifts the stars and
-         the limb a few pixels, and the document says exactly the same thing */
-      addEventListener('pointermove', function (e) {
-        if (e.pointerType === 'touch') return;
-        pxAim = e.clientX / (innerWidth || 1);
-      }, { passive: true });
-    }
     start();
   } catch (e) { /* the brochure is a complete, readable document without any of this */ }
 })();
