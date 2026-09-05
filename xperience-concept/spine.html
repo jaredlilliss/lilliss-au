@@ -189,7 +189,11 @@ body{
   display:block;margin-top:5px;max-width:22ch;margin-inline:auto;
   font:400 11px/1.4 var(--mono);color:var(--faint);
 }
-.stop.lost .nm{color:rgba(238,241,248,.68)}
+/* --muted, not a literal .68. The intent — a lost stop reads dimmer than a found one —
+   is right and is kept; the value was drift. .68 sits 0.02 above --muted's .66, which no
+   eye resolves, so it bought nothing and quietly put a fifth alpha into a page whose whole
+   discipline is one ink at four. Found by census, 05/09/2026. */
+.stop.lost .nm{color:var(--muted)}
 
 /* visibility:hidden, not just clipping: a clipped link is still in the tab
    order, so tabbing walked into source links on stops nobody could see. */
