@@ -26,7 +26,14 @@
 :root{
   --night:#05070d; --panel:rgba(255,255,255,.028); --panel-line:rgba(255,255,255,.085);
   --panel-line-strong:rgba(255,255,255,.16);
-  --ink:#eceff5; --muted:#8d96aa; --faint:#6b7488;
+  /* --faint was #6b7488, which measures 4.30:1 on --night against a 4.5 requirement, and it
+     carries TEXT — every .q section heading on the page, eleven elements. #717A90 gives 4.69.
+     Tiers stay ordered: ink #eceff5, muted #8d96aa (6.78:1), faint #717A90 (4.69:1).
+     The sibling page at jaredlilliss.github.io/privacy.html had the SAME fault at 3.70:1
+     from a different token (rgba alpha .40, not a hex), which is why a grep for the colour
+     would not have found both — the two privacy pages are separate files with separate
+     palettes. Found 06/09/2026 by a composited sweep at 100% coverage. */
+  --ink:#eceff5; --muted:#8d96aa; --faint:#717A90;
   --ember:#ff8c4a; --ember-soft:rgba(255,140,74,.08);
   --serif:"Fraunces",Georgia,"Times New Roman",serif;
   --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
