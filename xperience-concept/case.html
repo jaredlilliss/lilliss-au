@@ -78,6 +78,25 @@ a{color:inherit}
   text-transform:uppercase;color:var(--dim);margin-top:3px}
 .top nav{display:flex;gap:4px;font-size:13px}
 .top nav a{padding:6px 10px;border-radius:var(--r-sm);color:var(--muted);text-decoration:none}
+/* MOBILE MASTHEAD. The brand plus four section links cannot share a 54px row at 375px, and
+   because a flex item defaults to min-width:auto, nothing here could shrink: the masthead's
+   min-content was 434px, so the browser widened the LAYOUT viewport to 414 to fit it and the
+   whole page rendered zoomed out — every glyph smaller than designed. Measured 06/09/2026 at
+   375x812. Note the page reported no horizontal scroll precisely BECAUSE it had zoomed out,
+   which is why an overflow check alone does not find this: compare innerWidth against
+   documentElement.clientWidth, not scrollWidth against clientWidth.
+   The fix is to let the wide thing scroll inside itself rather than widen the page, and
+   min-width:0 is the half that actually matters. */
+@media (max-width:620px){
+  .top .wide{gap:10px}
+  .top .wide>*{min-width:0}
+  .top nav{overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .top nav::-webkit-scrollbar{display:none}
+}
+/* NB: "Concept · not affiliated" stays visible at every width. The first version of this
+   rule hid it on mobile to win ~130px, which is the wrong trade twice over — it is the
+   page's affiliation disclaimer, on a concept that restyles a real organisation's material,
+   and phones are where most people would meet it. Space is never bought from a disclosure. */
 .top nav a:hover{color:var(--ink);background:var(--s-2)}
 
 /* ── hero ─────────────────────────────────────────────────────────────────── */

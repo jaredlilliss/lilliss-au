@@ -129,9 +129,21 @@ h2{font:900 clamp(2rem,5.2vw,4rem)/.98 var(--display);letter-spacing:-.035em;mar
 .prose p strong{font-weight:800}
 .prose a{font-weight:800;color:var(--accent);text-decoration:none;border-bottom:3px solid var(--accent)}
 .prose a:hover{color:var(--ink);border-bottom-color:var(--ink)}
-.certs{border:3px solid var(--ink);padding:1.2rem 1.4rem}
+/* min-width:0 because .certs is a GRID ITEM, and a grid item defaults to min-width:auto just
+   as a flex item does — so it could not shrink below its content even after .cert learned to
+   wrap. It was the ONLY thing on the page over 375px: every other section of main sits at
+   103–172, and main's own 420 was just this 388 plus its padding. */
+.certs{border:3px solid var(--ink);padding:1.2rem 1.4rem;min-width:0}
 .certs h3{font:800 .82rem/1.4 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem}
-.cert{display:flex;justify-content:space-between;gap:1rem;padding:.65rem 0;border-top:2px solid var(--rule);font-weight:600}
+/* A flex item defaults to min-width:auto, so "Microsoft Azure Fundamentals (AZ-900)" could
+   not wrap: .cert held a min-content of 391px, .certs added its border and padding to make
+   442, and Chrome widened the LAYOUT viewport to 459 on a 375px device to fit it — the page
+   rendered zoomed out, every glyph smaller than designed. .two already collapses to one
+   column at 820px; this was the thing inside it that would not narrow. Measured 06/09/2026.
+   The page reported NO horizontal scroll, because it had zoomed out instead — which is why
+   this is caught by comparing innerWidth to documentElement.clientWidth, not scrollWidth. */
+.cert{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;padding:.65rem 0;border-top:2px solid var(--rule);font-weight:600}
+.cert>*{min-width:0}
 .cert:first-of-type{border-top:0}
 .cert span{font:800 .78rem/1.6 var(--display);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
 .cert span.held{color:var(--live)}
@@ -153,6 +165,12 @@ footer a:hover{color:#FF7A47;border-bottom-color:#FF7A47}
   .count{gap:1rem}
 }
 @media (max-width:560px){
+  /* .certs carries 50.8px of its own chrome (22.4px padding each side + a 3px border each
+     side). With min-width:0 it shrank from 442 to 388, which still left the page 4px wider
+     than a 375px device — enough to keep it zoomed out, and "no horizontal scroll at 375px"
+     is binary. Tightening the panel's own padding is the ordinary responsive answer; the
+     3px border is the look and stays. */
+  .certs{padding:1rem}
   .wrap{padding:0 1rem}
   .bar{gap:.6rem 1rem;padding-top:.9rem;padding-bottom:.9rem}
   nav{width:100%;margin-inline-start:0;gap:0 .9rem}
