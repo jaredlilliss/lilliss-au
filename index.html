@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lilliss IT — small-business IT support, Sydney</title>
-<meta name="description" content="Lilliss IT is Jared Lilliss — IT support and field technician across Sydney and regional NSW. POS and EFTPOS, Windows, networks, CCTV and AV. One person from fault intake to fix.">
+<title>Lilliss IT — Jared Lilliss</title>
+<meta name="description" content="Jared Lilliss — field IT across Sydney and regional NSW: point-of-sale and EFTPOS, networks, Windows, cameras. And software built to keep running, including a live NSW health-data collector.">
 <meta name="theme-color" content="#05070d">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://lilliss.au/">
@@ -12,13 +12,13 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT">
-<meta property="og:title" content="Lilliss IT — small-business IT support, Sydney">
-<meta property="og:description" content="One person from fault intake to fix. POS and EFTPOS, Windows, networks, CCTV and AV — across Sydney and regional NSW.">
+<meta property="og:title" content="Lilliss IT — Jared Lilliss">
+<meta property="og:description" content="Field IT across Sydney and regional NSW — point-of-sale, networks, Windows, cameras. And software built to keep running, including a live NSW health-data collector.">
 <meta property="og:url" content="https://lilliss.au/">
 <meta property="og:locale" content="en_AU">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lilliss IT — small-business IT support, Sydney">
-<meta name="twitter:description" content="One person from fault intake to fix. POS and EFTPOS, Windows, networks, CCTV and AV.">
+<meta name="twitter:title" content="Lilliss IT — Jared Lilliss">
+<meta name="twitter:description" content="Field IT across Sydney and regional NSW, and software built to keep running — including a live NSW health-data collector.">
 
 
 <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
@@ -29,7 +29,7 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Lilliss IT",
-  "description": "Small-business IT support and field technician services across Sydney and regional NSW.",
+  "description": "Jared Lilliss — field IT across Sydney and regional NSW, and software built to keep running, including a live NSW health-data collector.",
   "url": "https://lilliss.au/",
   "email": "jared@lilliss.au",
   "founder": { "@type": "Person", "name": "Jared Lilliss" },
@@ -178,6 +178,14 @@ nav a.cta{color:var(--ember)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.22}}
 @media (prefers-reduced-motion:reduce){.dot{animation:none}}
 
+/* ── three decisions here that look like omissions ───────────────────────────
+   1. The h1 is a NAME, not a slogan. On lilliss.au that states the one-person
+      fact instead of arguing it, which the page previously did six times over.
+   2. The Aussie Health card does not repeat the hero's sentence about every ED
+      and fifteen minutes. Hero states the fact, the card says what to go and
+      look at, the About says how it is built. Keep them from converging.
+   3. Services sits AFTER Work on purpose, and each card states scope rather
+      than selling it. */
 h1{font-family:var(--serif);font-weight:600;line-height:.95;letter-spacing:-.022em;
   font-size:clamp(44px,9.2vw,116px)}
 h1 .ln{display:block}
@@ -215,36 +223,6 @@ h2{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
-/* ── the handoff (signature device) ────────────────────────────────────── */
-.handoff{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:58px}
-@media (max-width:760px){.handoff{grid-template-columns:1fr}}
-.lane{background:var(--s-1);border:1px solid var(--edge);border-radius:var(--r-lg);padding:32px 28px;
-  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
-.lane.here{background:linear-gradient(180deg,rgba(255,140,74,.07),var(--s-1));border-color:rgba(255,140,74,.32)}
-.lane-k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:6px}
-.lane.here .lane-k{color:var(--ember)}
-.lane-n{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:600;line-height:1.15;
-  margin-bottom:26px;letter-spacing:-.01em}
-.chain{list-style:none;display:flex;flex-direction:column;gap:0}
-.chain li{position:relative;padding:13px 0 13px 34px;color:var(--muted);font-size:15.2px}
-.chain li::before{
-  content:"";position:absolute;left:8px;top:20px;width:9px;height:9px;border-radius:50%;
-  background:var(--bg-2);border:1px solid var(--edge-2);
-}
-.chain li:not(:last-child)::after{
-  content:"";position:absolute;left:12px;top:29px;bottom:-4px;width:1px;background:var(--edge);
-}
-.lane.here .chain li::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 10px rgba(255,140,74,.55)}
-.lane.here .chain li{color:var(--ink)}
-.chain .gap{
-  padding:6px 0 6px 34px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ember-deep)
-}
-.chain .gap::before,.chain .gap::after{display:none}
-.lane-foot{margin-top:26px;padding-top:20px;border-top:1px solid var(--edge);
-  font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--dim)}
-.lane.here .lane-foot{color:var(--ember)}
 
 /* ── work ──────────────────────────────────────────────────── */
 /* Three rules. The cards, grid, headings and reveal are #services' own, reused
@@ -275,11 +253,6 @@ h2{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1
 .card h3{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.008em;margin-bottom:12px;line-height:1.2}
 .card p{color:var(--muted);font-size:15.2px}
 
-/* ── pull quote ────────────────────────────────────────────────────────── */
-.pull{margin:0;padding:clamp(46px,7vw,84px) 0}
-.pull p{font-family:var(--serif);font-weight:400;font-style:italic;
-  font-size:clamp(24px,4.2vw,46px);line-height:1.22;letter-spacing:-.015em;max-width:900px}
-.pull p em{font-style:normal;color:var(--ember)}
 
 /* ── about + certs ─────────────────────────────────────────────────────── */
 .two{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(32px,6vw,72px);margin-top:52px;align-items:start}
@@ -324,9 +297,8 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   <div class="bar">
     <a class="sig" href="/"><b>LILLISS</b> IT</a>
     <nav>
-      <a href="#services">Services</a>
-      <a href="#how">How it runs</a>
       <a href="#work">Work</a>
+      <a href="#services">Services</a>
       <a href="#about">About</a>
       <a class="cta" href="#contact">Contact</a>
       <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
@@ -343,107 +315,28 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       <span id="clock">Sydney</span>
       <span>Bass Hill · Sydney &amp; regional NSW</span>
     </div>
-
     <h1>
-      <span class="ln">Someone has to</span>
-      <span class="ln">actually</span>
-      <span class="ln"><em>turn up.</em></span>
+      <span class="ln">Jared</span>
+      <span class="ln"><em>Lilliss</em></span>
     </h1>
 
     <p class="lede">
-      Lilliss IT is <strong>Jared Lilliss</strong>. Point-of-sale and EFTPOS, networks and
-      Wi&#8209;Fi, Windows machines and cameras &mdash; for venues and small businesses across
-      Sydney and regional NSW, usually the same day. You deal with one person the whole way
-      through.
+      I fix the gear small businesses run on &mdash; point&#8209;of&#8209;sale and EFTPOS,
+      networks, Windows machines, cameras &mdash; across Sydney and regional NSW.
+      I also build software, and keep it running: a collector that has taken a reading
+      from <strong>every NSW emergency department publishing a live count, every fifteen
+      minutes since July</strong>.
     </p>
 
     <div class="cta">
-      <a class="btn hot" href="#contact">Get in touch</a>
-      <a class="btn" href="#services">What I do</a>
+      <a class="btn hot" href="#work">See the work</a>
+      <a class="btn" href="#contact">Get in touch</a>
     </div>
 
     <div class="facts">
       <span>Trading since 2019, registered 2026</span>
       <span>ABN 78 576 434 613</span>
-      <span>No call centre, no ticket queue</span>
-    </div>
-  </section>
-
-
-  <section id="services">
-    <p class="sec-k rv">Services</p>
-    <h2 class="rv">What I do</h2>
-    <p class="sec-sub rv">
-      Mostly hospitality venues and small businesses — often mid-service, when it can't wait
-      until Monday.
-    </p>
-
-    <div class="cards">
-      <article class="card rv">
-        <h3>POS &amp; EFTPOS</h3>
-        <p>Rollouts, replacements and fault resolution for point-of-sale and payment terminals. Getting the tills taking money again is the job.</p>
-      </article>
-      <article class="card rv">
-        <h3>Windows support</h3>
-        <p>Endpoint and hardware support for Windows machines — setup, repair, migration, and the recurring faults nobody has had time to chase down.</p>
-      </article>
-      <article class="card rv">
-        <h3>Networks</h3>
-        <p>Structured cabling, switching and Wi-Fi for small sites. Tidy racks, labelled runs, and documentation you can hand to the next person.</p>
-      </article>
-      <article class="card rv">
-        <h3>CCTV &amp; AV</h3>
-        <p>Camera and audio-visual installation and troubleshooting for venues and shopfronts, from mounting to configuration.</p>
-      </article>
-      <article class="card rv">
-        <h3>Small-business IT</h3>
-        <p>The rest of it — email, printers, backups, vendor wrangling. If it plugs in and the business depends on it, it's in scope.</p>
-      </article>
-    </div>
-  </section>
-
-
-  <blockquote class="pull rv">
-    <p>A fault isn't fixed when it stops showing.<br>It's fixed when it's <em>written down</em> —
-    what broke, what fixed it, and what to watch for next time.</p>
-  </blockquote>
-
-
-  <section id="how">
-    <p class="sec-k rv">How it runs</p>
-    <h2 class="rv">Count the handoffs</h2>
-    <p class="sec-sub rv">
-      Every handoff is a place your context gets dropped and re-explained. That's the whole
-      difference, and it's the reason this is a one-man operation on purpose.
-    </p>
-
-    <div class="handoff">
-      <div class="lane rv">
-        <p class="lane-k">The usual way</p>
-        <p class="lane-n">Four people, three handoffs</p>
-        <ul class="chain">
-          <li>A call centre takes the details</li>
-          <li class="gap">↓ handoff</li>
-          <li>A ticket joins a queue</li>
-          <li class="gap">↓ handoff</li>
-          <li>A dispatcher assigns it out</li>
-          <li class="gap">↓ handoff</li>
-          <li>A tech who's never seen your site arrives</li>
-        </ul>
-        <p class="lane-foot">You explain it four times.</p>
-      </div>
-
-      <div class="lane here rv">
-        <p class="lane-k">Here</p>
-        <p class="lane-n">One person, no handoffs</p>
-        <ul class="chain">
-          <li>You ring Jared</li>
-          <li>Jared scopes it</li>
-          <li>Jared fixes it</li>
-          <li>Jared writes it up</li>
-        </ul>
-        <p class="lane-foot">You explain it once.</p>
-      </div>
+      <span>CompTIA A+ &middot; AZ-900</span>
     </div>
   </section>
 
@@ -461,11 +354,10 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     <div class="cards">
       <article class="card rv">
         <h3>Aussie Health Utility</h3>
-        <p>A collector that takes a reading from every NSW emergency department
-        publishing a live count, every fifteen minutes since July. It runs
-        unattended on a small Melbourne server, backs itself up nightly, and
-        publishes a board anyone can read &mdash; with the counting method written
-        on the page, including what the data cannot support.</p>
+        <p>It has run unattended on a small Melbourne server since the cutover,
+        backing itself up nightly, and nobody has had to touch it. The board it
+        publishes is open to anyone &mdash; and the counting method is printed on
+        the board itself, including the things the numbers cannot be used to say.</p>
         <div class="work-foot">
           <a class="wln" href="https://jaredlilliss.github.io/queue-board/">The live board &rarr;</a>
           <a class="wln" href="https://github.com/jaredlilliss/aussie-health-utility">Public mirror &rarr;</a>
@@ -512,28 +404,64 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </div>
   </div>
 </section>
+  <section id="services">
+    <p class="sec-k rv">Services</p>
+    <h2 class="rv">On site</h2>
+    <p class="sec-sub rv">
+      Hospitality venues and small businesses across Sydney and regional NSW,
+      usually the same day.
+    </p>
+
+    <div class="cards">
+      <article class="card rv">
+        <h3>POS &amp; EFTPOS</h3>
+        <p>Rollouts, replacements and fault resolution for point-of-sale and payment terminals.</p>
+      </article>
+      <article class="card rv">
+        <h3>Windows support</h3>
+        <p>Setup, repair, migration and endpoint hardware for Windows machines.</p>
+      </article>
+      <article class="card rv">
+        <h3>Networks</h3>
+        <p>Structured cabling, switching and Wi-Fi for small sites &mdash; runs labelled, layout documented.</p>
+      </article>
+      <article class="card rv">
+        <h3>CCTV &amp; AV</h3>
+        <p>Camera and audio-visual installation and troubleshooting, from mounting to configuration.</p>
+      </article>
+      <article class="card rv">
+        <h3>Small-business IT</h3>
+        <p>Email, printers, backups, and dealing with vendors so you don't have to.</p>
+      </article>
+    </div>
+  </section>
+
 
 <section id="about">
     <p class="sec-k rv">About</p>
-    <h2 class="rv">Field tech hands,<br>systems head</h2>
+    <h2 class="rv">Two kinds of work,<br>one set of habits</h2>
 
     <div class="two">
       <div class="prose rv">
         <p>
-          Lilliss IT is a one-man operation, on purpose. No handoffs between a sales rep, a
-          dispatcher and a tech who's never seen your site — <strong>the person you first speak
-          to is the person on the ladder.</strong>
+          The health platform is a polling loop feeding an append-only PostgreSQL
+          time series. <strong>Its privacy posture is set at the schema level</strong>
+          &mdash; there is no column for personal or health information, so none can
+          be collected by mistake rather than none being collected by policy. Nothing
+          is ever updated in place either: a reading that turns out to be wrong is
+          corrected by a later row, not by editing the record of what was published
+          at the time.
         </p>
         <p>
-          Day work keeps the standard honest. When a venue's tills stop mid-service the fix has
-          to be real, fast, and documented, because the next person to touch that site deserves
-          to know what happened.
+          The site work is the same instinct. Every build here is a single
+          self-contained HTML file &mdash; no framework, no build step, no tracker,
+          fonts served from the same domain &mdash; because a page that depends on
+          four services is a page with four ways to stop working.
         </p>
         <p>
-          Away from client work I build a privacy-by-design data platform over public Australian
-          health datasets — a polling loop feeding an append-only PostgreSQL time series, with
-          the privacy posture set at the schema level so no personal or health information is
-          ever collected. It has been collecting since July 2026, and now runs unattended on a Melbourne server.
+          The field work keeps it honest. When a venue's tills stop mid-service the
+          fix has to hold, and it has to be written down, because the next person on
+          that site inherits whatever I leave behind.
           <a href="https://jaredlilliss.github.io/" style="color:var(--ember);text-decoration:none;border-bottom:1px solid var(--ember-dim)">See the build →</a>
         </p>
       </div>
@@ -550,10 +478,11 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 
   <section id="contact">
     <p class="sec-k rv">Contact</p>
-    <h2 class="rv">Describe the fault.<br>You'll get a straight answer.</h2>
+    <h2 class="rv">Get in touch</h2>
     <p class="sec-sub rv">
-      Available across Sydney and regional NSW. Tell me the fault, the gear and the urgency, and
-      you'll get a straight answer about whether I can help and when — including when I can't.
+      A fault, a site, or a build &mdash; tell me what it is and how soon you need it,
+      and you'll get a straight answer about whether I can help and when, including
+      when I can't.
     </p>
 
     <a class="mail rv" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry&amp;body=The%20fault%3A%0D%0A%0D%0AThe%20gear%3A%0D%0A%0D%0AUrgency%20%E2%80%94%20mid-service%2C%20today%2C%20or%20this%20week%3A%0D%0A%0D%0ASuburb%3A%0D%0A">jared@lilliss.au</a>
