@@ -20,17 +20,48 @@
 </head>
 <body>
 <style>
-/* Latin faces, self-hosted from THIS domain — the same three files spine.html
-   already serves. No font network is contacted; privacy.html's promise holds.
-   Arabic is deliberately NOT in these files, so Arabic text falls through to
-   the platform faces later in each stack, which is the correct behaviour.
+/* Faces, self-hosted from THIS domain. No font network is contacted, privacy.html's
+   promise holds, and the page still sets correctly with the cable pulled.
 
-   ⚠️ The UAE Government Design System specifies Alexandria for Latin and Noto
-   Kufi Arabic for Arabic. Both are open-licensed and could be self-hosted here,
-   which would be the fully correct answer. Adding font binaries to this repo is
-   the owner's call, not mine, so this uses what is already served and says so. */
-@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
-  src:url('/fonts/inter.woff2') format('woff2')}
+   THE TWO NAMED FACES ARE NOT A PREFERENCE. The UAE Government Design System
+   names Alexandria for Latin and Noto Kufi Arabic for Arabic. Both are SIL OFL
+   1.1; both are now here, and the licences travel with them — /fonts/LICENSES.md.
+
+   WHAT THIS REPLACED, and why it mattered more than a brand note. The old stack
+   opened 'Inter','Segoe UI' and neither holds a single Arabic glyph, so every
+   Arabic run on the page — a little under half the text — resolved to whatever
+   Arabic face the reader's operating system happened to supply. Tahoma here,
+   Geeza Pro there, something else on Android. The page did not know what its own
+   Arabic looked like, and could not have known.
+
+   unicode-range below is load-bearing, not decoration. Alexandria ships as its
+   Latin cut only, so declaring its range means the browser never considers it
+   for an Arabic glyph: Arabic resolves to Noto Kufi by rule, rather than by the
+   accident of a font happening to lack the character.
+
+   Noto Kufi is subset from Google's own Arabic cut — the whole U+0600–06FF block
+   plus supplements and the bidi controls, every layout feature kept. 124 KB →
+   75 KB, verified metrically identical to the unsubsetted file across all 43
+   Arabic strings on this page (a first attempt that dropped U+0020 was caught
+   this way: it silently changed 39 of them). NOT in it: the legacy Presentation
+   Forms U+FB50–FDFF, and the maths and symbol blocks. Ordinary Arabic never uses
+   those codepoints, though some copy-paste sources emit them. The command that
+   regenerates the file is in /fonts/README.md.
+
+   ⚠️ BOTH RANGES BELOW ARE READ OUT OF THE FILES, not copied from the request
+   that built them. They are not the same thing. An earlier pass declared
+   U+0020-007E on Noto Kufi because that is what the subsetter was ASKED to keep;
+   Google's Arabic cut never held Latin letters to begin with, so all that
+   survived was the space. The browser then saw 'X' inside a range that claimed
+   it, found no glyph, and fell through per-glyph to Segoe UI — putting a THIRD
+   face on a page whose whole argument is that it uses this system's two.
+   Declaring less than a file holds is harmless; declaring more is a silent bug. */
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/alexandria-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Noto Kufi Arabic';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/notokufiarabic-arabic.woff2') format('woff2');
+  unicode-range:U+0020,U+00A0,U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08E1,U+08E3-08FF,U+200C-200E,U+FD3E-FD3F,U+FEFF}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
   src:url('/fonts/plexmono-400.woff2') format('woff2')}
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
@@ -77,7 +108,30 @@
   --panel:#2E1B0B;           /* solid, never translucent — no soft transitions */
   --panel-2:#3A230E;
   --mono:'IBM Plex Mono',ui-monospace,Consolas,'Cascadia Mono',monospace;
-  --sans:'Inter','Segoe UI','Noto Kufi Arabic','Noto Naskh Arabic','Noto Sans Arabic','Geeza Pro','Arabic Typesetting',system-ui,-apple-system,sans-serif;
+  /* Alexandria carries Latin, Noto Kufi carries Arabic, and the unicode-range on
+     each @font-face decides which — not the order of the platform fallbacks,
+     which are only here for the seconds before the files land. */
+  --sans:'Alexandria','Noto Kufi Arabic','Segoe UI','Noto Naskh Arabic','Geeza Pro',system-ui,-apple-system,sans-serif;
+  /* The Arabic stack. Same faces as --sans, Noto Kufi FIRST, and it is not
+     redundant with --sans — the reason is the space. U+0020 sits inside
+     Alexandria's declared unicode-range, so in a mixed run the Arabic letters
+     came from Noto Kufi while the word spaces came from Alexandria, whose space
+     is 21% narrower (324 vs 408 per ten, measured at 120px). Arabic prose was
+     being word-spaced by the Latin font. Leading with Noto Kufi hands it back
+     its own spacing, and the Latin digits inside Arabic sentences — the <bdi>
+     years — then come from the face set around them.
+
+     ONE variable, not two. The small tracked labels use --mono for texture in
+     Latin, and an earlier pass gave them a separate Arabic variable; it held a
+     byte-identical value. Arabic has no monospace counterpart in play here, and
+     Noto Kufi already is the geometric face those labels want, so the honest
+     answer is a single stack rather than two names for one value.
+
+     Alexandria sits SECOND here on purpose. Noto Kufi's Arabic cut holds no
+     Latin letters, so the brand name and the <bdi> years inside Arabic sentences
+     fall past it — and they should land on the design system's own Latin face,
+     the same one setting the masthead, not on the reader's system font. */
+  --sans-ar:'Noto Kufi Arabic','Alexandria','Segoe UI','Noto Naskh Arabic','Geeza Pro',system-ui,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -96,7 +150,7 @@ strong,b{font-weight:600;color:var(--ink)}
    The canvas sits between the radios and .doc so all of them stay siblings —
    this is a sibling selector and breaks the moment anything nests between. */
 #lang-en,#lang-ar{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-.ar{display:none}
+.ar{display:none}   /* the Arabic face is assigned at the foot of this sheet */
 #lang-ar:checked ~ .doc .ar{display:revert}
 #lang-ar:checked ~ .doc .en{display:none}
 #lang-ar:checked ~ .doc{direction:rtl}
@@ -201,7 +255,7 @@ section > p.ar{line-height:1.85}
 .next .row{display:grid;grid-template-columns:minmax(9rem,14rem) minmax(0,1fr);gap:.5rem 1.6rem;
   padding:1.5rem 0;border-top:1px solid var(--edge)}
 .next .rk{font:500 .66rem/1.6 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--g300)}
-.next .rk.ar{letter-spacing:.04em}
+.next .rk.ar{line-height:1.5}
 .next .rv p{margin:0;color:var(--ink-2)}
 .next .rv p.ar{line-height:1.85}
 .next .mk{width:26px;height:26px;color:var(--ink-3);margin-bottom:.5rem}
@@ -225,6 +279,39 @@ section > p.ar{line-height:1.85}
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
 }
+
+/* ═══ THE ARABIC CORRECTIONS ══════════════════════════════════════════════════
+   Deliberately the last thing in this stylesheet, and the position is doing the
+   work — read the specificity note under each rule before moving either of them.
+
+   ── 1. every Arabic run gets the Arabic face ─────────────────────────────────
+   `.ar` alone is (0,1,0), and nine Arabic elements were beaten by ordinary type
+   rules declared after it: .tag (0,1,0, later in source), .snap .k (0,2,0),
+   .pillar h3 and .place h3 (0,1,1). They rendered in Alexandria — which has no
+   Arabic — and fell through per-glyph to whatever the reader's system supplied.
+
+   `.doc .ar` is (0,2,0) and last, so it clears all four. Every Arabic element on
+   the page is inside .doc; that was measured, not assumed. .sw-ar is listed
+   separately because the language switch's own Arabic label carries no .ar
+   class — it is the one Arabic run that selector cannot reach. */
+.doc .ar,
+.switch label.sw-ar{font-family:var(--sans-ar)}
+
+/* ── 2. Arabic takes no tracking ──────────────────────────────────────────────
+   Arabic letters JOIN. CSS letter-spacing inserts a gap at every letter boundary
+   and breaks a word into disconnected shapes. The display rules further up
+   already reset it — h1, h2, the snap figures — but the small tracked labels did
+   not, and were still carrying up to .24em on the hero's own eyebrow. Eight runs
+   measured non-zero; this is the rule that took them to zero.
+
+   .next .rk.ar ties these on specificity, so source order settles it. The .04em
+   it used to declare has been deleted rather than left to lose quietly — a
+   stylesheet should not contain a declaration that contradicts the page. */
+.eyebrow.ar,
+.badge.ar,
+.brand span.ar,
+.switch label.sw-ar,
+.next .rk.ar{letter-spacing:0}
 </style>
 
 <input type="radio" name="lang" id="lang-en" checked>
