@@ -240,7 +240,7 @@ h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
 .flag i:nth-child(1){background:var(--green)}
 .flag i:nth-child(2){background:var(--g50)}
 .flag i:nth-child(3){background:var(--red)}
-.flag i:nth-child(4){flex:.55;background:#0B0B0B}
+.flag i:nth-child(4){flex:.55;background:#0B0B0B;box-shadow:0 0 0 1px rgba(249,247,237,.22)}  /* the black band needs an edge on a night sky, or four bars read as three */
 
 /* ── C. the instrument ────────────────────────────────────────────────────── */
 .chain{position:relative;padding-block:clamp(26px,5vw,52px) clamp(30px,5vw,58px);
@@ -322,11 +322,6 @@ section > p.ar{font-family:var(--sans-ar);line-height:1.9}
 .badge{display:inline-block;margin-block-end:12px;border:1px solid var(--g500);color:var(--ink-3);
   padding:4px 9px;font:500 .56rem/1.3 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
 .badge.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none;font-size:.68rem}
-.srcs{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
-.srcs li{counter-increment:s;display:flex;gap:12px;align-items:baseline;
-  color:var(--ink-2);font-size:.93rem}
-.srcs li::before{content:counter(s);color:var(--ink-3);font:500 .62rem/1.6 var(--mono);flex:none;min-width:1.6em}
-.srcs .host{color:var(--ink-3);font:400 .78rem/1.6 var(--mono)}
 .disclose{border-block-start:1px solid var(--edge);padding-block:clamp(34px,5vw,60px);
   color:var(--ink-2);font-size:.92rem;line-height:1.85}
 .disclose p{max-width:74ch;margin:0 0 14px}
@@ -359,6 +354,15 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 .eyebrow.ar,.badge.ar,.tb .k.ar,.tb .v.ar,.mk .lbl.ar,.readout.ar,.src-line .lbl.ar,
 .ledger .n.ar,.ret.ar,.switch label.sw-ar,.srcs .host.ar{letter-spacing:normal}
 .doc .ar,.tb .v.ar,.tb .k.ar,.srcs li.ar,.disclose p.ar,footer .ar{font-family:var(--sans-ar)}
+/* ═══ HIDERS, RE-ASSERTED LAST ═══════════════════════════════════════════════════
+   .ar{display:none} at the top of this sheet is (0,1,0), and it LOST: to
+   .badge{display:inline-block} (0,1,0, later in source) and to .ledger .n
+   {display:block} (0,2,0). Found 08/09 by an outside read of the shipped
+   render: the Arabic badge sat beside the English one on every place card, and
+   with scripting off every stage number appeared twice. A hider must win by
+   specificity or by source order; this one now wins by both. The language
+   switch, #lang-ar:checked ~ .doc .ar, is (1,2,0) and still wins over it. */
+.doc .ar{display:none}
 </style>
 </head>
 <body>
@@ -516,11 +520,11 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
       Initiative, and not a channel to them. Stage titles and place descriptions are quoted from
       their published pages; <b>the order between them is this page&rsquo;s argument, not theirs.</b>
       Arabic is a translation prepared for this concept.
-      <a href="/xperience-concept/notes.html">Notes, sources and full disclosure &rarr;</a></p>
+      <a href="/xperience-concept/notes.html">Notes, sources and full disclosure&nbsp;&rarr;</a></p>
     <p class="ar"><b>&#1607;&#1584;&#1575; &#1578;&#1589;&#1608;&#1585;&#1548; &#1608;&#1604;&#1610;&#1587; &#1578;&#1603;&#1604;&#1610;&#1601;&#1611;&#1575;.</b> &#1583;&#1585;&#1575;&#1587;&#1577; &#1578;&#1589;&#1605;&#1610;&#1605; &#1594;&#1610;&#1585; &#1605;&#1591;&#1604;&#1608;&#1576;&#1577; &#1571;&#1593;&#1583;&#1617;&#1607;&#1575; &#1580;&#1575;&#1585;&#1610;&#1583; &#1604;&#1610;&#1604;&#1610;&#1587;
       (&#1604;&#1610;&#1604;&#1610;&#1587; &#1570;&#1610; &#1578;&#1610;)&#1548; &#1594;&#1610;&#1585; &#1578;&#1575;&#1576;&#1593;&#1577; &#1604;&#1604;&#1605;&#1576;&#1575;&#1583;&#1585;&#1577; &#1608;&#1604;&#1575; &#1605;&#1593;&#1578;&#1605;&#1583;&#1577; &#1605;&#1606;&#1607;&#1575; &#1608;&#1604;&#1575; &#1602;&#1606;&#1575;&#1577; &#1604;&#1604;&#1578;&#1608;&#1575;&#1589;&#1604; &#1605;&#1593;&#1607;&#1575;. &#1593;&#1606;&#1575;&#1608;&#1610;&#1606; &#1575;&#1604;&#1605;&#1585;&#1575;&#1581;&#1604;
       &#1608;&#1575;&#1604;&#1571;&#1605;&#1575;&#1603;&#1606; &#1605;&#1602;&#1578;&#1576;&#1587;&#1577; &#1605;&#1606; &#1589;&#1601;&#1581;&#1575;&#1578;&#1607;&#1605;&#1548; <b>&#1571;&#1605;&#1575; &#1575;&#1604;&#1578;&#1585;&#1578;&#1610;&#1576; &#1576;&#1610;&#1606;&#1607;&#1575; &#1601;&#1607;&#1608; &#1581;&#1580;&#1577; &#1607;&#1584;&#1607; &#1575;&#1604;&#1589;&#1601;&#1581;&#1577;.</b>
-      <a href="/xperience-concept/notes.html">&#1575;&#1604;&#1605;&#1604;&#1575;&#1581;&#1592;&#1575;&#1578; &#1608;&#1575;&#1604;&#1605;&#1589;&#1575;&#1583;&#1585; &#1608;&#1575;&#1604;&#1573;&#1601;&#1589;&#1575;&#1581; &#1575;&#1604;&#1603;&#1575;&#1605;&#1604; &#8592;</a></p>
+      <a href="/xperience-concept/notes.html">&#1575;&#1604;&#1605;&#1604;&#1575;&#1581;&#1592;&#1575;&#1578; &#1608;&#1575;&#1604;&#1605;&#1589;&#1575;&#1583;&#1585; &#1608;&#1575;&#1604;&#1573;&#1601;&#1589;&#1575;&#1581; &#1575;&#1604;&#1603;&#1575;&#1605;&#1604;&nbsp;&#8592;</a></p>
   </div>
 
   <footer class="wrap">
@@ -534,7 +538,6 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 (function () {
   'use strict';
   var doc = document;
-  doc.documentElement.className += ' js';
 
   /* ═══ ONE SCALAR, NINE WRITERS, ONE RESOLVER ══════════════════════════════
      `f` is the only piece of state: how far along the chain the argument is
@@ -554,7 +557,8 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 
   var N = 6;
   var f = 0, target = 0, refusal = null, raf = 0;
-  var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var REDUCED = false;
+  try { REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
 
   var chain = doc.getElementById('chain');
   var marks = doc.getElementById('marks');
@@ -583,6 +587,13 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     };
   });
   if (STAGES.length !== N) return;
+
+  /* ONLY NOW does the document become scripted. This line used to sit at the top
+     of the closure, before the guards above -- so any early return left
+     .js .ledger{display:none} in force with the plate never filled: a page with
+     no stages on it at all. The fallback must stay the truth until the
+     instrument has actually been built. */
+  doc.documentElement.className += ' js';
 
   function isAr() { return doc.getElementById('lang-ar').checked; }
 
@@ -910,10 +921,11 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     });
   });
 
-  /* the sources count is COMPUTED from the DOM, not authored — so the title
-     block cannot drift from the list at the foot of the page. */
-  var sc = doc.getElementById('srccount'), list = doc.getElementById('srcs');
-  if (sc && list) sc.textContent = String(list.querySelectorAll('a[href]').length);
+  /* The SOURCES count in the title block is AUTHORED, and this says so. A
+     comment here used to claim it was computed from the DOM; the element it read
+     (#srcs) has never existed in this file -- the list lives in notes.html -- so
+     the computation could not fire and the comment described a check that did
+     not exist. If notes.html changes, change <bdi id="srccount"> by hand. */
 
   render();
 })();
