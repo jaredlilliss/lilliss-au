@@ -8,7 +8,7 @@
 
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
-<meta name="theme-color" content="#150C04">
+<meta name="theme-color" content="#0C0805">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT — concept prototype">
 <meta property="og:title" content="Before This — XperienceSpace | Lilliss IT concept">
@@ -62,9 +62,11 @@
    Counted on disk, same directory, same day:
      spine.html      13 gradient declarations, 0 canvas   <- called a masterpiece
      brochure.html    0 gradient declarations, 1 canvas   <- called horrible
-   The gradient-free page lost. So the horizon comes back, and the illustration rule
-   is obeyed where it actually applies: the khatim below is solid, geometric,
-   hard-edged, 1px, no gradient, constructed rather than drawn.
+   The gradient-free page lost. So the horizon came back — and then three separate
+   editions put a GEOMETRIC FIGURE in front of it, gold hairlines on brown, and all
+   three were rejected in turn. The figure was the fault, not the finish. There is
+   no illustration on this page any more, so the illustration rule now governs
+   nothing here: the ground is a sky and the only marks in it are stars.
 
    THE INSTRUMENT. One scalar, `f`, on [0,6]: how far along the chain the argument is
    actually true. Nine input paths write it; ONE function resolves them; everything
@@ -150,45 +152,43 @@ a:hover{color:var(--ink);text-decoration-color:var(--g300)}
 :focus-visible{outline:2px solid var(--g300);outline-offset:3px}
 strong,b{font-weight:600;color:var(--ink)}
 
-/* ── L1 the travelling night ────────────────────────────────────────────────
-   Fixed, full-bleed, and the ONLY thing the loop touches is --fh. The horizon
-   rises and warms as the chain fills: that is the ground moving under the
-   reader's thumb, which is the specific thing the bar page does and the page
-   this replaces did not. Cost per frame: one custom-property write. */
+/* ── L1 THE SKY ─────────────────────────────────────────
+   Three editions drew the same picture here — gold hairlines, a geometric
+   figure, on brown — and all three were rejected. The fault was never the
+   animation. A DIAGRAM was standing where a scene belongs. Counted on disk in
+   this same directory: the page called a masterpiece has 13 gradients and no
+   figure at all; the front door is an aurora; the field page is a dawn over
+   ridges. Not one of them has a motif.
+   So: overhead, warming to an ember at the rim where a city sits below the
+   horizon. The ember is capped so the composite at the bottom of the frame
+   never passes #4A2E10 — the stop the whole type ramp was measured against.
+   The chain still lifts it, which is the one coupling worth keeping: the ground
+   moves under the reader's thumb. Cost per frame: one custom-property write. */
 #ground{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(140% 46% at 50% calc((104 - var(--fh)*16) * 1%), rgba(215,188,109,.13), transparent 66%),
-    linear-gradient(180deg,
-      #150C04 0%,
-      #1D1206 calc((34 + var(--fh)*6) * 1%),
-      #241608 calc((62 + var(--fh)*10) * 1%),
-      #3A230E calc((84 + var(--fh)*8) * 1%),
-      #4A2E10 100%);}
-/* ── L3 grain — six 1px specks, static. The bar page's own comment says this is
-      what stopped its emptiness reading as BLANK rather than as SPACE. ─────── */
-#ground::after{content:"";position:absolute;inset:0;opacity:.5;
+    radial-gradient(140% 38% at 50% calc((118 - var(--fh)*8) * 1%),
+      rgba(199,124,44,calc(.12 + var(--fh)*.07)), transparent 64%),
+    radial-gradient(120% 60% at 26% -4%, rgba(78,98,150,.13), transparent 68%),
+    linear-gradient(180deg,#07080C 0%,#090A0E 42%,#0E0D10 66%,#1A1109 86%,#2C1B0B 100%);}
+/* ── L3 haze at the rim. These were six specks scattered over the whole frame,
+      which is what the bar page does and what stops its emptiness reading as
+      BLANK rather than as SPACE. They move DOWN here, into the band where the
+      canvas stars wash out, because a real sky's stars do wash out into the
+      glow — and because a static speck sitting beside a turning one is a lie
+      the eye catches. With scripting off they are the only sky there is. */
+#ground::after{content:"";position:absolute;inset:0;opacity:.42;
   background:
-    radial-gradient(1px 1px at 12% 22%, rgba(249,247,237,.42), transparent),
-    radial-gradient(1px 1px at 78% 14%, rgba(249,247,237,.30), transparent),
-    radial-gradient(1px 1px at 34% 68%, rgba(249,247,237,.36), transparent),
-    radial-gradient(1px 1px at 62% 47%, rgba(249,247,237,.28), transparent),
-    radial-gradient(1px 1px at 88% 74%, rgba(249,247,237,.34), transparent),
-    radial-gradient(1px 1px at 21% 88%, rgba(249,247,237,.26), transparent);}
+    radial-gradient(1px 1px at 12% 62%, rgba(249,247,237,.34), transparent),
+    radial-gradient(1px 1px at 78% 71%, rgba(249,247,237,.26), transparent),
+    radial-gradient(1px 1px at 34% 78%, rgba(249,247,237,.30), transparent),
+    radial-gradient(1px 1px at 62% 66%, rgba(249,247,237,.22), transparent),
+    radial-gradient(1px 1px at 88% 84%, rgba(249,247,237,.28), transparent),
+    radial-gradient(1px 1px at 21% 88%, rgba(249,247,237,.20), transparent);}
 
-/* ── L2 the khatim: the ILLUSTRATION, where the AEGOV rule actually applies.
-      Solid 1px gold strokes, geometric, hard-edged, no gradient. One square over
-      the same square turned 45 degrees — the compass-and-straightedge method,
-      which is why generating it from maths is the honest construction and not a
-      way around having no image files. Composited once, never repainted. ───── */
-/* L2 the khatim, LIVE. This was a static tiled <svg><pattern> for one commit and
-   that was the single worst thing about the page: same motif, dead. The previous
-   edition's own comment named the trap and I walked into it anyway — "the lattice
-   spacing is fixed to the viewport's short side so the figure keeps its
-   proportions on a phone instead of turning into WALLPAPER."
-   It is a canvas again, and it is now driven by the chain's own scalar rather
-   than by scroll position: the figure completes as the ARGUMENT completes. Cells
-   arrive outward from the centre, each with its own threshold, so it builds
-   rather than fades. Repaints only when the scalar has actually moved. */
+/* ── L2 the stars. Canvas, and the ONLY thing it draws is points and arcs.
+      No figure, no lattice, no khatim: the illustration rule has nothing to
+      govern here because there is no illustration. See THE SKY in the script
+      for why it turns and what turns it. */
 #screen{position:fixed;inset:0;z-index:1;pointer-events:none;display:block;width:100%;height:100%}
 .doc{position:relative;z-index:2}
 
@@ -586,17 +586,26 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 
   function isAr() { return doc.getElementById('lang-ar').checked; }
 
-  /* ═══ THE FIGURE ══════════════════════════════════════════════════════════
-     A lattice of khatim cells that ARRIVES as the chain advances. Each cell is
-     two squares, the second turning 45 degrees into place; cells further from
-     the centre have a later threshold, so the figure builds outward instead of
-     fading up. Driven by `f`, not by scroll — the atmosphere completes as the
-     argument does, which is the coupling the bar page has and a static pattern
-     cannot. Repaints only when the scalar has actually moved; a still figure
-     redrawn sixty times a second is sixty wasted frames. */
+  /* ═══ THE SKY ════════════════════════════════════════════════
+     It turns. Lie on your back in a desert long enough and the stars wheel
+     about the pole; that is the one thing a night sky actually does, and it is
+     the reason this page is tall. SCROLLING IS THE EXPOSURE — the further down
+     the argument you are, the further the sky has turned, about 77 degrees end
+     to end. Under that runs a slow drift of roughly half a degree a second, so
+     the sky is alive for a reader who has stopped scrolling, the way weather is
+     and an instrument is not.
+
+     The bright stars drag a short arc behind them so the turn is legible in a
+     still frame. Arc LENGTH grows with distance from the pole because that is
+     how the geometry works — same angle, longer chord — and a uniform trail
+     would read as a brush stroke rather than as rotation.
+
+     Nothing here follows the pointer, and that is deliberate. The edition this
+     replaces put a straightedge through the cursor, and pointer-chasing is
+     exactly what made it read as an apparatus. Weather does not answer you. */
   var cv = doc.getElementById('screen');
   var cx = cv && cv.getContext ? cv.getContext('2d') : null;
-  var CW = 0, CH = 0, dpr = 1, drawn = -1;
+  var CW = 0, CH = 0, dpr = 1;
 
   function sizeCanvas() {
     if (!cx) return;
@@ -606,117 +615,115 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     CH = cv.height = Math.round(innerHeight * dpr);
     cv.style.width = innerWidth + 'px';
     cv.style.height = innerHeight + 'px';
-    drawn = -1;
   }
 
-  /* WHERE THE HAND IS. -1 means no pointer has ever moved (touch, or a reader who
-     has not moved yet), and the figure then holds a resting angle instead of
-     snapping to a corner. */
-  var hx = -1, hy = -1, aim = 0.42, aimT = 0.42;
-
-  function ring(cxp, cyp, r, turn, alpha, w) {
-    if (r <= 1 || alpha <= 0.004) return;
-    cx.save(); cx.translate(cxp, cyp); cx.rotate(turn);
-    cx.globalAlpha = alpha; cx.strokeStyle = '#D7BC6D';
-    cx.lineWidth = Math.max(1, w * dpr);
-    cx.beginPath(); cx.rect(-r, -r, r * 2, r * 2); cx.stroke();
-    cx.restore();
+  /* Generated once, from a fixed seed, in POLAR coordinates about the pole — so
+     the sky is the same sky on every load and on every resize, and turning it is
+     one addition per star rather than a rebuild. sqrt() on the radius because
+     uniform r crowds the pole: area grows with r, so density must not. */
+  var seed = 20260908 >>> 0;
+  function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+  var SKY = [];
+  for (var si = 0; si < 2000; si++) {
+    SKY.push({ r: Math.sqrt(rnd()) * 0.97, a: rnd() * 6.2832, m: rnd() * rnd(), w: rnd() < 0.11 });
   }
 
-  function paintFigure() {
+  var SKY_BASE = 0.62;
+  function clock() { return (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0; }
+  var t0 = clock();
+
+  /* REDUCED MOTION FREEZES THE WHOLE SKY, drift and scroll coupling alike. A
+     scroll-linked rotation is user-driven and would arguably pass, but the
+     reader who asked for less movement did not ask for a caveat. One still
+     field, no loop, no listeners. */
+  function turn() {
+    if (REDUCED) return SKY_BASE;
+    var de = doc.documentElement;
+    var span = (de.scrollHeight || 0) - innerHeight;
+    var y = window.pageYOffset || de.scrollTop || 0;
+    var s = span > 8 ? Math.min(1, Math.max(0, y / span)) : 0;
+    return SKY_BASE + s * 1.35 + (clock() - t0) * 0.000008;
+  }
+
+  function paintSky() {
     if (!cx) return;
     /* SELF-HEALING SIZE. sizeCanvas() at init reads innerWidth, and if the page
        is laid out before the viewport exists — a hidden pane, a restored tab, a
-       print/preview pass — it reads 0, the buffer stays at the 300x150 default
-       and NO resize event necessarily follows to correct it. Measured exactly
-       that: viewport 1280x900, CSS box 1265x900, buffer still 300x150, figure
-       invisible. So the size is checked here, on the path that actually draws,
-       rather than trusted from an event that may never fire. */
+       print pass — it reads 0, the buffer stays at the 300x150 default, and NO
+       resize event necessarily follows to correct it. Measured exactly that:
+       viewport 1280x900, CSS box 1265x900, buffer still 300x150, nothing drawn.
+       So the size is checked on the path that actually paints. */
     var wantW = Math.round(innerWidth * Math.min(devicePixelRatio || 1, 1.5));
     var wantH = Math.round(innerHeight * Math.min(devicePixelRatio || 1, 1.5));
     if (wantW > 0 && wantH > 0 && (cv.width !== wantW || cv.height !== wantH)) sizeCanvas();
     if (!(CW > 0 && CH > 0)) return;
     cx.clearRect(0, 0, CW, CH);
 
-    var p = f / (N - 1);
-    var ox = CW / 2, oy = CH * 0.46;
-    var R = Math.min(CW, CH) * 0.42;
+    var th = turn();
+    var px = CW * 0.22, py = CH * 0.10;
+    var S = Math.hypot(CW, CH) * 0.88;
+    var fade = CH * 0.56, band = CH * 0.46;
 
-    /* THE STRAIGHTEDGE. One line from the centre of the construction out through
-       wherever the hand is, carried to the edge of the frame. It is the only
-       thing on the page that answers the pointer directly, and it is what makes
-       the figure feel drawn rather than printed. */
-    if (hx >= 0) {
-      var vx = hx - ox, vy = hy - oy, L = Math.sqrt(vx * vx + vy * vy) || 1;
-      var reach = Math.max(CW, CH);
-      cx.save();
-      cx.globalAlpha = 0.16; cx.strokeStyle = '#D7BC6D';
-      cx.lineWidth = Math.max(1, 1 * dpr);
-      cx.beginPath();
-      cx.moveTo(ox - vx / L * reach, oy - vy / L * reach);
-      cx.lineTo(ox + vx / L * reach, oy + vy / L * reach);
-      cx.stroke();
-      /* the compass point itself */
-      cx.globalAlpha = 0.5;
-      cx.beginPath(); cx.arc(hx, hy, 3 * dpr, 0, 6.2832); cx.stroke();
-      cx.restore();
-    }
-
-    /* THE COMPASS ARC — the circle both squares are inscribed in. Drawn because
-       that is how the figure is actually constructed, not as decoration. */
     cx.save();
-    cx.globalAlpha = 0.10; cx.strokeStyle = '#D7BC6D';
-    cx.lineWidth = Math.max(1, 1 * dpr);
-    cx.beginPath(); cx.arc(ox, oy, R * Math.SQRT2, 0, 6.2832); cx.stroke();
+    cx.translate(px, py); cx.rotate(th); cx.translate(S * 0.44, 0);
+    cx.rotate(1.02); cx.scale(1, 0.19);
+    var mw = cx.createRadialGradient(0, 0, 0, 0, 0, S * 0.9);
+    mw.addColorStop(0,   'rgba(154,163,201,.085)');
+    mw.addColorStop(0.5, 'rgba(126,133,172,.040)');
+    mw.addColorStop(1,   'rgba(126,133,172,0)');
+    cx.fillStyle = mw;
+    cx.beginPath(); cx.arc(0, 0, S * 0.9, 0, 6.2832); cx.fill();
     cx.restore();
 
-    /* THE CONSTRUCTION. One square, and the same square turned — the khatim, made
-       the way it has always been made. The TURN follows the hand: at rest it sits
-       at a resting angle, and it opens toward 45 degrees as the pointer swings.
-       Nested rings step inward, each slightly further through its own turn, so the
-       figure reads as a construction in progress rather than a finished stamp.
-       How MANY rings is the one thing the chain still governs — the argument
-       deepens the figure, the hand turns it. */
-    var rings = 3 + Math.round(p * 3);
-    for (var i = 0; i < rings; i++) {
-      var k = i / Math.max(1, rings - 1);
-      var r = R * (1 - k * 0.72);
-      var lead = aim + k * 0.22;
-      var a = 0.20 - k * 0.10;
-      ring(ox, oy, r, 0, a, 1.2);
-      ring(ox, oy, r, lead * Math.PI / 4, a, 1.2);
-    }
-
-    /* the eight points where the two squares cross — the khatim's actual vertices */
     cx.save();
-    cx.globalAlpha = 0.28; cx.fillStyle = '#D7BC6D';
-    for (var q = 0; q < 8; q++) {
-      var th = q * Math.PI / 4 + aim * Math.PI / 8;
-      var rr = R * 1.06;
+    cx.globalCompositeOperation = 'destination-out';
+    var er = cx.createLinearGradient(0, fade * 0.86, 0, CH * 0.94);
+    er.addColorStop(0, 'rgba(0,0,0,0)'); er.addColorStop(1, 'rgba(0,0,0,1)');
+    cx.fillStyle = er; cx.fillRect(0, fade * 0.86, CW, CH);
+    cx.restore();
+
+    for (var i = 0; i < SKY.length; i++) {
+      var s = SKY[i], ang = s.a + th, rad = s.r * S;
+      var x = px + Math.cos(ang) * rad, y = py + Math.sin(ang) * rad;
+      if (x < -24 || y < -24 || x > CW + 24 || y > CH + 24) continue;
+      /* washed out into the ember, the way they are over a lit horizon */
+      var k = y > fade ? 1 - (y - fade) / band : 1;
+      if (k <= 0.02) continue;
+      var a = (0.16 + s.m * 0.26) * k;   /* ceiling .42 — see above */
+      var col = s.w ? '215,188,109' : '249,247,237';
+      if (s.m > 0.52 && s.r > 0.30) {
+        var len = 0.010 + s.r * 0.009;
+        cx.beginPath();
+        cx.arc(px, py, rad, ang - len, ang);
+        cx.strokeStyle = 'rgba(' + col + ',' + (a * 0.52).toFixed(3) + ')';
+        cx.lineWidth = Math.max(1, (0.5 + s.m * 0.6) * dpr);
+        cx.stroke();
+      }
       cx.beginPath();
-      cx.arc(ox + Math.cos(th) * rr, oy + Math.sin(th) * rr, 1.6 * dpr, 0, 6.2832);
+      cx.arc(x, y, (0.9 + s.m * 1.4) * dpr, 0, 6.2832);
+      cx.fillStyle = 'rgba(' + col + ',' + a.toFixed(3) + ')';
       cx.fill();
     }
-    cx.restore();
   }
 
-  /* The hand drives the turn directly — no rAF dependency, because a pointer
-     event only happens while the page is visible anyway, and the figure is one
-     construction rather than two hundred cells, so drawing it on the event is
-     cheaper than scheduling a frame. */
-  function onHand(e) {
-    if (!cx || !(CW > 0 && CH > 0)) return;
-    hx = e.clientX * dpr; hy = e.clientY * dpr;
-    var ox = CW / 2, oy = CH * 0.46;
-    var ang = Math.atan2(hy - oy, hx - ox);
-    aimT = ((ang / Math.PI) + 1) % 0.5 / 0.5;      /* 0..1 across a quarter turn */
-    aim = REDUCED ? aimT : aim + (aimT - aim) * 0.35;
-    paintFigure();
+  /* Self-terminating on hidden, same rule the chain's loop follows: rAF does not
+     fire while document.hidden, so a queued frame that never arrives would leave
+     skyRaf pinned and the loop dead on return. Measured: 0 callbacks in 4s. */
+  var skyRaf = 0, lastTh = NaN;
+  function skyTick() {
+    skyRaf = 0;
+    if (doc.hidden) return;
+    var th = turn();
+    if (isNaN(lastTh) || Math.abs(th - lastTh) > 0.0004) { lastTh = th; paintSky(); }
+    skyQueue();
   }
-  addEventListener('pointermove', onHand, { passive: true });
+  function skyQueue() { if (!skyRaf && !doc.hidden && !REDUCED) skyRaf = requestAnimationFrame(skyTick); }
 
   sizeCanvas();
-  addEventListener('resize', function () { sizeCanvas(); paintFigure(); }, { passive: true });
+  paintSky();
+  skyQueue();
+  addEventListener('resize', function () { sizeCanvas(); lastTh = NaN; paintSky(); }, { passive: true });
+  doc.addEventListener('visibilitychange', function () { if (!doc.hidden) { lastTh = NaN; skyQueue(); } });
 
   /* the six marks, as real buttons: pointer and keyboard are one code path */
   STAGES.forEach(function (s, k) {
@@ -831,7 +838,6 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
       ? ('سلسلة الأسبقية. ' + preadout.textContent + '. استخدم مفاتيح الأسهم للتنقل.')
       : ('The precedence chain. ' + preadout.textContent + '. Use arrow keys to move along it.'));
 
-    paintFigure();
   }
 
   /* ── writers 1–2: drag and wheel, both over the chain only ─────────────── */
