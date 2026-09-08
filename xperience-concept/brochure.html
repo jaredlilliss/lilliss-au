@@ -3,59 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>The Brochure — XperienceSpace | Lilliss IT concept</title>
-<meta name="description" content="An unsolicited Lilliss IT design concept: a one-page bilingual brochure for XperienceSpace, English and Arabic, built to the UAE Design System's palette. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<title>Before This — XperienceSpace | Lilliss IT concept</title>
+<meta name="description" content="An unsolicited Lilliss IT design concept for XperienceSpace, English and Arabic side by side, built to the UAE Design System. Six stages in the order they have to become true. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
 
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
-<meta name="theme-color" content="#241608">
+<meta name="theme-color" content="#150C04">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT — concept prototype">
-<meta property="og:title" content="The Brochure — XperienceSpace | Lilliss IT concept">
-<meta property="og:description" content="An unsolicited Lilliss IT design concept: a one-page bilingual brochure for XperienceSpace, English and Arabic, built to the UAE Design System's palette. Not affiliated with, endorsed by, or commissioned by the XperienceSpace Initiative.">
+<meta property="og:title" content="Before This — XperienceSpace | Lilliss IT concept">
+<meta property="og:description" content="Six stages in the order they have to become true. An unsolicited bilingual design concept. Not affiliated with the XperienceSpace Initiative.">
 <meta property="og:url" content="https://lilliss.au/xperience-concept/brochure.html">
 <meta property="og:locale" content="en_AU">
 <meta property="og:locale:alternate" content="ar_AE">
 <meta name="twitter:card" content="summary">
-</head>
-<body>
 <style>
-/* Faces, self-hosted from THIS domain. No font network is contacted, privacy.html's
-   promise holds, and the page still sets correctly with the cable pulled.
+/* ═══ THE FACES ═══════════════════════════════════════════════════════════════
+   Carried over verbatim from the previous edition. This plumbing cost a subsetting
+   harness, a metrics comparison across 43 Arabic strings and a specificity audit;
+   nothing in this rebuild justifies re-deriving it.
 
-   THE TWO NAMED FACES ARE NOT A PREFERENCE. The UAE Government Design System
-   names Alexandria for Latin and Noto Kufi Arabic for Arabic. Both are SIL OFL
-   1.1; both are now here, and the licences travel with them — /fonts/LICENSES.md.
+   The two named faces are not a preference. The UAE Government Design System names
+   Alexandria for Latin and Noto Kufi Arabic for Arabic. Both are SIL OFL.
 
-   WHAT THIS REPLACED, and why it mattered more than a brand note. The old stack
-   opened 'Inter','Segoe UI' and neither holds a single Arabic glyph, so every
-   Arabic run on the page — a little under half the text — resolved to whatever
-   Arabic face the reader's operating system happened to supply. Tahoma here,
-   Geeza Pro there, something else on Android. The page did not know what its own
-   Arabic looked like, and could not have known.
-
-   unicode-range below is load-bearing, not decoration. Alexandria ships as its
-   Latin cut only, so declaring its range means the browser never considers it
-   for an Arabic glyph: Arabic resolves to Noto Kufi by rule, rather than by the
-   accident of a font happening to lack the character.
-
-   Noto Kufi is subset from Google's own Arabic cut — the whole U+0600–06FF block
-   plus supplements and the bidi controls, every layout feature kept. 124 KB →
-   75 KB, verified metrically identical to the unsubsetted file across all 43
-   Arabic strings on this page (a first attempt that dropped U+0020 was caught
-   this way: it silently changed 39 of them). NOT in it: the legacy Presentation
-   Forms U+FB50–FDFF, and the maths and symbol blocks. Ordinary Arabic never uses
-   those codepoints, though some copy-paste sources emit them. The command that
-   regenerates the file is in /fonts/README.md.
-
-   ⚠️ BOTH RANGES BELOW ARE READ OUT OF THE FILES, not copied from the request
-   that built them. They are not the same thing. An earlier pass declared
+   DECLARE LESS THAN THE FILE HOLDS, NEVER MORE. An earlier pass declared
    U+0020-007E on Noto Kufi because that is what the subsetter was ASKED to keep;
-   Google's Arabic cut never held Latin letters to begin with, so all that
-   survived was the space. The browser then saw 'X' inside a range that claimed
-   it, found no glyph, and fell through per-glyph to Segoe UI — putting a THIRD
-   face on a page whose whole argument is that it uses this system's two.
-   Declaring less than a file holds is harmless; declaring more is a silent bug. */
+   only the space survived. The browser then saw 'X' inside a range that claimed it,
+   found no glyph, and fell through per-glyph to Segoe UI — putting a THIRD face on
+   a page whose whole argument is that it uses this system's two. Both ranges below
+   were read back out of the binaries with fontTools, not copied from the request. */
 @font-face{font-family:'Alexandria';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/alexandria-latin.woff2') format('woff2');
   unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -67,746 +43,787 @@
 @font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
   src:url('/fonts/plexmono-500.woff2') format('woff2')}
 
-/* ═══ THE CONSTRUCTION ════════════════════════════════════════════════════════
-   Rebuilt 05/09/2026, and it is a rebuild rather than a repaint because the
-   previous edition was off-brief — mine was, not anyone else's.
+/* ═══ WHAT THIS PAGE IS, AND WHY IT IS NOT THE PREVIOUS ONE ═══════════════════
+   Rebuilt 08/09/2026. The previous edition was a brochure: a two-column bilingual
+   leaflet, 5,933px tall for 103 text nodes, with three consecutive 720px gaps.
+   Measured on it before deleting it: ZERO animated CSS properties, ZERO pointerdown
+   handlers, ZERO <a> elements, and exactly TWO clickable things — the two halves of
+   one language toggle. There was nothing on the page a reader could touch, nowhere
+   to go, and no source to check.
 
-   THE BRIEF IS NOT MY OPINION. The UAE Government Design System publishes its
-   own illustration principles, and they read: "Geometric — create illustrations
-   using basic geometric shapes." "Solid colours — don't use gradients,
-   contouring, or soft transitions." "High contrast." "Less is more."
+   THE MEASUREMENT THAT REVERSED THE BRIEF. The previous edition stripped its
+   gradient horizon on 05/09 and said so in its own comment: "The edition this
+   replaces was a soft gradient horizon with haze. Every word of that brief said no."
+   The brief it cited is real — but it is the AEGOV ILLUSTRATION principles:
+   "Geometric - create ILLUSTRATIONS using basic geometric shapes." "Solid colours -
+   don't use gradients, contouring, or soft transitions." Those govern the MARKS.
+   Applied to the sky, they turn a page into flat printed matter.
 
-   The edition this replaces was a soft gradient horizon with haze. Every word of
-   that brief said no. So: solid fills, hard edges, no gradient anywhere on this
-   page, and a motif built from basic shapes.
+   Counted on disk, same directory, same day:
+     spine.html      13 gradient declarations, 0 canvas   <- called a masterpiece
+     brochure.html    0 gradient declarations, 1 canvas   <- called horrible
+   The gradient-free page lost. So the horizon comes back, and the illustration rule
+   is obeyed where it actually applies: the khatim below is solid, geometric,
+   hard-edged, 1px, no gradient, constructed rather than drawn.
 
-   THE MOTIF IS CONSTRUCTED, NOT BORROWED. The eight-pointed star — khatim — is
-   made by overlaying one square on the same square turned 45°, which is how it
-   has always been made, with compass and straightedge. Drawing it from maths is
-   therefore not a shortcut around having no assets; it is the actual method. The
-   page builds it as you read, and at the end it becomes a screen — which is what
-   the geometry is for in the architecture it comes from: light, filtered.
+   THE INSTRUMENT. One scalar, `f`, on [0,6]: how far along the chain the argument is
+   actually true. Nine input paths write it; ONE function resolves them; everything
+   visible derives from it. Retreat is always granted. Forward is granted one link at
+   a time — reach past the frontier and the chain goes taut under the thumb and the
+   page names the thing that has to be true first. That refusal is the whole idea:
+   it is the only behaviour here that no stepper, timeline or progress bar performs.
 
-   PALETTE IS THEIRS, taken from the design system's published core ramp rather
-   than sampled off a photograph. Every value below is quoted, not invented.
+   THE AXIS IS AN ARGUMENT, NOT A CALENDAR, and the page says so on screen rather
+   than in this comment. The four programmes run at the same time. They do not
+   become true at the same time. ═══════════════════════════════════════════════ */
 
-   ONE committed palette, no theme switch. Nothing here interpolates. */
+/* ═══ STRUCTURE ══════════════════════════════════════════════════════════════
+   Held here rather than as HTML comments: an HTML comment is markup, it ships to
+   every reader, and it is where internal rationale leaks. The pre-push gate flags
+   them for exactly that reason, and it was right to.
+
+     A  header.tb      the title block. A drawing's, not a masthead.
+     B  .hero          the claim — their sentence, and the question under it
+     C  #chain         THE INSTRUMENT. Six marks, the frontier plate, the sentence,
+                       the source line, the readout, the range, the return edge.
+     D  .axis          the axis declaration — on screen, not in a comment, because
+                       the reader has to be told the ORDER is the argument
+     E  ol.ledger      the chain as a document. The scripting-off truth AND the
+                       nodes the script reads, so the two states cannot disagree.
+     F  .places        the two places, each opening with the disambiguation
+     G  what they say they are not — their own published limits
+     H  .srcs          nine primary sources, visible domains
+     I  .disclose      the disclosure, unweakened
+   ════════════════════════════════════════════════════════════════════════════ */
 :root{
   /* AEGOV core palette — the published gold ramp, verbatim */
   --g50:#F9F7ED;  --g100:#F2ECCF; --g200:#E6D7A2; --g300:#D7BC6D;
   --g400:#CBA344; --g500:#B68A35; --g600:#92722A; --g700:#7C5E24;
   --g800:#6C4527; --g900:#5D3B26; --g950:#361E12;
-  /* AEGOV semantic ramps — used ONCE each, on the flag rule, and nowhere else */
   --red:#D83731; --green:#3F8E50;
 
-  --ground:#241608;          /* the deepest ground: one step under g950 */
-  --ink:#F9F7ED;             /* g50 */
-  --ink-2:#E6D7A2;           /* g200 */
-  --ink-3:#CBA344;           /* g400 — still 5:1+ on the ground, checked */
-  --edge:#5D3B26;            /* g900, for hard rules */
+  --ground:#241608;
+  --ink:#F9F7ED;             /* g50  — 11.57:1 on the LIGHTEST ground stop */
+  --ink-2:#E6D7A2;           /* g200 —  8.65:1 */
+  --ink-3:#CBA344;           /* g400 —  5.25:1, the AA body floor */
+  --edge:#5D3B26;            /* g900, hard rules */
   --edge-2:#7C5E24;          /* g700 */
-  --panel:#2E1B0B;           /* solid, never translucent — no soft transitions */
+  --panel:#2E1B0B;
   --panel-2:#3A230E;
   --mono:'IBM Plex Mono',ui-monospace,Consolas,'Cascadia Mono',monospace;
-  /* Alexandria carries Latin, Noto Kufi carries Arabic, and the unicode-range on
-     each @font-face decides which — not the order of the platform fallbacks,
-     which are only here for the seconds before the files land. */
   --sans:'Alexandria','Noto Kufi Arabic','Segoe UI','Noto Naskh Arabic','Geeza Pro',system-ui,-apple-system,sans-serif;
-  /* The Arabic stack. Same faces as --sans, Noto Kufi FIRST, and it is not
-     redundant with --sans — the reason is the space. U+0020 sits inside
-     Alexandria's declared unicode-range, so in a mixed run the Arabic letters
-     came from Noto Kufi while the word spaces came from Alexandria, whose space
-     is 21% narrower (324 vs 408 per ten, measured at 120px). Arabic prose was
-     being word-spaced by the Latin font. Leading with Noto Kufi hands it back
-     its own spacing, and the Latin digits inside Arabic sentences — the <bdi>
-     years — then come from the face set around them.
 
-     ONE variable, not two. The small tracked labels use --mono for texture in
-     Latin, and an earlier pass gave them a separate Arabic variable; it held a
-     byte-identical value. Arabic has no monospace counterpart in play here, and
-     Noto Kufi already is the geometric face those labels want, so the honest
-     answer is a single stack rather than two names for one value.
-
-     Alexandria sits SECOND here on purpose. Noto Kufi's Arabic cut holds no
-     Latin letters, so the brand name and the <bdi> years inside Arabic sentences
-     fall past it — and they should land on the design system's own Latin face,
-     the same one setting the masthead, not on the reader's system font. */
+  /* The Arabic stack. Noto Kufi FIRST, and it is not redundant with --sans: the
+     reason is the space. U+0020 sits inside Alexandria's declared range, so in a
+     mixed run the Arabic letters came from Noto Kufi while the word spaces came
+     from Alexandria, whose space is 21% narrower (324 vs 408 per ten at 120px).
+     Arabic prose was being word-spaced by the Latin font. Alexandria sits SECOND
+     on purpose: Noto Kufi's Arabic cut holds no Latin letters, so the brand name
+     and the <bdi> numerals inside Arabic sentences fall past it and land on the
+     design system's own Latin face rather than the reader's system font. */
   --sans-ar:'Noto Kufi Arabic','Alexandria','Segoe UI','Noto Naskh Arabic','Geeza Pro',system-ui,sans-serif;
+
+  /* THE TRACKING GUARD IS CLASS-BASED, AND THAT IS A CORRECTION, NOT A TASTE.
+     This file carries ONE lang attribute and ZERO dir attributes in markup; Arabic
+     is marked by class. A guard written as [lang="ar"] * would match nothing here —
+     a detector that cannot fire returns the same answer as one that found nothing
+     wrong. Arabic letters JOIN: letter-spacing inserts a gap at every letter
+     boundary and shatters the word. This is the one gate with a physical,
+     irreversible failure mode, so it is done twice: once by variable, once by an
+     explicit reset block at the foot of this sheet. */
+  --track:.2em;
+
+  --f:0;                     /* the scalar, mirrored into CSS */
+  --fh:0;                    /* 0..1, drives the horizon */
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--ground);color:var(--ink);
-  font:400 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
-a{color:inherit}
+  font:400 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink-2);text-underline-offset:3px;text-decoration-color:var(--edge-2)}
+a:hover{color:var(--ink);text-decoration-color:var(--g300)}
 :focus-visible{outline:2px solid var(--g300);outline-offset:3px}
 strong,b{font-weight:600;color:var(--ink)}
 
-/* ── the screen: the construction itself, behind everything ───────────────── */
-#sky{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%;pointer-events:none}
+/* ── L1 the travelling night ────────────────────────────────────────────────
+   Fixed, full-bleed, and the ONLY thing the loop touches is --fh. The horizon
+   rises and warms as the chain fills: that is the ground moving under the
+   reader's thumb, which is the specific thing the bar page does and the page
+   this replaces did not. Cost per frame: one custom-property write. */
+#ground{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(140% 46% at 50% calc((104 - var(--fh)*16) * 1%), rgba(215,188,109,.13), transparent 66%),
+    linear-gradient(180deg,
+      #150C04 0%,
+      #1D1206 calc((34 + var(--fh)*6) * 1%),
+      #241608 calc((62 + var(--fh)*10) * 1%),
+      #3A230E calc((84 + var(--fh)*8) * 1%),
+      #4A2E10 100%);}
+/* ── L3 grain — six 1px specks, static. The bar page's own comment says this is
+      what stopped its emptiness reading as BLANK rather than as SPACE. ─────── */
+#ground::after{content:"";position:absolute;inset:0;opacity:.5;
+  background:
+    radial-gradient(1px 1px at 12% 22%, rgba(249,247,237,.42), transparent),
+    radial-gradient(1px 1px at 78% 14%, rgba(249,247,237,.30), transparent),
+    radial-gradient(1px 1px at 34% 68%, rgba(249,247,237,.36), transparent),
+    radial-gradient(1px 1px at 62% 47%, rgba(249,247,237,.28), transparent),
+    radial-gradient(1px 1px at 88% 74%, rgba(249,247,237,.34), transparent),
+    radial-gradient(1px 1px at 21% 88%, rgba(249,247,237,.26), transparent);}
+
+/* ── L2 the khatim: the ILLUSTRATION, where the AEGOV rule actually applies.
+      Solid 1px gold strokes, geometric, hard-edged, no gradient. One square over
+      the same square turned 45 degrees — the compass-and-straightedge method,
+      which is why generating it from maths is the honest construction and not a
+      way around having no image files. Composited once, never repainted. ───── */
+#screen{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5}
 .doc{position:relative;z-index:2}
 
-/* ── the language switch, unchanged in mechanism ────────────────────────────
+/* ── the language switch, mechanism unchanged ───────────────────────────────
    It works with scripting off, which is the whole point of doing it in CSS.
-   The canvas sits between the radios and .doc so all of them stay siblings —
-   this is a sibling selector and breaks the moment anything nests between. */
+   #ground and #screen sit between the radios and .doc so all of them remain
+   SIBLINGS — this is a sibling combinator and it breaks the moment anything
+   nests between. Do not wrap .doc. */
 #lang-en,#lang-ar{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-.ar{display:none}   /* the Arabic face is assigned at the foot of this sheet */
+.ar{display:none}
 #lang-ar:checked ~ .doc .ar{display:revert}
 #lang-ar:checked ~ .doc .en{display:none}
 #lang-ar:checked ~ .doc{direction:rtl}
-#lang-en:checked ~ .doc .sw-en,
-#lang-ar:checked ~ .doc .sw-ar{background:var(--g300);color:#241608;border-color:var(--g300)}
-#lang-en:focus-visible ~ .doc .sw-en,
-#lang-ar:focus-visible ~ .doc .sw-ar{outline:2px solid var(--g300);outline-offset:2px}
 
-/* ── masthead, with a live clock in Dubai time ─────────────────────────────
-   Lifted from a Dubai studio's own site, where a live local time in the header
-   does more to place the work than the megabytes of 3D behind it. It costs
-   nothing and it is true. */
-.top{max-width:60rem;margin:0 auto;padding:1.1rem 1.5rem;display:flex;align-items:center;
-  gap:.7rem 1.2rem;flex-wrap:wrap;border-bottom:1px solid var(--edge)}
-.brand{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
-.brand b{font:600 1.02rem/1 var(--sans);letter-spacing:-.01em}
-.brand span{font:500 .64rem/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
-.spacer{flex:1 1 auto}
-#clock{font:500 .64rem/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;
-  color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
-.switch{display:flex;gap:.35rem}
-.switch label{cursor:pointer;font:500 .62rem/1 var(--mono);letter-spacing:.14em;
-  padding:.55rem .78rem;border:1px solid var(--edge-2);color:var(--ink-2);background:transparent}
-.switch label:hover{color:var(--ink);border-color:var(--g300)}
+.wrap{width:min(1180px,100%);margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
+.tracked{font:500 .64rem/1.5 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
 
-/* ── the hero: one loud thing, and the page's only loud thing ────────────── */
-.hero{max-width:60rem;margin:0 auto;padding:min(15vh,7.5rem) 1.5rem 3rem}
-.eyebrow{font:500 .66rem/1.6 var(--mono);letter-spacing:.24em;text-transform:uppercase;
-  color:var(--g300);margin:0 0 1.5rem}
-h1{margin:0;font:600 clamp(2.9rem,9.4vw,7.6rem)/.98 var(--sans);letter-spacing:-.045em;
-  max-width:14ch;text-wrap:balance;color:var(--ink)}
-h1.ar{line-height:1.2;letter-spacing:0}
-.tag{margin:1.2rem 0 0;font:400 clamp(1.05rem,2.2vw,1.45rem)/1.45 var(--sans);color:var(--g300);max-width:34ch}
-.tag.ar{line-height:1.75}
-.lede{margin:1.5rem 0 0;max-width:48ch;color:var(--ink-2);font-size:1.05rem}
-.lede.ar{line-height:1.85}
-.lede strong{color:var(--ink)}
-/* the flag, once, as three SOLID blocks — not a gradient, because the brief
-   says no gradients and because a flag has edges, not blends */
-.flagrule{display:flex;height:3px;margin:2.6rem 0 0;max-width:21rem}
-.flagrule i{display:block;flex:1 1 0}
-.flagrule i:nth-child(1){background:var(--green)}
-.flagrule i:nth-child(2){background:var(--ink)}
-.flagrule i:nth-child(3){background:var(--red)}
+/* ── A. the title block. A drawing's title block, not a masthead. ─────────── */
+.tb{border-block-end:1px solid var(--edge);background:rgba(21,12,4,.72);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  position:sticky;top:0;z-index:40}
+.tb .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;padding-block:11px}
+.tb .fld{display:flex;align-items:baseline;gap:8px;min-width:0}
+.tb .k{color:var(--ink-3);flex:none}
+.tb .v{font:500 .78rem/1.5 var(--sans);color:var(--ink-2);min-width:0}
+.tb .v b{color:var(--ink)}
+.switch{margin-inline-start:auto;display:flex;gap:0;border:1px solid var(--edge-2);flex:none}
+/* The radios themselves are 1x1 and visually hidden; THESE are the real targets,
+   so they carry the 24px minimum (WCAG 2.2 SC 2.5.8) — measured at 20px tall
+   before this rule. */
+.switch label{cursor:pointer;padding:0 12px;color:var(--ink-3);
+  min-height:26px;display:inline-flex;align-items:center;
+  font:500 .62rem/1 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
+.switch label.sw-ar{font-family:var(--sans-ar);letter-spacing:normal}
+#lang-en:checked ~ .doc .switch label[for=lang-en],
+#lang-ar:checked ~ .doc .switch label[for=lang-ar]{background:var(--g300);color:#150C04}
 
-/* ── the three figures: solid panels, hard 1px rules ─────────────────────── */
-.snap{max-width:60rem;margin:0 auto;padding:0 1.5rem;display:grid;gap:1px;
-  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));background:var(--edge)}
-.snap > div{background:var(--panel);padding:1.5rem 1.4rem 1.6rem}
-.snap .k{font:600 clamp(1.8rem,3.6vw,2.5rem)/1.05 var(--sans);letter-spacing:-.035em;color:var(--g300);
-  font-variant-numeric:tabular-nums}
-.snap .k.ar{letter-spacing:0;line-height:1.35}
-.snap .v{margin-top:.6rem;font-size:.92rem;color:var(--ink-2)}
+/* ── B. the claim ─────────────────────────────────────────────────────────── */
+.hero{padding-block:clamp(48px,9vw,110px) clamp(24px,4vw,44px)}
+.eyebrow{margin:0 0 18px;color:var(--ink-3);
+  font:500 .66rem/1.6 var(--mono);letter-spacing:.24em;text-transform:uppercase}
+h1{margin:0;font:600 clamp(2.5rem,7.6vw,5.6rem)/1.02 var(--sans);letter-spacing:-.04em;color:var(--ink)}
+h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
+.ask{margin:20px 0 0;max-width:44ch;color:var(--ink-2);
+  font:400 clamp(1.05rem,2.1vw,1.35rem)/1.65 var(--sans)}
+.ask.ar{font-family:var(--sans-ar);line-height:1.85}
+.flag{display:flex;width:190px;height:5px;margin-top:30px}
+.flag i{flex:1}
+.flag i:nth-child(1){background:var(--green)}
+.flag i:nth-child(2){background:var(--g50)}
+.flag i:nth-child(3){background:var(--red)}
+.flag i:nth-child(4){flex:.55;background:#0B0B0B}
 
-section{max-width:60rem;margin:0 auto;padding:5.5rem 1.5rem 0}
-h2{margin:0 0 1.1rem;font:600 clamp(1.7rem,3.4vw,2.3rem)/1.16 var(--sans);letter-spacing:-.03em;
-  max-width:24ch;text-wrap:balance;color:var(--ink)}
-h2.ar{line-height:1.4;letter-spacing:0}
-section > p{max-width:52ch;color:var(--ink-2)}
-section > p.ar{line-height:1.85}
+/* ── C. the instrument ────────────────────────────────────────────────────── */
+.chain{position:relative;padding-block:clamp(26px,5vw,52px) clamp(30px,5vw,58px);
+  border-block-start:1px solid var(--edge);outline-offset:6px}
+.marks{display:flex;align-items:stretch;gap:0;margin:0 0 30px;padding:0;list-style:none}
+.mk{flex:1 1 0;min-width:0;background:none;border:0;padding:0;cursor:pointer;
+  display:flex;flex-direction:column;gap:9px;text-align:start;color:inherit;font:inherit;
+  min-height:44px}
+.mk .bar{height:2px;background:var(--edge-2);position:relative}
+.mk .bar::after{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:0;background:var(--g300)}
+.mk .lbl{color:var(--ink-3);font:500 .58rem/1.4 var(--mono);letter-spacing:var(--track);
+  text-transform:uppercase;padding-inline-end:10px}
+.mk .lbl.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none;font-size:.68rem}
+.mk[data-state="met"] .bar{background:var(--g300)}
+.mk[data-state="met"] .lbl{color:var(--ink-2)}
+.mk[data-state="here"] .bar{background:var(--g500)}
+.mk[data-state="here"] .bar::after{width:calc(var(--frac,0) * 100%)}
+.mk[data-state="here"] .lbl{color:var(--ink)}
+.mk[data-state="refused"] .bar{background:var(--red)}
+.plate{border:1px solid var(--edge-2);background:var(--panel);padding:clamp(20px,3.4vw,34px);
+  display:grid;gap:16px}
+.plate h2{margin:0;font:600 clamp(1.4rem,3.2vw,2.2rem)/1.18 var(--sans);letter-spacing:-.03em;color:var(--ink)}
+.plate h2.ar{font-family:var(--sans-ar);line-height:1.5;letter-spacing:0}
+.sentence{margin:0;font:500 clamp(1.3rem,3.2vw,2rem)/1.32 var(--sans);color:var(--ink);letter-spacing:-.02em}
+.sentence.ar{font-family:var(--sans-ar);line-height:1.7;letter-spacing:0}
+.quote{margin:0;color:var(--ink-2);font:400 1rem/1.7 var(--sans);max-width:62ch}
+.quote.ar{font-family:var(--sans-ar);line-height:1.9}
+.src-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;
+  border-block-start:1px solid var(--edge);padding-block-start:14px}
+.src-line .lbl{color:var(--ink-3);font:500 .58rem/1.4 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
+.src-line .lbl.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none}
+.dot{display:inline-block;width:9px;height:9px;border:1px solid var(--g300);flex:none;
+  transform:translateY(1px)}
+.dot.filled{background:var(--g300)}
+.readout{color:var(--ink-3);font:500 .62rem/1 var(--mono);letter-spacing:var(--track);
+  text-transform:uppercase;font-variant-numeric:tabular-nums}
+.readout.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none;font-size:.72rem}
+.jsonly{display:none}
+.js .jsonly{display:revert}
+.js .ledger{display:none}
+/* 44px of hit area, not 16. A range input's default track is ~16px tall, which
+   fails WCAG 2.2 SC 2.5.8 (24x24) as a non-inline target — measured at 339x16
+   before this rule. The visible track stays thin; the reachable area does not. */
+.scrub{width:100%;margin-block-start:22px;accent-color:var(--g300);
+  min-height:44px;height:44px;background:transparent;cursor:pointer}
+.ret{margin-block-start:18px;background:none;border:1px solid var(--g300);color:var(--g300);
+  padding:9px 18px;cursor:pointer;font:500 .62rem/1 var(--mono);letter-spacing:var(--track);
+  text-transform:uppercase;min-height:44px}
+.ret.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none}
+.ret[hidden]{display:none}
 
-/* ── the four programmes: 2 x 2, hard-ruled, no rounded corners anywhere ─── */
-.pillars{margin-top:2.4rem;display:grid;gap:1px;background:var(--edge);
-  grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
-.pillar{position:relative;background:var(--panel);padding:1.9rem 1.4rem 2rem}
-.pillar.on{background:var(--panel-2)}
-.pillar .n{display:block;font:500 .64rem/1 var(--mono);letter-spacing:.2em;color:var(--ink-3)}
-.pillar.on .n{color:var(--g300)}
-.pillar .mk{display:block;width:40px;height:40px;margin:1rem 0 1rem;color:var(--ink-3)}
-.pillar.on .mk{color:var(--g300)}
-.mk svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;
-  stroke-linecap:butt;stroke-linejoin:miter;overflow:visible}
-.pillar h3{margin:0;font:600 1.14rem/1.28 var(--sans);letter-spacing:-.015em;color:var(--ink)}
-.pillar h3.ar{line-height:1.55;letter-spacing:0}
-.pillar p{margin:.55rem 0 0;font-size:.94rem;color:var(--ink-2)}
-.pillar p.ar{line-height:1.8}
+/* ── D. the axis declaration. On screen, not in a comment. ────────────────── */
+.axis{margin-block-start:26px;border-inline-start:2px solid var(--g500);padding-inline-start:16px;
+  color:var(--ink-2);font:400 .95rem/1.75 var(--sans);max-width:70ch}
+.axis.ar{font-family:var(--sans-ar);line-height:1.95;border-inline-start:2px solid var(--g500)}
 
-/* ── the two places ───────────────────────────────────────────────────────── */
-.places{margin-top:2.4rem;display:grid;gap:1px;background:var(--edge);
-  grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
-.place{background:var(--panel);padding:1.8rem 1.5rem}
-.place .mk{display:block;width:46px;height:46px;margin:0 0 1.1rem;color:var(--g300)}
-.badge{display:inline-block;font:500 .6rem/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
-  color:var(--ground);background:var(--g300);padding:.4rem .55rem;margin:0 0 .9rem}
-.place h3{margin:0 0 .6rem;font:600 1.3rem/1.2 var(--sans);letter-spacing:-.025em;color:var(--ink)}
-.place h3.ar{line-height:1.5;letter-spacing:0}
-.place p{margin:0;font-size:.95rem;color:var(--ink-2)}
-.place p.ar{line-height:1.85}
+/* ── E. the ledger: the scripting-off truth, and the same nodes JS reads ──── */
+.ledger{margin:34px 0 0;padding:0;list-style:none;display:grid;gap:22px}
+.ledger li{border-block-start:1px solid var(--edge);padding-block-start:18px}
+.ledger h3{margin:0 0 8px;font:600 1.12rem/1.35 var(--sans);color:var(--ink)}
+.ledger h3.ar{font-family:var(--sans-ar);line-height:1.6}
+.ledger p{margin:0 0 8px;color:var(--ink-2);font-size:.98rem}
+.ledger p.ar{font-family:var(--sans-ar);line-height:1.9}
+.ledger .n{color:var(--ink-3);font:500 .58rem/1 var(--mono);letter-spacing:var(--track);
+  text-transform:uppercase;display:block;margin-block-end:9px}
 
-/* ── the arc ──────────────────────────────────────────────────────────────── */
-.align{margin-top:2.2rem;border-top:1px solid var(--edge)}
-.align .row{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:.9rem 1.3rem;
-  align-items:center;padding:1.3rem .2rem;border-bottom:1px solid var(--edge)}
-.align .mk{width:30px;height:30px;color:var(--ink-3)}
-.align .yr{font:500 clamp(1.2rem,2.5vw,1.6rem)/1 var(--mono);color:var(--g300);
-  font-variant-numeric:tabular-nums;white-space:nowrap}
-.align .txt{font-size:1rem;color:var(--ink)}
-.align .txt.ar{line-height:1.8}
-
-/* ── what happens next ────────────────────────────────────────────────────── */
-.next{margin-top:2.2rem}
-.next .row{display:grid;grid-template-columns:minmax(9rem,14rem) minmax(0,1fr);gap:.5rem 1.6rem;
-  padding:1.5rem 0;border-top:1px solid var(--edge)}
-.next .rk{font:500 .66rem/1.6 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--g300)}
-.next .rk.ar{line-height:1.5}
-.next .rv p{margin:0;color:var(--ink-2)}
-.next .rv p.ar{line-height:1.85}
-.next .mk{width:26px;height:26px;color:var(--ink-3);margin-bottom:.5rem}
-
-.contact{margin-top:3rem;padding:1.8rem 1.6rem;background:var(--panel);border-inline-start:3px solid var(--g300)}
-.contact h2{font-size:1.12rem;margin-bottom:.7rem}
-.contact p{margin:0;color:var(--ink-2);font-size:.95rem;max-width:56ch}
-.contact p.ar{line-height:1.85}
-
-/* ── the honesty layer: legible, never fine print. Carried over unchanged. ── */
-.disclose{max-width:60rem;margin:5rem auto 0;padding:2rem 1.5rem 5rem;
-  border-top:1px solid var(--edge);font-size:.86rem;line-height:1.8;color:var(--ink-2)}
+/* ── F/G/H/I ──────────────────────────────────────────────────────────────── */
+section{padding-block:clamp(40px,6vw,72px);border-block-start:1px solid var(--edge)}
+h2.sec{margin:0 0 8px;font:600 clamp(1.5rem,3vw,2.1rem)/1.2 var(--sans);letter-spacing:-.028em;color:var(--ink)}
+h2.sec.ar{font-family:var(--sans-ar);line-height:1.45;letter-spacing:0}
+section > p{margin:0 0 16px;max-width:66ch;color:var(--ink-2)}
+section > p.ar{font-family:var(--sans-ar);line-height:1.9}
+.two{display:grid;gap:clamp(22px,3.4vw,40px);grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-block-start:28px}
+.card{border:1px solid var(--edge);background:var(--panel);padding:clamp(18px,2.6vw,28px);min-width:0}
+.card h3{margin:0 0 10px;font:600 1.2rem/1.3 var(--sans);color:var(--ink)}
+.card h3.ar{font-family:var(--sans-ar);line-height:1.6}
+.card p{margin:0 0 10px;color:var(--ink-2);font-size:.97rem}
+.card p.ar{font-family:var(--sans-ar);line-height:1.9}
+.badge{display:inline-block;margin-block-end:12px;border:1px solid var(--g500);color:var(--ink-3);
+  padding:4px 9px;font:500 .56rem/1.3 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
+.badge.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none;font-size:.68rem}
+.srcs{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
+.srcs li{counter-increment:s;display:flex;gap:12px;align-items:baseline;
+  color:var(--ink-2);font-size:.93rem}
+.srcs li::before{content:counter(s);color:var(--ink-3);font:500 .62rem/1.6 var(--mono);flex:none;min-width:1.6em}
+.srcs .host{color:var(--ink-3);font:400 .78rem/1.6 var(--mono)}
+.disclose{border-block-start:1px solid var(--edge);padding-block:clamp(34px,5vw,60px);
+  color:var(--ink-2);font-size:.92rem;line-height:1.85}
+.disclose p{max-width:74ch;margin:0 0 14px}
+.disclose p.ar{font-family:var(--sans-ar);line-height:1.95}
 .disclose b{color:var(--ink)}
+footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:var(--ink-3);font-size:.84rem}
 
-@media (max-width:640px){
-  .hero{padding-top:min(10vh,4.5rem)}
-  section{padding-top:4rem}
-  .next .row{grid-template-columns:1fr}
+@media (max-width:760px){
+  .marks{flex-direction:column;gap:12px}
+  .mk{flex-direction:row;align-items:center;gap:12px}
+  .mk .bar{width:3px;height:auto;align-self:stretch;min-height:26px}
+  .mk .bar::after{inset-inline:0;inset-block-start:0;width:auto;height:0}
+  .mk[data-state="here"] .bar::after{height:calc(var(--frac,0) * 100%);width:auto}
 }
+
+/* prefers-reduced-motion: the instrument still works, it just stops easing.
+   The refusal is drawn and spoken, never only animated — a reader who declines
+   motion must still get the whole argument. */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
 }
 
-/* ═══ THE ARABIC CORRECTIONS ══════════════════════════════════════════════════
-   Deliberately the last thing in this stylesheet, and the position is doing the
-   work — read the specificity note under each rule before moving either of them.
-
-   ── 1. every Arabic run gets the Arabic face ─────────────────────────────────
-   `.ar` alone is (0,1,0), and nine Arabic elements were beaten by ordinary type
-   rules declared after it: .tag (0,1,0, later in source), .snap .k (0,2,0),
-   .pillar h3 and .place h3 (0,1,1). They rendered in Alexandria — which has no
-   Arabic — and fell through per-glyph to whatever the reader's system supplied.
-
-   `.doc .ar` is (0,2,0) and last, so it clears all four. Every Arabic element on
-   the page is inside .doc; that was measured, not assumed. .sw-ar is listed
-   separately because the language switch's own Arabic label carries no .ar
-   class — it is the one Arabic run that selector cannot reach. */
-.doc .ar,
-.switch label.sw-ar{font-family:var(--sans-ar)}
-
-/* ── 2. Arabic takes no tracking ──────────────────────────────────────────────
-   Arabic letters JOIN. CSS letter-spacing inserts a gap at every letter boundary
-   and breaks a word into disconnected shapes. The display rules further up
-   already reset it — h1, h2, the snap figures — but the small tracked labels did
-   not, and were still carrying up to .24em on the hero's own eyebrow. Eight runs
-   measured non-zero; this is the rule that took them to zero.
-
-   .next .rk.ar ties these on specificity, so source order settles it. The .04em
-   it used to declare has been deleted rather than left to lose quietly — a
-   stylesheet should not contain a declaration that contradicts the page. */
-.eyebrow.ar,
-.badge.ar,
-.brand span.ar,
-.switch label.sw-ar,
-.next .rk.ar{letter-spacing:0}
+/* ═══ THE ARABIC RESET — LAST IN THE SHEET, DELIBERATELY ══════════════════════
+   Specificity ties are settled by source order, so this block must stay at the
+   foot. Every tracked class gains an .ar counterpart that returns letter-spacing
+   to normal and hands the run its own face. Arabic letters JOIN; tracking them
+   shatters words, and no automated check on this page can see that happen. */
+.doc .ar,.doc .ar *{letter-spacing:normal}
+.eyebrow.ar,.badge.ar,.tb .k.ar,.tb .v.ar,.mk .lbl.ar,.readout.ar,.src-line .lbl.ar,
+.ledger .n.ar,.ret.ar,.switch label.sw-ar,.srcs .host.ar{letter-spacing:normal}
+.doc .ar,.tb .v.ar,.tb .k.ar,.srcs li.ar,.disclose p.ar,footer .ar{font-family:var(--sans-ar)}
 </style>
+</head>
+<body>
 
 <input type="radio" name="lang" id="lang-en" checked>
 <input type="radio" name="lang" id="lang-ar">
 
-<canvas id="sky" aria-hidden="true"></canvas>
-<div id="glow" aria-hidden="true"></div>
+<div id="ground" aria-hidden="true"></div>
+
+<svg id="screen" aria-hidden="true" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="kh" width="180" height="180" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#7C5E24" stroke-width="1">
+        <rect x="52" y="52" width="76" height="76"/>
+        <rect x="52" y="52" width="76" height="76" transform="rotate(45 90 90)"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#kh)"/>
+</svg>
 
 <div class="doc">
 
-  <header class="top">
-    <div class="brand">
-      <b>XperienceSpace</b>
-      <span class="en">A new way to experience space</span>
-      <span class="ar">طريقة جديدة لتجربة الفضاء</span>
-    </div>
-    <div class="spacer"></div>
-    <span id="clock" aria-hidden="true"></span>
-    <div class="switch">
-      <label for="lang-en" class="sw-en">ENGLISH</label>
-      <label for="lang-ar" class="sw-ar">عربي</label>
+  <header class="tb">
+    <div class="wrap row">
+      <div class="fld"><span class="k tracked en">Sheet</span><span class="k tracked ar">الورقة</span>
+        <span class="v en"><b>Before This</b></span><span class="v ar"><b>قبل هذا</b></span></div>
+      <div class="fld"><span class="k tracked en">Client</span><span class="k tracked ar">العميل</span>
+        <span class="v en">None. Not commissioned.</span><span class="v ar">لا يوجد. غير مُكلَّف به.</span></div>
+      <div class="fld"><span class="k tracked en">Drawn by</span><span class="k tracked ar">إعداد</span>
+        <span class="v en">Jared Lilliss, Lilliss IT</span><span class="v ar">جاريد ليليس، ليليس آي تي</span></div>
+      <div class="fld"><span class="k tracked en">Sources</span><span class="k tracked ar">المصادر</span>
+        <span class="v"><bdi id="srccount">9</bdi></span></div>
+      <div class="switch">
+        <label for="lang-en">English</label>
+        <label for="lang-ar" class="sw-ar">عربي</label>
+      </div>
     </div>
   </header>
 
-
-  <div class="hero">
-    <div class="eyebrow en">UAE &middot; A future-ready space economy</div>
-    <div class="eyebrow ar">الإمارات العربية المتحدة &middot; اقتصاد فضائي جاهز للمستقبل</div>
-
-    <h1 class="en">Building the UAE Space Nation</h1>
-    <h1 class="ar">بناء دولة الإمارات الفضائية</h1>
-
-    <p class="tag en">Planting the UAE flag in the future of space</p>
-    <p class="tag ar">غرس علم الإمارات العربية المتحدة في مستقبل الفضاء</p>
-
-    <p class="lede en">Space is no longer a distant aspiration. It is a strategic
-    arena for sovereign capability, sustainable growth and global leadership.
-    <strong>XperienceSpace is a UAE-based initiative establishing the local
-    industry and community ecosystem supporting the UAE vision for space.</strong></p>
-
-    <p class="lede ar">لم يعد الفضاء طموحاً بعيد المنال. إنها ساحة استراتيجية
-    للقدرة السيادية والنمو المستدام والقيادة العالمية.
-    <strong>XperienceSpace هي مبادرة مقرها الإمارات العربية المتحدة تعمل على
-    إنشاء بيئة صناعية ومجتمعية محلية تدعم رؤية الإمارات العربية المتحدة
-    للفضاء.</strong></p>
-
-    <div class="flagrule" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="wrap hero">
+    <p class="eyebrow en">Unsolicited design concept · not affiliated</p>
+    <p class="eyebrow ar">تصور تصميمي غير مطلوب · غير تابع</p>
+    <h1 class="en">Four programmes,<br>one ecosystem.</h1>
+    <h1 class="ar">أربعة برامج،<br>نظام بيئي واحد.</h1>
+    <p class="ask en">Their sentence. This page asks the question underneath it — in what order does that become true?</p>
+    <p class="ask ar">هذه جملتهم. تطرح هذه الصفحة السؤال الكامن تحتها — بأي ترتيب يصبح ذلك حقيقة؟</p>
+    <div class="flag" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   </div>
 
+  <div class="wrap">
+    <div class="chain" id="chain" role="group" tabindex="0"
+         aria-label="The precedence chain. Six stages. Use arrow keys to move along it.">
 
-  <div class="snap">
-    <div>
-      <div class="k en">40+ years</div>
-      <div class="k ar">أكثر من ٤٠ عاماً</div>
-      <div class="v en">A legacy dating to <bdi>1974</bdi> and early engagement
-      with NASA, now a national space roadmap.</div>
-      <div class="v ar">إرث يعود إلى عام <bdi>1974</bdi> والمشاركة المبكرة مع
-      وكالة ناسا، وهو اليوم خارطة طريق وطنية للفضاء.</div>
-    </div>
-    <div>
-      <div class="k"><bdi>2030&ndash;2117</bdi></div>
-      <div class="v en">Coordinated milestones towards a sustainable space
-      economy and the Mars city vision.</div>
-      <div class="v ar">مراحل منسقة نحو اقتصاد فضائي مستدام ورؤية مدينة على
-      المريخ.</div>
-    </div>
-    <div>
-      <div class="k en">4 pillars</div>
-      <div class="k ar">أربع ركائز</div>
-      <div class="v en">Community, education, industry and R&amp;D, integrated
-      into one ecosystem.</div>
-      <div class="v ar">المجتمع، والتعليم، والصناعة، والبحث والتطوير، كلها
-      متكاملة في نظام بيئي واحد.</div>
+      <div class="marks" id="marks"></div>
+
+      <div class="plate">
+        <h2 id="ptitle" class="en">Someone walks in</h2>
+        <p class="sentence" id="psent" aria-live="polite"></p>
+        <p class="quote" id="pquote"></p>
+        <div class="src-line">
+          <span class="lbl tracked en">Source</span><span class="lbl tracked ar">المصدر</span>
+          <span class="dot" id="pdot" aria-hidden="true"></span>
+          <span id="psrc"></span>
+          <span class="readout" id="preadout"></span>
+        </div>
+      </div>
+
+      <div class="jsonly">
+        <label class="readout en" for="scrub">Position along the chain</label>
+        <label class="readout ar" for="scrub">الموضع على السلسلة</label>
+        <input class="scrub" id="scrub" type="range" min="0" max="600" step="1" value="0">
+        <button class="ret en" id="ret" hidden>Start again</button>
+        <button class="ret ar" id="retar" hidden>ابدأ من جديد</button>
+      </div>
+
+      <div class="axis en">
+        <b>The six stages are quoted from XperienceSpace's own published pages. The order between
+        them — what has to be true before what — is this concept's argument, not their published
+        claim.</b> These four programmes run at the same time. They do not become true at the same
+        time. That is the difference between a calendar and a dependency, and it is the only thing
+        this page adds.
+      </div>
+      <div class="axis ar">
+        <b>المراحل الست مقتبسة من صفحات XperienceSpace المنشورة. أما الترتيب بينها — ما الذي يجب أن
+        يتحقق قبل ماذا — فهو حجة هذا التصور، وليس ادعاءً منشوراً لهم.</b> هذه البرامج الأربعة تعمل في
+        الوقت نفسه، لكنها لا تصبح حقيقة في الوقت نفسه. هذا هو الفرق بين التقويم والاعتماد، وهو الشيء
+        الوحيد الذي تضيفه هذه الصفحة.
+      </div>
+
+      <ol class="ledger" id="ledger">
+        <li data-k="0" data-quoted="1">
+          <span class="n tracked en">Stage 1</span><span class="n tracked ar">المرحلة ١</span>
+          <h3 class="en">Someone walks in</h3><h3 class="ar">يدخل أحدهم</h3>
+          <p class="en" data-sent="Before this: nothing has to be true. This is where it starts.">The UAE Space Welcome Center is described as “the iconic gateway at the heart of UAE Space City: immersive exhibits, simulations, labs, events and industry showcases linking the public to live missions.”</p>
+          <p class="ar" data-sent="قبل هذا: لا شيء يجب أن يتحقق. من هنا تبدأ.">يوصف مركز الترحيب بأنه البوابة الأبرز في قلب مدينة الفضاء الإماراتية: معارض غامرة ومحاكاة ومختبرات وفعاليات تربط الجمهور بالمهام الحية.</p>
+        </li>
+        <li data-k="1" data-quoted="1">
+          <span class="n tracked en">Stage 2</span><span class="n tracked ar">المرحلة ٢</span>
+          <h3 class="en">Interest becomes study</h3><h3 class="ar">يتحول الاهتمام إلى دراسة</h3>
+          <p class="en" data-sent="Before this: someone has to walk in.">Public Engagement &amp; Community — “raising awareness and inspiring innovation by addressing Earth’s challenges, creating new opportunities for UAE’s growth in the space economy.”</p>
+          <p class="ar" data-sent="قبل هذا: يجب أن يدخل أحدهم.">المشاركة العامة والمجتمع — رفع الوعي وإلهام الابتكار عبر معالجة تحديات الأرض، وخلق فرص جديدة لنمو الإمارات في اقتصاد الفضاء.</p>
+        </li>
+        <li data-k="2" data-quoted="1">
+          <span class="n tracked en">Stage 3</span><span class="n tracked ar">المرحلة ٣</span>
+          <h3 class="en">Study becomes capability that stays</h3><h3 class="ar">تتحول الدراسة إلى قدرة تبقى</h3>
+          <p class="en" data-sent="Before this: interest has to become study.">Education &amp; Talent Pipeline — “developing future leaders by applying UAE-driven solutions to global and space challenges, strengthening national expertise and resilience.”</p>
+          <p class="ar" data-sent="قبل هذا: يجب أن يتحول الاهتمام إلى دراسة.">التعليم ومسار المواهب — إعداد قادة المستقبل بتطبيق حلول إماراتية على التحديات العالمية والفضائية، وتعزيز الخبرة الوطنية.</p>
+        </li>
+        <li data-k="3" data-quoted="1">
+          <span class="n tracked en">Stage 4</span><span class="n tracked ar">المرحلة ٤</span>
+          <h3 class="en">There is somewhere to employ it</h3><h3 class="ar">يوجد مكان لتوظيفها</h3>
+          <p class="en" data-sent="Before this: study has to become capability that stays.">UAE Space City — “a scalable future-ready urban and economic zone housing R&amp;D centers, manufacturing clusters, training facilities and high-tech workplaces.”</p>
+          <p class="ar" data-sent="قبل هذا: يجب أن تتحول الدراسة إلى قدرة تبقى.">مدينة الفضاء الإماراتية — منطقة حضرية واقتصادية قابلة للتوسع تضم مراكز بحث وتطوير ومجمعات تصنيع ومرافق تدريب وأماكن عمل عالية التقنية.</p>
+        </li>
+        <li data-k="4" data-quoted="1">
+          <span class="n tracked en">Stage 5</span><span class="n tracked ar">المرحلة ٥</span>
+          <h3 class="en">Partners build here rather than visit</h3><h3 class="ar">يبني الشركاء هنا لا أن يزوروا</h3>
+          <p class="en" data-sent="Before this: there has to be somewhere to employ it.">Industry Development &amp; Support — “creating initiatives to develop cutting-edge solutions addressing local and global needs, driving UAE’s leadership in space and hiTech industries.”</p>
+          <p class="ar" data-sent="قبل هذا: يجب أن يوجد مكان لتوظيفها.">تطوير ودعم الصناعة — إطلاق مبادرات لتطوير حلول متقدمة تلبي الاحتياجات المحلية والعالمية، وترسيخ ريادة الإمارات في صناعات الفضاء والتقنية.</p>
+        </li>
+        <li data-k="5" data-quoted="1">
+          <span class="n tracked en">Stage 6</span><span class="n tracked ar">المرحلة ٦</span>
+          <h3 class="en">The capability is owned, not rented</h3><h3 class="ar">تكون القدرة مملوكة لا مستأجرة</h3>
+          <p class="en" data-sent="Before this: partners have to build here rather than visit.">Research &amp; Development — “developing products &amp; services needed to solve Earth’s sustainability challenges and build a competitive, future-ready space sector for UAE.”</p>
+          <p class="ar" data-sent="قبل هذا: يجب أن يبني الشركاء هنا لا أن يزوروا فقط.">البحث والتطوير — تطوير منتجات وخدمات لحل تحديات الاستدامة على الأرض وبناء قطاع فضائي تنافسي جاهز للمستقبل.</p>
+        </li>
+      </ol>
     </div>
   </div>
 
-
-  <section>
-    <h2 class="en">Four programmes, one ecosystem</h2>
-    <h2 class="ar">أربعة برامج، نظام بيئي واحد</h2>
-
-    <p class="en">Programme development incentivises industry and R&amp;D to
-    locate to the UAE, driving the transfer of technology and talent to the
-    region.</p>
-    <p class="ar">يساهم تطوير البرامج في تحفيز الصناعة والبحث والتطوير على
-    الاستقرار في دولة الإمارات، بما يدفع نقل التكنولوجيا والمواهب إلى
-    المنطقة.</p>
-
-    <div class="pillars">
-      <div class="pillar">
-        <span class="n">01</span>
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="3.4"/><path d="M20 12.6a7.4 7.4 0 0 1 0 14.8M20 7a13 13 0 0 1 0 26" opacity=".85"/><circle cx="7.5" cy="12" r="1.9"/><circle cx="6" cy="26" r="1.9"/><circle cx="12" cy="34" r="1.9"/></svg></span>
-        <h3 class="en">Community engagement</h3>
-        <h3 class="ar">المشاركة المجتمعية</h3>
-        <p class="en">Bringing the national space effort within reach of the
-        people it is being built for.</p>
-        <p class="ar">جعل الجهد الوطني للفضاء في متناول الناس الذين يُبنى من
-        أجلهم.</p>
+  <section class="wrap">
+    <h2 class="sec en">Where it is meant to happen</h2>
+    <h2 class="sec ar">أين يُفترض أن يحدث ذلك</h2>
+    <div class="two">
+      <div class="card">
+        <span class="badge en">A proposal, not a government programme</span>
+        <span class="badge ar">مقترح، وليس برنامجاً حكومياً</span>
+        <h3 class="en">UAE Space City</h3><h3 class="ar">مدينة الفضاء الإماراتية</h3>
+        <p class="en">XperienceSpace describes it as a scalable, future-ready special economic zone
+          for industry and community. <b>It is their proposal.</b> The UAE Space Agency runs a
+          separate, real programme of Space Economic Zones — a different thing with a different
+          owner, and this page does not blur them.</p>
+        <p class="ar">تصفها XperienceSpace بأنها منطقة اقتصادية خاصة قابلة للتوسع للصناعة والمجتمع.
+          <b>هذا مقترح خاص بهم.</b> وتدير وكالة الإمارات للفضاء برنامجاً منفصلاً وقائماً للمناطق
+          الاقتصادية الفضائية — وهو أمر مختلف ذو جهة مختلفة، ولا تخلط هذه الصفحة بينهما.</p>
       </div>
-      <div class="pillar">
-        <span class="n">02</span>
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 33h9v-7h9v-7h9v-7h5"/><circle cx="13" cy="26" r="1.9"/><circle cx="22" cy="19" r="1.9"/><circle cx="31" cy="12" r="1.9"/><path d="M33 8l3 4-3 4" opacity=".85"/></svg></span>
-        <h3 class="en">Education &amp; talent pipeline</h3>
-        <h3 class="ar">مسار التعليم والمواهب</h3>
-        <p class="en">A route from classroom to industry, so the capability
-        stays in the country that grew it.</p>
-        <p class="ar">مسار من الفصل الدراسي إلى الصناعة، لتبقى القدرات في
-        البلد الذي أنشأها.</p>
-      </div>
-      <div class="pillar">
-        <span class="n">03</span>
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M3 34h34"/><path d="M8 34V20h7v14M19 34V12h7v22M30 34V24h5v10"/><path d="M8 20l3.5-4L15 20M19 12l3.5-4L26 12" opacity=".85"/></svg></span>
-        <h3 class="en">Industry development &amp; support</h3>
-        <h3 class="ar">تطوير ودعم الصناعة</h3>
-        <p class="en">Conditions that make it rational for global partners to
-        build here rather than visit.</p>
-        <p class="ar">ظروف تجعل من المنطقي للشركاء العالميين أن يبنوا هنا بدلاً
-        من الزيارة فقط.</p>
-      </div>
-      <div class="pillar">
-        <span class="n">04</span>
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="3.6"/><ellipse cx="20" cy="20" rx="16" ry="6.6"/><ellipse cx="20" cy="20" rx="16" ry="6.6" transform="rotate(60 20 20)" opacity=".85"/><ellipse cx="20" cy="20" rx="16" ry="6.6" transform="rotate(120 20 20)" opacity=".55"/></svg></span>
-        <h3 class="en">Research &amp; development</h3>
-        <h3 class="ar">البحث والتطوير</h3>
-        <p class="en">Work that produces capability the UAE owns, not licences
-        it rents.</p>
-        <p class="ar">عمل ينتج قدرات تملكها الإمارات، لا تراخيص تستأجرها.</p>
+      <div class="card">
+        <span class="badge en">A proposal, not a government programme</span>
+        <span class="badge ar">مقترح، وليس برنامجاً حكومياً</span>
+        <h3 class="en">UAE Space Welcome Center</h3><h3 class="ar">مركز الترحيب الفضائي</h3>
+        <p class="en">Described by XperienceSpace as the gateway at the heart of that city —
+          exhibits, simulations, labs and showcases. Stage one of the chain above exists because
+          this is the only stage a member of the public can start at.</p>
+        <p class="ar">تصفه XperienceSpace بأنه البوابة في قلب تلك المدينة — معارض ومحاكاة ومختبرات
+          وعروض. توجد المرحلة الأولى في السلسلة أعلاه لأن هذه هي المرحلة الوحيدة التي يمكن لفرد من
+          الجمهور أن يبدأ منها.</p>
       </div>
     </div>
   </section>
 
-
-  <section>
-    <h2 class="en">Where it happens</h2>
-    <h2 class="ar">أين يحدث ذلك</h2>
-
-    <div class="places">
-      <div class="place">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M3 36h34" opacity=".55"/><path d="M6 36V17h9v19M19 36V9h8v27M31 36V22h5v14"/><path d="M6 17h9M19 9h8M31 22h5" opacity=".85"/><path d="M23 9V4" opacity=".85"/><circle cx="23" cy="3" r="1.6"/><path d="M9 24h3M9 29h3M22 16h3M22 22h3M22 28h3" opacity=".6"/></svg></span>
-        <span class="badge en">Special economic zone</span>
-        <span class="badge ar">منطقة اقتصادية خاصة</span>
-        <h3 class="en">UAE Space City</h3>
-        <h3 class="ar">مدينة الفضاء الإماراتية</h3>
-        <p class="en">A scalable, future-ready economic zone dedicated to
-        innovation, education, enterprise and the development of cutting-edge
-        technologies. As a smart city it concentrates the technologies that
-        serve the UAE's strategies for the economy, the environment and the
-        space programme &mdash; a zone supporting the establishment of the UAE
-        Space Nation.</p>
-        <p class="ar">منطقة اقتصادية قابلة للتوسع ومستعدة للمستقبل، مخصصة
-        للابتكار والتعليم وريادة الأعمال وتطوير التقنيات المتقدمة. وباعتبارها
-        مدينة ذكية، تركّز التقنيات التي تخدم استراتيجيات الإمارات للاقتصاد
-        والبيئة وبرنامج الفضاء &mdash; منطقة تدعم إنشاء دولة الإمارات الفضائية.</p>
-      </div>
-      <div class="place">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M8 35V16a12 12 0 0 1 24 0v19"/><path d="M8 35h24" opacity=".55"/><path d="M16 35V24a4 4 0 0 1 8 0v11"/><path d="M2 35h6M32 35h6" opacity=".55"/><path d="M20 11v-6M20 5l3.5 2.2L20 9.4" opacity=".85"/></svg></span>
-        <span class="badge en">Public gateway</span>
-        <span class="badge ar">بوابة الجمهور</span>
-        <h3 class="en">UAE Space Welcome Centre</h3>
-        <h3 class="ar">مركز الترحيب الفضائي الإماراتي</h3>
-        <p class="en">At the heart of Space City, the Welcome Centre is the
-        gateway to the nation's vision for space &mdash; more than a visitor
-        centre: a showcase of innovation, a bridge to public engagement and
-        industry collaboration, and somewhere the next generation can see the
-        thing being built.</p>
-        <p class="ar">في قلب مدينة الفضاء، يمثل مركز الترحيب بوابةً لرؤية الدولة
-        للفضاء &mdash; وهو أكثر من مركز زوار: منصة للابتكار، وجسر للتواصل مع
-        الجمهور والتعاون الصناعي، ومكان يرى فيه الجيل القادم ما يُبنى.</p>
-      </div>
-    </div>
+  <section class="wrap">
+    <h2 class="sec en">What they say they are not</h2>
+    <h2 class="sec ar">ما يقولون إنهم ليسوا عليه</h2>
+    <p class="en">Unusually, the initiative publishes its own limits. Reproduced because a concept
+      that quotes an organisation should quote the part that constrains it, not only the part that
+      sells it: <b>“Not a regulator, government agency or operator of national missions. Not a
+      replacement for UAE institutions or official strategies. Not a speculative venture; programs
+      are tied to measurable readiness and real capabilities.”</b></p>
+    <p class="ar">من غير المعتاد أن تنشر مبادرة حدودها بنفسها. ونعيد ذلك هنا لأن التصور الذي يقتبس من
+      جهة ينبغي أن يقتبس ما يقيّدها لا ما يروّج لها فقط: <b>«ليست جهة تنظيمية ولا وكالة حكومية ولا
+      مشغّلاً للمهام الوطنية. وليست بديلاً عن مؤسسات الدولة أو استراتيجياتها الرسمية. وليست مشروعاً
+      مضارباً؛ فبرامجها مرتبطة بجاهزية قابلة للقياس وقدرات حقيقية.»</b></p>
   </section>
 
-
-  <section>
-    <h2 class="en">The arc, in order</h2>
-    <h2 class="ar">المسار، بالترتيب</h2>
-
-    <p class="en">Every figure below reads in the same order in both editions.
-    That is not a detail &mdash; a date range that reverses itself in Arabic is
-    the first thing a reader notices and the last thing they mention.</p>
-    <p class="ar">كل رقم أدناه يُقرأ بالترتيب نفسه في كلتا النسختين. وهذه ليست
-    تفصيلاً بسيطاً &mdash; فالمدى الزمني الذي ينعكس ترتيبه في العربية هو أول ما
-    يلاحظه القارئ وآخر ما يذكره.</p>
-
-    <div class="align">
-      <div class="row">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M6 34h12" opacity=".55"/><path d="M12 34V22"/><path d="M4 20a12 12 0 0 1 20-9" /><path d="M4 20l8 2 12-11" opacity=".85"/><circle cx="31" cy="9" r="1.8"/><path d="M27 13l3-3" opacity=".6"/></svg></span>
-        <span class="yr"><bdi>1974</bdi></span>
-        <span class="txt en">Early engagement with NASA</span>
-        <span class="txt ar">المشاركة المبكرة مع وكالة ناسا</span>
-      </div>
-      <div class="row">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="M20 6v4M20 30v4M6 20h4M30 20h4" opacity=".7"/><path d="M14 26l4-12 8 6z"/></svg></span>
-        <span class="yr"><bdi>2030</bdi></span>
-        <span class="txt en">Aligned with the UAE National Space Strategy</span>
-        <span class="txt ar">يتماشى مع استراتيجية الإمارات الوطنية للفضاء</span>
-      </div>
-      <div class="row">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 20h32"/><path d="M4 14v12M36 14v12"/><path d="M12 17v6M20 17v6M28 17v6" opacity=".6"/></svg></span>
-        <span class="yr"><bdi>2030&ndash;2117</bdi></span>
-        <span class="txt en">Coordinated milestones towards a sustainable space economy</span>
-        <span class="txt ar">مراحل منسقة نحو اقتصاد فضائي مستدام</span>
-      </div>
-      <div class="row">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="21" cy="19" r="10"/><ellipse cx="21" cy="19" rx="17" ry="5" transform="rotate(-22 21 19)" opacity=".8"/><path d="M16 15.5a3 3 0 0 0 4.6 1.6M24 23a2.4 2.4 0 0 1 2.4-2" opacity=".55"/></svg></span>
-        <span class="yr"><bdi>MARS-2117</bdi></span>
-        <span class="txt en">The long-term programme this ecosystem supports</span>
-        <span class="txt ar">البرنامج طويل الأمد الذي يدعمه هذا النظام البيئي</span>
-      </div>
-    </div>
+  <section class="wrap">
+    <h2 class="sec en">Sources</h2>
+    <h2 class="sec ar">المصادر</h2>
+    <p class="en">Everything quoted above about the initiative is theirs. Everything below is a
+      primary government page, so a stranger can check the UAE-side claims without taking this
+      page’s word for anything.</p>
+    <p class="ar">كل ما اقتُبس أعلاه عن المبادرة يخصها هي. وكل ما يلي صفحات حكومية أولية، ليتمكن أي
+      قارئ من التحقق من الادعاءات المتعلقة بالإمارات دون الاعتماد على هذه الصفحة.</p>
+    <ul class="srcs" id="srcs">
+      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy/space-economic-zones" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economic Zones ↗</a> <span class="host">space.gov.ae</span></li>
+      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economy ↗</a> <span class="host">space.gov.ae</span></li>
+      <li><a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet approves the National Space Strategy 2030 ↗</a> <span class="host">mediaoffice.ae</span></li>
+      <li><a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">Launch of the UAE Space Agency’s strategic plans ↗</a> <span class="host">uaecabinet.ae</span></li>
+      <li><a href="https://u.ae/en/about-the-uae/uae-in-the-future/uae-future" target="_blank" rel="noopener noreferrer">The UAE in the future ↗</a> <span class="host">u.ae</span></li>
+      <li><a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">Mohammed Bin Rashid Space Centre — about ↗</a> <span class="host">mbrsc.ae</span></li>
+      <li><a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC — satellites ↗</a> <span class="host">mbrsc.ae</span></li>
+      <li><a href="https://designsystem.gov.ae/" target="_blank" rel="noopener noreferrer">The UAE Design System ↗</a> <span class="host">designsystem.gov.ae</span></li>
+      <li><a href="https://designsystem.gov.ae/guidelines" target="_blank" rel="noopener noreferrer">UAE Design System — guidelines ↗</a> <span class="host">designsystem.gov.ae</span></li>
+    </ul>
   </section>
 
+  <div class="wrap disclose">
+    <p class="en"><b>This page is a concept.</b> It is an unsolicited design study by Jared Lilliss
+      (Lilliss IT), restyling public content from the XperienceSpace Initiative’s own website as a
+      design exercise. It is <b>not affiliated with, endorsed by, or commissioned by the
+      XperienceSpace Initiative</b>, and it is not published on their behalf. It is not a channel to
+      them: their own site publishes their contact details, and nothing here reaches them.</p>
+    <p class="ar"><b>هذه الصفحة تصور تصميمي.</b> وهي دراسة تصميم غير مطلوبة أعدّها جاريد ليليس
+      (ليليس آي تي)، بإعادة تصميم محتوى منشور من موقع مبادرة XperienceSpace كتمرين تصميمي.
+      <b>وهي غير تابعة للمبادرة ولا معتمدة منها ولا مُكلَّف بها من قبلها</b>، ولا تُنشر نيابة عنها.
+      وليست قناة للتواصل معهم: ينشر موقعهم بيانات الاتصال الخاصة به، ولا شيء هنا يصل إليهم.</p>
+    <p class="en">The English wording of the six stages and the two places is quoted from their
+      published pages. <b>The Arabic on this page is a translation prepared for this concept</b> —
+      where their own published Arabic edition supplies a name, theirs is used; the connecting
+      sentences are this page’s own and are not their published Arabic wording. The figures are
+      theirs; the ordering, the layout and the typography are the proposal. Colours and the two
+      faces follow the UAE Design System, which is public.</p>
+    <p class="ar">الصياغة الإنجليزية للمراحل الست وللمكانين مقتبسة من صفحاتهم المنشورة. <b>أما
+      العربية في هذه الصفحة فهي ترجمة أُعدّت لهذا التصور</b> — وحيثما وفّرت نسختهم العربية المنشورة
+      اسماً، استُخدم اسمهم؛ والجمل الرابطة من إعداد هذه الصفحة وليست صياغتهم العربية المنشورة.
+      الأرقام لهم؛ أما الترتيب والتخطيط والطباعة فهي المقترح.</p>
+    <p class="en"><b>On the horizon behind this page.</b> The UAE Design System’s “solid colours —
+      don’t use gradients” sits under its <i>illustration</i> principles, and it is obeyed there:
+      the eight-pointed khatim is 1px, solid, geometric and hard-edged. The ground behind it is a
+      gradient on purpose. A previous edition of this page applied the illustration rule to the sky
+      and became flat printed matter; that is recorded here rather than quietly reversed.</p>
+    <p class="ar"><b>عن الأفق خلف هذه الصفحة.</b> قاعدة «ألوان صلبة — لا تدرجات» في نظام التصميم
+      الإماراتي واردة ضمن مبادئ <i>الرسوم التوضيحية</i>، وهي متّبعة هناك: الخاتم الثماني بخط واحد
+      صلب هندسي حاد الحواف. أما الأرضية خلفه فهي تدرّج عن قصد.</p>
+  </div>
 
-  <section>
-    <h2 class="en">What happens next</h2>
-    <h2 class="ar">ما الخطوة التالية</h2>
-
-    <div class="next">
-      <div class="row">
-        <div class="rk en">Partners</div>
-        <div class="rk ar">الشركاء</div>
-        <div class="rv">
-          <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="15" cy="20" r="10"/><circle cx="25" cy="20" r="10" opacity=".8"/></svg></span>
-          <p class="en">Global partners, UAE talent and investors co-develop
-          future space capability in support of national programmes.</p>
-          <p class="ar">يتعاون الشركاء العالميون والمواهب الإماراتية والمستثمرون
-          على تطوير قدرات فضائية مستقبلية دعماً للبرامج الوطنية.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="rk en">Investment</div>
-        <div class="rk ar">الاستثمار</div>
-        <div class="rv">
-          <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 34h32" opacity=".55"/><path d="M9 34V25M17 34V19M25 34V13M33 34V6"/></svg></span>
-          <p class="en">Private investment and partnership driven, in full
-          alignment with official UAE space strategies and objectives.</p>
-          <p class="ar">مدفوعة بالاستثمار الخاص والشراكات، وبما يتماشى تماماً مع
-          استراتيجيات وأهداف الإمارات الرسمية في مجال الفضاء.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="rk en">A conversation</div>
-        <div class="rk ar">محادثة</div>
-        <div class="rv">
-          <span class="mk" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 8h20v14H12l-6 5v-5H4z"/><path d="M16 26h20v-14h-8" opacity=".7"/><path d="M36 26v5l-5-5" opacity=".7"/></svg></span>
-          <p class="en">Bring the question you actually have. The right first
-          meeting is thirty minutes, not a document.</p>
-          <p class="ar">أحضر السؤال الذي يشغلك فعلاً. اللقاء الأول المناسب مدته
-          ثلاثون دقيقة، وليس مستنداً.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="contact">
-      <h2 class="en">About this concept</h2>
-      <h2 class="ar">حول هذا التصور</h2>
-      <p class="en">This concept is not a channel to XperienceSpace. Their own site publishes their contact details; nothing here reaches them.</p>
-      <p class="ar">هذا التصور ليس قناة للتواصل مع XperienceSpace. ينشر موقعهم بيانات الاتصال الخاصة بهم، ولا شيء هنا يصل إليهم.</p>
-    </div>
-  </section>
-
-
-  <p class="disclose">
-    <b>This page is a concept.</b> It is an unsolicited design study by Jared
-    Lilliss (Lilliss IT), restyling public content from xperiencespace.com,
-    unsolicited, as a design exercise. It is <b>not affiliated with,
-    endorsed by, or commissioned by the XperienceSpace Initiative</b>, and it is
-    not published on their behalf. The English wording is quoted from their published pages. <b>The Arabic on this page is a translation prepared for this concept, not their published Arabic wording</b> — checked sentence by sentence against their own Arabic pages on 4 September 2026. The figures are theirs; the layout, the typography and the Arabic direction handling are
-    the proposal. Colours follow the UAE Design System (AEGOV), which is public
-    and MIT-licensed. Nothing here is a claim about the UAE space programme
-    beyond what xperiencespace.com already publishes. Built 31 August 2026.
-  </p>
+  <footer class="wrap">
+    <span class="en">Lilliss IT · concept prototype · rebuilt 8 September 2026 · one file, no external requests</span>
+    <span class="ar">ليليس آي تي · نموذج تصوري · أُعيد بناؤه في ٨ سبتمبر ٢٠٢٦ · ملف واحد، دون أي طلبات خارجية</span>
+  </footer>
 
 </div>
 
 <script>
-/* ═══ THE CONSTRUCTION ════════════════════════════════════════════════════════
-   ONE scalar: how far you have read. It drives a single thing — the completion
-   of a geometric construction — and the construction is the page's whole
-   atmosphere. There is nothing else moving.
-
-   WHAT IS BEING DRAWN, and why it is drawn rather than fetched. The eight-pointed
-   star is made by laying one square over the same square turned 45 degrees. That
-   is not an approximation of the figure; it is how the figure has always been
-   made, with compass and straightedge. So generating it from maths is the honest
-   method rather than a way around having no image files — and it means the page
-   still works with the network cable pulled.
-
-   The published design guidance for this context asks for basic geometric shapes,
-   solid colours with no gradients or soft transitions, and high contrast. Every
-   stroke below is a flat colour at a fixed alpha. Nothing interpolates, nothing
-   blurs, and there is not one gradient on this page.
-
-   As you read, the squares arrive, turn, and lock; then the figure repeats into a
-   lattice — which is what this geometry is for in the architecture it comes from:
-   a screen that filters light rather than a pattern that fills a wall.
-
-   Costs: DPR capped, ~30fps, redrawn only when the reading position has actually
-   moved, stopped while the tab is hidden, and never started under
-   prefers-reduced-motion — where the finished figure is drawn once, statically. */
 (function () {
-  "use strict";
+  'use strict';
   var doc = document;
-  var reduced = false; try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  doc.documentElement.className += ' js';
 
-  var cv = doc.getElementById('sky');
-  var cx = cv && cv.getContext ? cv.getContext('2d') : null;
-  var pillars = [].slice.call(doc.querySelectorAll('.pillar'));
+  /* ═══ ONE SCALAR, NINE WRITERS, ONE RESOLVER ══════════════════════════════
+     `f` is the only piece of state: how far along the chain the argument is
+     actually true. floor(f) = stages met. frac(f) = how far the next stage's
+     precondition is from being met.
 
-  var W = 0, H = 0, dpr = 1, raf = 0, acc = 0, tPrev = 0;
-  var read = 0, drawn = -1, cur = -1;
+     `target` is written ONLY by go(). `refusal` is a resolver-owned memo,
+     written ONLY by go() and cleared ONLY by the next go() — never by the lerp
+     and never by a render, so it cannot race the thing that draws it. That is
+     the same shape the sibling page uses: one authoritative scalar plus
+     resolver-owned caches.
 
-  function readPos() {
-    var h = doc.documentElement.scrollHeight - innerHeight;
-    return h > 0 ? Math.min(1, Math.max(0, (window.scrollY || doc.documentElement.scrollTop) / h)) : 0;
-  }
+     THE RESOLVER IS THE GATE. Every writer calls go(), so every writer is
+     refusable — there is no side door. Retreat is always granted; forward is
+     granted one stage at a time. Precedence is an ORDER, not a lock: you can
+     reach everywhere, you just cannot reach it out of order. */
 
-  function size() {
-    if (!cx) return;
-    dpr = Math.min(devicePixelRatio || 1, 1.5);
-    if (!(innerWidth > 0 && innerHeight > 0)) { W = H = 0; return; }
-    W = cv.width = Math.round(innerWidth * dpr);
-    H = cv.height = Math.round(innerHeight * dpr);
-    cv.style.width = innerWidth + 'px';
-    cv.style.height = innerHeight + 'px';
-    drawn = -1;
-  }
+  var N = 6;
+  var f = 0, target = 0, refusal = null, raf = 0;
+  var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* one cell of the figure: two squares, the second turned 45 degrees.
-     `turn` 0..1 rotates the second square into place; `grow` 0..1 opens both
-     from nothing to full size. Straight strokes, flat colour, no easing curve
-     baked in here — the easing is in how `turn` is fed. */
-  function cell(x, y, r, grow, turn, alpha, colour) {
-    if (grow <= 0.001 || alpha <= 0.004) return;
-    var s = r * grow;
-    cx.save();
-    cx.translate(x, y);
-    cx.globalAlpha = alpha;
-    cx.strokeStyle = colour;
-    cx.lineWidth = Math.max(2, 2.2 * dpr);
-    cx.beginPath();
-    cx.rect(-s, -s, s * 2, s * 2);
-    cx.stroke();
-    cx.rotate(turn * Math.PI / 4);
-    cx.beginPath();
-    cx.rect(-s, -s, s * 2, s * 2);
-    cx.stroke();
-    cx.restore();
-  }
+  var chain = doc.getElementById('chain');
+  var marks = doc.getElementById('marks');
+  var ledger = doc.getElementById('ledger');
+  var scrub = doc.getElementById('scrub');
+  var retEn = doc.getElementById('ret'), retAr = doc.getElementById('retar');
+  var ptitle = doc.getElementById('ptitle'), psent = doc.getElementById('psent');
+  var pquote = doc.getElementById('pquote'), psrc = doc.getElementById('psrc');
+  var pdot = doc.getElementById('pdot'), preadout = doc.getElementById('preadout');
+  if (!chain || !ledger) return;
 
-  function paint() {
-    if (!cx || !(W > 0 && H > 0)) return;
-    cx.clearRect(0, 0, W, H);
-
-    /* the lattice spacing is fixed to the viewport's short side so the figure
-       keeps its proportions on a phone instead of turning into wallpaper */
-    var step = Math.max(96 * dpr, Math.min(W, H) / 5.2);
-    var r = step * 0.5;
-    var cols = Math.ceil(W / step) + 2;
-    var rows = Math.ceil(H / step) + 2;
-    var ox = (W - (cols - 1) * step) / 2;
-    var oy = (H - (rows - 1) * step) / 2;
-
-    /* cells arrive outward from the centre, so the figure builds rather than
-       fades. p is the reading position; each cell has its own threshold. */
-    var p = read;
-    var midc = (cols - 1) / 2, midr = (rows - 1) / 2;
-    var maxd = Math.sqrt(midc * midc + midr * midr) || 1;
-
-    for (var i = 0; i < cols; i++) {
-      for (var j = 0; j < rows; j++) {
-        var dx = i - midc, dy = j - midr;
-        var d = Math.sqrt(dx * dx + dy * dy) / maxd;      /* 0 centre .. 1 edge */
-        var gate = d * 0.62;                              /* outer cells arrive later */
-        /* +0.20 so the figure is already present on arrival and COMPLETES as you
-           read, rather than being absent for anyone who has not scrolled yet —
-           arrival is the one moment every reader sees */
-        var t = (p + 0.20 - gate) / 0.30;
-        if (t <= 0) continue;
-        if (t > 1) t = 1;
-        /* ease so the turn settles rather than stopping dead */
-        var e = 1 - Math.pow(1 - t, 3);
-        /* the published guidance asks for high contrast, and the first attempt
-           painted 1.18% of the canvas — technically present, effectively absent.
-           Raised until the figure is legible as a figure, and no further: it sits
-           behind reading text and must not compete with it. */
-        var alpha = 0.055 + 0.135 * e * (1 - d * 0.45);
-        cell(ox + i * step, oy + j * step, r, e, e, alpha, '#D7BC6D');
-      }
-    }
-  }
-
-  /* which programme the reader is at — held through the gap between two, so a
-     boundary cannot flicker */
-  function currentPillar() {
-    if (!pillars.length) return -1;
-    var line = innerHeight * 0.42, nearest = -1, nd = Infinity;
-    for (var i = 0; i < pillars.length; i++) {
-      var b = pillars[i].getBoundingClientRect();
-      if (b.bottom < 0 || b.top > innerHeight) continue;
-      if (b.top <= line && b.bottom >= line) return i;
-      var d = Math.min(Math.abs(b.top - line), Math.abs(b.bottom - line));
-      if (d < nd) { nd = d; nearest = i; }
-    }
-    return nd < innerHeight * 0.5 ? nearest : cur;
-  }
-
-  function apply() {
-    read = readPos();
-    var i = currentPillar();
-    if (i !== cur) {
-      cur = i;
-      for (var k = 0; k < pillars.length; k++) pillars[k].classList.toggle('on', k === i);
-    }
-    if (reduced) { drawn = -1; paint(); }
-  }
-
-  function tick(ts) {
-    raf = requestAnimationFrame(tick);
-    if (doc.hidden) return;
-    if (!tPrev) tPrev = ts;
-    var dt = Math.min(64, ts - tPrev); tPrev = ts;
-    acc += dt; if (acc < 33) return; acc = 0;
-    /* only repaint when the reading position has actually moved — a static
-       figure redrawn thirty times a second is thirty wasted frames */
-    if (Math.abs(read - drawn) < 0.0015) return;
-    drawn = read;
-    paint();
-  }
-  function start() { if (!raf && !reduced) { tPrev = 0; raf = requestAnimationFrame(tick); } }
-  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-
-  var ticking = false;
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () { apply(); ticking = false; });
-  }
-
-  /* ── the clock ────────────────────────────────────────────────────────────
-     Local time where the subject is, not where the reader is. It is computed
-     from the reader's own clock with a fixed offset rather than fetched, so it
-     stays true with the network gone; the UAE does not observe daylight saving,
-     so a fixed +04:00 is correct all year rather than correct today. */
-  var clockEl = doc.getElementById('clock');
-  function stamp() {
-    if (!clockEl) return;
-    try {
-      var d = new Date();
-      var uae = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + (4 * 3600000));
-      var hh = ('0' + uae.getHours()).slice(-2);
-      var mm = ('0' + uae.getMinutes()).slice(-2);
-      clockEl.textContent = 'Abu Dhabi ' + hh + ':' + mm;
-    } catch (e) { /* a header without a clock is still a header */ }
-  }
-
-  try {
-    size();
-    apply();
-    paint();
-    stamp();
-    setInterval(stamp, 30000);
-    addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', function () { size(); apply(); paint(); }, { passive: true });
-    addEventListener('visibilitychange', function () {
-      if (doc.hidden) stop(); else { apply(); start(); }
-    });
-    start();
-  } catch (e) { /* the brochure is a complete, readable document without any of this */ }
-})();
-</script>
-
-<script>
-/* Progressive enhancement only, and deliberately thin. The switch above works
-   with scripting off; this adds the two things CSS cannot: the `dir` and `lang`
-   attributes on the document root, which is what actually tells the browser's
-   bidi algorithm and a screen reader which language and direction they are in.
-   If this never runs, the page still switches language and still reads
-   right-to-left — it simply announces itself less well. */
-(function(){
-  "use strict";
-  try{
-    var en = document.getElementById("lang-en");
-    var ar = document.getElementById("lang-ar");
-    if(!en || !ar) return;
-    var apply = function(){
-      var isAr = ar.checked;
-      var r = document.documentElement;
-      r.setAttribute("dir", isAr ? "rtl" : "ltr");
-      r.setAttribute("lang", isAr ? "ar" : "en");
+  /* Read the stages OUT OF THE LEDGER rather than duplicating them in a JS array.
+     Same nodes, so the scripting-off document and the instrument can never
+     disagree about what the page says. */
+  var STAGES = [].slice.call(ledger.children).map(function (li) {
+    var en = li.querySelector('h3.en'), ar = li.querySelector('h3.ar');
+    var pen = li.querySelector('p.en'), par = li.querySelector('p.ar');
+    return {
+      titleEn: en ? en.textContent.trim() : '',
+      titleAr: ar ? ar.textContent.trim() : '',
+      quoteEn: pen ? pen.textContent.trim() : '',
+      quoteAr: par ? par.textContent.trim() : '',
+      sentEn: pen ? (pen.getAttribute('data-sent') || '') : '',
+      sentAr: par ? (par.getAttribute('data-sent') || '') : '',
+      quoted: li.getAttribute('data-quoted') === '1'
     };
-    en.addEventListener("change", apply);
-    ar.addEventListener("change", apply);
-    apply();
-  }catch(e){ /* the CSS switch is the real one; nothing to recover */ }
+  });
+  if (STAGES.length !== N) return;
+
+  function isAr() { return doc.getElementById('lang-ar').checked; }
+
+  /* the six marks, as real buttons: pointer and keyboard are one code path */
+  STAGES.forEach(function (s, k) {
+    var b = doc.createElement('button');
+    b.className = 'mk'; b.type = 'button'; b.setAttribute('data-k', String(k));
+    b.innerHTML = '<span class="bar"></span>' +
+      '<span class="lbl en">' + (k + 1) + ' &middot; ' + s.titleEn + '</span>' +
+      '<span class="lbl ar">' + (k + 1) + ' &middot; ' + s.titleAr + '</span>';
+    b.addEventListener('click', function () { go(k); });
+    marks.appendChild(b);
+  });
+  var MK = [].slice.call(marks.children);
+
+  /* The ceiling is read off `target`, NOT off `f`. `f` is where the animation
+     currently is; `target` is what the reader has actually been granted. Gating
+     on `f` would refuse a legitimate second step taken before the ease finished
+     — the reader would be told to wait for an animation, which is exactly the
+     kind of modal behaviour this page refuses to have. */
+  function ceiling() { return Math.min(N - 1, Math.floor(target + 1e-6) + 1); }
+
+  /* go() COMMITS SYNCHRONOUSLY. This is the honest-door principle applied to
+     state, and it is a correction: the first build of this script only ever
+     SCHEDULED a render, so in any context where requestAnimationFrame is
+     throttled — a background tab, a tab being restored, an embedded pane — the
+     instrument froze while still looking correct. Measured: 0 rAF callbacks in
+     1500ms with document.hidden true, and every input silently did nothing.
+
+     So: what is TRUE commits here and now, derived from `target`. How it EASES
+     there is the enhancement, derived from `f` in tick(). Lose the animation and
+     the page still works completely; it just stops gliding. */
+  function go(v) {
+    var want = Math.max(0, Math.min(N - 1, v)), cap = ceiling();
+    if (want > cap + 1e-9) { refusal = { want: Math.ceil(want), at: cap }; target = cap; }
+    else { refusal = null; target = want; }
+    if (REDUCED || doc.hidden) f = target;   /* nobody is watching it move */
+    render();
+    queue();
+  }
+
+  function queue() { if (!raf && !doc.hidden) raf = requestAnimationFrame(tick); }
+
+  /* a tab coming back from hidden must not be stranded mid-ease */
+  doc.addEventListener('visibilitychange', function () {
+    if (!doc.hidden) queue(); else { f = target; render(); }
+  });
+
+  function tick() {
+    raf = 0;
+    f += (target - f) * (REDUCED ? 1 : 0.18);
+    if (Math.abs(target - f) < 4e-4) f = target; else queue();
+    render();
+  }
+
+  function render() {
+    var ar = isAr();
+    /* SEMANTICS from `target` — what is true. VISUALS from `f` — where the ease
+       has got to. Split deliberately: with rAF throttled, f may never move, and
+       the reader must still get the right stage, the right sentence and the
+       right refusal. */
+    var i = Math.max(0, Math.min(N - 1, Math.round(target)));
+    var here = Math.floor(target + 1e-6);
+    var frac = f - Math.floor(f);
+    var s = STAGES[i];
+
+    doc.documentElement.style.setProperty('--f', String(f));
+    doc.documentElement.style.setProperty('--fh', String(f / (N - 1)));
+
+    MK.forEach(function (b, k) {
+      var st = k < here ? 'met' : (k === here ? 'here' : 'ahead');
+      if (refusal && k === refusal.want) st = 'refused';
+      b.setAttribute('data-state', st);
+      b.style.setProperty('--frac', String(k === Math.floor(f + 1e-6) ? frac : 0));
+    });
+
+    ptitle.textContent = ar ? s.titleAr : s.titleEn;
+    ptitle.className = ar ? 'ar' : 'en';
+    pquote.textContent = ar ? s.quoteAr : s.quoteEn;
+    pquote.className = 'quote ' + (ar ? 'ar' : 'en');
+
+    var sentence;
+    if (refusal) {
+      var blocked = STAGES[refusal.want], need = STAGES[refusal.at];
+      sentence = ar
+        ? ('لا يمكن الوصول إلى «' + blocked.titleAr + '» بعد. ' + need.sentAr)
+        : ('“' + blocked.titleEn + '” is not reachable yet. ' + need.sentEn);
+    } else {
+      sentence = ar ? s.sentAr : s.sentEn;
+    }
+    psent.textContent = sentence;
+    psent.className = 'sentence ' + (ar ? 'ar' : 'en');
+
+    pdot.className = 'dot' + (s.quoted ? ' filled' : '');
+    psrc.textContent = ar
+      ? (s.quoted ? 'مقتبس من صفحاتهم المنشورة' : 'حجة هذا التصور')
+      : (s.quoted ? 'Quoted from their published pages' : 'This concept’s argument');
+    psrc.className = ar ? 'ar' : 'en';
+
+    preadout.textContent = ar
+      ? ('المرحلة ' + (i + 1) + ' من ' + N)
+      : ('Stage ' + (i + 1) + ' of ' + N);
+    preadout.className = 'readout ' + (ar ? 'ar' : 'en');
+
+    if (scrub) {
+      scrub.value = String(Math.round(f * 100));
+      scrub.setAttribute('aria-valuetext', preadout.textContent + ' — ' + (ar ? s.titleAr : s.titleEn));
+    }
+    var done = f >= N - 1 - 1e-6;
+    if (retEn) retEn.hidden = !done;
+    if (retAr) retAr.hidden = !done;
+
+    chain.setAttribute('aria-label', ar
+      ? ('سلسلة الأسبقية. ' + preadout.textContent + '. استخدم مفاتيح الأسهم للتنقل.')
+      : ('The precedence chain. ' + preadout.textContent + '. Use arrow keys to move along it.'));
+  }
+
+  /* ── writers 1–2: drag and wheel, both over the chain only ─────────────── */
+  var dragging = false, grabAt = 0, grabF = 0;
+  function pitch() {
+    var r = chain.getBoundingClientRect();
+    return (innerWidth > 760 ? r.width : r.height) / (N - 1);
+  }
+  function axis(e) { return innerWidth > 760 ? e.clientX : e.clientY; }
+  function dirSign() { return (innerWidth > 760 && isAr()) ? -1 : 1; }
+
+  chain.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('button,a,input')) return;
+    dragging = true; grabAt = axis(e); grabF = f;
+    chain.setPointerCapture(e.pointerId);
+  });
+  chain.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    go(grabF + dirSign() * (axis(e) - grabAt) / pitch());
+  });
+  ['pointerup', 'pointercancel'].forEach(function (t) {
+    chain.addEventListener(t, function () { dragging = false; });
+  });
+  chain.style.touchAction = 'none';   /* on the chain ONLY, never the document */
+
+  chain.addEventListener('wheel', function (e) {
+    var atEnd = (f <= 0 && e.deltaY < 0) || (f >= N - 1 && e.deltaY > 0);
+    if (atEnd) return;                 /* let the page scroll at both ends */
+    e.preventDefault();
+    go(f + (e.deltaY + e.deltaX) / (pitch() * 1.6));
+  }, { passive: false });
+
+  /* ── writers 3–6: keys. Every one routed through go(), so every one is
+        refusable. Up/Down and +/- never mirror, giving a direction-free path. */
+  chain.addEventListener('keydown', function (e) {
+    var step = e.shiftKey ? 0.25 : 1, k = e.key, d = dirSign();
+    if (k === 'ArrowRight') go(f + step * d);
+    else if (k === 'ArrowLeft') go(f - step * d);
+    else if (k === 'ArrowDown' || k === '+' || k === '=') go(f + step);
+    else if (k === 'ArrowUp' || k === '-' || k === '_') go(f - step);
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(N - 1);
+    else return;
+    e.preventDefault();
+  });
+
+  /* ── writer 7: the native range ────────────────────────────────────────── */
+  if (scrub) scrub.addEventListener('input', function () { go(scrub.value / 100); });
+
+  /* ── writer 8: the deep link. Routed THROUGH go(), so a shared link to the
+        end opens on a refusal rather than skipping the argument. ─────────── */
+  var q = new URLSearchParams(location.search).get('before');
+  if (q !== null) {
+    var v = (q === 'start') ? 0 : (q === 'end') ? N - 1 : parseFloat(q);
+    if (!isNaN(v)) go(v);
+  }
+
+  /* ── writer 9: the return edge. A retreat, so always granted. ──────────── */
+  [retEn, retAr].forEach(function (b) { if (b) b.addEventListener('click', function () { go(0); }); });
+
+  /* language switch: keep the document's own lang/dir honest for the bidi
+     algorithm and for screen readers, and re-render so every string, label and
+     live region is in the language actually on screen. */
+  ['lang-en', 'lang-ar'].forEach(function (id) {
+    doc.getElementById(id).addEventListener('change', function () {
+      var ar = isAr();
+      doc.documentElement.lang = ar ? 'ar' : 'en';
+      doc.documentElement.dir = ar ? 'rtl' : 'ltr';
+      render();
+    });
+  });
+
+  /* the sources count is COMPUTED from the DOM, not authored — so the title
+     block cannot drift from the list at the foot of the page. */
+  var sc = doc.getElementById('srccount'), list = doc.getElementById('srcs');
+  if (sc && list) sc.textContent = String(list.querySelectorAll('a[href]').length);
+
+  render();
 })();
 </script>
 </body>
