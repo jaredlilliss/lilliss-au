@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Notes &amp; sources — Before This | Lilliss IT concept</title>
+<meta name="description" content="Sources, disclosure and method for the Before This design concept. Unsolicited, not affiliated with the XperienceSpace Initiative.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://lilliss.au/xperience-concept/notes.html">
+<meta name="theme-color" content="#150C04">
+<style>
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/alexandria-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Noto Kufi Arabic';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/notokufiarabic-arabic.woff2') format('woff2');
+  unicode-range:U+0020,U+00A0,U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08E1,U+08E3-08FF,U+200C-200E,U+FD3E-FD3F,U+FEFF}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
+/* The apparatus lives here rather than under the instrument. On the page itself
+   it was nine sources, three disclosure paragraphs and a section of quoted
+   limits sitting below a six-stage argument — correct, and far too much page.
+   Splitting it is not hiding it: the concept page carries the disclaimer in its
+   title block and its eyebrow, and links here in its footer. */
+:root{
+  --g300:#D7BC6D; --ground:#241608; --ink:#F9F7ED; --ink-2:#E6D7A2; --ink-3:#CBA344;
+  --edge:#5D3B26; --edge-2:#7C5E24; --panel:#2E1B0B;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'Alexandria','Noto Kufi Arabic','Segoe UI',system-ui,sans-serif;
+  --sans-ar:'Noto Kufi Arabic','Alexandria','Segoe UI',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:400 17px/1.75 var(--sans);-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(140% 42% at 50% 100%, rgba(215,188,109,.10), transparent 66%),
+    linear-gradient(180deg,#150C04 0%,#1D1206 38%,#241608 70%,#3A230E 100%) fixed;}
+a{color:var(--ink-2);text-underline-offset:3px;text-decoration-color:var(--edge-2)}
+a:hover{color:var(--ink);text-decoration-color:var(--g300)}
+:focus-visible{outline:2px solid var(--g300);outline-offset:3px}
+b,strong{font-weight:600;color:var(--ink)}
+.wrap{width:min(820px,100%);margin-inline:auto;padding-inline:clamp(18px,4vw,40px)}
+header{border-block-end:1px solid var(--edge);padding-block:16px}
+.back{font:500 .62rem/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;display:inline-flex;align-items:center;min-height:26px}
+.back:hover{color:var(--g300)}
+h1{margin:0 0 10px;font:600 clamp(1.9rem,4.6vw,2.9rem)/1.12 var(--sans);letter-spacing:-.03em}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+main{padding-block:clamp(34px,6vw,64px)}
+section{padding-block:clamp(28px,4vw,44px);border-block-start:1px solid var(--edge)}
+section:first-child{border-block-start:0;padding-block-start:0}
+h2{margin:0 0 14px;font:600 clamp(1.25rem,2.6vw,1.6rem)/1.25 var(--sans);letter-spacing:-.02em}
+h2.ar{font-family:var(--sans-ar);line-height:1.5;letter-spacing:0}
+p{margin:0 0 14px;max-width:70ch;color:var(--ink-2)}
+p.ar{font-family:var(--sans-ar);line-height:1.95;letter-spacing:normal}
+.quoted{border-inline-start:2px solid var(--g300);padding-inline-start:16px;color:var(--ink)}
+ul.srcs{margin:0;padding:0;list-style:none;display:grid;gap:13px;counter-reset:s}
+ul.srcs li{counter-increment:s;display:flex;gap:12px;align-items:baseline;color:var(--ink-2);font-size:.95rem}
+ul.srcs li::before{content:counter(s);color:var(--ink-3);font:500 .62rem/1.7 var(--mono);flex:none;min-width:1.7em}
+.host{color:var(--ink-3);font:400 .78rem/1.7 var(--mono)}
+footer{border-block-start:1px solid var(--edge);padding-block:26px 44px;color:var(--ink-3);font-size:.84rem}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><a class="back" href="/xperience-concept/brochure.html">&larr; Before This</a></div></header>
+
+<main class="wrap">
+  <h1>Notes &amp; sources</h1>
+  <p class="lede">The apparatus behind the concept: what is quoted, what is argued, where every
+    checkable claim comes from, and what this page is not.</p>
+
+  <section>
+    <h2>What they say they are not</h2>
+    <p>Unusually, the initiative publishes its own limits. Reproduced here because a concept that
+      quotes an organisation should quote the part that constrains it, not only the part that
+      sells it:</p>
+    <p class="quoted">“Not a regulator, government agency or operator of national missions. Not a
+      replacement for UAE institutions or official strategies. Not a speculative venture; programs
+      are tied to measurable readiness and real capabilities.”</p>
+    <p>That sentence is why the concept page opens both of its place cards by saying UAE Space City
+      and the UAE Space Welcome Center are <b>their proposal</b>, and that the UAE Space Agency runs
+      a separate, real Space Economic Zones programme. A private proposal set in the government’s
+      own design system can be mistaken for a government publication, and the fix is to say so
+      plainly rather than to style it more cautiously.</p>
+  </section>
+
+  <section>
+    <h2>What is quoted and what is argued</h2>
+    <p>The six stage titles and the two place descriptions are quoted from the initiative’s own
+      published pages. <b>The order between them is not theirs.</b> What has to be true before what
+      is this concept’s argument, and the page says so on screen, above the chain, rather than
+      burying it here.</p>
+    <p>The four programmes run at the same time. They do not become true at the same time — that
+      difference between a calendar and a dependency is the only thing the concept adds.</p>
+  </section>
+
+  <section>
+    <h2>On the Arabic</h2>
+    <p><b>The Arabic is a translation prepared for this concept.</b> Where the initiative’s own
+      published Arabic edition supplies a name, theirs is used — the two pillar names read
+      <span dir="rtl" lang="ar" style="font-family:var(--sans-ar)">المشاركة العامة والمجتمع</span>
+      and <span dir="rtl" lang="ar" style="font-family:var(--sans-ar)">التعليم ومسار المواهب</span>
+      because that is how they write them. The connecting sentences are this page’s own and are not
+      their published wording.</p>
+    <p>Typographically: Arabic letters join, so no Arabic run on either page carries CSS
+      letter-spacing — tracking a joined script breaks the words apart. The Arabic face is Noto Kufi
+      Arabic and it leads its own stack, because the space character sits inside Alexandria’s
+      range and a mixed run was otherwise being word-spaced by the Latin font.</p>
+  </section>
+
+  <section>
+    <h2>Sources</h2>
+    <p>Everything quoted about the initiative is theirs. Everything below is a primary government or
+      design-system page, so a stranger can check the UAE-side claims without taking this page’s
+      word for anything.</p>
+    <ul class="srcs">
+      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy/space-economic-zones" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economic Zones ↗</a> <span class="host">space.gov.ae</span></li>
+      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economy ↗</a> <span class="host">space.gov.ae</span></li>
+      <li><a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet approves the National Space Strategy 2030 ↗</a> <span class="host">mediaoffice.ae</span></li>
+      <li><a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">Launch of the UAE Space Agency’s strategic plans ↗</a> <span class="host">uaecabinet.ae</span></li>
+      <li><a href="https://u.ae/en/about-the-uae/uae-in-the-future/uae-future" target="_blank" rel="noopener noreferrer">The UAE in the future ↗</a> <span class="host">u.ae</span></li>
+      <li><a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">Mohammed Bin Rashid Space Centre — about ↗</a> <span class="host">mbrsc.ae</span></li>
+      <li><a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC — satellites ↗</a> <span class="host">mbrsc.ae</span></li>
+      <li><a href="https://designsystem.gov.ae/" target="_blank" rel="noopener noreferrer">The UAE Design System ↗</a> <span class="host">designsystem.gov.ae</span></li>
+      <li><a href="https://designsystem.gov.ae/guidelines" target="_blank" rel="noopener noreferrer">UAE Design System — guidelines ↗</a> <span class="host">designsystem.gov.ae</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Disclosure</h2>
+    <p><b>This is a concept.</b> It is an unsolicited design study by Jared Lilliss (Lilliss IT),
+      restyling public content from the XperienceSpace Initiative’s own website as a design
+      exercise. It is <b>not affiliated with, endorsed by, or commissioned by the XperienceSpace
+      Initiative</b>, and it is not published on their behalf. It is not a channel to them: their
+      own site publishes their contact details, and nothing here reaches them.</p>
+    <p>The figures are theirs. The ordering, the layout and the typography are the proposal.
+      Colours and the two typefaces follow the UAE Design System, which is public.</p>
+    <p><b>On the horizon behind the concept page.</b> The UAE Design System’s “solid colours — don’t
+      use gradients” sits under its <i>illustration</i> principles, and it is obeyed there: the
+      eight-pointed khatim is drawn in single solid strokes, geometric and hard-edged. The ground
+      behind it is a gradient on purpose. An earlier edition applied the illustration rule to the
+      sky and became flat printed matter; that is recorded rather than quietly reversed.</p>
+  </section>
+</main>
+
+<footer class="wrap">Lilliss IT · concept prototype · 8 September 2026 · one file, no external requests</footer>
+
+</body>
+</html>

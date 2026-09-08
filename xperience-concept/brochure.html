@@ -91,9 +91,14 @@
      E  ol.ledger      the chain as a document. The scripting-off truth AND the
                        nodes the script reads, so the two states cannot disagree.
      F  .places        the two places, each opening with the disambiguation
-     G  what they say they are not — their own published limits
-     H  .srcs          nine primary sources, visible domains
-     I  .disclose      the disclosure, unweakened
+     G  .disclose      ONE line: concept, not affiliated, whose argument the order
+                       is — then a link out.
+
+   The apparatus moved to notes.html on 08/09: nine sources, three disclosure
+   paragraphs and a section of quoted limits were sitting under a six-stage
+   argument. Correct, and far too much page. Splitting is not hiding — the
+   disclaimer is in the eyebrow, in the title block's CLIENT field, and in the
+   line above the link.
    ════════════════════════════════════════════════════════════════════════════ */
 :root{
   /* AEGOV core palette — the published gold ramp, verbatim */
@@ -175,7 +180,16 @@ strong,b{font-weight:600;color:var(--ink)}
       the same square turned 45 degrees — the compass-and-straightedge method,
       which is why generating it from maths is the honest construction and not a
       way around having no image files. Composited once, never repainted. ───── */
-#screen{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5}
+/* L2 the khatim, LIVE. This was a static tiled <svg><pattern> for one commit and
+   that was the single worst thing about the page: same motif, dead. The previous
+   edition's own comment named the trap and I walked into it anyway — "the lattice
+   spacing is fixed to the viewport's short side so the figure keeps its
+   proportions on a phone instead of turning into WALLPAPER."
+   It is a canvas again, and it is now driven by the chain's own scalar rather
+   than by scroll position: the figure completes as the ARGUMENT completes. Cells
+   arrive outward from the centre, each with its own threshold, so it builds
+   rather than fades. Repaints only when the scalar has actually moved. */
+#screen{position:fixed;inset:0;z-index:1;pointer-events:none;display:block;width:100%;height:100%}
 .doc{position:relative;z-index:2}
 
 /* ── the language switch, mechanism unchanged ───────────────────────────────
@@ -354,17 +368,7 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 
 <div id="ground" aria-hidden="true"></div>
 
-<svg id="screen" aria-hidden="true" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <pattern id="kh" width="180" height="180" patternUnits="userSpaceOnUse">
-      <g fill="none" stroke="#7C5E24" stroke-width="1">
-        <rect x="52" y="52" width="76" height="76"/>
-        <rect x="52" y="52" width="76" height="76" transform="rotate(45 90 90)"/>
-      </g>
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#kh)"/>
-</svg>
+<canvas id="screen" aria-hidden="true"></canvas>
 
 <div class="doc">
 
@@ -506,69 +510,17 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     </div>
   </section>
 
-  <section class="wrap">
-    <h2 class="sec en">What they say they are not</h2>
-    <h2 class="sec ar">ما يقولون إنهم ليسوا عليه</h2>
-    <p class="en">Unusually, the initiative publishes its own limits. Reproduced because a concept
-      that quotes an organisation should quote the part that constrains it, not only the part that
-      sells it: <b>“Not a regulator, government agency or operator of national missions. Not a
-      replacement for UAE institutions or official strategies. Not a speculative venture; programs
-      are tied to measurable readiness and real capabilities.”</b></p>
-    <p class="ar">من غير المعتاد أن تنشر مبادرة حدودها بنفسها. ونعيد ذلك هنا لأن التصور الذي يقتبس من
-      جهة ينبغي أن يقتبس ما يقيّدها لا ما يروّج لها فقط: <b>«ليست جهة تنظيمية ولا وكالة حكومية ولا
-      مشغّلاً للمهام الوطنية. وليست بديلاً عن مؤسسات الدولة أو استراتيجياتها الرسمية. وليست مشروعاً
-      مضارباً؛ فبرامجها مرتبطة بجاهزية قابلة للقياس وقدرات حقيقية.»</b></p>
-  </section>
-
-  <section class="wrap">
-    <h2 class="sec en">Sources</h2>
-    <h2 class="sec ar">المصادر</h2>
-    <p class="en">Everything quoted above about the initiative is theirs. Everything below is a
-      primary government page, so a stranger can check the UAE-side claims without taking this
-      page’s word for anything.</p>
-    <p class="ar">كل ما اقتُبس أعلاه عن المبادرة يخصها هي. وكل ما يلي صفحات حكومية أولية، ليتمكن أي
-      قارئ من التحقق من الادعاءات المتعلقة بالإمارات دون الاعتماد على هذه الصفحة.</p>
-    <ul class="srcs" id="srcs">
-      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy/space-economic-zones" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economic Zones ↗</a> <span class="host">space.gov.ae</span></li>
-      <li><a href="https://space.gov.ae/en/projects-and-initiatives/space-economy" target="_blank" rel="noopener noreferrer">UAE Space Agency — Space Economy ↗</a> <span class="host">space.gov.ae</span></li>
-      <li><a href="https://mediaoffice.ae/en/news/2019/3/UAE-Cabinet-approves-National-Space-Strategy-2030" target="_blank" rel="noopener noreferrer">UAE Cabinet approves the National Space Strategy 2030 ↗</a> <span class="host">mediaoffice.ae</span></li>
-      <li><a href="https://uaecabinet.ae/en/details/news/mohammed-bin-rashid-witnesses-launch-of-strategic-plans-of-uae-space-agency" target="_blank" rel="noopener noreferrer">Launch of the UAE Space Agency’s strategic plans ↗</a> <span class="host">uaecabinet.ae</span></li>
-      <li><a href="https://u.ae/en/about-the-uae/uae-in-the-future/uae-future" target="_blank" rel="noopener noreferrer">The UAE in the future ↗</a> <span class="host">u.ae</span></li>
-      <li><a href="https://www.mbrsc.ae/about/" target="_blank" rel="noopener noreferrer">Mohammed Bin Rashid Space Centre — about ↗</a> <span class="host">mbrsc.ae</span></li>
-      <li><a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC — satellites ↗</a> <span class="host">mbrsc.ae</span></li>
-      <li><a href="https://designsystem.gov.ae/" target="_blank" rel="noopener noreferrer">The UAE Design System ↗</a> <span class="host">designsystem.gov.ae</span></li>
-      <li><a href="https://designsystem.gov.ae/guidelines" target="_blank" rel="noopener noreferrer">UAE Design System — guidelines ↗</a> <span class="host">designsystem.gov.ae</span></li>
-    </ul>
-  </section>
-
   <div class="wrap disclose">
-    <p class="en"><b>This page is a concept.</b> It is an unsolicited design study by Jared Lilliss
-      (Lilliss IT), restyling public content from the XperienceSpace Initiative’s own website as a
-      design exercise. It is <b>not affiliated with, endorsed by, or commissioned by the
-      XperienceSpace Initiative</b>, and it is not published on their behalf. It is not a channel to
-      them: their own site publishes their contact details, and nothing here reaches them.</p>
-    <p class="ar"><b>هذه الصفحة تصور تصميمي.</b> وهي دراسة تصميم غير مطلوبة أعدّها جاريد ليليس
-      (ليليس آي تي)، بإعادة تصميم محتوى منشور من موقع مبادرة XperienceSpace كتمرين تصميمي.
-      <b>وهي غير تابعة للمبادرة ولا معتمدة منها ولا مُكلَّف بها من قبلها</b>، ولا تُنشر نيابة عنها.
-      وليست قناة للتواصل معهم: ينشر موقعهم بيانات الاتصال الخاصة به، ولا شيء هنا يصل إليهم.</p>
-    <p class="en">The English wording of the six stages and the two places is quoted from their
-      published pages. <b>The Arabic on this page is a translation prepared for this concept</b> —
-      where their own published Arabic edition supplies a name, theirs is used; the connecting
-      sentences are this page’s own and are not their published Arabic wording. The figures are
-      theirs; the ordering, the layout and the typography are the proposal. Colours and the two
-      faces follow the UAE Design System, which is public.</p>
-    <p class="ar">الصياغة الإنجليزية للمراحل الست وللمكانين مقتبسة من صفحاتهم المنشورة. <b>أما
-      العربية في هذه الصفحة فهي ترجمة أُعدّت لهذا التصور</b> — وحيثما وفّرت نسختهم العربية المنشورة
-      اسماً، استُخدم اسمهم؛ والجمل الرابطة من إعداد هذه الصفحة وليست صياغتهم العربية المنشورة.
-      الأرقام لهم؛ أما الترتيب والتخطيط والطباعة فهي المقترح.</p>
-    <p class="en"><b>On the horizon behind this page.</b> The UAE Design System’s “solid colours —
-      don’t use gradients” sits under its <i>illustration</i> principles, and it is obeyed there:
-      the eight-pointed khatim is 1px, solid, geometric and hard-edged. The ground behind it is a
-      gradient on purpose. A previous edition of this page applied the illustration rule to the sky
-      and became flat printed matter; that is recorded here rather than quietly reversed.</p>
-    <p class="ar"><b>عن الأفق خلف هذه الصفحة.</b> قاعدة «ألوان صلبة — لا تدرجات» في نظام التصميم
-      الإماراتي واردة ضمن مبادئ <i>الرسوم التوضيحية</i>، وهي متّبعة هناك: الخاتم الثماني بخط واحد
-      صلب هندسي حاد الحواف. أما الأرضية خلفه فهي تدرّج عن قصد.</p>
+    <p class="en"><b>A concept, not a commission.</b> Unsolicited design study by Jared Lilliss
+      (Lilliss IT). Not affiliated with, endorsed by or commissioned by the XperienceSpace
+      Initiative, and not a channel to them. Stage titles and place descriptions are quoted from
+      their published pages; <b>the order between them is this page&rsquo;s argument, not theirs.</b>
+      Arabic is a translation prepared for this concept.
+      <a href="/xperience-concept/notes.html">Notes, sources and full disclosure &rarr;</a></p>
+    <p class="ar"><b>&#1607;&#1584;&#1575; &#1578;&#1589;&#1608;&#1585;&#1548; &#1608;&#1604;&#1610;&#1587; &#1578;&#1603;&#1604;&#1610;&#1601;&#1611;&#1575;.</b> &#1583;&#1585;&#1575;&#1587;&#1577; &#1578;&#1589;&#1605;&#1610;&#1605; &#1594;&#1610;&#1585; &#1605;&#1591;&#1604;&#1608;&#1576;&#1577; &#1571;&#1593;&#1583;&#1617;&#1607;&#1575; &#1580;&#1575;&#1585;&#1610;&#1583; &#1604;&#1610;&#1604;&#1610;&#1587;
+      (&#1604;&#1610;&#1604;&#1610;&#1587; &#1570;&#1610; &#1578;&#1610;)&#1548; &#1594;&#1610;&#1585; &#1578;&#1575;&#1576;&#1593;&#1577; &#1604;&#1604;&#1605;&#1576;&#1575;&#1583;&#1585;&#1577; &#1608;&#1604;&#1575; &#1605;&#1593;&#1578;&#1605;&#1583;&#1577; &#1605;&#1606;&#1607;&#1575; &#1608;&#1604;&#1575; &#1602;&#1606;&#1575;&#1577; &#1604;&#1604;&#1578;&#1608;&#1575;&#1589;&#1604; &#1605;&#1593;&#1607;&#1575;. &#1593;&#1606;&#1575;&#1608;&#1610;&#1606; &#1575;&#1604;&#1605;&#1585;&#1575;&#1581;&#1604;
+      &#1608;&#1575;&#1604;&#1571;&#1605;&#1575;&#1603;&#1606; &#1605;&#1602;&#1578;&#1576;&#1587;&#1577; &#1605;&#1606; &#1589;&#1601;&#1581;&#1575;&#1578;&#1607;&#1605;&#1548; <b>&#1571;&#1605;&#1575; &#1575;&#1604;&#1578;&#1585;&#1578;&#1610;&#1576; &#1576;&#1610;&#1606;&#1607;&#1575; &#1601;&#1607;&#1608; &#1581;&#1580;&#1577; &#1607;&#1584;&#1607; &#1575;&#1604;&#1589;&#1601;&#1581;&#1577;.</b>
+      <a href="/xperience-concept/notes.html">&#1575;&#1604;&#1605;&#1604;&#1575;&#1581;&#1592;&#1575;&#1578; &#1608;&#1575;&#1604;&#1605;&#1589;&#1575;&#1583;&#1585; &#1608;&#1575;&#1604;&#1573;&#1601;&#1589;&#1575;&#1581; &#1575;&#1604;&#1603;&#1575;&#1605;&#1604; &#8592;</a></p>
   </div>
 
   <footer class="wrap">
@@ -633,6 +585,82 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
   if (STAGES.length !== N) return;
 
   function isAr() { return doc.getElementById('lang-ar').checked; }
+
+  /* ═══ THE FIGURE ══════════════════════════════════════════════════════════
+     A lattice of khatim cells that ARRIVES as the chain advances. Each cell is
+     two squares, the second turning 45 degrees into place; cells further from
+     the centre have a later threshold, so the figure builds outward instead of
+     fading up. Driven by `f`, not by scroll — the atmosphere completes as the
+     argument does, which is the coupling the bar page has and a static pattern
+     cannot. Repaints only when the scalar has actually moved; a still figure
+     redrawn sixty times a second is sixty wasted frames. */
+  var cv = doc.getElementById('screen');
+  var cx = cv && cv.getContext ? cv.getContext('2d') : null;
+  var CW = 0, CH = 0, dpr = 1, drawn = -1;
+
+  function sizeCanvas() {
+    if (!cx) return;
+    dpr = Math.min(devicePixelRatio || 1, 1.5);
+    if (!(innerWidth > 0 && innerHeight > 0)) { CW = CH = 0; return; }
+    CW = cv.width = Math.round(innerWidth * dpr);
+    CH = cv.height = Math.round(innerHeight * dpr);
+    cv.style.width = innerWidth + 'px';
+    cv.style.height = innerHeight + 'px';
+    drawn = -1;
+  }
+
+  function cellAt(x, y, r, grow, turn, alpha) {
+    if (grow <= 0.001 || alpha <= 0.004) return;
+    var s = r * grow;
+    cx.save();
+    cx.translate(x, y);
+    cx.globalAlpha = alpha;
+    cx.strokeStyle = '#D7BC6D';
+    cx.lineWidth = Math.max(1.4, 1.6 * dpr);
+    cx.beginPath(); cx.rect(-s, -s, s * 2, s * 2); cx.stroke();
+    cx.rotate(turn * Math.PI / 4);
+    cx.beginPath(); cx.rect(-s, -s, s * 2, s * 2); cx.stroke();
+    cx.restore();
+  }
+
+  function paintFigure() {
+    if (!cx) return;
+    /* SELF-HEALING SIZE. sizeCanvas() at init reads innerWidth, and if the page
+       is laid out before the viewport exists — a hidden pane, a restored tab, a
+       print/preview pass — it reads 0, the buffer stays at the 300x150 default
+       and NO resize event necessarily follows to correct it. Measured exactly
+       that: viewport 1280x900, CSS box 1265x900, buffer still 300x150, figure
+       invisible. So the size is checked here, on the path that actually draws,
+       rather than trusted from an event that may never fire. */
+    var wantW = Math.round(innerWidth * Math.min(devicePixelRatio || 1, 1.5));
+    var wantH = Math.round(innerHeight * Math.min(devicePixelRatio || 1, 1.5));
+    if (wantW > 0 && wantH > 0 && (cv.width !== wantW || cv.height !== wantH)) sizeCanvas();
+    if (!(CW > 0 && CH > 0)) return;
+    var p = f / (N - 1);
+    if (Math.abs(p - drawn) < 0.002) return;
+    drawn = p;
+    cx.clearRect(0, 0, CW, CH);
+    /* spacing tied to the SHORT side, so a phone gets a figure and not wallpaper */
+    var step = Math.max(96 * dpr, Math.min(CW, CH) / 4.6);
+    var r = step * 0.5;
+    var cols = Math.ceil(CW / step) + 2, rows = Math.ceil(CH / step) + 2;
+    var ox = (CW - (cols - 1) * step) / 2, oy = (CH - (rows - 1) * step) / 2;
+    var midc = (cols - 1) / 2, midr = (rows - 1) / 2;
+    var maxd = Math.sqrt(midc * midc + midr * midr) || 1;
+    for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) {
+      var dx = i - midc, dy = j - midr;
+      var d = Math.sqrt(dx * dx + dy * dy) / maxd;     /* 0 centre .. 1 edge */
+      /* +0.22 so the figure is already present on arrival and COMPLETES as the
+         reader works — arrival is the one moment every reader sees */
+      var t = (p + 0.22 - d * 0.62) / 0.34;
+      if (t <= 0) continue; if (t > 1) t = 1;
+      var e = 1 - Math.pow(1 - t, 3);
+      cellAt(ox + i * step, oy + j * step, r, e, e, 0.05 + 0.17 * e * (1 - d * 0.4));
+    }
+  }
+
+  sizeCanvas();
+  addEventListener('resize', function () { sizeCanvas(); paintFigure(); }, { passive: true });
 
   /* the six marks, as real buttons: pointer and keyboard are one code path */
   STAGES.forEach(function (s, k) {
@@ -746,6 +774,8 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     chain.setAttribute('aria-label', ar
       ? ('سلسلة الأسبقية. ' + preadout.textContent + '. استخدم مفاتيح الأسهم للتنقل.')
       : ('The precedence chain. ' + preadout.textContent + '. Use arrow keys to move along it.'));
+
+    paintFigure();
   }
 
   /* ── writers 1–2: drag and wheel, both over the chain only ─────────────── */
