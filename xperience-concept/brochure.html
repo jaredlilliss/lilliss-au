@@ -280,6 +280,7 @@ h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
 .readout.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none;font-size:.72rem}
 .jsonly{display:none}
 .js .jsonly{display:revert}
+.js .plate{display:grid}   /* revert would make it block; the plate is a grid */
 .js .ledger{display:none}
 /* 44px of hit area, not 16. A range input's default track is ~16px tall, which
    fails WCAG 2.2 SC 2.5.8 (24x24) as a non-inline target — measured at 339x16
@@ -363,6 +364,20 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
    specificity or by source order; this one now wins by both. The language
    switch, #lang-ar:checked ~ .doc .ar, is (1,2,0) and still wins over it. */
 .doc .ar{display:none}
+
+/* ── forced colours (Windows High Contrast). Anything drawn only with a background
+   disappears; the six bars, the source dot and the flag went with it. Rendered
+   under inForcedColors on 08/09 and looked at. */
+@media (forced-colors:active){
+  #screen{display:none}
+  .mk .bar{background:CanvasText}
+  .mk .bar::after{background:Highlight}
+  .mk[data-state="refused"] .bar{background:Highlight}
+  .dot{border-color:CanvasText}
+  .dot.filled{background:CanvasText}
+  .flag i{border:1px solid CanvasText}
+  .plate,.card,.badge,.ret,.switch{border-color:CanvasText}
+}
 </style>
 </head>
 <body>
@@ -409,7 +424,7 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 
       <div class="marks" id="marks"></div>
 
-      <div class="plate">
+      <div class="plate jsonly">
         <h2 id="ptitle" class="en">Someone walks in</h2>
         <p class="sentence" id="psent" aria-live="polite"></p>
         <p class="quote" id="pquote"></p>
