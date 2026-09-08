@@ -305,7 +305,7 @@ body{
    animation on every arrival. */
 @media (prefers-reduced-motion: reduce){
   .stop svg,.disp,.src,.stop,.ending .go,.stem svg,.stem .sy,.stem .sn,.stem .ss,.stem{transition:none !important}
-  .hint{animation:none}
+  .hint{animation:none;opacity:0}   /* none freezes it at full opacity ON the scrub; measured 08/09 */
 }
 @media (max-width:620px){
   .who{font-size:11px;letter-spacing:.16em}
@@ -458,7 +458,22 @@ body{
 
 @media (prefers-reduced-motion:reduce){
   .rail{transition:none!important}
-  .hint{animation:none}
+  .hint{animation:none;opacity:0}
+}
+
+/* FORCED COLOURS. Rendered under --blink-settings=inForcedColors=true on 08/09:
+   the ground, the horizon line, the TODAY line, the scrub and fifteen SVG marks
+   all vanished -- every one of them is a background or a page-colour stroke,
+   which forced colours drop. A high-contrast reader got a giant year and some
+   labels. This block hands each of them a system colour instead. */
+@media (forced-colors:active){
+  .mark,.mark-soft,.mark-now,.mark-far,.stop svg,.stem svg{stroke:CanvasText}
+  .mark-fill,.fill-now,.fill-far{fill:CanvasText}
+  .line,.today i{background:CanvasText}
+  .scrub input{forced-color-adjust:none;background:CanvasText}
+  .scrub input::-webkit-slider-thumb{background:ButtonText}
+  .scrub input::-moz-range-thumb{background:ButtonText}
+  .void button,.ending .go{border-color:ButtonText}
 }
 
 /* ── PHONE: the bottom band was carrying four things at once ────────────────

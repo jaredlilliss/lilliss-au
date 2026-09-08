@@ -331,7 +331,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
       networks, Windows machines, cameras &mdash; across Sydney and regional NSW.
       I also build software, and keep it running: a collector that has taken a reading
       from <strong>every NSW emergency department publishing a live count, every fifteen
-      minutes since July</strong>.
+      minutes since July 2026</strong>.
     </p>
 
     <div class="cta">
@@ -360,7 +360,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     <div class="cards">
       <article class="card rv">
         <h3>Aussie Health Utility</h3>
-        <p>It has run unattended on a small Melbourne server since the cutover,
+        <p>It has run unattended on a small Melbourne server since the August 2026 cutover,
         backing itself up nightly, and nobody has had to touch it. The board it
         publishes is open to anyone &mdash; and the counting method is printed on
         the board itself, including the things the numbers cannot be used to say.</p>
@@ -476,7 +476,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
         <h4>Certifications</h4>
         <div class="cert"><b>CompTIA A+</b><span class="held">Held</span></div>
         <div class="cert"><b>Microsoft Azure Fundamentals (AZ-900)</b><span class="held">Held</span></div>
-        <div class="cert"><b>CompTIA Security+</b><span class="wip">In progress</span></div>
+        <div class="cert"><b>CompTIA Security+</b><span class="wip">In progress · 2026</span></div>
       </aside>
     </div>
   </section>
@@ -512,7 +512,10 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
 
 <script>
 (function(){
-  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Guarded, like the spine's. This line sits ABOVE the defended reveal below;
+     unguarded, it was the one statement that could still blank the page. */
+  var reduced = false;
+  try { reduced = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
 
   /* ── reveals — FIRST, and defended ────────────────────────────────────────
      Every content block on this page is .rv{opacity:0} and only becomes visible
