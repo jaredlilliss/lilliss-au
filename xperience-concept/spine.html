@@ -219,6 +219,9 @@ body{
 /* today */
 .today{position:absolute;top:0;height:100%;transform:translateX(-50%);pointer-events:none}
 .today i{position:absolute;top:0;left:50%;height:100%;width:1px;background:linear-gradient(180deg,transparent,rgba(242,196,106,.42) 34%,rgba(242,196,106,.42) 66%,transparent)}
+.today.clash b{bottom:auto;top:24%}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.planned .no,.planned .sn{font-style:italic}
 .today b{
   position:absolute;bottom:78px;left:50%;transform:translateX(-50%);
   font:500 10.5px/1 var(--mono);letter-spacing:.24em;color:var(--now);white-space:nowrap;
@@ -558,10 +561,11 @@ body{
          aria-label="Travel the span from the 1970s to 2117">
 </div>
 
+<p id="live" aria-live="polite" class="sr"></p>
 <p class="foot">
   An unsolicited concept restyling public content from xperiencespace.com.
   Not affiliated with, endorsed by, or commissioned by the XperienceSpace
-  Initiative. Every date shown is sourced; nothing is estimated.
+  Initiative. Every date shown is sourced; dates after today are the source&rsquo;s plan.
 </p>
 
 
@@ -582,9 +586,9 @@ body{
       <li><span class="y">2022</span><span class="n">Rashid‑1 launch</span><span class="d">Emirates Lunar Mission, MBRSC</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
       <li><span class="y">25 APR 2023</span><span class="n">Rashid‑1</span><span class="d">Lost — the lander failed to touch down</span><span class="s">Source: MBRSC — Emirates Lunar Mission</span></li>
       <li><span class="y">14 JAN 2025</span><span class="n">MBZ‑Sat</span><span class="d">MBRSC’s national satellite programme</span><span class="s">Source: <a href="https://www.mbrsc.ae/satellites/" target="_blank" rel="noopener noreferrer">MBRSC satellite programme ↗</a></span></li>
-      <li><span class="y">2028</span><span class="n">Emirates Mission to the Asteroid Belt</span><span class="d">Launch</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
-      <li><span class="y">2030</span><span class="n">First main‑belt fly‑by</span><span class="d">Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
-      <li><span class="y">2033</span><span class="n">Landing on an asteroid</span><span class="d">Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2028</span><span class="n">Emirates Mission to the Asteroid Belt</span><span class="d">Planned — Launch</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2030</span><span class="n">First main‑belt fly‑by</span><span class="d">Planned — Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
+      <li><span class="y">2033</span><span class="n">Landing on an asteroid</span><span class="d">Planned — Emirates Mission to the Asteroid Belt, UAE Space Agency</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/projects-of-the-50/emirati-interplanetary-mission-2028" target="_blank" rel="noopener noreferrer">u.ae — Projects of the 50 ↗</a></span></li>
       <li><span class="y">2117</span><span class="n">Mars</span><span class="d">The horizon</span><span class="s">Source: <a href="https://u.ae/en/about-the-uae/uae-in-the-future/uae-future" target="_blank" rel="noopener noreferrer">u.ae — the UAE in the future ↗</a></span></li>
     </ul>
 </div>
@@ -775,9 +779,10 @@ body{
 
   var STOPEL = [];   /* {el, at} in rail space - used to pick the focused stop */
   var STEMEL = [];   /* the record stems, same shape - operable since 03/09 */
+  var LIVE = document.getElementById('live');
 
   function build(){
-    rail.setAttribute('role', 'list');
+    rail.setAttribute('role', 'group');
     rail.setAttribute('aria-label', 'Milestones, earliest to latest');
     rail.style.width = WIDE + 'px';
     /* the line IS the span, so it ends at 2117 rather than running the full
@@ -793,20 +798,23 @@ body{
       var el = document.createElement('div');
       /* alternate the label lane: chronological order, so consecutive
          milestones never share a side and the dense decade halves. */
-      el.className = 'stop ' + (i % 2 ? 'up' : 'dn') + (s.lost ? ' lost' : '');
+      el.className = 'stop ' + (i % 2 ? 'up' : 'dn') + (s.lost ? ' lost' : '') + (s.at > NOW ? ' planned' : '');
+      /* A date after today is the source's PLAN, not a fact, and the page's footer
+         promises facts. Derived from NOW so it stays true in 2028 without an edit. */
+      var note = s.at > NOW ? 'Planned \u2014 ' + s.no : s.no;
       /* the span is painted as a landscape but must still be navigable as a
          list. One sentence per stop, so a screen reader gets the milestone
          whole rather than three orphaned fragments. */
-      el.setAttribute('role', 'listitem');
+      el.setAttribute('role', 'button');
       /* Focusable, because it is now operable. Adding cursor:pointer and a click
          handler without this made the milestones mouse-only: they looked
          pressable and could not be reached any other way. Seven stops is seven
          tab stops, and on a page whose whole subject IS these objects, tabbing
          through them is the natural keyboard reading order rather than noise.
-         role stays listitem so the list is not broken; the label carries the
-         action so a screen reader announces what pressing it does. */
+         role is button (was listitem until 09/09 -- a list item that says "Press"
+         is a contradiction a screen reader reads out); the rail is a group. */
       el.setAttribute('tabindex', '0');
-      el.setAttribute('aria-label', s.yr + '. ' + s.nm + '. ' + s.no
+      el.setAttribute('aria-label', s.yr + '. ' + s.nm + '. ' + note
                                   + '. Press to travel here.');
       el.style.left = (PAD + frac(s.at) * SPANPX) + 'px';
       el.innerHTML = MARKS[s.mark] +
@@ -814,7 +822,7 @@ body{
         '<span class="txt">' +
           '<b class="yr">' + s.yr + '</b>' +
           '<b class="nm">' + s.nm + '</b>' +
-          '<b class="no">' + s.no + '</b>' +
+          '<b class="no">' + note + '</b>' +
           '<b class="src">' + srcHTML(s.at) + '</b>' +
         '</span>';
       rail.appendChild(el);
@@ -826,6 +834,9 @@ body{
     t.className = 'today';
     t.style.left = (PAD + frac(NOW) * SPANPX) + 'px';
     t.innerHTML = '<i></i><b>TODAY &middot; ' + NOW + '</b>';
+    /* In 2028 TODAY lands exactly on the 2028 milestone's px; the label climbs
+       so it is not printed through the glyph. Same px() on both, so this fires. */
+    if (STOPS.concat(RECORD).some(function(o){ return o.at === NOW; })) t.classList.add('clash');
     rail.appendChild(t);
 
 
@@ -857,8 +868,9 @@ body{
     /* the record stems, drawn quieter than the milestones */
     RECORD.forEach(function(r){
       var el = document.createElement('div');
-      el.className = 'stem';
-      el.setAttribute('role', 'listitem');
+      el.className = 'stem' + (r.at > NOW ? ' planned' : '');
+      var rnote = r.at > NOW ? 'Planned \u2014 ' + r.own : r.own;
+      el.setAttribute('role', 'button');
       /* The owner comes from the entry, never from a literal. Hardcoding it here
          announced every stem as "MBRSC satellite programme" - including the two
          Emirates Mission to the Asteroid Belt entries, which the ruling assigns to
@@ -867,14 +879,14 @@ body{
       /* Operable, so focusable - the same reasoning as the milestones above.
          Eight more tab stops, on a page whose subject IS these objects. */
       el.setAttribute('tabindex', '0');
-      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. ' + r.own + '. Press to travel here.');
+      el.setAttribute('aria-label', r.at + '. ' + r.nm + '. ' + rnote + '. Press to travel here.');
       var rx = PAD + frac(r.at) * SPANPX;
       el.style.left = rx + 'px';
       if (nearestGap(rx) < 130) el.classList.add('tight');
       var mk = r.mk === 'ast' ? STEMMARK_AST : (r.mk === 'lch' ? STEMMARK_LCH : STEMMARK);
       el.innerHTML = mk + '<i></i>' +
         '<b class="sy">' + r.at + '</b>' +
-        '<b class="sn">' + r.nm + '</b>' +
+        '<b class="sn">' + (r.at > NOW ? 'Planned \u00b7 ' : '') + r.nm + '</b>' +
         '<b class="ss">' + srcHTML(r.at) + '</b>';
       rail.appendChild(el);
       STEMEL.push({el:el, at:rx, yr:r.at});
@@ -970,7 +982,7 @@ body{
     var near = rec ? rec.el : null;
     if (near !== FOCUS) {
       if (FOCUS) FOCUS.classList.remove('on');
-      if (near) near.classList.add('on');
+      if (near) { near.classList.add('on'); if (LIVE) LIVE.textContent = near.getAttribute('aria-label').replace(' Press to travel here.', ''); }
       rail.classList.toggle('focusing', !!near);
       FOCUS = near; FOCUSREC = rec;
     }
