@@ -609,17 +609,17 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     drawn = -1;
   }
 
-  function cellAt(x, y, r, grow, turn, alpha) {
-    if (grow <= 0.001 || alpha <= 0.004) return;
-    var s = r * grow;
-    cx.save();
-    cx.translate(x, y);
-    cx.globalAlpha = alpha;
-    cx.strokeStyle = '#D7BC6D';
-    cx.lineWidth = Math.max(1.4, 1.6 * dpr);
-    cx.beginPath(); cx.rect(-s, -s, s * 2, s * 2); cx.stroke();
-    cx.rotate(turn * Math.PI / 4);
-    cx.beginPath(); cx.rect(-s, -s, s * 2, s * 2); cx.stroke();
+  /* WHERE THE HAND IS. -1 means no pointer has ever moved (touch, or a reader who
+     has not moved yet), and the figure then holds a resting angle instead of
+     snapping to a corner. */
+  var hx = -1, hy = -1, aim = 0.42, aimT = 0.42;
+
+  function ring(cxp, cyp, r, turn, alpha, w) {
+    if (r <= 1 || alpha <= 0.004) return;
+    cx.save(); cx.translate(cxp, cyp); cx.rotate(turn);
+    cx.globalAlpha = alpha; cx.strokeStyle = '#D7BC6D';
+    cx.lineWidth = Math.max(1, w * dpr);
+    cx.beginPath(); cx.rect(-r, -r, r * 2, r * 2); cx.stroke();
     cx.restore();
   }
 
@@ -636,28 +636,84 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     var wantH = Math.round(innerHeight * Math.min(devicePixelRatio || 1, 1.5));
     if (wantW > 0 && wantH > 0 && (cv.width !== wantW || cv.height !== wantH)) sizeCanvas();
     if (!(CW > 0 && CH > 0)) return;
-    var p = f / (N - 1);
-    if (Math.abs(p - drawn) < 0.002) return;
-    drawn = p;
     cx.clearRect(0, 0, CW, CH);
-    /* spacing tied to the SHORT side, so a phone gets a figure and not wallpaper */
-    var step = Math.max(96 * dpr, Math.min(CW, CH) / 4.6);
-    var r = step * 0.5;
-    var cols = Math.ceil(CW / step) + 2, rows = Math.ceil(CH / step) + 2;
-    var ox = (CW - (cols - 1) * step) / 2, oy = (CH - (rows - 1) * step) / 2;
-    var midc = (cols - 1) / 2, midr = (rows - 1) / 2;
-    var maxd = Math.sqrt(midc * midc + midr * midr) || 1;
-    for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) {
-      var dx = i - midc, dy = j - midr;
-      var d = Math.sqrt(dx * dx + dy * dy) / maxd;     /* 0 centre .. 1 edge */
-      /* +0.22 so the figure is already present on arrival and COMPLETES as the
-         reader works — arrival is the one moment every reader sees */
-      var t = (p + 0.22 - d * 0.62) / 0.34;
-      if (t <= 0) continue; if (t > 1) t = 1;
-      var e = 1 - Math.pow(1 - t, 3);
-      cellAt(ox + i * step, oy + j * step, r, e, e, 0.05 + 0.17 * e * (1 - d * 0.4));
+
+    var p = f / (N - 1);
+    var ox = CW / 2, oy = CH * 0.46;
+    var R = Math.min(CW, CH) * 0.42;
+
+    /* THE STRAIGHTEDGE. One line from the centre of the construction out through
+       wherever the hand is, carried to the edge of the frame. It is the only
+       thing on the page that answers the pointer directly, and it is what makes
+       the figure feel drawn rather than printed. */
+    if (hx >= 0) {
+      var vx = hx - ox, vy = hy - oy, L = Math.sqrt(vx * vx + vy * vy) || 1;
+      var reach = Math.max(CW, CH);
+      cx.save();
+      cx.globalAlpha = 0.16; cx.strokeStyle = '#D7BC6D';
+      cx.lineWidth = Math.max(1, 1 * dpr);
+      cx.beginPath();
+      cx.moveTo(ox - vx / L * reach, oy - vy / L * reach);
+      cx.lineTo(ox + vx / L * reach, oy + vy / L * reach);
+      cx.stroke();
+      /* the compass point itself */
+      cx.globalAlpha = 0.5;
+      cx.beginPath(); cx.arc(hx, hy, 3 * dpr, 0, 6.2832); cx.stroke();
+      cx.restore();
     }
+
+    /* THE COMPASS ARC — the circle both squares are inscribed in. Drawn because
+       that is how the figure is actually constructed, not as decoration. */
+    cx.save();
+    cx.globalAlpha = 0.10; cx.strokeStyle = '#D7BC6D';
+    cx.lineWidth = Math.max(1, 1 * dpr);
+    cx.beginPath(); cx.arc(ox, oy, R * Math.SQRT2, 0, 6.2832); cx.stroke();
+    cx.restore();
+
+    /* THE CONSTRUCTION. One square, and the same square turned — the khatim, made
+       the way it has always been made. The TURN follows the hand: at rest it sits
+       at a resting angle, and it opens toward 45 degrees as the pointer swings.
+       Nested rings step inward, each slightly further through its own turn, so the
+       figure reads as a construction in progress rather than a finished stamp.
+       How MANY rings is the one thing the chain still governs — the argument
+       deepens the figure, the hand turns it. */
+    var rings = 3 + Math.round(p * 3);
+    for (var i = 0; i < rings; i++) {
+      var k = i / Math.max(1, rings - 1);
+      var r = R * (1 - k * 0.72);
+      var lead = aim + k * 0.22;
+      var a = 0.20 - k * 0.10;
+      ring(ox, oy, r, 0, a, 1.2);
+      ring(ox, oy, r, lead * Math.PI / 4, a, 1.2);
+    }
+
+    /* the eight points where the two squares cross — the khatim's actual vertices */
+    cx.save();
+    cx.globalAlpha = 0.28; cx.fillStyle = '#D7BC6D';
+    for (var q = 0; q < 8; q++) {
+      var th = q * Math.PI / 4 + aim * Math.PI / 8;
+      var rr = R * 1.06;
+      cx.beginPath();
+      cx.arc(ox + Math.cos(th) * rr, oy + Math.sin(th) * rr, 1.6 * dpr, 0, 6.2832);
+      cx.fill();
+    }
+    cx.restore();
   }
+
+  /* The hand drives the turn directly — no rAF dependency, because a pointer
+     event only happens while the page is visible anyway, and the figure is one
+     construction rather than two hundred cells, so drawing it on the event is
+     cheaper than scheduling a frame. */
+  function onHand(e) {
+    if (!cx || !(CW > 0 && CH > 0)) return;
+    hx = e.clientX * dpr; hy = e.clientY * dpr;
+    var ox = CW / 2, oy = CH * 0.46;
+    var ang = Math.atan2(hy - oy, hx - ox);
+    aimT = ((ang / Math.PI) + 1) % 0.5 / 0.5;      /* 0..1 across a quarter turn */
+    aim = REDUCED ? aimT : aim + (aimT - aim) * 0.35;
+    paintFigure();
+  }
+  addEventListener('pointermove', onHand, { passive: true });
 
   sizeCanvas();
   addEventListener('resize', function () { sizeCanvas(); paintFigure(); }, { passive: true });
