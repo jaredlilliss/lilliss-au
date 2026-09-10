@@ -8,7 +8,7 @@
 
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/brochure.html">
-<meta name="theme-color" content="#0C0805">
+<meta name="theme-color" content="#F6EAD2">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT — concept prototype">
 <meta property="og:title" content="Before This — XperienceSpace | Lilliss IT concept">
@@ -115,8 +115,8 @@
   --ink-3:#CBA344;           /* g400 —  5.25:1, the AA body floor */
   --edge:#5D3B26;            /* g900, hard rules */
   --edge-2:#7C5E24;          /* g700 */
-  --panel:#2E1B0B;
-  --panel-2:#3A230E;
+  --panel:rgba(249,247,237,.05);
+  --panel-2:rgba(249,247,237,.08);
   --mono:'IBM Plex Mono',ui-monospace,Consolas,'Cascadia Mono',monospace;
   --sans:'Alexandria','Noto Kufi Arabic','Segoe UI','Noto Naskh Arabic','Geeza Pro',system-ui,-apple-system,sans-serif;
 
@@ -143,6 +143,20 @@
   --f:0;                     /* the scalar, mirrored into CSS */
   --fh:0;                    /* 0..1, drives the horizon */
 }
+/* LIGHT. Every rule this estate wrote was measured on dark pages; Still Wild is
+   cream and loved. Ink flips to the dark end of the same gold ramp; every ratio
+   below is against the DARKEST stop of the ground, #DEC39F (L .571):
+   ink-3 #5A391E 8.3 (and 5.17 on the sun disc itself, which the sweep took as a
+   backdrop for the mark labels at #6C4527 and scored 4.17) · ink-2 #3A2A14 8.2 ·
+   bars: met #7C5E24 5.5, here #92722A 3.65 (non-text, 3:1). The .ret control is
+   TEXT and sits where the sun can be behind it: in gold it read 3.01 on the disc
+   (AR sweep, 11/09), so it takes ink-3 — 5.17 there, 8.3 on the ground. */
+:root{
+  --ground:#EAD0A6; --ink:#1B1409; --ink-2:#3A2A14; --ink-3:#5A391E;
+  --edge:rgba(54,30,18,.22); --edge-2:rgba(54,30,18,.36);
+  --panel:rgba(255,252,244,.46); --panel-2:rgba(255,252,244,.62);
+  --g300:#7C5E24; --g500:#92722A;
+}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--ground);color:var(--ink);
@@ -166,10 +180,11 @@ strong,b{font-weight:600;color:var(--ink)}
    moves under the reader's thumb. Cost per frame: one custom-property write. */
 #ground{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(140% 38% at 50% calc((118 - var(--fh)*8) * 1%),
-      rgba(199,124,44,calc(.12 + var(--fh)*.07)), transparent 64%),
-    radial-gradient(120% 60% at 26% -4%, rgba(78,98,150,.13), transparent 68%),
-    linear-gradient(180deg,#07080C 0%,#090A0E 42%,#0E0D10 66%,#1A1109 86%,#2C1B0B 100%);}
+    radial-gradient(circle at 84% calc((31 - var(--fh)*12) * 1%),
+      rgba(242,166,90,.96) 0, rgba(242,166,90,.96) 42px, rgba(242,166,90,.30) 46px, rgba(242,166,90,0) 120px),
+    radial-gradient(140% 40% at 50% 96%, rgba(196,144,86,.34), transparent 66%),
+    radial-gradient(120% 60% at 26% -4%, rgba(255,255,255,.28), transparent 68%),
+    linear-gradient(180deg,#F6EAD2 0%,#F1DDB8 36%,#EAD0A6 64%,#E2C6A0 84%,#DEC39F 100%);}
 /* ── L3 haze at the rim. These were six specks scattered over the whole frame,
       which is what the bar page does and what stops its emptiness reading as
       BLANK rather than as SPACE. They move DOWN here, into the band where the
@@ -207,7 +222,7 @@ strong,b{font-weight:600;color:var(--ink)}
 .tracked{font:500 .64rem/1.5 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
 
 /* ── A. the title block. A drawing's title block, not a masthead. ─────────── */
-.tb{border-block-end:1px solid var(--edge);background:rgba(21,12,4,.72);
+.tb{border-block-end:1px solid var(--edge);background:rgba(246,234,210,.78);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   position:sticky;top:0;z-index:40}
 .tb .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;padding-block:11px}
@@ -224,28 +239,28 @@ strong,b{font-weight:600;color:var(--ink)}
   font:500 .62rem/1 var(--mono);letter-spacing:var(--track);text-transform:uppercase}
 .switch label.sw-ar{font-family:var(--sans-ar);letter-spacing:normal}
 #lang-en:checked ~ .doc .switch label[for=lang-en],
-#lang-ar:checked ~ .doc .switch label[for=lang-ar]{background:var(--g300);color:#150C04}
+#lang-ar:checked ~ .doc .switch label[for=lang-ar]{background:var(--g300);color:#F9F7ED}
 
 /* ── B. the claim ─────────────────────────────────────────────────────────── */
-.hero{padding-block:clamp(48px,9vw,110px) clamp(24px,4vw,44px)}
+.hero{padding-block:clamp(34px,6vw,64px) clamp(16px,3vw,28px)}
 .eyebrow{margin:0 0 18px;color:var(--ink-3);
   font:500 .66rem/1.6 var(--mono);letter-spacing:.24em;text-transform:uppercase}
-h1{margin:0;font:600 clamp(2.5rem,7.6vw,5.6rem)/1.02 var(--sans);letter-spacing:-.04em;color:var(--ink)}
+h1{margin:0;font:600 clamp(2.3rem,6.6vw,4.9rem)/1.02 var(--sans);letter-spacing:-.04em;color:var(--ink)}
 h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
-.ask{margin:20px 0 0;max-width:44ch;color:var(--ink-2);
+.ask{margin:0 0 18px;max-width:52ch;color:var(--ink-2);
   font:400 clamp(1.05rem,2.1vw,1.35rem)/1.65 var(--sans)}
 .ask.ar{font-family:var(--sans-ar);line-height:1.85}
-.flag{display:flex;width:190px;height:5px;margin-top:30px}
+.flag{display:flex;width:190px;height:5px;margin-top:22px}
 .flag i{flex:1}
 .flag i:nth-child(1){background:var(--green)}
 .flag i:nth-child(2){background:var(--g50)}
 .flag i:nth-child(3){background:var(--red)}
-.flag i:nth-child(4){flex:.55;background:#0B0B0B;box-shadow:0 0 0 1px rgba(249,247,237,.22)}  /* the black band needs an edge on a night sky, or four bars read as three */
+.flag i:nth-child(4){flex:.55;background:#0B0B0B;box-shadow:0 0 0 1px rgba(54,30,18,.35)}  /* the black band needs an edge on a night sky, or four bars read as three */
 
 /* ── C. the instrument ────────────────────────────────────────────────────── */
 .chain{position:relative;padding-block:clamp(26px,5vw,52px) clamp(30px,5vw,58px);
   border-block-start:1px solid var(--edge);outline-offset:6px}
-.marks{display:flex;align-items:stretch;gap:0;margin:0 0 30px;padding:0;list-style:none}
+.marks{display:flex;align-items:stretch;gap:0;margin:0 0 10px;padding:0;list-style:none}
 .mk{flex:1 1 0;min-width:0;background:none;border:0;padding:0;cursor:pointer;
   display:flex;flex-direction:column;gap:9px;text-align:start;color:inherit;font:inherit;
   min-height:44px}
@@ -260,7 +275,7 @@ h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
 .mk[data-state="here"] .bar::after{width:calc(var(--frac,0) * 100%)}
 .mk[data-state="here"] .lbl{color:var(--ink)}
 .mk[data-state="refused"] .bar{background:var(--red)}
-.plate{border:1px solid var(--edge-2);background:var(--panel);padding:clamp(20px,3.4vw,34px);
+.plate{margin-block-start:22px;border:1px solid rgba(54,30,18,.26);background:var(--panel);padding:clamp(20px,3.4vw,34px);
   display:grid;gap:16px}
 .plate h2{margin:0;font:600 clamp(1.4rem,3.2vw,2.2rem)/1.18 var(--sans);letter-spacing:-.03em;color:var(--ink)}
 .plate h2.ar{font-family:var(--sans-ar);line-height:1.5;letter-spacing:0}
@@ -285,9 +300,9 @@ h1.ar{font-family:var(--sans-ar);line-height:1.24;letter-spacing:0}
 /* 44px of hit area, not 16. A range input's default track is ~16px tall, which
    fails WCAG 2.2 SC 2.5.8 (24x24) as a non-inline target — measured at 339x16
    before this rule. The visible track stays thin; the reachable area does not. */
-.scrub{width:100%;margin-block-start:22px;accent-color:var(--g300);
+.scrub{width:100%;margin-block-start:4px;accent-color:var(--g300);
   min-height:44px;height:44px;background:transparent;cursor:pointer}
-.ret{margin-block-start:18px;background:none;border:1px solid var(--g300);color:var(--g300);
+.ret{margin-block-start:18px;background:none;border:1px solid var(--ink-3);color:var(--ink-3);
   padding:9px 18px;cursor:pointer;font:500 .62rem/1 var(--mono);letter-spacing:var(--track);
   text-transform:uppercase;min-height:44px}
 .ret.ar{font-family:var(--sans-ar);letter-spacing:normal;text-transform:none}
@@ -315,7 +330,7 @@ h2.sec.ar{font-family:var(--sans-ar);line-height:1.45;letter-spacing:0}
 section > p{margin:0 0 16px;max-width:66ch;color:var(--ink-2)}
 section > p.ar{font-family:var(--sans-ar);line-height:1.9}
 .two{display:grid;gap:clamp(22px,3.4vw,40px);grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-block-start:28px}
-.card{border:1px solid var(--edge);background:var(--panel);padding:clamp(18px,2.6vw,28px);min-width:0}
+.card{border:1px solid rgba(54,30,18,.22);background:var(--panel);padding:clamp(18px,2.6vw,28px);min-width:0}
 .card h3{margin:0 0 10px;font:600 1.2rem/1.3 var(--sans);color:var(--ink)}
 .card h3.ar{font-family:var(--sans-ar);line-height:1.6}
 .card p{margin:0 0 10px;color:var(--ink-2);font-size:.97rem}
@@ -411,10 +426,10 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
   <div class="wrap hero">
     <p class="eyebrow en">Unsolicited design concept · not affiliated</p>
     <p class="eyebrow ar">تصور تصميمي غير مطلوب · غير تابع</p>
-    <h1 class="en">Four programmes,<br>one ecosystem.</h1>
-    <h1 class="ar">أربعة برامج،<br>نظام بيئي واحد.</h1>
-    <p class="ask en">Their sentence. This page asks the question underneath it — in what order does that become true?</p>
-    <p class="ask ar">هذه جملتهم. تطرح هذه الصفحة السؤال الكامن تحتها — بأي ترتيب يصبح ذلك حقيقة؟</p>
+    <p class="ask en">“Four programmes, one ecosystem.” Their sentence. This page asks the question underneath it.</p>
+    <p class="ask ar">«أربعة برامج، نظام بيئي واحد.» هذه جملتهم. تطرح هذه الصفحة السؤال الكامن تحتها.</p>
+    <h1 class="en">In what order<br>does it become true?</h1>
+    <h1 class="ar">بأي ترتيب<br>يصبح ذلك حقيقة؟</h1>
     <div class="flag" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   </div>
 
@@ -423,6 +438,14 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
          aria-label="The precedence chain. Six stages. Use arrow keys to move along it.">
 
       <div class="marks" id="marks"></div>
+      <div class="jsonly">
+        <label class="readout en" for="scrub">Position along the chain</label>
+        <label class="readout ar" for="scrub">الموضع على السلسلة</label>
+        <input class="scrub" id="scrub" type="range" min="0" max="600" step="1" value="0">
+        <button class="ret en" id="ret" hidden>Start again</button>
+        <button class="ret ar" id="retar" hidden>ابدأ من جديد</button>
+      </div>
+
 
       <div class="plate jsonly">
         <h2 id="ptitle" class="en">Someone walks in</h2>
@@ -434,14 +457,6 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
           <span id="psrc"></span>
           <span class="readout" id="preadout"></span>
         </div>
-      </div>
-
-      <div class="jsonly">
-        <label class="readout en" for="scrub">Position along the chain</label>
-        <label class="readout ar" for="scrub">الموضع على السلسلة</label>
-        <input class="scrub" id="scrub" type="range" min="0" max="600" step="1" value="0">
-        <button class="ret en" id="ret" hidden>Start again</button>
-        <button class="ret ar" id="retar" hidden>ابدأ من جديد</button>
       </div>
 
       <div class="axis en">
@@ -649,12 +664,15 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
      uniform r crowds the pole: area grows with r, so density must not. */
   var seed = 20260908 >>> 0;
   function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
-  var SKY = [];
+  var SKY = [], CLOUDS = [];
+  for (var ci = 0; ci < 26; ci++) {
+    CLOUDS.push({ x: rnd(), y: 0.05 + rnd() * 0.48, rx: 140 + rnd() * 320, ry: 7 + rnd() * 15, d: 0.5 + rnd() * 0.9 });
+  }
   for (var si = 0; si < 2000; si++) {
     SKY.push({ r: Math.sqrt(rnd()) * 0.97, a: rnd() * 6.2832, m: rnd() * rnd(), w: rnd() < 0.11 });
   }
 
-  var SKY_BASE = 0.62;
+  var SKY_BASE = 0.62, SKY_FH = 0;
   function clock() { return (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0; }
   var t0 = clock();
 
@@ -694,9 +712,9 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     cx.translate(px, py); cx.rotate(th); cx.translate(S * 0.44, 0);
     cx.rotate(1.02); cx.scale(1, 0.19);
     var mw = cx.createRadialGradient(0, 0, 0, 0, 0, S * 0.9);
-    mw.addColorStop(0,   'rgba(154,163,201,.085)');
-    mw.addColorStop(0.5, 'rgba(126,133,172,.040)');
-    mw.addColorStop(1,   'rgba(126,133,172,0)');
+    mw.addColorStop(0,   'rgba(255,255,255,.10)');
+    mw.addColorStop(0.5, 'rgba(255,255,255,.05)');
+    mw.addColorStop(1,   'rgba(255,255,255,0)');
     cx.fillStyle = mw;
     cx.beginPath(); cx.arc(0, 0, S * 0.9, 0, 6.2832); cx.fill();
     cx.restore();
@@ -708,27 +726,15 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
     cx.fillStyle = er; cx.fillRect(0, fade * 0.86, CW, CH);
     cx.restore();
 
-    for (var i = 0; i < SKY.length; i++) {
-      var s = SKY[i], ang = s.a + th, rad = s.r * S;
-      var x = px + Math.cos(ang) * rad, y = py + Math.sin(ang) * rad;
-      if (x < -24 || y < -24 || x > CW + 24 || y > CH + 24) continue;
-      /* washed out into the ember, the way they are over a lit horizon */
-      var k = y > fade ? 1 - (y - fade) / band : 1;
-      if (k <= 0.02) continue;
-      var a = (0.16 + s.m * 0.26) * k;   /* ceiling .42 — see above */
-      var col = s.w ? '215,188,109' : '249,247,237';
-      if (s.m > 0.52 && s.r > 0.30) {
-        var len = 0.010 + s.r * 0.009;
-        cx.beginPath();
-        cx.arc(px, py, rad, ang - len, ang);
-        cx.strokeStyle = 'rgba(' + col + ',' + (a * 0.52).toFixed(3) + ')';
-        cx.lineWidth = Math.max(1, (0.5 + s.m * 0.6) * dpr);
-        cx.stroke();
-      }
-      cx.beginPath();
-      cx.arc(x, y, (0.9 + s.m * 1.4) * dpr, 0, 6.2832);
-      cx.fillStyle = 'rgba(' + col + ',' + a.toFixed(3) + ')';
-      cx.fill();
+    /* HIGH HAZE. Flat, faint, and it drifts with the scroll the way the stars
+       turned — same scalar, a different sky. No gradients per blob: a flat fill
+       at .07 over itself is soft enough and costs nothing. */
+    var drift = (th - SKY_BASE) * CW * 0.22, span = CW + 700 * dpr;
+    cx.fillStyle = 'rgba(255,251,240,0.075)';
+    for (var i = 0; i < CLOUDS.length; i++) {
+      var c = CLOUDS[i];
+      var cxp = (((c.x * CW + drift * c.d) % span) + span) % span - 350 * dpr;
+      cx.beginPath(); cx.ellipse(cxp, c.y * CH, c.rx * dpr, c.ry * dpr, 0, 0, 6.2832); cx.fill();
     }
   }
 
@@ -816,6 +822,7 @@ footer{border-block-start:1px solid var(--edge);padding-block:30px 46px;color:va
 
     doc.documentElement.style.setProperty('--f', String(f));
     doc.documentElement.style.setProperty('--fh', String(f / (N - 1)));
+    SKY_FH = f / (N - 1);
 
     MK.forEach(function (b, k) {
       var st = k < here ? 'met' : (k === here ? 'here' : 'ahead');

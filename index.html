@@ -641,6 +641,17 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     auroraAt = t;
   }
   function paint(){
+    /* SELF-HEALING SIZE. A hidden pane, a restored tab or a print pass lays the
+       page out before the viewport exists: innerWidth reads 0, size() makes a
+       0x0 offscreen buffer, and drawImage() of a 0x0 canvas THROWS. Uncaught,
+       that exception left this closure at the sky and took the cable nodes and
+       the scroll glow below it — seen 11/09 as an InvalidStateError at the
+       IIFE close. So the size is checked on the path that actually paints, and
+       an empty viewport paints nothing instead of throwing. */
+    var wantDpr = Math.min(devicePixelRatio || 1, 1.5);
+    var wantW = Math.round(innerWidth * wantDpr), wantH = Math.round(innerHeight * wantDpr);
+    if (!(wantW > 0 && wantH > 0)) return;
+    if (c.width !== wantW || c.height !== wantH){ size(); return; }   /* size() paints */
     if (t - auroraAt > 500) buildAurora();
     x.clearRect(0, 0, W, H);
     x.drawImage(off, 0, 0);
