@@ -340,7 +340,9 @@ footer .ar{font-family:var(--sans-ar);font-size:12.5px}
   .mk .fill{fill:CanvasText;opacity:.25}
   .dot{border-color:CanvasText}
   .dot.filled{background:CanvasText}
-  .scrub{forced-color-adjust:none;background:CanvasText center/100% 2px no-repeat}
+  /* an IMAGE, not a colour: a bare colour in the shorthand paints the whole
+     44px box and the track became a black bar with no thumb (sib3 render) */
+  .scrub{forced-color-adjust:none;background:linear-gradient(CanvasText,CanvasText) center/100% 2px no-repeat}
   .scrub::-webkit-slider-thumb{background:ButtonText}
   .scrub::-moz-range-thumb{background:ButtonText}
   .card,.badge,.ret,.switch,.tb{border-color:CanvasText}
