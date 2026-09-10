@@ -7,7 +7,7 @@
 <meta name="description" content="Sources, disclosure and method for the Before This design concept. Unsolicited, not affiliated with the XperienceSpace Initiative.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://lilliss.au/xperience-concept/notes.html">
-<meta name="theme-color" content="#150C04">
+<meta name="theme-color" content="#0C1A5E">
 <style>
 @font-face{font-family:'Alexandria';font-style:normal;font-weight:100 900;font-display:swap;
   src:url('/fonts/alexandria-latin.woff2') format('woff2');
@@ -23,9 +23,12 @@
    limits sitting below a six-stage argument — correct, and far too much page.
    Splitting it is not hiding it: the concept page carries the disclaimer in its
    title block and its eyebrow, and links here in its footer. */
+/* 11/09: the concept page became the spine's sibling (night to rust, one ink at
+   four alphas, a gold "now"); this page follows it so the link out does not land
+   on a different world. */
 :root{
-  --g300:#D7BC6D; --ground:#241608; --ink:#F9F7ED; --ink-2:#E6D7A2; --ink-3:#CBA344;
-  --edge:#5D3B26; --edge-2:#7C5E24; --panel:#2E1B0B;
+  --g300:#F2C46A; --ground:#0C1A5E; --ink:#EEF1F8; --ink-2:rgba(238,241,248,.80); --ink-3:rgba(238,241,248,.62);
+  --edge:rgba(238,241,248,.30); --edge-2:rgba(238,241,248,.42); --panel:rgba(238,241,248,.05);
   --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
   --sans:'Alexandria','Noto Kufi Arabic','Segoe UI',system-ui,sans-serif;
   --sans-ar:'Noto Kufi Arabic','Alexandria','Segoe UI',system-ui,sans-serif;
@@ -34,10 +37,12 @@
 html{-webkit-text-size-adjust:100%}
 body{margin:0;color:var(--ink);font:400 17px/1.75 var(--sans);-webkit-font-smoothing:antialiased;
   background:
-    radial-gradient(140% 42% at 50% 100%, rgba(215,188,109,.10), transparent 66%),
-    linear-gradient(180deg,#150C04 0%,#1D1206 38%,#241608 70%,#3A230E 100%) fixed;}
+    radial-gradient(128% 44% at 50% 56%, rgba(255,255,255,.07), transparent 68%),
+    linear-gradient(180deg, rgba(0,0,0,.30) 0%, transparent 30%, transparent 60%, rgba(0,0,0,.40) 100%),
+    linear-gradient(100deg,#0C1A5E 0%,#141C56 22%,#2B1F4A 48%,#43203A 74%,#5A1F1A 100%) fixed;
+  background-color:#2B1F4A;   /* AFTER the shorthand (which resets it): the ground's middle stop, for any engine that drops `fixed` */}
 a{color:var(--ink-2);text-underline-offset:3px;text-decoration-color:var(--edge-2)}
-a:hover{color:var(--ink);text-decoration-color:var(--g300)}
+a:hover{color:var(--g300);text-decoration-color:var(--g300)}
 :focus-visible{outline:2px solid var(--g300);outline-offset:3px}
 b,strong{font-weight:600;color:var(--ink)}
 .wrap{width:min(820px,100%);margin-inline:auto;padding-inline:clamp(18px,4vw,40px)}
