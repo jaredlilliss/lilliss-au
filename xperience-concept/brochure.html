@@ -319,6 +319,10 @@ footer .ar{font-family:var(--sans-ar);font-size:12.5px}
    order, and this one wins by both. The switch, #lang-ar:checked ~ .doc .ar,
    is (1,2,0) and still beats it. ═══════════════════════════════════════════ */
 .doc .ar{display:none}
+/* hidden must beat the language switch: #lang-ar:checked ~ .doc .ar (1,2,0)
+   was reviving the Arabic "start again" button whenever Arabic was on, at
+   every position — seen on the 02:35 Arabic render, present since 08/09. */
+.doc [hidden]{display:none !important}
 
 /* ── forced colours (Windows High Contrast). Anything drawn only with a background
    or a page-coloured stroke disappears; the line, the marks, the lit run and the
