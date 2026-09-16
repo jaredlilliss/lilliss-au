@@ -71,8 +71,9 @@
   --line-strong:rgba(24,36,32,.4);
   --text:#182420;
   --muted:#4E5C55;
-  --muted-2:#75816F;
+  --muted-2:#5C6857;        /* was #75816F: 3.48 on the section ground at 12-14px (16/09); 5.0 now */
   --ember:#D9622B;          /* burnt sun — shared variable names for the DOM/JS */
+  --ember-ink:#B8461A;      /* the same orange for TEXT and buttons: #D9622B read 3.1-3.4 on the cream and 2.61 as the 65px headline phrase (composite sweep, 16/09); this is 4.95 on the cream, 3.78 on the hero band as large text, 5.36 under white */
   --ember-soft:rgba(217,98,43,.11);
   --gum:#2F7A6E;            /* river teal */
   --gum-soft:rgba(47,122,110,.12);
@@ -109,7 +110,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 .wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
 section{scroll-margin-top:86px}
 .eyebrow{
-  font:600 .7rem/1.2 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ember);
+  font:600 .7rem/1.2 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ember-ink);
   margin:0 0 1.1rem;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;
 }
 .eyebrow::before{content:"";width:34px;height:2px;background:var(--ember);flex:none}
@@ -128,8 +129,8 @@ body{counter-reset:band}
 /* prototype markers */
 .ph{
   display:inline-block;vertical-align:baseline;font:700 .6rem/1 var(--mono);letter-spacing:.09em;
-  text-transform:uppercase;color:#9C4218;background:var(--ember-soft);
-  border:1px dashed rgba(217,98,43,.55);padding:.28em .5em;border-radius:3px;margin-left:.4em;white-space:nowrap;
+  text-transform:uppercase;color:#9C4218;background:#F7E4D8;   /* opaque: over the night panels the translucent chip read 2.00 (16/09) */
+  border:1px dashed rgba(184,70,26,.55);padding:.28em .5em;border-radius:3px;margin-left:.4em;white-space:nowrap;
 }
 
 /* header */
@@ -142,7 +143,7 @@ body{counter-reset:band}
 .site-head .wrap{display:flex;align-items:center;gap:1.4rem;min-height:64px}
 .brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;flex:none}
 .brand b{font:800 1.08rem/1 var(--sans);letter-spacing:.12em}
-.brand span{font:600 .56rem/1 var(--mono);letter-spacing:.26em;color:var(--muted-2);margin-top:.42rem}
+.brand span{font:600 .56rem/1 var(--mono);letter-spacing:.26em;color:var(--muted);margin-top:.42rem}   /* 9px over the hero canvas read 4.42 in muted-2 (16/09); muted is 5.3 */
 .nav{display:flex;gap:1.35rem;margin-left:auto;align-items:center}
 .nav a{
   text-decoration:none;color:var(--muted);font:600 .88rem/1 var(--sans);padding-block:.35rem;
@@ -202,7 +203,7 @@ body{counter-reset:band}
 .btn-ghost{background:transparent;color:var(--text)}
 .btn-ghost:hover{background:var(--surface)}
 .btn-sm{padding:.6rem 1rem;font-size:.82rem}
-.hero-cta .btn-primary{background:var(--ember);border-color:var(--ember);color:#FFF6EC}
+.hero-cta .btn-primary{background:var(--ember-ink);border-color:var(--ember-ink);color:#FFF6EC}
 .hero-cta .btn-primary:hover{background:#C25423;box-shadow:0 14px 30px -12px rgba(217,98,43,.55)}
 
 /* hero: the dawn scene (canvas injected behind .wrap) */
@@ -222,7 +223,7 @@ body{counter-reset:band}
 html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line-height:1.12;font-size:clamp(2.5rem,7.8vw,6rem)}
 /* the em drops to its own line via a forced break (display:block would orphan
    the sentence's full stop onto a line of its own — a 6rem dot) */
-.hero h1 em{font-style:normal;color:var(--ember);font-size:.58em;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--ember-ink);font-size:.58em;letter-spacing:-.02em}
 .hero h1 em::before{content:"\A";white-space:pre}
 /* the lede rides over the ridges, so it sits on a paper chip */
 .hero .lede{
@@ -293,7 +294,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 }
 .trip.feature{box-shadow:8px 8px 0 var(--ember-soft);border-width:2px}
 .trip-tag{font:700 .66rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gum)}
-.trip.feature .trip-tag{color:var(--ember)}
+.trip.feature .trip-tag{color:var(--ember-ink)}
 .trip h3{font-size:1.55rem}
 .trip-meta{font:600 .8rem/1.4 var(--mono);color:var(--muted-2)}
 .trip p{color:var(--muted);font-size:.94rem}
@@ -387,7 +388,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 @media (min-width:900px){.enquire-grid{grid-template-columns:1.15fr .85fr;gap:2.4rem}}
 .form-card{background:var(--surface);border:1.5px solid var(--text);border-radius:var(--radius-lg);padding:1.75rem 1.65rem}
 .field{margin-bottom:1.1rem}
-.field label{display:block;font:700 .8rem/1.3 var(--sans);margin-bottom:.45rem}
+.field label{display:block;font:700 .8rem/1.3 var(--sans);margin-bottom:.45rem;color:var(--text)}   /* inherited the night section's #8E9887 onto the cream card: 2.78 (16/09) */
 .field .hint{display:block;font-weight:400;color:var(--muted-2);font-size:.78rem;margin-top:.2rem}
 .field input,.field textarea,.field select{
   width:100%;background:#FFFDF6;border:1.5px solid var(--line-strong);border-radius:6px;
@@ -397,7 +398,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 .field input::placeholder,.field textarea::placeholder{color:var(--muted-2)}
 .field-row{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 .form-foot{display:flex;gap:.9rem;align-items:center;flex-wrap:wrap;margin-top:.4rem}
-.form-foot .btn-primary{background:var(--ember);border-color:var(--ember);color:#FFF6EC}
+.form-foot .btn-primary{background:var(--ember-ink);border-color:var(--ember-ink);color:#FFF6EC}
 .disabled-note{font:600 .76rem/1.4 var(--mono);color:var(--muted-2)}
 
 /* faq */
@@ -423,7 +424,7 @@ html[lang^="zh"] .hero h1,html[lang="ja"] .hero h1,html[lang="ko"] .hero h1{line
 .foot-grid a:hover{color:#F5F0DF}
 .foot-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
 .foot-grid p{color:#AFB9A8}
-.foot-legal{border-top:1px solid rgba(231,225,206,.18);padding-top:1.4rem;display:grid;gap:.5rem;font-size:.79rem;line-height:1.6;color:#7B8474}
+.foot-legal{border-top:1px solid rgba(231,225,206,.18);padding-top:1.4rem;display:grid;gap:.5rem;font-size:.79rem;line-height:1.6;color:#8E9887}   /* was #7B8474: 4.21 on the night footer at 12.6px (16/09); the footer's own grey, 5.6 */
 .foot-legal b{color:#C9C3AE!important}
 
 
@@ -480,11 +481,11 @@ section[aria-labelledby="why-h"],#safety{display:none}
   flex:1;text-align:center;text-decoration:none;font:800 .92rem/1 var(--sans);
   padding:.85rem .5rem;border-radius:99px;color:#F5F0DF;border:1.5px solid rgba(231,225,206,.35);
 }
-.wx-dock a.dock-cta{background:var(--ember);border-color:var(--ember);color:#FFF6EC}
+.wx-dock a.dock-cta{background:var(--ember-ink);border-color:var(--ember-ink);color:#FFF6EC}
 
 
 [hidden]{display:none!important}
-.builder-line b{color:var(--ember)}
+.builder-line b{color:#F2A65A}   /* the footer's hover orange: on the night ground the display orange read 4.47 and the ink orange 3.07 (16/09); this is 8.6 */
 
 /* interactions */
 .js .rv{opacity:0;transform:translateY(26px) scale(.988);transition:opacity .7s ease var(--rvd,0s),transform .7s cubic-bezier(.22,.8,.3,1) var(--rvd,0s)}
@@ -560,7 +561,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
 }
 .wx-contact a{color:#E7E1CE;text-decoration:none;border-bottom:1.5px solid rgba(242,166,90,.55)}
 .wx-contact a:hover{color:#F2A65A}
-.wx-contact>span[aria-hidden]{color:#5C6A5E}
+.wx-contact>span[aria-hidden]{color:#8E9887}   /* was #5C6A5E: 2.87 on the night panel (16/09) */
 
 /* footer: the night camp is now also the enquiry */
 .site-foot{padding-block:4rem 2.2rem}
@@ -606,7 +607,7 @@ section[aria-labelledby="why-h"],#safety{display:none}
 .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border-block:1px solid var(--line);margin:2.2rem 0 2.6rem}
 .num{padding:1.15rem 1.3rem 1.15rem 1.4rem;border-left:1px solid var(--line)}
 .num:first-child{border-left:0;padding-left:0}
-.num b{display:block;font:800 clamp(2rem,4vw,2.9rem)/1.1 var(--mono);letter-spacing:-.03em;color:var(--ember);font-variant-numeric:tabular-nums}
+.num b{display:block;font:800 clamp(2rem,4vw,2.9rem)/1.1 var(--mono);letter-spacing:-.03em;color:var(--ember-ink);font-variant-numeric:tabular-nums}
 .num .num-cap{font-size:.82rem;color:var(--muted-2);line-height:1.45;display:block;margin-top:.2rem}
 @media (max-width:560px){.numbers{grid-template-columns:1fr 1fr}.num{padding-left:1rem}.num:nth-child(odd){border-left:0;padding-left:0}}
 
