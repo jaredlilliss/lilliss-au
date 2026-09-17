@@ -1,0 +1,2319 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Deep Cut - a diving game about rare answers. Common answers float, rare answers sink. Ten rounds on a simulated demo dataset. Runs entirely in your browser.">
+<meta name="robots" content="index,follow">
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/plexmono-400.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Self-hosted, replacing the Google Fonts links the artifact build used. The privacy policy
+   on this domain states that the site contacts no third party and invites the reader to
+   check the network tab, so a font network here would publish a falsehood. */
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
+src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;
+src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+src:url('/fonts/plexmono-500.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;
+src:url('/fonts/plexmono-500.woff2') format('woff2')}
+</style>
+<title>Deep Cut</title>
+<style>
+:root{
+  --ink:#03101c; --ink2:#061a2a; --abyss:#01080f;
+  --turq:#54e8d2; --turq-dim:#2b8f84; --turq-deep:#0e3d3d;
+  --amber:#f3a33c; --amber-lt:#ffd79a; --amber-deep:#6b4415;
+  --bone:#e7f1ef; --mute:#7f9aa3; --mute-dim:#4a6670;
+  --alarm:#ff7d5e;
+  --rule:rgba(84,232,210,.20);
+  --rule-warm:rgba(243,163,60,.24);
+  --frame:rgba(231,241,239,.10);
+  --ruler-w:66px;
+  --kb:0px;
+  --display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--ink)}
+body{
+  font-family:var(--mono);
+  color:var(--bone);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  -webkit-tap-highlight-color:transparent;
+}
+#ocean{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(130% 95% at 50% 42%,transparent 48%,rgba(1,8,15,.62) 100%);
+  transition:box-shadow .5s ease;
+}
+#vignette.deep{box-shadow:inset 0 0 180px rgba(84,232,210,.30)}
+#vignette.rise{box-shadow:inset 0 0 160px rgba(243,163,60,.18)}
+
+/* NOTE for whoever picks this up (Atelier, 18/09/2026, lilliss.au deployment).
+   The title screen's text sits straight on the painted ocean and does not clear AA:
+   measured at 1280x860, span.cut 1.08 on the bright horizon, the EXPEDITION label
+   1.50, the DEMO FREQUENCIES badge 1.82, the intro paragraph 1.63, the personal-best
+   line 1.20, and the three ghost buttons 2.02 to 3.54, against a 4.5 bar. Confirmed
+   by eye on the render, not only by the sweep. A depth gradient over the canvas was
+   tried and moved almost nothing, because the worst offenders sit where the scene is
+   brightest. The real fix is a palette decision on the game's own look -- lifting
+   --mute off the water and giving the wordmark's turquoise somewhere darker to sit --
+   and that belongs to the game's author, not to the seat that deployed it. Left
+   exactly as built, deliberately, with the numbers recorded here. */
+
+/* ---------- shared instrument chrome ---------- */
+#hud{position:fixed;inset:0;z-index:2;pointer-events:none;display:flex;flex-direction:column}
+#hud > *{pointer-events:auto}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain}
+/* Every panel below sets its own display:flex, which beats the UA [hidden]
+   rule on its own. Without this the prompt, sonar and reveal all paint at
+   once. The publish skeleton supplies the same rule; this makes the file
+   correct standalone too. */
+[hidden]{display:none!important}
+.screen[hidden]{display:none!important}
+.pad{padding:clamp(18px,4vw,40px);padding-right:calc(clamp(18px,4vw,40px) + var(--ruler-w))}
+
+.label{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.20em;text-transform:uppercase;color:var(--mute);
+}
+.label.warm{color:var(--amber)}
+.label.cool{color:var(--turq-dim)}
+.hair{height:1px;background:var(--rule);border:0;margin:0}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* instrument frame: corner ticks, no rounded cards */
+.frame{position:relative;border:1px solid var(--frame);background:rgba(3,16,28,.58);backdrop-filter:blur(7px)}
+.frame::before,.frame::after{
+  content:"";position:absolute;width:11px;height:11px;pointer-events:none;
+  border:1px solid var(--turq);opacity:.55;
+}
+.frame::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.frame::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
+.btn{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  padding:14px 22px;min-height:48px;border:1px solid var(--turq-dim);color:var(--turq);
+  background:linear-gradient(180deg,rgba(84,232,210,.10),rgba(84,232,210,.03));
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .1s ease;
+}
+.btn:hover{background:rgba(84,232,210,.18);border-color:var(--turq)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{
+  color:var(--ink);border-color:var(--turq);
+  background:linear-gradient(180deg,var(--turq),#2fbfae);
+  font-size:13px;padding:17px 30px;
+}
+.btn.primary:hover{background:linear-gradient(180deg,#7ffbe8,#3ed0bd)}
+.btn.warm{border-color:var(--amber-deep);color:var(--amber);background:linear-gradient(180deg,rgba(243,163,60,.10),rgba(243,163,60,.02))}
+.btn.warm:hover{background:rgba(243,163,60,.18);border-color:var(--amber)}
+.btn.ghost{border-color:var(--frame);color:var(--mute);background:none}
+.btn.ghost:hover{color:var(--bone);border-color:var(--rule);background:rgba(231,241,239,.05)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.34;cursor:not-allowed;transform:none}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px}
+
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--amber);border:1px solid var(--rule-warm);padding:5px 9px;background:rgba(243,163,60,.06);
+}
+.badge .dot{width:5px;height:5px;background:var(--amber);flex:none}
+.badge.survey{color:var(--turq);border-color:var(--rule);background:rgba(84,232,210,.06)}
+.badge.survey .dot{background:var(--turq)}
+
+/* ---------- title ---------- */
+#screen-title{justify-content:center;align-items:flex-start;text-align:left}
+.title-wrap{max-width:min(660px,100%);display:flex;flex-direction:column;gap:22px}
+.wordmark{
+  font-family:var(--display);font-optical-sizing:auto;
+  font-weight:800;font-size:clamp(58px,15vw,140px);line-height:.84;letter-spacing:-.035em;
+  margin:0;color:var(--bone);text-wrap:balance;
+}
+.wordmark .cut{display:block;color:var(--turq);font-weight:300;font-style:italic;letter-spacing:-.02em}
+.tagline{
+  font-family:var(--display);font-weight:300;font-style:italic;
+  font-size:clamp(17px,3.4vw,25px);line-height:1.42;color:var(--bone);opacity:.86;margin:0;max-width:30ch;
+}
+.subline{font-family:var(--mono);font-size:11px;line-height:1.85;color:var(--mute);letter-spacing:.04em;max-width:48ch;margin:0}
+.title-rule{display:flex;align-items:center;gap:14px}
+.title-rule .hair{flex:1}
+
+/* ---------- tutorial ---------- */
+#screen-tutorial{justify-content:center}
+.tut-wrap{max-width:min(620px,100%);display:flex;flex-direction:column;gap:20px}
+.tut-line{
+  font-family:var(--display);font-weight:400;font-size:clamp(23px,5vw,38px);line-height:1.22;
+  margin:0;text-wrap:balance;
+}
+.tut-line em{font-style:italic;color:var(--turq)}
+.tut-table{display:flex;flex-direction:column;border:1px solid var(--frame)}
+.tut-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--frame)}
+.tut-row:last-child{border-bottom:0}
+.tut-row .ans{font-family:var(--display);font-size:16px}
+.tut-row .pct{font-family:var(--mono);font-size:11px;color:var(--mute)}
+.tut-row .chg{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.06em;text-align:right;min-width:112px}
+.up{color:var(--amber)} .down{color:var(--turq)}
+
+/* ---------- play HUD ---------- */
+#screen-play{display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+#screen-play > *{pointer-events:auto}
+.topbar{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  padding:calc(14px + env(safe-area-inset-top,0px)) calc(14px + var(--ruler-w)) 10px 16px;
+}
+.pips{display:flex;gap:4px;margin-top:8px}
+.pip{width:13px;height:3px;background:rgba(231,241,239,.16)}
+.pip.down{background:var(--turq)} .pip.up{background:var(--amber)} .pip.now{background:var(--bone)}
+.depth-read{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.depth-num{
+  font-family:var(--mono);font-weight:600;font-size:clamp(28px,7vw,44px);line-height:1;
+  color:var(--amber);letter-spacing:-.02em;
+}
+.depth-num .m{font-size:.44em;color:var(--amber-deep);margin-left:4px;letter-spacing:.1em}
+.zone-read{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--turq-dim);text-transform:uppercase}
+
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 16px;min-height:0}
+.prompt-frame{width:min(600px,100%);padding:26px 24px;display:flex;flex-direction:column;gap:14px}
+.prompt-text{
+  font-family:var(--display);font-optical-sizing:auto;font-weight:400;
+  font-size:clamp(25px,5.6vw,42px);line-height:1.14;margin:0;text-wrap:balance;letter-spacing:-.015em;
+}
+.prompt-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+.console{
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+  margin-bottom:var(--kb);
+  display:flex;flex-direction:column;gap:10px;
+  background:linear-gradient(180deg,transparent,rgba(1,8,15,.72) 40%);
+  transition:margin-bottom .12s ease;
+}
+.console-inner{width:min(600px,100%);margin:0 auto;display:flex;flex-direction:column;gap:9px}
+.timerbar{position:relative;height:2px;background:rgba(231,241,239,.12);overflow:hidden}
+.timerbar span{position:absolute;inset:0 auto 0 0;background:var(--turq);transform-origin:left;transition:background .3s ease}
+.timerbar.warn span{background:var(--amber)} .timerbar.crit span{background:var(--alarm)}
+.timerrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.answer-row{display:flex;gap:8px;align-items:stretch}
+#answer{
+  flex:1;min-width:0;font-family:var(--display);font-size:clamp(18px,4.4vw,24px);font-weight:400;
+  padding:13px 15px;min-height:52px;color:var(--bone);
+  background:rgba(3,16,28,.76);border:1px solid var(--turq-dim);
+}
+#answer::placeholder{color:var(--mute-dim);font-style:italic}
+#answer:focus{border-color:var(--turq);background:rgba(6,26,42,.88)}
+#answer.shake{animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#submit{flex:none;padding:0 20px}
+#anchor-btn{
+  display:flex;align-items:center;gap:9px;justify-content:center;width:100%;
+  padding:11px 14px;min-height:46px;border:1px solid var(--frame);color:var(--mute);
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  transition:all .2s ease;
+}
+#anchor-btn:hover:not([disabled]){color:var(--amber);border-color:var(--rule-warm)}
+#anchor-btn svg{flex:none;width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
+#anchor-btn.armed{color:var(--ink);background:var(--amber);border-color:var(--amber);animation:armed 1.6s ease-in-out infinite}
+@keyframes armed{0%,100%{box-shadow:0 0 0 0 rgba(243,163,60,.5)}50%{box-shadow:0 0 0 7px rgba(243,163,60,0)}}
+#anchor-btn[disabled]{opacity:.3}
+.hint{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--mute-dim);text-align:center;min-height:13px}
+
+/* ---------- sonar + reveal ---------- */
+.sonar-wrap{width:min(600px,100%);display:flex;flex-direction:column;align-items:center;gap:16px}
+.sonar-read{font-family:var(--mono);font-size:12px;letter-spacing:.34em;color:var(--turq);text-transform:uppercase}
+.sonar-scan{width:min(340px,80%);height:1px;background:var(--rule);position:relative;overflow:hidden}
+.sonar-scan::after{
+  content:"";position:absolute;top:0;left:-30%;width:30%;height:100%;
+  background:linear-gradient(90deg,transparent,var(--turq),transparent);animation:scan 1.1s linear infinite;
+}
+@keyframes scan{to{left:100%}}
+
+.reveal{width:min(600px,100%);padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.reveal-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.reveal-answer{
+  font-family:var(--display);font-weight:400;font-size:clamp(26px,6vw,40px);line-height:1.08;
+  margin:0;letter-spacing:-.02em;word-break:break-word;
+}
+.reveal-answer.hit{color:var(--turq)}
+.reveal-answer.miss{color:var(--amber-lt)}
+.reveal-corrected{font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.06em}
+.freq{display:flex;flex-direction:column;gap:7px}
+.freq-bar{height:6px;background:rgba(231,241,239,.10);position:relative}
+.freq-bar i{position:absolute;inset:0 auto 0 0;background:var(--amber);display:block}
+.freq-bar b{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--turq);opacity:.5}
+.freq-text{font-family:var(--mono);font-size:11px;color:var(--bone);letter-spacing:.03em}
+.freq-text strong{color:var(--amber);font-weight:600}
+.change{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.change-num{font-family:var(--mono);font-weight:600;font-size:clamp(34px,9vw,54px);line-height:1;letter-spacing:-.03em}
+.change-dir{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.flavour{font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(15px,3.4vw,19px);color:var(--bone);opacity:.82;margin:0;text-wrap:balance}
+.reveal-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--frame)}
+.missed{font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.04em;line-height:1.7}
+.missed b{color:var(--turq);font-weight:500}
+.deepcut-stamp{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.34em;color:var(--ink);
+  background:var(--turq);padding:5px 10px;align-self:flex-start;
+}
+
+/* ---------- results ---------- */
+.res-wrap{max-width:min(720px,100%);display:flex;flex-direction:column;gap:20px}
+.res-depth{font-family:var(--mono);font-weight:600;font-size:clamp(54px,15vw,110px);line-height:.88;color:var(--amber);letter-spacing:-.04em}
+.res-depth .m{font-size:.3em;color:var(--amber-deep);margin-left:8px;letter-spacing:.1em}
+.res-crown{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.3em;color:var(--ink);background:var(--turq);padding:6px 12px;align-self:flex-start}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--frame);border:1px solid var(--frame)}
+.res-cell{background:rgba(3,16,28,.6);padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.res-cell .v{font-family:var(--display);font-size:19px;line-height:1.2;word-break:break-word}
+.res-cell .d{font-family:var(--mono);font-size:12px;font-weight:600}
+.rounds{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
+.rounds th{text-align:left;font-weight:500;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);padding:8px 9px;border-bottom:1px solid var(--rule)}
+.rounds td{padding:9px;border-bottom:1px solid var(--frame);vertical-align:top}
+.rounds td.a{font-family:var(--display);font-size:14px;color:var(--bone)}
+.rounds td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rounds tr.anchored td{background:rgba(243,163,60,.07)}
+.tablewrap{overflow-x:auto;border:1px solid var(--frame)}
+
+/* ---------- chart ---------- */
+.chart-wrap{max-width:min(720px,100%);display:flex;flex-direction:column;gap:16px;flex:1;min-height:0}
+.tabs{display:flex;gap:0;border:1px solid var(--frame);align-self:flex-start}
+.tab{padding:10px 16px;min-height:42px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);border-right:1px solid var(--frame)}
+.tab:last-child{border-right:0}
+.tab[aria-selected="true"]{background:rgba(84,232,210,.14);color:var(--turq)}
+.chart{
+  position:relative;flex:1;min-height:340px;border:1px solid var(--frame);overflow:hidden;
+  background:linear-gradient(180deg,#0d5670 0%,#0a3a55 18%,#062740 42%,#04182c 68%,#01080f 100%);
+}
+.chart-grid{position:absolute;inset:0;pointer-events:none}
+.chart-grid i{position:absolute;left:0;right:0;height:1px;background:rgba(231,241,239,.07)}
+.chart-grid span{position:absolute;right:7px;transform:translateY(-50%);font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:rgba(231,241,239,.34)}
+.mark{position:absolute;left:0;right:0;display:flex;align-items:center;gap:9px;padding:0 10px;transform:translateY(-50%)}
+.mark .line{flex:1;height:1px;background:rgba(84,232,210,.32)}
+.mark .dot{width:8px;height:8px;background:var(--turq);flex:none;transform:rotate(45deg)}
+.mark .txt{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--bone);white-space:nowrap}
+.mark .txt em{color:var(--mute);font-style:normal;font-size:9px;margin-left:6px}
+.mark.best .dot{background:var(--amber);width:11px;height:11px}
+.mark.best .txt{color:var(--amber);font-weight:600}
+.mark.best .line{background:rgba(243,163,60,.42)}
+.chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:var(--display);font-style:italic;color:var(--mute);font-size:16px}
+
+/* ---------- settings / data ---------- */
+.set-wrap{max-width:min(680px,100%);display:flex;flex-direction:column;gap:18px}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--frame)}
+.set-row .t{display:flex;flex-direction:column;gap:3px}
+.set-row .t b{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.set-row .t span{font-family:var(--mono);font-size:10px;color:var(--mute);line-height:1.6}
+.toggle{flex:none;width:52px;height:28px;border:1px solid var(--frame);position:relative;background:rgba(231,241,239,.05)}
+.toggle i{position:absolute;top:3px;left:3px;width:20px;height:20px;background:var(--mute);transition:.18s ease}
+.toggle[aria-checked="true"]{border-color:var(--turq-dim);background:rgba(84,232,210,.14)}
+.toggle[aria-checked="true"] i{left:27px;background:var(--turq)}
+pre.schema{
+  font-family:var(--mono);font-size:10.5px;line-height:1.65;color:var(--turq);margin:0;
+  padding:14px;border:1px solid var(--frame);background:rgba(1,8,15,.55);overflow-x:auto;white-space:pre;
+}
+#dataset-paste{
+  width:100%;min-height:110px;resize:vertical;font-family:var(--mono);font-size:11px;line-height:1.6;
+  padding:11px;color:var(--bone);background:rgba(1,8,15,.62);border:1px solid var(--frame);
+}
+.notice{font-family:var(--mono);font-size:10.5px;line-height:1.7;padding:10px 12px;border-left:2px solid var(--turq);background:rgba(84,232,210,.06);color:var(--bone)}
+.notice.bad{border-left-color:var(--alarm);background:rgba(255,125,94,.07)}
+.prose{font-family:var(--mono);font-size:11px;line-height:1.85;color:var(--mute);margin:0}
+.prose b{color:var(--bone);font-weight:500}
+h2.sec{font-family:var(--display);font-weight:400;font-size:clamp(24px,5vw,34px);margin:0;letter-spacing:-.02em}
+.topnav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+
+/* practice banner */
+#practice-flag{
+  position:fixed;top:0;left:0;right:0;z-index:3;pointer-events:none;text-align:center;
+  padding:calc(3px + env(safe-area-inset-top,0px)) 8px 3px;
+  font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ink);background:var(--amber);
+}
+body.practice .topbar{padding-top:calc(30px + env(safe-area-inset-top,0px))}
+
+@media (max-width:520px){
+  :root{--ruler-w:44px}
+  .prompt-frame{padding:20px 18px}
+  .reveal{padding:18px}
+  .depth-num{font-size:clamp(24px,8vw,34px)}
+}
+body.kb-open .stage{justify-content:flex-start;padding-top:8px}
+body.kb-open .prompt-frame{padding:14px 16px}
+body.kb-open .prompt-text{font-size:clamp(17px,4.4vw,22px)}
+body.kb-open .topbar{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+body.reduced .sonar-scan::after{animation:none;left:0;width:100%;opacity:.5}
+body.reduced #anchor-btn.armed{animation:none}
+</style>
+<canvas id="ocean" aria-hidden="true"></canvas>
+<div id="vignette" aria-hidden="true"></div>
+<div id="practice-flag" hidden>Practice dive &middot; untimed &middot; not ranked with timed runs</div>
+<div id="hud"></div>
+<script id="deepcut-demo-data" type="application/json">{"datasetVersion":"demo-1.0.0","sourceType":"simulated-demo","sourceRef":"DEEP CUT bundled demo set - frequencies authored for play balance, not collected from people","methodology":"Simulated. Answer validity was written and adversarially audited for factual correctness; the response counts are invented to make the game playable and describe no real population.","collectionDate":"2026-09-17","questions":[{"id":"food-citrus-fruit","prompt":"Name a citrus fruit.","category":"food","sampleSize":1600,"answers":[{"canonical":"orange","aliases":["oranges","navel orange","navel oranges","valencia orange","valencia oranges"],"count":480},{"canonical":"lemon","aliases":["lemons","meyer lemon","meyer lemons"],"count":344},{"canonical":"lime","aliases":["limes","key lime","key limes","persian lime","tahitian lime"],"count":160},{"canonical":"grapefruit","aliases":["grapefruits","grape fruit","grape fruits","ruby red grapefruit","pink grapefruit"],"count":136},{"canonical":"mandarin","aliases":["mandarins","mandarin orange","mandarin oranges","mandarine","mandarines","satsuma","satsumas"],"count":80},{"canonical":"tangerine","aliases":["tangerines"],"count":56},{"canonical":"clementine","aliases":["clementines","clementine orange"],"count":40},{"canonical":"pomelo","aliases":["pomelos","pummelo","pummelos","shaddock"],"count":24},{"canonical":"kumquat","aliases":["kumquats","cumquat","cumquats"],"count":20},{"canonical":"yuzu","aliases":["yuzus","yuzu fruit"],"count":16},{"canonical":"blood orange","aliases":["blood oranges","bloodorange","blood-orange"],"count":14},{"canonical":"bergamot","aliases":["bergamots","bergamot orange","bergamot oranges"],"count":10},{"canonical":"calamansi","aliases":["calamansis","kalamansi","calamondin","calamondins"],"count":8}],"knownInvalid":[{"term":"banana","why":"Bananas are not in the citrus family."},{"term":"mango","why":"Mangoes are in the cashew family, not citrus."},{"term":"pineapple","why":"Pineapples are bromeliads, not citrus."},{"term":"tomato","why":"Tomatoes are nightshades, not citrus."}]},{"id":"food-pizza-topping","prompt":"Name a topping you can order on a pizza.","category":"food","sampleSize":2000,"answers":[{"canonical":"pepperoni","aliases":["peperoni","pepperonis","pepperoni slices"],"count":580},{"canonical":"mushroom","aliases":["mushrooms","button mushroom","button mushrooms","sliced mushrooms"],"count":280},{"canonical":"cheese","aliases":["cheeses","extra cheese","mozzarella","mozarella","mozzarella cheese"],"count":180},{"canonical":"onion","aliases":["onions","red onion","red onions","caramelised onion","caramelized onion"],"count":170},{"canonical":"sausage","aliases":["sausages","italian sausage","sausage meat","sliced sausage"],"count":165},{"canonical":"pineapple","aliases":["pineapples","pineapple chunks","pineapple pieces"],"count":90},{"canonical":"ham","aliases":["hams","sliced ham","leg ham","diced ham"],"count":80},{"canonical":"olive","aliases":["olives","black olive","black olives","green olives","kalamata olives"],"count":60},{"canonical":"bacon","aliases":["bacon bits","streaky bacon","bacon rashers"],"count":60},{"canonical":"bell pepper","aliases":["bell peppers","bellpepper","capsicum","capsicums","green pepper","green peppers","green capsicum"],"count":50},{"canonical":"anchovy","aliases":["anchovies","anchovy fillets"],"count":30},{"canonical":"jalapeno","aliases":["jalapenos","jalapeño","jalapeños","jalapeno peppers"],"count":20},{"canonical":"spinach","aliases":["baby spinach","spinach leaves"],"count":15},{"canonical":"artichoke","aliases":["artichokes","artichoke hearts","artichoke heart"],"count":12}],"knownInvalid":[{"term":"cardboard","why":"Cardboard is packaging material, not food."},{"term":"bleach","why":"Bleach is a cleaning chemical, not food."},{"term":"gravel","why":"Gravel is crushed stone, not food."},{"term":"engine oil","why":"Engine oil is a machine lubricant, not food."}]},{"id":"food-hot-drink","prompt":"Name a drink that is usually served hot.","category":"food","sampleSize":1200,"answers":[{"canonical":"coffee","aliases":["black coffee","filter coffee","instant coffee","brewed coffee","cup of coffee"],"count":360},{"canonical":"tea","aliases":["hot tea","cup of tea","black tea","english breakfast","english breakfast tea"],"count":252},{"canonical":"hot chocolate","aliases":["hotchocolate","hot cocoa","cocoa","drinking chocolate","hot choc"],"count":132},{"canonical":"latte","aliases":["lattes","cafe latte","café latte","caffe latte"],"count":102},{"canonical":"cappuccino","aliases":["cappuccinos","cappucino","capuccino"],"count":42},{"canonical":"green tea","aliases":["greentea","green teas","sencha"],"count":42},{"canonical":"espresso","aliases":["espressos","expresso","double espresso","shot of espresso"],"count":30},{"canonical":"chai","aliases":["chai latte","chai tea","chai tea latte","masala chai"],"count":24},{"canonical":"peppermint tea","aliases":["mint tea","peppermint infusion","mint infusion"],"count":18},{"canonical":"mulled wine","aliases":["mulled wines","gluhwein","glühwein","gluehwein"],"count":18},{"canonical":"matcha","aliases":["matcha latte","matcha tea"],"count":12},{"canonical":"hot toddy","aliases":["toddy","hot toddies","whisky toddy","whiskey toddy"],"count":10},{"canonical":"mulled cider","aliases":["mulled ciders","hot cider","spiced cider","wassail"],"count":6}],"knownInvalid":[{"term":"iced tea","why":"Iced tea is served cold over ice."},{"term":"iced coffee","why":"Iced coffee is served cold over ice."},{"term":"milkshake","why":"A milkshake is a cold blended drink."},{"term":"smoothie","why":"A smoothie is a cold blended drink."}]},{"id":"food-cooking-herb","prompt":"Name a culinary herb — a leafy plant used to flavour food.","category":"food","sampleSize":900,"answers":[{"canonical":"basil","aliases":["fresh basil","sweet basil","thai basil","basil leaves"],"count":234},{"canonical":"parsley","aliases":["fresh parsley","flat leaf parsley","flat-leaf parsley","italian parsley","curly parsley"],"count":135},{"canonical":"rosemary","aliases":["fresh rosemary","rosemary sprigs","rosemary leaves"],"count":99},{"canonical":"thyme","aliases":["fresh thyme","lemon thyme","thyme leaves"],"count":81},{"canonical":"oregano","aliases":["fresh oregano","dried oregano","mexican oregano"],"count":76},{"canonical":"mint","aliases":["fresh mint","peppermint","spearmint","mint leaves"],"count":45},{"canonical":"coriander","aliases":["cilantro","corriander","fresh coriander","coriander leaves","chinese parsley"],"count":45},{"canonical":"sage","aliases":["garden sage","fresh sage","sage leaves"],"count":27},{"canonical":"dill","aliases":["dill weed","dillweed","fresh dill"],"count":18},{"canonical":"chives","aliases":["chive","fresh chives","garlic chives"],"count":14},{"canonical":"tarragon","aliases":["french tarragon","fresh tarragon","estragon"],"count":9},{"canonical":"bay leaf","aliases":["bay leaves","bayleaf","laurel leaf","bay"],"count":9},{"canonical":"marjoram","aliases":["sweet marjoram","fresh marjoram"],"count":6},{"canonical":"chervil","aliases":["garden chervil","fresh chervil"],"count":5}],"knownInvalid":[{"term":"cinnamon","why":"Cinnamon is dried tree bark, a spice."},{"term":"paprika","why":"Paprika is ground dried peppers, a spice."},{"term":"black pepper","why":"Black pepper is ground dried peppercorns, a spice."},{"term":"cumin","why":"Cumin is a dried seed, a spice."}]},{"id":"food-pasta-shape","prompt":"Name a pasta shape.","category":"food","sampleSize":2400,"answers":[{"canonical":"spaghetti","aliases":["spagetti","spaghetti pasta","spaghetti noodles"],"count":672},{"canonical":"penne","aliases":["pennes","penne rigate","penne lisce","quills"],"count":360},{"canonical":"fusilli","aliases":["fusili","fusilli pasta","rotini","spirals","spiral pasta","corkscrew pasta"],"count":216},{"canonical":"macaroni","aliases":["macoroni","maccheroni","elbow macaroni","macaroni elbows","elbow pasta","elbows"],"count":204},{"canonical":"fettuccine","aliases":["fettucine","fettuccini","fettucini"],"count":132},{"canonical":"linguine","aliases":["linguini","linguine pasta"],"count":120},{"canonical":"farfalle","aliases":["farfalle pasta","bow tie pasta","bow-tie pasta","bow ties","bowtie","bowties","butterfly pasta"],"count":120},{"canonical":"rigatoni","aliases":["rigatone","rigatoni tubes"],"count":72},{"canonical":"ravioli","aliases":["raviolis","raviolo"],"count":60},{"canonical":"lasagne","aliases":["lasagna","lasagne sheets","lasagna sheets","pasta sheets"],"count":48},{"canonical":"tagliatelle","aliases":["tagliatelli","taglietelle","tagliatelle pasta"],"count":36},{"canonical":"orzo","aliases":["orzo pasta","risoni"],"count":24},{"canonical":"shells","aliases":["shell","conchiglie","pasta shells","shell pasta","seashell pasta"],"count":24}],"knownInvalid":[{"term":"basmati","why":"Basmati is a variety of rice."},{"term":"quinoa","why":"Quinoa is a seed grain, not pasta."},{"term":"risotto","why":"Risotto is a rice dish."},{"term":"sourdough","why":"Sourdough is bread."}]},{"id":"food-cheese","prompt":"Name a type of cheese.","category":"food","sampleSize":1800,"answers":[{"canonical":"cheddar","aliases":["cheddars","cheddar cheese","sharp cheddar","mature cheddar","tasty cheese"],"count":540},{"canonical":"mozzarella","aliases":["mozarella","motzarella","mozzarella cheese","fresh mozzarella","buffalo mozzarella"],"count":288},{"canonical":"parmesan","aliases":["parmasan","parmesean","parmesan cheese","parmigiano","parmigiano reggiano","parmigiano-reggiano"],"count":198},{"canonical":"brie","aliases":["brie cheese","double brie","triple cream brie"],"count":153},{"canonical":"feta","aliases":["fetta","feta cheese","greek feta"],"count":90},{"canonical":"gouda","aliases":["gouda cheese","smoked gouda","young gouda"],"count":72},{"canonical":"swiss cheese","aliases":["swiss","emmental","emmentaler","emmenthal"],"count":72},{"canonical":"blue cheese","aliases":["bluecheese","bleu cheese","blue vein","blue vein cheese"],"count":54},{"canonical":"camembert","aliases":["camembert cheese","camambert","cammembert"],"count":36},{"canonical":"ricotta","aliases":["ricotta cheese"],"count":27},{"canonical":"halloumi","aliases":["haloumi","hallumi","halloumi cheese"],"count":27},{"canonical":"gruyere","aliases":["gruyère","gruyere cheese","gruyère cheese"],"count":18},{"canonical":"gorgonzola","aliases":["gorgonzolla","gorgonzola cheese","gorgonzola dolce"],"count":18}],"knownInvalid":[{"term":"hummus","why":"Hummus is a chickpea dip with no dairy in it."},{"term":"butter","why":"Butter is a dairy fat, not cheese."},{"term":"yoghurt","why":"Yoghurt is cultured milk, not cheese."},{"term":"tofu","why":"Tofu is pressed soybean curd, not milk curd."}]},{"id":"geo-european-capital","prompt":"Name the capital city of a European country.","category":"geo","sampleSize":1600,"answers":[{"canonical":"paris","aliases":["paris france"],"count":416},{"canonical":"london","aliases":["london uk","london england"],"count":240},{"canonical":"rome","aliases":["roma","rome italy"],"count":192},{"canonical":"berlin","aliases":["berlin germany"],"count":144},{"canonical":"madrid","aliases":["madrid spain"],"count":132},{"canonical":"amsterdam","aliases":["amsterdam netherlands","amsterdam holland"],"count":68},{"canonical":"brussels","aliases":["bruxelles","brussel","brussels belgium"],"count":56},{"canonical":"prague","aliases":["praha","prague czech republic","prague czechia"],"count":40},{"canonical":"lisbon","aliases":["lisboa","lisbon portugal"],"count":40},{"canonical":"vienna","aliases":["wien","vienna austria"],"count":36},{"canonical":"athens","aliases":["athina","athens greece"],"count":28},{"canonical":"dublin","aliases":["baile atha cliath","dublin ireland"],"count":22},{"canonical":"oslo","aliases":["oslo norway"],"count":14},{"canonical":"bratislava","aliases":["bratislava slovakia"],"count":9},{"canonical":"valletta","aliases":["valetta","valletta malta"],"count":7},{"canonical":"ljubljana","aliases":["ljubliana","ljubljana slovenia"],"count":5}],"knownInvalid":[{"term":"zurich","why":"Switzerland's capital is Bern, not Zurich."},{"term":"istanbul","why":"Turkey's capital is Ankara."},{"term":"barcelona","why":"Spain's capital is Madrid."},{"term":"sydney","why":"Sydney is in Australia, not Europe."},{"term":"milan","why":"Italy's capital is Rome."}]},{"id":"geo-desert","prompt":"Name a desert region of the world.","category":"geo","sampleSize":1200,"answers":[{"canonical":"sahara","aliases":["the sahara","sahara desert","the sahara desert"],"count":420},{"canonical":"gobi","aliases":["gobi desert","the gobi","the gobi desert"],"count":156},{"canonical":"mojave","aliases":["mohave","mojave desert","mohave desert","the mojave"],"count":108},{"canonical":"kalahari","aliases":["kalahari desert","the kalahari","the kalahari desert"],"count":100},{"canonical":"sonoran","aliases":["sonora","sonoran desert","sonora desert","the sonoran desert"],"count":60},{"canonical":"atacama","aliases":["atacama desert","the atacama","the atacama desert"],"count":48},{"canonical":"arabian desert","aliases":["arabian","arabia desert","the arabian desert"],"count":36},{"canonical":"antarctic desert","aliases":["antarctica","antarctic","antarctic polar desert","the antarctic desert"],"count":24},{"canonical":"namib","aliases":["namib desert","the namib","the namib desert"],"count":22},{"canonical":"great victoria","aliases":["great victoria desert","victoria desert","the great victoria desert"],"count":18},{"canonical":"thar","aliases":["thar desert","great indian desert","the thar desert"],"count":14},{"canonical":"simpson","aliases":["simpson desert","the simpson desert"],"count":8},{"canonical":"taklamakan","aliases":["taklimakan","takla makan","taklamakan desert","taklimakan desert"],"count":6}],"knownInvalid":[{"term":"amazon","why":"The Amazon is a rainforest, among Earth's wettest places."},{"term":"everglades","why":"The Everglades are Florida wetlands, not a desert."},{"term":"serengeti","why":"The Serengeti is grassland savanna, not desert."},{"term":"congo","why":"The Congo basin is dense tropical rainforest."}]},{"id":"geo-south-american-country","prompt":"Name a sovereign country in South America.","category":"geo","sampleSize":2000,"answers":[{"canonical":"brazil","aliases":["brasil","federative republic of brazil"],"count":560},{"canonical":"argentina","aliases":["argentine republic"],"count":340},{"canonical":"colombia","aliases":["columbia","republic of colombia"],"count":180},{"canonical":"peru","aliases":["perú","republic of peru"],"count":168},{"canonical":"chile","aliases":["republic of chile"],"count":168},{"canonical":"venezuela","aliases":["venezuala","venezeula"],"count":80},{"canonical":"ecuador","aliases":["equador","republic of ecuador"],"count":60},{"canonical":"bolivia","aliases":["plurinational state of bolivia"],"count":50},{"canonical":"uruguay","aliases":["uraguay"],"count":36},{"canonical":"paraguay","aliases":["paragay"],"count":24},{"canonical":"guyana","aliases":["guyanna"],"count":16},{"canonical":"suriname","aliases":["surinam"],"count":10}],"knownInvalid":[{"term":"mexico","why":"Mexico is in North America."},{"term":"panama","why":"Panama sits in Central America, part of North America."},{"term":"cuba","why":"Cuba is a Caribbean island in North America."},{"term":"spain","why":"Spain is in Europe, despite the shared language."},{"term":"french guiana","why":"French Guiana is an overseas department of France, not a sovereign country."}]},{"id":"geo-river","prompt":"Name a river anywhere in the world.","category":"geo","sampleSize":1400,"answers":[{"canonical":"nile","aliases":["the nile","river nile","nile river"],"count":364},{"canonical":"amazon","aliases":["amazon river","rio amazonas","the amazon"],"count":252},{"canonical":"mississippi","aliases":["missisippi","mississipi","the mississippi","mississippi river"],"count":154},{"canonical":"danube","aliases":["donau","dunav","river danube","danube river","the danube"],"count":119},{"canonical":"thames","aliases":["river thames","the thames","thames river"],"count":116},{"canonical":"yangtze","aliases":["yangzi","yangtse","chang jiang","changjiang","yangtze river"],"count":70},{"canonical":"ganges","aliases":["ganga","river ganges","ganges river","the ganges"],"count":49},{"canonical":"rhine","aliases":["rhein","rijn","river rhine","rhine river","the rhine"],"count":42},{"canonical":"congo","aliases":["congo river","zaire river","the congo"],"count":28},{"canonical":"volga","aliases":["volga river","the volga"],"count":21},{"canonical":"mekong","aliases":["mekong river","the mekong"],"count":17},{"canonical":"murray","aliases":["murray river","the murray"],"count":13},{"canonical":"zambezi","aliases":["zambesi","zambezi river","the zambezi"],"count":8}],"knownInvalid":[{"term":"lake victoria","why":"Lake Victoria is a lake, not a river."},{"term":"atlantic","why":"The Atlantic is an ocean, not a river."},{"term":"suez canal","why":"The Suez Canal is a man-made canal, not a river."},{"term":"everest","why":"Everest is a mountain, not a river."}]},{"id":"geo-island-country","prompt":"Name a sovereign island nation — a country whose territory is entirely islands.","category":"geo","sampleSize":1000,"answers":[{"canonical":"japan","aliases":["nippon","nihon"],"count":262},{"canonical":"iceland","aliases":["republic of iceland"],"count":110},{"canonical":"madagascar","aliases":["republic of madagascar"],"count":90},{"canonical":"cuba","aliases":["republic of cuba"],"count":84},{"canonical":"new zealand","aliases":["newzealand","new zeland","nz","aotearoa"],"count":82},{"canonical":"ireland","aliases":["republic of ireland","eire"],"count":81},{"canonical":"philippines","aliases":["the philippines","phillipines","philipines","republic of the philippines"],"count":50},{"canonical":"sri lanka","aliases":["srilanka","sri-lanka","ceylon"],"count":35},{"canonical":"jamaica","aliases":[],"count":25},{"canonical":"malta","aliases":["republic of malta"],"count":20},{"canonical":"fiji","aliases":["fiji islands","republic of fiji"],"count":15},{"canonical":"singapore","aliases":["singapura","republic of singapore"],"count":12},{"canonical":"maldives","aliases":["the maldives","republic of maldives"],"count":10},{"canonical":"seychelles","aliases":["the seychelles","republic of seychelles"],"count":6},{"canonical":"nauru","aliases":["republic of nauru"],"count":4}],"knownInvalid":[{"term":"greenland","why":"Greenland is an autonomous territory of Denmark, not sovereign."},{"term":"hawaii","why":"Hawaii is a US state, not a country."},{"term":"puerto rico","why":"Puerto Rico is a US territory, not a sovereign country."},{"term":"switzerland","why":"Switzerland is landlocked in Europe, not an island."}]},{"id":"geo-mountain-range","prompt":"Name a mountain range (a range, not a single peak).","category":"geo","sampleSize":1800,"answers":[{"canonical":"himalayas","aliases":["himalaya","the himalayas","himalayan mountains"],"count":504},{"canonical":"rockies","aliases":["rocky mountains","the rockies","the rocky mountains","rocky mountain range"],"count":252},{"canonical":"alps","aliases":["the alps","european alps","swiss alps"],"count":234},{"canonical":"andes","aliases":["the andes","andes mountains","andean mountains","cordillera de los andes"],"count":198},{"canonical":"appalachians","aliases":["appalachian mountains","appalachian","appalachia","the appalachians"],"count":90},{"canonical":"urals","aliases":["ural mountains","the urals","ural"],"count":54},{"canonical":"pyrenees","aliases":["the pyrenees","pyrenean mountains"],"count":45},{"canonical":"atlas mountains","aliases":["atlas","the atlas mountains","atlas range","the atlas range"],"count":36},{"canonical":"caucasus","aliases":["caucasus mountains","the caucasus","greater caucasus"],"count":32},{"canonical":"sierra nevada","aliases":["sierra nevada mountains","sierra nevadas","the sierra nevada"],"count":23},{"canonical":"carpathians","aliases":["carpathian mountains","carpathian","the carpathians"],"count":18},{"canonical":"great dividing range","aliases":["the great dividing range"],"count":14},{"canonical":"drakensberg","aliases":["drakensberg mountains","drakensburg","the drakensberg"],"count":7}],"knownInvalid":[{"term":"everest","why":"Everest is a single peak within the Himalayas."},{"term":"kilimanjaro","why":"Kilimanjaro is a standalone volcano, not a range."},{"term":"mount fuji","why":"Fuji is one volcano in Japan, not a range."},{"term":"grand canyon","why":"The Grand Canyon is a gorge carved by a river."}]},{"id":"sci-name-a-moon","prompt":"Name a moon in our solar system (Earth's own Moon counts).","category":"sci","sampleSize":2200,"answers":[{"canonical":"moon","aliases":["the moon","luna","earths moon","earth's moon","the earths moon","our moon"],"count":704},{"canonical":"europa","aliases":["europa moon","jupiters moon europa","jupiter's moon europa"],"count":264},{"canonical":"titan","aliases":["titan moon","saturns moon titan","saturn's moon titan"],"count":242},{"canonical":"io","aliases":["io moon"],"count":198},{"canonical":"ganymede","aliases":["ganymede moon"],"count":176},{"canonical":"callisto","aliases":["callisto moon"],"count":88},{"canonical":"phobos","aliases":["phobos moon"],"count":77},{"canonical":"enceladus","aliases":["enceladus moon"],"count":55},{"canonical":"triton","aliases":["triton moon"],"count":44},{"canonical":"deimos","aliases":["deimos moon"],"count":40},{"canonical":"titania","aliases":["titania moon"],"count":26},{"canonical":"mimas","aliases":["mimas moon"],"count":20},{"canonical":"iapetus","aliases":["japetus","iapetus moon"],"count":13},{"canonical":"charon","aliases":["charon moon","plutos moon charon","pluto's moon charon"],"count":13},{"canonical":"miranda","aliases":["miranda moon"],"count":11}],"knownInvalid":[{"term":"pluto","why":"Pluto is a dwarf planet orbiting the Sun; it has moons of its own."},{"term":"mars","why":"Mars is a planet, not a moon."},{"term":"sun","why":"The Sun is a star, not a moon."},{"term":"international space station","why":"An artificial spacecraft, not a natural moon."}]},{"id":"sci-chemical-element","prompt":"Name a chemical element from the periodic table.","category":"sci","sampleSize":2000,"answers":[{"canonical":"hydrogen","aliases":["h","h2","hydrogen gas"],"count":520},{"canonical":"oxygen","aliases":["o","o2","oxygen gas"],"count":330},{"canonical":"carbon","aliases":["c"],"count":220},{"canonical":"gold","aliases":["au","aurum"],"count":170},{"canonical":"helium","aliases":["he","helium gas"],"count":160},{"canonical":"iron","aliases":["fe","ferrum"],"count":100},{"canonical":"nitrogen","aliases":["n","n2","nitrogen gas"],"count":70},{"canonical":"copper","aliases":["cu","cuprum"],"count":48},{"canonical":"neon","aliases":["ne","neon gas"],"count":40},{"canonical":"sodium","aliases":["na","natrium"],"count":36},{"canonical":"sulfur","aliases":["sulphur","s","sulfer"],"count":30},{"canonical":"mercury","aliases":["hg","quicksilver"],"count":28},{"canonical":"uranium","aliases":["u"],"count":26},{"canonical":"silver","aliases":["ag","argentum"],"count":22},{"canonical":"tungsten","aliases":["w","wolfram"],"count":14}],"knownInvalid":[{"term":"water","why":"Water is a compound of hydrogen and oxygen, not an element."},{"term":"bronze","why":"Bronze is an alloy of copper and tin, not an element."},{"term":"steel","why":"Steel is an alloy of iron and carbon, not an element."},{"term":"salt","why":"Table salt is sodium chloride, a compound of two elements."}]},{"id":"sci-wild-cat-species","prompt":"Name a wild cat species - any non-domestic member of the cat family.","category":"sci","sampleSize":1200,"answers":[{"canonical":"lion","aliases":["lions","lioness","lionesses","african lion","asiatic lion"],"count":312},{"canonical":"tiger","aliases":["tigers","tigress","bengal tiger","siberian tiger"],"count":192},{"canonical":"leopard","aliases":["leopards","african leopard"],"count":120},{"canonical":"cheetah","aliases":["cheetahs","cheeta"],"count":108},{"canonical":"jaguar","aliases":["jaguars"],"count":96},{"canonical":"cougar","aliases":["cougars","puma","pumas","mountain lion","mountain lions"],"count":60},{"canonical":"lynx","aliases":["lynxes","lynxs","eurasian lynx","canada lynx","iberian lynx"],"count":42},{"canonical":"snow leopard","aliases":["snow leopards","snowleopard","snow-leopard"],"count":30},{"canonical":"bobcat","aliases":["bobcats","bob cat","bob-cat"],"count":24},{"canonical":"ocelot","aliases":["ocelots"],"count":17},{"canonical":"caracal","aliases":["caracals"],"count":12},{"canonical":"serval","aliases":["servals"],"count":10},{"canonical":"clouded leopard","aliases":["clouded leopards","cloudedleopard","clouded-leopard"],"count":7},{"canonical":"jaguarundi","aliases":["jaguarundis","jaguarondi","eyra"],"count":5}],"knownInvalid":[{"term":"hyena","why":"Hyenas belong to their own family, Hyaenidae, not the cat family."},{"term":"wolf","why":"A wolf is a canid, not a feline."},{"term":"tasmanian tiger","why":"The thylacine was a marsupial, unrelated to cats despite the name."},{"term":"maine coon","why":"A domestic cat breed, not a wild species."}]},{"id":"sci-human-organ","prompt":"Name an organ in the human body.","category":"sci","sampleSize":1800,"answers":[{"canonical":"heart","aliases":["the heart","hearts"],"count":468},{"canonical":"brain","aliases":["the brain","brains"],"count":288},{"canonical":"liver","aliases":["the liver","livers"],"count":198},{"canonical":"lungs","aliases":["lung","the lungs","the lung"],"count":162},{"canonical":"kidneys","aliases":["kidney","the kidneys","the kidney"],"count":144},{"canonical":"stomach","aliases":["the stomach","stomachs"],"count":99},{"canonical":"skin","aliases":["the skin"],"count":63},{"canonical":"intestines","aliases":["intestine","the intestines","small intestine","large intestine","bowel","bowels","colon"],"count":54},{"canonical":"pancreas","aliases":["the pancreas"],"count":45},{"canonical":"spleen","aliases":["the spleen"],"count":36},{"canonical":"bladder","aliases":["urinary bladder","the bladder"],"count":23},{"canonical":"gallbladder","aliases":["gall bladder","gall-bladder","gallbladders"],"count":18},{"canonical":"thyroid","aliases":["thyroid gland","the thyroid"],"count":14},{"canonical":"appendix","aliases":["vermiform appendix","the appendix"],"count":11},{"canonical":"thymus","aliases":["thymus gland","the thymus"],"count":8}],"knownInvalid":[{"term":"gills","why":"Humans breathe with lungs and have no gills."},{"term":"insulin","why":"Insulin is a hormone, not an organ."},{"term":"swim bladder","why":"A swim bladder is a fish organ; humans do not have one."},{"term":"gizzard","why":"Birds have a gizzard; the human body has none."}]},{"id":"sci-gemstone","prompt":"Name a gemstone - any gem material used in jewellery.","category":"sci","sampleSize":1000,"answers":[{"canonical":"diamond","aliases":["diamonds"],"count":270},{"canonical":"ruby","aliases":["rubies","rubys"],"count":140},{"canonical":"emerald","aliases":["emeralds"],"count":120},{"canonical":"sapphire","aliases":["sapphires","saphire","saphires","blue sapphire"],"count":100},{"canonical":"amethyst","aliases":["amethysts"],"count":80},{"canonical":"pearl","aliases":["pearls"],"count":45},{"canonical":"topaz","aliases":["topazes","topaz stone","imperial topaz"],"count":35},{"canonical":"opal","aliases":["opals","black opal","fire opal"],"count":30},{"canonical":"jade","aliases":["jadeite","nephrite","jade stone"],"count":22},{"canonical":"garnet","aliases":["garnets"],"count":18},{"canonical":"turquoise","aliases":["turquoise stone","turquois"],"count":14},{"canonical":"amber","aliases":["baltic amber","amber stone"],"count":12},{"canonical":"aquamarine","aliases":["aquamarines","aqua marine","aqua-marine"],"count":11},{"canonical":"peridot","aliases":["peridots","olivine"],"count":8},{"canonical":"tanzanite","aliases":["tanzanites","tanzanite stone"],"count":6},{"canonical":"tourmaline","aliases":["tourmalines","watermelon tourmaline"],"count":5}],"knownInvalid":[{"term":"granite","why":"Granite is a building rock, not a gem material."},{"term":"gold","why":"Gold is a precious metal, not a gem."},{"term":"limestone","why":"Limestone is a sedimentary building rock, not a gem material."},{"term":"silver","why":"Silver is a metal, not a gemstone."}]},{"id":"sci-flightless-bird","prompt":"Name a flightless bird (living or extinct).","category":"sci","sampleSize":1400,"answers":[{"canonical":"penguin","aliases":["penguins","emperor penguin","emperor penguins","king penguin"],"count":420},{"canonical":"ostrich","aliases":["ostriches","ostrichs","ostrich bird"],"count":266},{"canonical":"emu","aliases":["emus"],"count":182},{"canonical":"kiwi","aliases":["kiwis","kiwi bird","kiwi birds"],"count":126},{"canonical":"dodo","aliases":["dodos","dodoes","dodo bird"],"count":77},{"canonical":"cassowary","aliases":["cassowaries","casowary","southern cassowary"],"count":70},{"canonical":"rhea","aliases":["rheas","greater rhea"],"count":42},{"canonical":"moa","aliases":["moas","giant moa"],"count":20},{"canonical":"kakapo","aliases":["kakapos","kakapo parrot","owl parrot"],"count":17},{"canonical":"great auk","aliases":["great auks","greatauk","great-auk"],"count":11},{"canonical":"takahe","aliases":["takahes","south island takahe"],"count":10},{"canonical":"weka","aliases":["wekas","maori hen"],"count":8},{"canonical":"flightless cormorant","aliases":["flightless cormorants","galapagos cormorant","galapagos cormorants"],"count":7}],"knownInvalid":[{"term":"albatross","why":"Albatrosses are among the strongest soaring fliers alive."},{"term":"eagle","why":"Eagles are powerful fliers and hunt on the wing."},{"term":"bat","why":"Bats are flying mammals, not birds."},{"term":"peacock","why":"Peafowl fly short distances and roost in trees."}]},{"id":"ent-orchestra-instrument","prompt":"Name an instrument played in a symphony orchestra.","category":"ent","sampleSize":1600,"answers":[{"canonical":"violin","aliases":["violins","fiddle","fiddles","first violin","1st violin"],"count":448},{"canonical":"cello","aliases":["cellos","violoncello","violoncellos"],"count":192},{"canonical":"flute","aliases":["flutes","concert flute"],"count":160},{"canonical":"trumpet","aliases":["trumpets"],"count":144},{"canonical":"clarinet","aliases":["clarinets","b flat clarinet","bb clarinet"],"count":136},{"canonical":"viola","aliases":["violas"],"count":80},{"canonical":"oboe","aliases":["oboes"],"count":64},{"canonical":"french horn","aliases":["french horns","frenchhorn","french-horn","horn in f"],"count":48},{"canonical":"double bass","aliases":["double basses","double-bass","doublebass","contrabass","upright bass","string bass","string basses"],"count":40},{"canonical":"trombone","aliases":["trombones"],"count":32},{"canonical":"harp","aliases":["harps","concert harp"],"count":32},{"canonical":"timpani","aliases":["tympani","timpanis","kettledrum","kettledrums","kettle drum","kettle drums"],"count":24},{"canonical":"bassoon","aliases":["bassoons"],"count":24},{"canonical":"tuba","aliases":["tubas"],"count":16}],"knownInvalid":[{"term":"conductor","why":"A person who leads the players, not an instrument."},{"term":"sheet music","why":"Printed notation, not an instrument."},{"term":"music stand","why":"A rack that holds the music, not an instrument."},{"term":"microphone","why":"Audio equipment, not a musical instrument."}]},{"id":"ent-classic-board-game","prompt":"Name a classic board game - one played on a board, not with cards.","category":"ent","sampleSize":1200,"answers":[{"canonical":"monopoly","aliases":["monopoly board game"],"count":324},{"canonical":"chess","aliases":["chess game","game of chess"],"count":180},{"canonical":"scrabble","aliases":["scrabble board game"],"count":126},{"canonical":"checkers","aliases":["checker","draughts","english draughts"],"count":108},{"canonical":"risk","aliases":["risk board game","the game of risk"],"count":102},{"canonical":"clue","aliases":["cluedo","clue board game","clue game"],"count":60},{"canonical":"sorry","aliases":["sorry!","sorry board game","sorry game"],"count":42},{"canonical":"battleship","aliases":["battleships","battle ship","battle ships"],"count":36},{"canonical":"backgammon","aliases":["back gammon","backgamon"],"count":30},{"canonical":"connect four","aliases":["connect 4","connect-four","connectfour","four in a row"],"count":24},{"canonical":"snakes and ladders","aliases":["chutes and ladders","snakes & ladders","chutes & ladders","snakes n ladders"],"count":21},{"canonical":"candy land","aliases":["candyland","candy-land"],"count":18},{"canonical":"chinese checkers","aliases":["chinese chequers","chinese checker","chinese-checkers"],"count":15}],"knownInvalid":[{"term":"poker","why":"A card game, played with no board."},{"term":"uno","why":"A card game, played with no board."},{"term":"charades","why":"An acted party game with no board or pieces."},{"term":"sudoku","why":"A pencil-and-paper number puzzle, not a board game."}]},{"id":"ent-dance-style","prompt":"Name a style of dancing.","category":"ent","sampleSize":2000,"answers":[{"canonical":"ballet","aliases":["classical ballet","ballet dancing","ballet dance"],"count":540},{"canonical":"salsa","aliases":["salsa dancing","salsa dance"],"count":240},{"canonical":"hip hop","aliases":["hip-hop","hiphop","hip hop dance","hip hop dancing"],"count":220},{"canonical":"tap","aliases":["tap dance","tap dancing","tapdance","tap-dance"],"count":180},{"canonical":"tango","aliases":["argentine tango","tango dancing","the tango"],"count":170},{"canonical":"waltz","aliases":["waltzing","viennese waltz","the waltz"],"count":100},{"canonical":"breakdancing","aliases":["breakdance","break dancing","break-dancing","breaking","b-boying","b boying"],"count":80},{"canonical":"flamenco","aliases":["flamenco dancing","flamenco dance"],"count":60},{"canonical":"jazz","aliases":["jazz dance","jazz dancing"],"count":60},{"canonical":"swing","aliases":["swing dance","swing dancing","swingdance"],"count":50},{"canonical":"samba","aliases":["samba dancing","samba dance"],"count":40},{"canonical":"foxtrot","aliases":["fox trot","fox-trot","the foxtrot"],"count":30},{"canonical":"contemporary","aliases":["contemporary dance","contemporary dancing"],"count":30}],"knownInvalid":[{"term":"yoga","why":"A posture and breathing practice, not a dance."},{"term":"karate","why":"A martial art, not a dance."},{"term":"pilates","why":"A studio exercise method, not a dance."},{"term":"opera","why":"A staged art form built on singing, not dancing."}]},{"id":"ent-film-genre","prompt":"Name a film genre.","category":"ent","sampleSize":1400,"answers":[{"canonical":"comedy","aliases":["comedies","comedy film","comedy movie"],"count":357},{"canonical":"horror","aliases":["horrors","horror film","horror movie","scary movie"],"count":224},{"canonical":"action","aliases":["action film","action movie","action films"],"count":182},{"canonical":"drama","aliases":["dramas","drama film","drama movie"],"count":126},{"canonical":"romance","aliases":["romantic","romantic film","romance film","romance movie","love story"],"count":119},{"canonical":"sci-fi","aliases":["science fiction","science-fiction","scifi","sci fi"],"count":70},{"canonical":"thriller","aliases":["thrillers","thriller film","psychological thriller"],"count":56},{"canonical":"fantasy","aliases":["fantasies","fantasy film","fantasy movie"],"count":35},{"canonical":"documentary","aliases":["documentaries","documentary film","doco","docu"],"count":35},{"canonical":"western","aliases":["westerns","cowboy film","cowboy movie","spaghetti western"],"count":28},{"canonical":"musical","aliases":["musicals","musical film","movie musical"],"count":21},{"canonical":"film noir","aliases":["noir","film-noir","filmnoir"],"count":14}],"knownInvalid":[{"term":"netflix","why":"A streaming service, not a genre."},{"term":"imax","why":"A projection and screen format, not a genre."},{"term":"trailer","why":"A short promotional clip, not a genre."},{"term":"oscar","why":"An industry award, not a genre."}]},{"id":"ent-summer-olympic-sport","prompt":"Name a sport contested at the Summer Olympics.","category":"ent","sampleSize":1800,"answers":[{"canonical":"swimming","aliases":["swim","freestyle swimming"],"count":468},{"canonical":"athletics","aliases":["track and field","track & field","track","running"],"count":252},{"canonical":"gymnastics","aliases":["artistic gymnastics","gymnastic","gymnast"],"count":198},{"canonical":"soccer","aliases":["football","association football","futbol","fútbol"],"count":162},{"canonical":"basketball","aliases":["basket ball","3x3 basketball","3 x 3 basketball"],"count":153},{"canonical":"tennis","aliases":["lawn tennis"],"count":90},{"canonical":"boxing","aliases":["amateur boxing","olympic boxing"],"count":63},{"canonical":"cycling","aliases":["bicycling","bike racing","cycle racing","road cycling","track cycling"],"count":54},{"canonical":"volleyball","aliases":["volley ball","beach volleyball","indoor volleyball"],"count":45},{"canonical":"archery","aliases":["target archery","bow and arrow"],"count":36},{"canonical":"fencing","aliases":["sword fighting","epee fencing","foil fencing","sabre fencing"],"count":36},{"canonical":"rowing","aliases":["row","sculling"],"count":27},{"canonical":"table tennis","aliases":["ping pong","ping-pong","pingpong","table-tennis"],"count":27},{"canonical":"judo","aliases":[],"count":18}],"knownInvalid":[{"term":"snowboarding","why":"A Winter Olympic sport, ridden on snow."},{"term":"curling","why":"A Winter Olympic sport, played on ice."},{"term":"bobsleigh","why":"A Winter Olympic sliding sport, run on ice."},{"term":"alpine skiing","why":"A Winter Olympic sport, raced on snow."}]},{"id":"ent-circus-act","prompt":"Name an act you would see at a traditional circus.","category":"ent","sampleSize":800,"answers":[{"canonical":"clown","aliases":["clowns","clowning","clown act"],"count":208},{"canonical":"trapeze","aliases":["flying trapeze","trapeze artist","trapeze act"],"count":112},{"canonical":"juggling","aliases":["juggler","jugglers","juggling act"],"count":80},{"canonical":"tightrope","aliases":["tightrope walking","tightrope walker","tight rope","high wire","highwire","wire walking"],"count":72},{"canonical":"lion taming","aliases":["lion tamer","lion tamers","lion tamer act","big cat act"],"count":68},{"canonical":"acrobatics","aliases":["acrobat","acrobats","acrobatic act","tumbling"],"count":44},{"canonical":"magic act","aliases":["magic","magician","magic show","illusionist"],"count":32},{"canonical":"human cannonball","aliases":["cannonball","human cannon ball","human cannonballs","shot from a cannon"],"count":24},{"canonical":"fire breathing","aliases":["fire breather","fire breathers","fire-breathing","firebreathing"],"count":20},{"canonical":"sword swallowing","aliases":["sword swallower","sword swallowers","sword-swallowing"],"count":16},{"canonical":"contortionist","aliases":["contortion","contortionists","contortion act"],"count":12},{"canonical":"stilt walking","aliases":["stilt walker","stilt walkers","stilt-walking","stilts"],"count":12},{"canonical":"unicycle riding","aliases":["unicycle","unicyclist","unicycling","riding a unicycle"],"count":10},{"canonical":"knife throwing","aliases":["knife thrower","knife throwers","knife-throwing"],"count":8}],"knownInvalid":[{"term":"roller coaster","why":"A fairground ride, not a circus performance."},{"term":"ferris wheel","why":"A fairground ride, not a performed act."},{"term":"bumper cars","why":"A carnival ride, not a circus act."},{"term":"carousel","why":"A merry-go-round ride, not a performance."}]},{"id":"obj-kitchen-drawer-utensil","prompt":"Name a cooking utensil kept in a kitchen drawer (not knives, forks or eating spoons)","category":"obj","sampleSize":1600,"answers":[{"canonical":"spatula","aliases":["spatulas","turner","turners","egg turner","egg flipper","fish slice","fish-slice"],"count":416},{"canonical":"wooden spoon","aliases":["wooden spoons","wood spoon","wood spoons","wooden mixing spoon","mixing spoon"],"count":192},{"canonical":"whisk","aliases":["whisks","balloon whisk","wire whisk","hand whisk"],"count":176},{"canonical":"ladle","aliases":["ladles","ladel","soup ladle","serving ladle"],"count":136},{"canonical":"tongs","aliases":["tong","kitchen tongs","serving tongs","salad tongs","pair of tongs"],"count":128},{"canonical":"peeler","aliases":["peelers","vegetable peeler","veg peeler","veggie peeler","potato peeler"],"count":88},{"canonical":"can opener","aliases":["can openers","canopener","can-opener","tin opener","tin-opener","tinopener"],"count":72},{"canonical":"grater","aliases":["graters","cheese grater","box grater","hand grater"],"count":56},{"canonical":"potato masher","aliases":["masher","mashers","potato mashers","spud masher"],"count":40},{"canonical":"slotted spoon","aliases":["slotted spoons","perforated spoon","draining spoon"],"count":24},{"canonical":"garlic press","aliases":["garlic presses","garlic crusher","garlic mincer"],"count":16},{"canonical":"pastry brush","aliases":["pastry brushes","basting brush","basting brushes","baking brush"],"count":11},{"canonical":"melon baller","aliases":["melon ballers","melon scoop"],"count":8}],"knownInvalid":[{"term":"dishwasher","why":"A plumbed-in appliance; it does not fit in a drawer."},{"term":"refrigerator","why":"A large appliance for storing food, not a utensil."},{"term":"lawn mower","why":"A garden machine for cutting grass, not kitchen equipment."},{"term":"chainsaw","why":"A power tool for cutting timber, not a cooking utensil."}]},{"id":"obj-toolbox-tool","prompt":"Name a hand tool you would expect in a basic household toolbox","category":"obj","sampleSize":2000,"answers":[{"canonical":"hammer","aliases":["hammers","claw hammer","ball peen hammer","ball-peen hammer","ball pein hammer"],"count":580},{"canonical":"screwdriver","aliases":["screwdrivers","screw driver","screw drivers","phillips screwdriver","philips screwdriver","flathead screwdriver","flat head screwdriver"],"count":380},{"canonical":"pliers","aliases":["plier","plyers","pliars","needle nose pliers","needle-nose pliers","long nose pliers"],"count":230},{"canonical":"tape measure","aliases":["tape measures","measuring tape","measuring tapes","tape measurer","measure tape"],"count":160},{"canonical":"wrench","aliases":["wrenches","spanner","spanners","adjustable wrench","adjustable spanner","monkey wrench"],"count":160},{"canonical":"allen key","aliases":["allen keys","alan key","allan key","hex key","hex keys","hex wrench","allen wrench"],"count":70},{"canonical":"spirit level","aliases":["spirit levels","level","levels","bubble level","builders level"],"count":50},{"canonical":"utility knife","aliases":["utility knives","box cutter","boxcutter","box-cutter","stanley knife","stanley-knife","retractable knife"],"count":40},{"canonical":"hacksaw","aliases":["hacksaws","hack saw","junior hacksaw","metal saw"],"count":30},{"canonical":"chisel","aliases":["chisels","wood chisel","cold chisel"],"count":24},{"canonical":"clamp","aliases":["clamps","g clamp","g-clamp","c clamp","c-clamp"],"count":18},{"canonical":"nail punch","aliases":["nail punches","nail set","nail sets","nail puncher"],"count":10}],"knownInvalid":[{"term":"toaster","why":"A kitchen appliance for bread, not a hand tool."},{"term":"stethoscope","why":"A medical instrument for listening to the body, not a toolbox item."},{"term":"pillow","why":"Bedding for sleeping; it is not a tool."},{"term":"shampoo","why":"A hair-washing product, not a tool of any kind."}]},{"id":"obj-wallet-contents","prompt":"Name something people commonly keep in their wallet","category":"obj","sampleSize":1200,"answers":[{"canonical":"cash","aliases":["banknotes","bank notes","paper money","dollar bills","folding money","cash money"],"count":312},{"canonical":"credit card","aliases":["credit cards","creditcard","credit-card","charge card"],"count":144},{"canonical":"drivers licence","aliases":["drivers license","driver's licence","driver's license","drivers licenses","driving licence","driving license","licence","license"],"count":120},{"canonical":"coins","aliases":["coin","change","loose change","small change","shrapnel"],"count":108},{"canonical":"receipts","aliases":["receipt","old receipts","shop receipt","shop receipts"],"count":96},{"canonical":"debit card","aliases":["debit cards","bank card","eftpos card","atm card","cash card"],"count":60},{"canonical":"photo","aliases":["photos","photograph","photographs","picture","pictures","family photo"],"count":54},{"canonical":"loyalty card","aliases":["loyalty cards","rewards card","reward card","points card","club card"],"count":42},{"canonical":"id card","aliases":["id","i.d.","photo id","identification","identity card","proof of age card"],"count":36},{"canonical":"business card","aliases":["business cards","someones business card","someone's business card"],"count":30},{"canonical":"gift card","aliases":["gift cards","gift voucher","gift vouchers","gift certificate"],"count":24},{"canonical":"transit card","aliases":["travel card","travel pass","metro card","oyster card","opal card","myki","bus pass"],"count":18},{"canonical":"condom","aliases":["condoms","prophylactic"],"count":12},{"canonical":"stamp","aliases":["stamps","postage stamp","postage stamps"],"count":10},{"canonical":"library card","aliases":["library cards"],"count":8}],"knownInvalid":[{"term":"refrigerator","why":"A large appliance; it cannot fit in a wallet."},{"term":"bicycle","why":"A full-sized vehicle, far too big for a wallet."},{"term":"mattress","why":"Bedroom furniture; it cannot fit in a wallet."},{"term":"washing machine","why":"A heavy laundry appliance, impossible to carry in a wallet."}]},{"id":"obj-first-aid-kit","prompt":"Name an item you would expect to find in a home first aid kit","category":"obj","sampleSize":1500,"answers":[{"canonical":"bandaid","aliases":["band aid","band-aid","bandaids","band aids","band-aids","plaster","plasters","sticking plaster","sticking plasters","elastoplast"],"count":450},{"canonical":"bandage","aliases":["bandages","roller bandage","crepe bandage","elastic bandage","compression bandage","conforming bandage"],"count":180},{"canonical":"antiseptic","aliases":["antiseptic cream","antiseptic wipes","antiseptic solution","antiseptic spray","disinfectant","dettol","betadine"],"count":135},{"canonical":"gauze","aliases":["gauze pad","gauze pads","sterile gauze","gauze swab","gauze swabs","gauze dressing"],"count":120},{"canonical":"scissors","aliases":["scissor","pair of scissors","medical scissors","trauma shears","first aid scissors"],"count":120},{"canonical":"tweezers","aliases":["tweezer","pair of tweezers","tweasers"],"count":75},{"canonical":"painkillers","aliases":["painkiller","pain killers","pain relief","paracetamol","ibuprofen","aspirin","panadol"],"count":60},{"canonical":"medical tape","aliases":["surgical tape","adhesive tape","micropore tape","first aid tape","strapping tape"],"count":52},{"canonical":"gloves","aliases":["glove","disposable gloves","latex gloves","nitrile gloves","rubber gloves"],"count":45},{"canonical":"thermometer","aliases":["thermometers","digital thermometer"],"count":22},{"canonical":"safety pin","aliases":["safety pins","safetypin","safety-pin"],"count":20},{"canonical":"burn gel","aliases":["burn cream","burn ointment","burn dressing","burnaid"],"count":15},{"canonical":"sling","aliases":["slings","arm sling"],"count":12},{"canonical":"eye wash","aliases":["eyewash","eye-wash","eye wash solution","saline eye wash"],"count":9}],"knownInvalid":[{"term":"hammer","why":"A hand tool for driving nails, not medical equipment."},{"term":"hairdryer","why":"A grooming appliance for drying hair; it treats no injury."},{"term":"toaster","why":"A kitchen appliance for bread, never first aid equipment."},{"term":"screwdriver","why":"A tool for turning screws, not for treating wounds."}]},{"id":"obj-home-wheels","prompt":"Name something in or around a home, including the garage, that has wheels","category":"obj","sampleSize":900,"answers":[{"canonical":"car","aliases":["cars","automobile","auto","motor car","the family car"],"count":234},{"canonical":"office chair","aliases":["desk chair","computer chair","swivel chair","rolling chair","chair on wheels"],"count":117},{"canonical":"bicycle","aliases":["bike","bikes","bicycles","pushbike","push bike"],"count":90},{"canonical":"vacuum cleaner","aliases":["vacuum","vacuums","vacuum cleaners","hoover","barrel vacuum"],"count":81},{"canonical":"wheelie bin","aliases":["wheelie bins","wheely bin","bin","rubbish bin","garbage bin","green bin"],"count":72},{"canonical":"suitcase","aliases":["suitcases","luggage","wheeled suitcase","travel case","roller case"],"count":45},{"canonical":"pram","aliases":["prams","stroller","strollers","buggy","pushchair"],"count":40},{"canonical":"lawn mower","aliases":["lawnmower","lawnmowers","lawn mowers","mower","push mower"],"count":36},{"canonical":"skateboard","aliases":["skateboards","skate board","skate boards"],"count":27},{"canonical":"wheelbarrow","aliases":["wheelbarrows","wheel barrow","barrow"],"count":20},{"canonical":"wheelchair","aliases":["wheelchairs","wheel chair","wheel chairs"],"count":18},{"canonical":"toy car","aliases":["toy cars","matchbox car","matchbox cars","hot wheels","toy truck"],"count":12},{"canonical":"roller skates","aliases":["rollerskates","roller skate","rollerblades","roller blades","inline skates"],"count":10},{"canonical":"scooter","aliases":["scooters","kick scooter","push scooter","kids scooter"],"count":9}],"knownInvalid":[{"term":"bathtub","why":"A fixed plumbing fixture bolted to the floor; it has no wheels."},{"term":"ceiling fan","why":"Mounted to the ceiling; its blades are not wheels."},{"term":"toaster","why":"A benchtop appliance that sits still, with no wheels."},{"term":"doormat","why":"A flat mat that lies on the floor; it has no wheels."}]},{"id":"obj-sewing-box","prompt":"Name something you would find in a home sewing box","category":"obj","sampleSize":2200,"answers":[{"canonical":"needle","aliases":["needles","sewing needle","sewing needles","hand needle","darning needle"],"count":572},{"canonical":"thread","aliases":["threads","sewing thread","cotton thread","spool of thread","spools of thread","cotton reel","reel of cotton"],"count":352},{"canonical":"scissors","aliases":["scissor","pair of scissors","fabric scissors","sewing scissors","sewing shears","dressmaking shears"],"count":264},{"canonical":"pins","aliases":["pin","straight pins","straight pin","dressmaker pins","dressmakers pins","sewing pins"],"count":187},{"canonical":"buttons","aliases":["button","spare buttons","spare button"],"count":176},{"canonical":"thimble","aliases":["thimbles"],"count":121},{"canonical":"tape measure","aliases":["tape measures","measuring tape","tape measurer","sewing tape measure","soft tape measure"],"count":88},{"canonical":"pin cushion","aliases":["pincushion","pincushions","pin cushions","pin-cushion"],"count":66},{"canonical":"safety pin","aliases":["safety pins","safetypin","safety-pin"],"count":44},{"canonical":"seam ripper","aliases":["seam rippers","unpicker","unpickers","quick unpick","stitch ripper"],"count":33},{"canonical":"zipper","aliases":["zippers","zip","zips","spare zip"],"count":26},{"canonical":"bobbin","aliases":["bobbins","bobbin spool","bobbin spools"],"count":22},{"canonical":"elastic","aliases":["sewing elastic","elastic tape","elastic band for sewing"],"count":18},{"canonical":"tailors chalk","aliases":["tailor's chalk","tailors' chalk","chalk","fabric chalk","marking chalk"],"count":15}],"knownInvalid":[{"term":"hammer","why":"A hand tool for driving nails; it sews nothing."},{"term":"frying pan","why":"Kitchen cookware for cooking food, unrelated to sewing."},{"term":"toothbrush","why":"A bathroom item for cleaning teeth, not a sewing supply."},{"term":"kettle","why":"An appliance for boiling water, not a sewing supply."}]},{"id":"know-month-of-year","prompt":"Name a month of the year.","category":"know","sampleSize":1600,"answers":[{"canonical":"january","aliases":["jan","janurary","januray"],"count":448},{"canonical":"december","aliases":["dec","decmeber","desember"],"count":224},{"canonical":"june","aliases":["jun"],"count":160},{"canonical":"july","aliases":["jul"],"count":144},{"canonical":"may","aliases":[],"count":136},{"canonical":"march","aliases":["mar"],"count":64},{"canonical":"october","aliases":["oct","ocotber","octber"],"count":48},{"canonical":"april","aliases":["apr","aprill"],"count":44},{"canonical":"august","aliases":["aug","agust"],"count":40},{"canonical":"february","aliases":["feb","febuary","februrary"],"count":32},{"canonical":"september","aliases":["sep","sept","septmber"],"count":28},{"canonical":"november","aliases":["nov","novemeber","novermber"],"count":20}],"knownInvalid":[{"term":"sunday","why":"A day of the week, not a month."},{"term":"summer","why":"A season, not a month."},{"term":"easter","why":"A holiday that falls inside a month."},{"term":"gregorian","why":"The name of the calendar, not a month."}]},{"id":"know-greek-deity","prompt":"Name a god or goddess from Greek mythology.","category":"know","sampleSize":1200,"answers":[{"canonical":"zeus","aliases":["zues"],"count":360},{"canonical":"poseidon","aliases":["posiedon","poseiden"],"count":144},{"canonical":"hades","aliases":["haides"],"count":120},{"canonical":"athena","aliases":["athene","athina","athenna"],"count":102},{"canonical":"apollo","aliases":["apollon","apolo"],"count":100},{"canonical":"aphrodite","aliases":["afrodite","aphrodyte"],"count":60},{"canonical":"hera","aliases":[],"count":36},{"canonical":"ares","aliases":[],"count":30},{"canonical":"hermes","aliases":["hermez"],"count":24},{"canonical":"artemis","aliases":["artemus"],"count":18},{"canonical":"dionysus","aliases":["dionysos","dyonisus","dionysius"],"count":14},{"canonical":"hephaestus","aliases":["hephaistos","hephaestos","hephestus"],"count":12},{"canonical":"eros","aliases":[],"count":10},{"canonical":"hestia","aliases":["hestea"],"count":7},{"canonical":"nike","aliases":["nike goddess"],"count":6},{"canonical":"nyx","aliases":["nix"],"count":5}],"knownInvalid":[{"term":"thor","why":"A Norse god, not a Greek one."},{"term":"jupiter","why":"The Roman sky god; the Greek one is Zeus."},{"term":"ra","why":"An Egyptian sun god."},{"term":"anubis","why":"An Egyptian god of the dead, outside the Greek pantheon."}]},{"id":"know-world-language","prompt":"Name a language that people speak somewhere in the world.","category":"know","sampleSize":2000,"answers":[{"canonical":"english","aliases":["american english","british english","engish"],"count":600},{"canonical":"spanish","aliases":["espanol","español","castilian","castellano"],"count":260},{"canonical":"french","aliases":["francais","français","frnech"],"count":220},{"canonical":"mandarin","aliases":["chinese","mandarin chinese","standard chinese","putonghua"],"count":170},{"canonical":"german","aliases":["deutsch","germen"],"count":168},{"canonical":"japanese","aliases":["nihongo","japenese"],"count":100},{"canonical":"italian","aliases":["italiano","italien"],"count":70},{"canonical":"russian","aliases":["russain","russsian"],"count":50},{"canonical":"arabic","aliases":["modern standard arabic","msa","arabik"],"count":40},{"canonical":"portuguese","aliases":["portugese","português","brazilian portuguese"],"count":30},{"canonical":"hindi","aliases":["hindhi"],"count":24},{"canonical":"korean","aliases":["korian","hangugeo"],"count":20},{"canonical":"greek","aliases":["modern greek","ellinika"],"count":16},{"canonical":"swahili","aliases":["kiswahili"],"count":14},{"canonical":"welsh","aliases":["cymraeg"],"count":10}],"knownInvalid":[{"term":"python","why":"A programming language; nobody speaks it."},{"term":"braille","why":"A writing system read by touch, not a spoken language."},{"term":"morse code","why":"A signalling code for letters, not a language."},{"term":"alphabet","why":"A set of letters, not a language."}]},{"id":"know-job-for-a-living","prompt":"Name a job someone can do for a living.","category":"know","sampleSize":1000,"answers":[{"canonical":"teacher","aliases":["teachers","school teacher","teaching"],"count":280},{"canonical":"doctor","aliases":["doctors","physician","medical doctor","gp"],"count":140},{"canonical":"nurse","aliases":["nurses","registered nurse","nursing"],"count":90},{"canonical":"lawyer","aliases":["lawyers","solicitor","attorney","barrister"],"count":85},{"canonical":"chef","aliases":["chefs","cook","head chef"],"count":82},{"canonical":"engineer","aliases":["engineers","engineering"],"count":50},{"canonical":"police officer","aliases":["police officers","policeman","policewoman","cop","police"],"count":40},{"canonical":"firefighter","aliases":["firefighters","fire fighter","fireman","firemen"],"count":30},{"canonical":"plumber","aliases":["plumbers","plumbing"],"count":25},{"canonical":"electrician","aliases":["electricians","sparky"],"count":20},{"canonical":"accountant","aliases":["accountants","accounting","cpa"],"count":15},{"canonical":"mechanic","aliases":["mechanics","car mechanic","motor mechanic"],"count":12},{"canonical":"farmer","aliases":["farmers","farming"],"count":10},{"canonical":"pilot","aliases":["pilots","airline pilot"],"count":9},{"canonical":"librarian","aliases":["librarians"],"count":6},{"canonical":"welder","aliases":["welders","welding"],"count":4}],"knownInvalid":[{"term":"unemployed","why":"Describes having no job."},{"term":"retired","why":"A status after working life, not an occupation."},{"term":"hobby","why":"Something done for pleasure, not for pay."},{"term":"weekend","why":"Time away from work, not a job."}]},{"id":"know-means-of-transport","prompt":"Name a means of transport.","category":"know","sampleSize":1800,"answers":[{"canonical":"car","aliases":["cars","automobile","motorcar","motor car"],"count":540},{"canonical":"bus","aliases":["buses","busses","coach"],"count":198},{"canonical":"train","aliases":["trains","railway","locomotive"],"count":180},{"canonical":"plane","aliases":["planes","aeroplane","airplane","jet"],"count":162},{"canonical":"bicycle","aliases":["bicycles","bike","bikes","push bike","pushbike"],"count":150},{"canonical":"motorbike","aliases":["motorbikes","motorcycle","motorcycles","motor bike"],"count":81},{"canonical":"boat","aliases":["boats","ship","sailboat","rowboat"],"count":63},{"canonical":"tram","aliases":["trams","streetcar","street car","light rail"],"count":45},{"canonical":"helicopter","aliases":["helicopters","chopper","heli"],"count":36},{"canonical":"taxi","aliases":["taxis","cab","taxicab","taxi cab"],"count":27},{"canonical":"scooter","aliases":["scooters","e-scooter","e scooter","kick scooter"],"count":22},{"canonical":"ferry","aliases":["ferries","ferry boat","car ferry"],"count":18},{"canonical":"horse","aliases":["horses","horseback","horseback riding","pony"],"count":14},{"canonical":"skateboard","aliases":["skateboards","skate board","skateboarding"],"count":11},{"canonical":"hot air balloon","aliases":["hot-air balloon","hotair balloon","hot air ballon","balloon"],"count":8},{"canonical":"cable car","aliases":["cable cars","cablecar","cable-car","gondola lift"],"count":8}],"knownInvalid":[{"term":"refrigerator","why":"A kitchen appliance; it carries nobody anywhere."},{"term":"television","why":"A screen for watching, not for travelling."},{"term":"microwave","why":"Cooks food; it moves no one."},{"term":"sofa","why":"Furniture for sitting on; it stays where it is."}]},{"id":"know-martial-art","prompt":"Name a martial art.","category":"know","sampleSize":900,"answers":[{"canonical":"karate","aliases":["karate do","karate-do","shotokan","kyokushin"],"count":285},{"canonical":"taekwondo","aliases":["tae kwon do","taekwon-do","tae-kwon-do","tkd"],"count":117},{"canonical":"judo","aliases":["ju do","kodokan judo"],"count":99},{"canonical":"kung fu","aliases":["kungfu","kung-fu","gong fu"],"count":81},{"canonical":"jiu jitsu","aliases":["jiu-jitsu","jiujitsu","ju jitsu","jujitsu","jujutsu","bjj","brazilian jiu jitsu"],"count":76},{"canonical":"muay thai","aliases":["muaythai","muay-thai","thai boxing"],"count":36},{"canonical":"aikido","aliases":["aiki do","akido"],"count":27},{"canonical":"krav maga","aliases":["kravmaga","krav-maga"],"count":23},{"canonical":"capoeira","aliases":["capoiera","capuera"],"count":18},{"canonical":"tai chi","aliases":["taichi","tai-chi","tai chi chuan","taijiquan"],"count":14},{"canonical":"kendo","aliases":["ken do","kendou"],"count":11},{"canonical":"wing chun","aliases":["wingchun","wing-chun","ving tsun"],"count":9},{"canonical":"sumo","aliases":["sumo wrestling","sumou"],"count":7},{"canonical":"hapkido","aliases":["hap ki do","hapki do"],"count":5},{"canonical":"silat","aliases":["pencak silat","pentjak silat"],"count":4},{"canonical":"ninjutsu","aliases":["ninjitsu","ninpo"],"count":4}],"knownInvalid":[{"term":"yoga","why":"A stretching and breathing practice, not a fighting art."},{"term":"ballet","why":"A dance form, not a martial art."},{"term":"chess","why":"A board game with no physical combat."},{"term":"pilates","why":"A fitness method, not a fighting discipline."}]}]}</script>
+<script>
+"use strict";
+/* ============================================================================
+   DEEP CUT
+   Modules, in order: CONFIG - SCORING - NORMALISE - DATASET - STORE
+                      AUDIO - WORLD (canvas) - UI - GAME (state machine) - BOOT
+   Nothing below reaches into the DOM except UI, and nothing draws except WORLD.
+   ========================================================================== */
+
+/* ------------------------------- CONFIG ---------------------------------- */
+const CFG = {
+  rounds: 10,
+  roundSeconds: 20,
+  sonarMs: 1150,
+  sonarMsReduced: 420,
+  continueDelayMs: 700,
+  continueDelayDeepMs: 1250,
+  deepCutThreshold: 80,        // depthChange at or above this is a DEEP CUT
+  pxPerMetre: 2.6,
+  maxRuns: 25,
+  maxAnswerChars: 40,
+};
+
+const ZONES = [
+  { key: "SURFACE",  name: "Surface",  from: 0,   to: 60 },
+  { key: "SHALLOWS", name: "Shallows", from: 60,  to: 220 },
+  { key: "TWILIGHT", name: "Twilight", from: 220, to: 460 },
+  { key: "MIDNIGHT", name: "Midnight", from: 460, to: 780 },
+  { key: "ABYSS",    name: "The Abyss",from: 780, to: Infinity },
+];
+const zoneAt = d => ZONES.find(z => d >= z.from && d < z.to) || ZONES[ZONES.length - 1];
+
+const clamp = (v, lo, hi) => v < lo ? lo : v > hi ? hi : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const fmt = n => Math.round(n).toLocaleString("en-AU");
+
+/* ------------------------------- SCORING ---------------------------------
+   One configurable place. Changing this bumps `id`, which partitions the
+   leaderboard so runs scored under different rules are never compared.      */
+const SCORING = {
+  id: "v1",
+  label: "Classic",
+  min: -100,
+  max: 100,
+  unsupportedPenalty: -75,
+  // p is a percentage 0-100 of respondents who gave this answer.
+  fromPercent(p) { return clamp(Math.round(100 - 4 * p), this.min, this.max); },
+  // The one gamble: doubles the round outcome in whichever direction it fell.
+  applyAnchor(change) { return change * 2; },
+  describe() { return "depth = clamp(round(100 - 4 x percent), -100, +100)"; },
+};
+
+/* ------------------------------ NORMALISE --------------------------------
+   Deliberately conservative. Exact key match first, then a tightly guarded
+   single-character typo pass. No general fuzzy matching: accepting a
+   DIFFERENT valid answer by accident is the worst bug this game could have. */
+
+const UK_US = [
+  ["colour","color"],["flavour","flavor"],["favour","favor"],["harbour","harbor"],
+  ["armour","armor"],["honour","honor"],["labour","labor"],["neighbour","neighbor"],
+  ["odour","odor"],["savour","savor"],["vapour","vapor"],["rumour","rumor"],
+  ["grey","gray"],["mould","mold"],["moult","molt"],["smoulder","smolder"],
+  ["plough","plow"],["doughnut","donut"],["sulphur","sulfur"],["aluminium","aluminum"],
+  ["tyre","tire"],["pyjamas","pajamas"],["yoghurt","yogurt"],["whisky","whiskey"],
+  ["jewellery","jewelry"],["axe","ax"],["kerb","curb"],["draught","draft"],
+  ["storey","story"],["cheque","check"],["programme","program"],["aeroplane","airplane"],
+  ["defence","defense"],["offence","offense"],["licence","license"],
+  ["oesophagus","esophagus"],["paediatric","pediatric"],["anaemia","anemia"],
+  ["leukaemia","leukemia"],["foetus","fetus"],["aubergine","eggplant"],
+  ["courgette","zucchini"],["coriander","cilantro"],["rocket","arugula"],
+  ["prawn","shrimp"],["capsicum","bell pepper"],["swede","rutabaga"],
+  ["candyfloss","cotton candy"],["chips","fries"],
+];
+const RE_SUFFIX = [
+  [/ise\b/g, "ize"], [/ize\b/g, "ise"],
+  [/isation\b/g, "ization"], [/ization\b/g, "isation"],
+  [/yse\b/g, "yze"], [/yze\b/g, "yse"],
+];
+const RE_WORDS = ["centre","litre","metre","theatre","fibre","sabre","calibre","spectre","ochre","lustre","manoeuvre","sombre","meagre"];
+
+// Built from char codes on purpose: a literal combining-mark range in source
+// is invisible, reorders in editors, and inverts if the file is ever decoded
+// as anything but UTF-8.
+const RE_DIACRITIC = new RegExp("[" + String.fromCharCode(0x300) + "-" + String.fromCharCode(0x36f) + "]", "g");
+
+function norm(raw) {
+  return String(raw == null ? "" : raw)
+    .normalize("NFKD").replace(RE_DIACRITIC, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9\s'-]/g, " ")
+    .replace(/[-_']/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function spellingVariants(s) {
+  const out = new Set([s]);
+  for (const [uk, us] of UK_US) {
+    const ruk = new RegExp("\\b" + uk + "\\b", "g");
+    const rus = new RegExp("\\b" + us + "\\b", "g");
+    if (ruk.test(s)) out.add(s.replace(ruk, us));
+    if (rus.test(s)) out.add(s.replace(rus, uk));
+  }
+  for (const w of RE_WORDS) {
+    const er = w.replace(/re\b/, "er");
+    const rw = new RegExp("\\b" + w + "\\b", "g");
+    const re = new RegExp("\\b" + er + "\\b", "g");
+    if (rw.test(s)) out.add(s.replace(rw, er));
+    if (re.test(s)) out.add(s.replace(re, w));
+  }
+  for (const [re, rep] of RE_SUFFIX) {
+    re.lastIndex = 0;
+    if (re.test(s)) { re.lastIndex = 0; out.add(s.replace(re, rep)); }
+  }
+  return out;
+}
+
+function numberVariants(s) {
+  const out = new Set([s]);
+  const strip = s.replace(/^(the|a|an)\s+/, "");
+  if (strip !== s) out.add(strip);
+  for (const base of Array.from(out)) {
+    const words = base.split(" ");
+    const last = words[words.length - 1];
+    const swap = w => { words[words.length - 1] = w; return words.join(" "); };
+    if (/ies$/.test(last) && last.length > 4) out.add(swap(last.replace(/ies$/, "y")));
+    if (/(ch|sh|ss|x|z)es$/.test(last)) out.add(swap(last.replace(/es$/, "")));
+    if (/[^su]s$/.test(last) && last.length > 3) out.add(swap(last.replace(/s$/, "")));
+    if (/[^aeiou]y$/.test(last)) out.add(swap(last.replace(/y$/, "ies")));
+    if (/(ch|sh|ss|x|z)$/.test(last)) out.add(swap(last + "es"));
+    if (!/s$/.test(last)) out.add(swap(last + "s"));
+  }
+  return out;
+}
+
+/** Every key a given canonical/alias should answer to. */
+function keysFor(raw) {
+  const base = norm(raw);
+  if (!base) return [];
+  const out = new Set();
+  for (const a of numberVariants(base))
+    for (const b of spellingVariants(a))
+      for (const c of numberVariants(b)) out.add(c);
+  return Array.from(out);
+}
+
+function editDistanceAtMostOne(a, b) {
+  if (a === b) return true;
+  const la = a.length, lb = b.length;
+  if (Math.abs(la - lb) > 1) return false;
+  let i = 0, j = 0, diff = 0;
+  while (i < la && j < lb) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++diff > 1) return false;
+    if (la > lb) i++; else if (lb > la) j++; else { i++; j++; }
+  }
+  return true;
+}
+
+/* ------------------------------- DATASET ---------------------------------
+   A question is compiled once into a lookup index. Unknown frequency is NOT
+   zero frequency: an answer that is absent is reported as unmeasured, never
+   as rare and never as false.                                               */
+
+function compileQuestion(q) {
+  const index = new Map();      // normalised key -> answer object
+  const collisions = [];
+  const total = q.answers.reduce((s, a) => s + a.count, 0);
+  const answers = q.answers.map((a, i) => ({
+    i,
+    canonical: a.canonical,
+    count: a.count,
+    percent: q.sampleSize > 0 ? (a.count / q.sampleSize) * 100 : 0,
+  }));
+  // An answer the dataset recorded no responses for is UNMEASURED, not rare.
+  // It is kept out of the scoring index entirely so a zero can never be read
+  // as maximum rarity, and is resolved through its own path instead.
+  const unmeasured = new Map();
+  q.answers.forEach((a, i) => {
+    const target = a.count > 0 ? index : unmeasured;
+    const raws = [a.canonical].concat(Array.isArray(a.aliases) ? a.aliases : []);
+    for (const raw of raws) for (const k of keysFor(raw)) {
+      if (index.has(k) && index.get(k).i !== i) { collisions.push(k); index.delete(k); continue; }
+      if (!index.has(k) && !unmeasured.has(k)) target.set(k, answers[i]);
+    }
+  });
+  const invalid = new Map();
+  for (const bad of (q.knownInvalid || [])) {
+    for (const k of keysFor(bad.term)) if (!index.has(k)) invalid.set(k, bad);
+  }
+  const measured = answers.filter(a => a.count > 0);
+  return {
+    ...q,
+    answers,
+    index,
+    unmeasured,
+    invalid,
+    collisions,
+    listedShare: q.sampleSize > 0 ? (total / q.sampleSize) * 100 : 0,
+    deepest: measured.slice().sort((a, b) => a.percent - b.percent)[0] || null,
+  };
+}
+
+const MATCH = { HIT: "hit", INVALID: "invalid", UNMEASURED: "unmeasured", UNLISTED: "unlisted", TIMEOUT: "timeout" };
+
+function resolveAnswer(cq, raw, allowTypo) {
+  const key = norm(raw);
+  if (!key) return { kind: MATCH.UNLISTED, key };
+  for (const k of keysFor(raw)) {
+    const hit = cq.index.get(k);
+    if (hit) return { kind: MATCH.HIT, answer: hit, key, corrected: null };
+  }
+  for (const k of keysFor(raw)) {
+    const um = cq.unmeasured.get(k);
+    if (um) return { kind: MATCH.UNMEASURED, answer: um, key };
+  }
+  for (const k of keysFor(raw)) {
+    const bad = cq.invalid.get(k);
+    if (bad) return { kind: MATCH.INVALID, why: bad.why, key };
+  }
+  if (allowTypo && key.length >= 6) {
+    let found = null, count = 0;
+    for (const [k, ans] of cq.index) {
+      if (Math.abs(k.length - key.length) > 1) continue;
+      if (!editDistanceAtMostOne(k, key)) continue;
+      if (found && found.i !== ans.i) { count = 2; break; }
+      if (!found) { found = ans; count = 1; }
+    }
+    if (found && count === 1) return { kind: MATCH.HIT, answer: found, key, corrected: found.canonical };
+  }
+  return { kind: MATCH.UNLISTED, key };
+}
+
+const DATASET_RULES = [
+  "datasetVersion must be a non-empty string",
+  "sourceType must be 'simulated-demo' or 'human-survey'",
+  "questions must be a non-empty array",
+  "each question needs id, prompt, category, sampleSize, answers[]",
+  "each answer needs canonical (string) and count (number >= 0)",
+  "sum of counts must not exceed sampleSize",
+];
+
+function validateDataset(data) {
+  const errs = [];
+  if (!data || typeof data !== "object") return { ok: false, errors: ["Not a JSON object."] };
+  if (typeof data.datasetVersion !== "string" || !data.datasetVersion.trim()) errs.push("datasetVersion missing.");
+  if (data.sourceType !== "simulated-demo" && data.sourceType !== "human-survey")
+    errs.push("sourceType must be 'simulated-demo' or 'human-survey'.");
+  if (!Array.isArray(data.questions) || !data.questions.length) errs.push("questions[] missing or empty.");
+  if (errs.length) return { ok: false, errors: errs };
+  const seen = new Set();
+  data.questions.forEach((q, n) => {
+    const at = "Question " + (n + 1) + (q && q.id ? " (" + q.id + ")" : "") + ": ";
+    if (!q || typeof q !== "object") return errs.push(at + "not an object.");
+    if (typeof q.id !== "string" || !q.id) errs.push(at + "id missing.");
+    else if (seen.has(q.id)) errs.push(at + "duplicate id."); else seen.add(q.id);
+    if (typeof q.prompt !== "string" || !q.prompt) errs.push(at + "prompt missing.");
+    if (typeof q.sampleSize !== "number" || !(q.sampleSize > 0)) errs.push(at + "sampleSize must be a positive number.");
+    if (!Array.isArray(q.answers) || q.answers.length < 2) return errs.push(at + "needs at least 2 answers.");
+    let sum = 0;
+    q.answers.forEach(a => {
+      if (!a || typeof a.canonical !== "string" || !a.canonical) errs.push(at + "an answer has no canonical.");
+      if (typeof a.count !== "number" || a.count < 0) errs.push(at + "answer '" + (a && a.canonical) + "' has a bad count.");
+      else sum += a.count;
+      if (a && a.aliases != null && !Array.isArray(a.aliases)) errs.push(at + "aliases must be an array.");
+    });
+    if (typeof q.sampleSize === "number" && sum > q.sampleSize)
+      errs.push(at + "counts sum to " + sum + ", above sampleSize " + q.sampleSize + ".");
+  });
+  if (errs.length) return { ok: false, errors: errs.slice(0, 12) };
+  return { ok: true, errors: [] };
+}
+
+function prepareDataset(data) {
+  const d = JSON.parse(JSON.stringify(data));   // frozen copy for the run
+  d.compiled = d.questions.map(compileQuestion);
+  d.isDemo = d.sourceType === "simulated-demo";
+  return d;
+}
+
+/* -------------------------------- STORE ----------------------------------
+   Every read and write is guarded: private windows, cleared site data and
+   corrupted saves must all degrade to "no records yet", never to a crash.   */
+const STORE_KEY = "deepcut.save.v2";
+const DATA_KEY = "deepcut.dataset.v2";
+
+const defaultSave = () => ({
+  v: 2,
+  settings: { sound: true, motion: true, typo: true },
+  runs: {},
+});
+
+const Store = {
+  data: defaultSave(),
+  corrupted: false,
+  load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return;
+      const p = JSON.parse(raw);
+      if (!p || typeof p !== "object" || p.v !== 2 || typeof p.runs !== "object" || p.runs === null) {
+        this.corrupted = true; return;
+      }
+      const s = p.settings && typeof p.settings === "object" ? p.settings : {};
+      this.data = {
+        v: 2,
+        settings: {
+          sound: s.sound !== false,
+          motion: s.motion !== false,
+          typo: s.typo !== false,
+        },
+        runs: {},
+      };
+      for (const k of Object.keys(p.runs)) {
+        if (!Array.isArray(p.runs[k])) continue;
+        this.data.runs[k] = p.runs[k]
+          .filter(r => r && typeof r.depth === "number" && isFinite(r.depth) && r.depth >= 0)
+          .slice(0, CFG.maxRuns);
+      }
+    } catch (e) { this.corrupted = true; this.data = defaultSave(); }
+  },
+  save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(this.data)); } catch (e) { /* read-only storage */ }
+  },
+  bucket(mode, datasetVersion) { return mode + "|" + datasetVersion + "|" + SCORING.id; },
+  runsIn(key) { return this.data.runs[key] || []; },
+  best(key) { const r = this.runsIn(key); return r.length ? r[0].depth : null; },
+  addRun(key, run) {
+    const list = this.runsIn(key).slice();
+    list.push(run);
+    list.sort((a, b) => b.depth - a.depth);
+    this.data.runs[key] = list.slice(0, CFG.maxRuns);
+    this.save();
+    return this.data.runs[key].indexOf(run);
+  },
+  loadDataset() {
+    try {
+      const raw = localStorage.getItem(DATA_KEY);
+      if (!raw) return null;
+      const p = JSON.parse(raw);
+      return validateDataset(p).ok ? p : null;
+    } catch (e) { return null; }
+  },
+  saveDataset(d) { try { localStorage.setItem(DATA_KEY, JSON.stringify(d)); } catch (e) {} },
+  clearDataset() { try { localStorage.removeItem(DATA_KEY); } catch (e) {} },
+};
+
+/* -------------------------------- AUDIO ----------------------------------
+   Entirely synthesised: no asset can 404. The context is not created until a
+   real user gesture, and every cue is redundant with something on screen.   */
+const Audio_ = {
+  ctx: null, master: null, ambience: null, filter: null, on: true, started: false,
+
+  unlock() {
+    if (this.ctx) { if (this.ctx.state === "suspended") this.ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      this.ctx = new AC();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.on ? 0.9 : 0;
+      this.master.connect(this.ctx.destination);
+      this.startAmbience();
+      this.started = true;
+    } catch (e) { this.ctx = null; }
+  },
+  setEnabled(v) {
+    this.on = v;
+    if (this.master) this.master.gain.setTargetAtTime(v ? 0.9 : 0, this.ctx.currentTime, 0.05);
+  },
+  startAmbience() {
+    const c = this.ctx;
+    const len = c.sampleRate * 3;
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) {           // brown-ish noise: the sea, not static
+      const w = Math.random() * 2 - 1;
+      last = (last + 0.02 * w) / 1.02;
+      d[i] = last * 3.2;
+    }
+    const src = c.createBufferSource();
+    src.buffer = buf; src.loop = true;
+    const f = c.createBiquadFilter();
+    f.type = "lowpass"; f.frequency.value = 520; f.Q.value = 0.6;
+    const g = c.createGain(); g.gain.value = 0.10;
+    src.connect(f); f.connect(g); g.connect(this.master);
+    src.start();
+    // a slow swell so the ambience breathes
+    const lfo = c.createOscillator(), lg = c.createGain();
+    lfo.frequency.value = 0.07; lg.gain.value = 0.035;
+    lfo.connect(lg); lg.connect(g.gain); lfo.start();
+    this.ambience = g; this.filter = f;
+  },
+  /** Deeper water = darker ambience. Called as the ship descends. */
+  setDepth(d) {
+    if (!this.ctx || !this.filter) return;
+    const t = clamp(d / 900, 0, 1);
+    this.filter.frequency.setTargetAtTime(lerp(560, 130, t), this.ctx.currentTime, 0.6);
+  },
+  tone(freq, to, dur, type, vol, delay) {
+    if (!this.ctx || !this.on) return;
+    const c = this.ctx, t0 = c.currentTime + (delay || 0);
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t0);
+    if (to && to !== freq) o.frequency.exponentialRampToValueAtTime(Math.max(20, to), t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol || 0.2, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(this.master);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  },
+  ping() { this.tone(1180, 430, 0.55, "sine", 0.16); this.tone(1180, 430, 0.45, "sine", 0.06, 0.34); },
+  ui()   { this.tone(520, 620, 0.07, "triangle", 0.10); },
+  tick() { this.tone(1500, 1500, 0.035, "square", 0.035); },
+  descend(mag) {
+    const d = clamp(mag / 100, 0.3, 2);
+    this.tone(320, 62, 0.55 + d * 0.5, "triangle", 0.22);
+    this.tone(160, 40, 0.75 + d * 0.5, "sine", 0.17, 0.05);
+  },
+  rise() { this.tone(180, 520, 0.42, "triangle", 0.15); this.tone(360, 900, 0.34, "sine", 0.07, 0.04); },
+  penalty() { this.tone(150, 96, 0.34, "sawtooth", 0.11); },
+  deepCut() {
+    [73.42, 110, 146.83, 220].forEach((f, i) => this.tone(f, f, 2.0, "sine", 0.16, i * 0.09));
+    this.tone(1760, 2640, 0.9, "sine", 0.05, 0.3);
+    this.tone(2640, 1320, 1.3, "sine", 0.04, 0.55);
+  },
+  best() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, f, 0.5, "sine", 0.10, i * 0.075)); },
+};
+
+/* -------------------------------- WORLD ----------------------------------
+   Procedural, code-drawn, device-pixel-ratio aware. Nothing here is an image
+   file, so nothing here can fail to load. The camera is the only link
+   between game state and what is painted.                                   */
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+const WATER = [
+  [-400, [ 20,  92, 116]],
+  [   0, [ 26, 108, 130]],
+  [  60, [ 15,  76, 101]],
+  [ 220, [  9,  51,  76]],
+  [ 460, [  5,  33,  58]],
+  [ 780, [  3,  20,  40]],
+  [1150, [  1,  10,  20]],
+  [1800, [  1,   5,  11]],
+];
+function waterRGB(d) {
+  let a = WATER[0], b = WATER[WATER.length - 1];
+  for (let i = 0; i < WATER.length - 1; i++) {
+    if (d >= WATER[i][0] && d <= WATER[i + 1][0]) { a = WATER[i]; b = WATER[i + 1]; break; }
+    if (d > WATER[WATER.length - 1][0]) { a = b = WATER[WATER.length - 1]; }
+  }
+  const t = a[0] === b[0] ? 0 : clamp((d - a[0]) / (b[0] - a[0]), 0, 1);
+  return [Math.round(lerp(a[1][0], b[1][0], t)), Math.round(lerp(a[1][1], b[1][1], t)), Math.round(lerp(a[1][2], b[1][2], t))];
+}
+const rgb = c => "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+const rgba = (c, a) => "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
+
+/** Scenery is generated once per expedition and never regenerated mid-run,
+ *  so the world a player descends through is stable and re-findable. */
+function buildProps(seed) {
+  const rnd = mulberry32(seed);
+  const props = [];
+  const push = (type, depth, extra) => props.push(Object.assign({ type, depth, x: rnd(), s: 0.7 + rnd() * 0.8, r: rnd() }, extra));
+  for (let i = 0; i < 9; i++) push("gull", -140 - rnd() * 240, { sp: 0.25 + rnd() * 0.5 });
+  for (let d = 55; d < 240; d += 16 + rnd() * 22) {
+    push("kelp", d, { h: 60 + rnd() * 120 });
+    if (rnd() > 0.55) push("school", d + rnd() * 10, { n: 6 + Math.floor(rnd() * 9) });
+    if (rnd() > 0.82) push("rock", d, {});
+  }
+  for (let d = 150; d < 330; d += 40 + rnd() * 70) if (rnd() > 0.45) push("wreck", d, {});
+  for (let d = 215; d < 500; d += 20 + rnd() * 30) {
+    push("jelly", d, { ph: rnd() * 6.28 });
+    if (rnd() > 0.7) push("fish", d, {});
+  }
+  for (let d = 300; d < 620; d += 90 + rnd() * 120) push("whale", d, { sp: 0.06 + rnd() * 0.05 });
+  for (let d = 450; d < 820; d += 17 + rnd() * 26) {
+    push("biolum", d, { n: 5 + Math.floor(rnd() * 10), ph: rnd() * 6.28 });
+    if (rnd() > 0.62) push("angler", d, { ph: rnd() * 6.28 });
+  }
+  for (let d = 700; d < 900; d += 55 + rnd() * 60) push("spire", d, {});
+  for (let d = 790; d < 1500; d += 34 + rnd() * 44) {
+    push("ruin", d, { kind: Math.floor(rnd() * 3) });
+    if (rnd() > 0.72) push("biolum", d + 8, { n: 6 + Math.floor(rnd() * 8), ph: rnd() * 6.28 });
+    if (rnd() > 0.88) push("statue", d, {});
+  }
+  push("seabed", 1520, {});
+  return props.sort((a, b) => a.depth - b.depth);
+}
+
+const PARALLAX = {
+  gull: 0.5, whale: 0.35, spire: 0.5, ruin: 0.9, statue: 0.8, wreck: 0.85,
+  kelp: 1, rock: 0.95, school: 0.8, fish: 0.9, jelly: 0.75, biolum: 0.7,
+  angler: 0.8, seabed: 1,
+};
+
+const World = {
+  cv: null, ctx: null, W: 0, H: 0, dpr: 1,
+  props: [], particles: [], bubbles: [], rings: [],
+  shipDepth: 0, targetDepth: 0, vel: 0, lead: 0,
+  camTop: 0, shipY: 0, shipX: 0,
+  pb: null, pbPassed: false,
+  reduced: false, buoy: 0, deepFlash: 0, sonar: 0,
+  glow: null, t: 0,
+
+  init(cv) {
+    this.cv = cv; this.ctx = cv.getContext("2d", { alpha: false });
+    this.makeGlow();
+    this.resize();
+    window.addEventListener("resize", () => this.resize());
+    if (window.visualViewport) window.visualViewport.addEventListener("resize", () => this.resize());
+  },
+  makeGlow() {
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const g = c.getContext("2d");
+    const rg = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    rg.addColorStop(0, "rgba(255,255,255,1)");
+    rg.addColorStop(0.35, "rgba(255,255,255,.42)");
+    rg.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = rg; g.fillRect(0, 0, 64, 64);
+    this.glow = c;
+  },
+  /** One sprite, tinted by composite, keeps glows off the expensive shadowBlur path. */
+  blob(x, y, r, colour, alpha) {
+    const c = this.ctx;
+    c.save(); c.globalAlpha = alpha; c.globalCompositeOperation = "lighter";
+    c.drawImage(this.glow, x - r, y - r, r * 2, r * 2);
+    if (colour) { c.globalAlpha = alpha * 0.8; c.fillStyle = colour; c.beginPath(); c.arc(x, y, r * 0.22, 0, 6.2832); c.fill(); }
+    c.restore();
+  },
+  resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    this.W = this.cv.clientWidth; this.H = this.cv.clientHeight; this.dpr = dpr;
+    this.cv.width = Math.max(1, Math.round(this.W * dpr));
+    this.cv.height = Math.max(1, Math.round(this.H * dpr));
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.seedParticles();
+  },
+  seedParticles() {
+    const want = this.reduced ? 40 : Math.round(clamp(this.W * this.H / 5200, 60, 220));
+    this.particles = [];
+    for (let i = 0; i < want; i++) {
+      this.particles.push({
+        x: Math.random() * this.W,
+        y: Math.random() * this.H,
+        r: 0.5 + Math.random() * 1.9,
+        sp: 0.08 + Math.random() * 0.5,
+        ph: Math.random() * 6.2832,
+        a: 0.15 + Math.random() * 0.5,
+      });
+    }
+  },
+  reset(seed, pb) {
+    this.props = buildProps(seed);
+    this.shipDepth = 0; this.targetDepth = 0; this.vel = 0; this.lead = 0;
+    this.bubbles = []; this.rings = [];
+    this.pb = pb; this.pbPassed = false;
+    this.buoy = 0; this.deepFlash = 0; this.sonar = 0;
+  },
+  setReduced(v) { this.reduced = v; this.seedParticles(); },
+  goTo(depth) { this.targetDepth = Math.max(0, depth); },
+  ring(strong) { this.rings.push({ r: 0, max: strong ? Math.max(this.W, this.H) * 0.95 : 240, a: 1, strong: !!strong }); },
+  puff(n, up) {
+    if (this.reduced) n = Math.min(n, 6);
+    for (let i = 0; i < n; i++) this.bubbles.push({
+      x: this.shipX + (Math.random() - 0.5) * 60,
+      y: this.shipY + 12 + Math.random() * 26,
+      r: 1 + Math.random() * 3.6,
+      sp: (up ? 1 : 1) * (0.5 + Math.random() * 1.5),
+      ph: Math.random() * 6.2832, life: 1,
+    });
+  },
+
+  step(dt) {
+    this.t += dt;
+    const k = this.reduced ? 0.22 : (Math.abs(this.targetDepth - this.shipDepth) > 140 ? 0.021 : 0.045);
+    const prev = this.shipDepth;
+    this.shipDepth += (this.targetDepth - this.shipDepth) * clamp(k * dt * 60, 0, 1);
+    if (Math.abs(this.targetDepth - this.shipDepth) < 0.25) this.shipDepth = this.targetDepth;
+    this.vel = (this.shipDepth - prev) / Math.max(dt, 0.0001);
+    this.lead = lerp(this.lead, clamp(this.vel * 0.06, -34, 34), clamp(dt * 4, 0, 1));
+
+    const anchor = 0.42;
+    const worldY = this.shipDepth * CFG.pxPerMetre;
+    this.camTop = Math.max(-this.H * 0.30, worldY - this.H * anchor + this.lead);
+    this.shipY = worldY - this.camTop;
+    this.shipX = this.W * 0.42;
+
+    if (this.pb != null && !this.pbPassed && this.shipDepth > this.pb + 0.5) { this.pbPassed = true; this.onPB && this.onPB(); }
+
+    for (const b of this.bubbles) { b.y -= b.sp * dt * 60 * 1.1; b.x += Math.sin(this.t * 2 + b.ph) * 0.35; b.life -= dt * 0.42; }
+    this.bubbles = this.bubbles.filter(b => b.life > 0 && b.y > -20);
+    for (const r of this.rings) { r.r += dt * (r.strong ? 620 : 300); r.a = Math.max(0, 1 - r.r / r.max); }
+    this.rings = this.rings.filter(r => r.a > 0.01);
+    if (this.deepFlash > 0) this.deepFlash = Math.max(0, this.deepFlash - dt * 0.55);
+    if (this.sonar > 0) this.sonar = Math.max(0, this.sonar - dt);
+    this.buoy = lerp(this.buoy, this.buoyTarget || 0, clamp(dt * 3.2, 0, 1));
+    Audio_.setDepth(this.shipDepth);
+  },
+
+  depthAtY(sy) { return (this.camTop + sy) / CFG.pxPerMetre; },
+  yAtDepth(d, f) { return d * CFG.pxPerMetre - this.camTop * (f == null ? 1 : f); },
+
+  draw() {
+    const c = this.ctx, W = this.W, H = this.H, t = this.t;
+    const topD = this.depthAtY(0), botD = this.depthAtY(H);
+
+    /* --- water column --------------------------------------------------- */
+    const grad = c.createLinearGradient(0, 0, 0, H);
+    for (let i = 0; i <= 8; i++) {
+      const p = i / 8;
+      grad.addColorStop(p, rgb(waterRGB(lerp(topD, botD, p))));
+    }
+    c.fillStyle = grad; c.fillRect(0, 0, W, H);
+
+    /* --- sky, waves, gulls ---------------------------------------------- */
+    const surfY = this.yAtDepth(0, 1);
+    if (surfY > -40) this.drawSky(surfY);
+
+    /* --- light shafts ---------------------------------------------------- */
+    const shaftFade = clamp(1 - topD / 340, 0, 1);
+    if (shaftFade > 0.02 && !this.reduced) {
+      c.save(); c.globalCompositeOperation = "lighter";
+      for (let i = 0; i < 6; i++) {
+        const bx = ((i * 0.19 + Math.sin(t * 0.09 + i) * 0.03) % 1) * (W + 300) - 150;
+        const w = 40 + i * 13;
+        const g2 = c.createLinearGradient(0, surfY, 0, surfY + H * 1.2);
+        g2.addColorStop(0, "rgba(150,245,235," + (0.11 * shaftFade) + ")");
+        g2.addColorStop(1, "rgba(120,220,220,0)");
+        c.fillStyle = g2;
+        c.beginPath();
+        c.moveTo(bx, surfY); c.lineTo(bx + w, surfY);
+        c.lineTo(bx + w * 3.6 + 150, surfY + H * 1.2); c.lineTo(bx + w * 2.2 + 150, surfY + H * 1.2);
+        c.closePath(); c.fill();
+      }
+      c.restore();
+    }
+
+    /* --- scenery --------------------------------------------------------- */
+    for (const p of this.props) {
+      const f = PARALLAX[p.type] || 1;
+      const y = this.yAtDepth(p.depth, f);
+      if (y < -320 || y > H + 320) continue;
+      const x = p.x * (W + 160) - 80;
+      this.drawProp(p, x, y, t);
+    }
+
+    /* --- personal best ghost --------------------------------------------- */
+    if (this.pb != null && this.pb > 0) {
+      const y = this.yAtDepth(this.pb, 1);
+      if (y > -20 && y < H + 20) {
+        c.save();
+        c.strokeStyle = this.pbPassed ? "rgba(84,232,210,.30)" : "rgba(84,232,210,.62)";
+        c.lineWidth = 1; c.setLineDash([7, 9]); c.lineDashOffset = -t * 22;
+        c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke();
+        c.setLineDash([]);
+        c.font = "500 9px " + MONO;
+        c.fillStyle = this.pbPassed ? "rgba(84,232,210,.45)" : "rgba(84,232,210,.85)";
+        c.fillText((this.pbPassed ? "OVERTAKEN  " : "YOUR BEST  ") + Math.round(this.pb) + " M", 14, y - 7);
+        c.restore();
+      }
+    }
+
+    /* --- marine snow ----------------------------------------------------- */
+    c.save();
+    const darkness = clamp((this.shipDepth - 120) / 700, 0, 1);
+    for (const p of this.particles) {
+      p.y -= p.sp * 0.6;
+      if (this.vel > 4) p.y -= this.vel * 0.02;
+      if (p.y < -6) { p.y = H + 6; p.x = Math.random() * W; }
+      if (p.y > H + 6) p.y = -6;
+      const wob = this.reduced ? 0 : Math.sin(t * 0.8 + p.ph) * 6;
+      c.fillStyle = "rgba(216,244,240," + (p.a * (0.25 + darkness * 0.75)) + ")";
+      c.fillRect(p.x + wob, p.y, p.r, p.r);
+    }
+    c.restore();
+
+    /* --- bubbles --------------------------------------------------------- */
+    c.save();
+    c.strokeStyle = "rgba(190,250,244,.5)"; c.lineWidth = 1;
+    for (const b of this.bubbles) {
+      c.globalAlpha = clamp(b.life, 0, 1) * 0.8;
+      c.beginPath(); c.arc(b.x, b.y, b.r, 0, 6.2832); c.stroke();
+    }
+    c.restore();
+
+    /* --- ship ------------------------------------------------------------ */
+    this.drawShip(c, this.shipX, this.shipY, t);
+
+    /* --- sonar rings ----------------------------------------------------- */
+    for (const r of this.rings) {
+      c.save();
+      c.globalCompositeOperation = "lighter";
+      c.strokeStyle = "rgba(84,232,210," + (r.a * (r.strong ? 0.5 : 0.34)) + ")";
+      c.lineWidth = r.strong ? 2.5 : 1.3;
+      c.beginPath(); c.arc(this.shipX, this.shipY, r.r, 0, 6.2832); c.stroke();
+      c.restore();
+    }
+
+    /* --- depth ruler ----------------------------------------------------- */
+    this.drawRuler(c, W, H, topD, botD);
+  },
+
+  drawSky(surfY) {
+    const c = this.ctx, W = this.W;
+    const g = c.createLinearGradient(0, Math.min(0, surfY - this.H * 0.4), 0, surfY);
+    g.addColorStop(0, "#1b3550"); g.addColorStop(0.45, "#5d7f92"); g.addColorStop(0.82, "#c99a67"); g.addColorStop(1, "#e8b97f");
+    c.fillStyle = g; c.fillRect(0, -this.H, W, surfY + this.H);
+    // low sun
+    const sx = W * 0.74, sy = surfY - this.H * 0.16;
+    this.blob(sx, sy, 90, null, 0.34);
+    c.fillStyle = "rgba(255,226,171,.85)"; c.beginPath(); c.arc(sx, sy, 15, 0, 6.2832); c.fill();
+    // gulls
+    c.strokeStyle = "rgba(20,36,48,.55)"; c.lineWidth = 1.4;
+    for (const p of this.props) {
+      if (p.type !== "gull") continue;
+      const gy = this.yAtDepth(p.depth, PARALLAX.gull);
+      if (gy > surfY - 10) continue;
+      const gx = ((p.x + this.t * p.sp * 0.012) % 1.25 - 0.12) * W;
+      const s = 5 + p.s * 5, fl = Math.sin(this.t * 3 + p.r * 6) * 0.35 + 1;
+      c.beginPath();
+      c.moveTo(gx - s, gy); c.quadraticCurveTo(gx - s * 0.5, gy - s * 0.55 * fl, gx, gy);
+      c.quadraticCurveTo(gx + s * 0.5, gy - s * 0.55 * fl, gx + s, gy);
+      c.stroke();
+    }
+    // surface chop
+    c.save();
+    c.strokeStyle = "rgba(226,246,255,.5)"; c.lineWidth = 1.6;
+    c.beginPath();
+    for (let x = -10; x <= W + 10; x += 6) {
+      const y = surfY + Math.sin(x * 0.026 + this.t * 1.5) * 4 + Math.sin(x * 0.011 - this.t * 0.9) * 3;
+      x === -10 ? c.moveTo(x, y) : c.lineTo(x, y);
+    }
+    c.stroke();
+    c.fillStyle = "rgba(190,236,244,.20)";
+    c.lineTo(W + 10, surfY + 26); c.lineTo(-10, surfY + 26); c.closePath(); c.fill();
+    c.restore();
+  },
+
+  drawRuler(c, W, H, topD, botD) {
+    const rw = W < 520 ? 44 : 66, x0 = W - rw;
+    c.save();
+    c.fillStyle = "rgba(1,8,15,.42)"; c.fillRect(x0, 0, rw, H);
+    c.strokeStyle = "rgba(84,232,210,.18)"; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(x0 + .5, 0); c.lineTo(x0 + .5, H); c.stroke();
+    const step = 10;
+    const start = Math.floor(Math.max(0, topD) / step) * step;
+    c.font = "500 9px " + MONO;
+    for (let d = start; d < botD; d += step) {
+      const y = this.yAtDepth(d, 1);
+      if (y < -10 || y > H + 10) continue;
+      const major = d % 50 === 0, hundred = d % 100 === 0;
+      c.strokeStyle = hundred ? "rgba(243,163,60,.55)" : major ? "rgba(231,241,239,.30)" : "rgba(231,241,239,.13)";
+      c.beginPath(); c.moveTo(x0 + 1, y + .5); c.lineTo(x0 + (hundred ? 15 : major ? 10 : 5), y + .5); c.stroke();
+      if (hundred) { c.fillStyle = "rgba(243,163,60,.82)"; c.fillText(String(d), x0 + 19, y + 3); }
+    }
+    for (const z of ZONES) {
+      const y = this.yAtDepth(z.from, 1);
+      if (z.from === 0 || y < -10 || y > H + 10) continue;
+      c.strokeStyle = "rgba(84,232,210,.45)";
+      c.beginPath(); c.moveTo(x0 + 1, y + .5); c.lineTo(W, y + .5); c.stroke();
+      c.save(); c.translate(x0 - 4, y - 5); c.rotate(-Math.PI / 2);
+      c.textAlign = "right"; c.fillStyle = "rgba(84,232,210,.75)";
+      c.font = "600 9px " + MONO;
+      c.fillText(z.name.toUpperCase(), 0, 0);
+      c.restore();
+    }
+    if (this.pb != null && this.pb > 0) {
+      const y = this.yAtDepth(this.pb, 1);
+      if (y > -10 && y < H + 10) {
+        c.fillStyle = "rgba(84,232,210,.9)";
+        c.beginPath(); c.moveTo(W - 3, y); c.lineTo(W - 12, y - 5); c.lineTo(W - 12, y + 5); c.closePath(); c.fill();
+      }
+    }
+    c.restore();
+  },
+};
+const MONO = '"IBM Plex Mono",ui-monospace,monospace';
+
+Object.assign(World, {
+  drawProp(p, x, y, t) {
+    const c = this.ctx;
+    const sway = this.reduced ? 0 : Math.sin(t * 0.6 + p.r * 6.28);
+    switch (p.type) {
+      case "gull": return;
+
+      case "kelp": {
+        c.save(); c.strokeStyle = "rgba(18,74,66,.85)"; c.lineCap = "round";
+        for (let i = 0; i < 4; i++) {
+          const ox = (i - 1.5) * 9 * p.s, h = p.h * p.s * (0.7 + (i % 2) * 0.4);
+          c.lineWidth = 3.5 * p.s;
+          c.beginPath(); c.moveTo(x + ox, y);
+          c.bezierCurveTo(x + ox + sway * 16, y - h * 0.4, x + ox - sway * 14, y - h * 0.72, x + ox + sway * 9, y - h);
+          c.stroke();
+        }
+        c.restore(); return;
+      }
+      case "rock": {
+        c.save(); c.fillStyle = "rgba(8,36,44,.9)";
+        c.beginPath();
+        const r0 = 22 * p.s;
+        for (let i = 0; i <= 7; i++) {
+          const a = (i / 7) * Math.PI, rr = r0 * (0.65 + ((i * 37 + p.r * 100) % 40) / 100);
+          const px = x - Math.cos(a) * rr, py = y - Math.sin(a) * rr * 0.55;
+          i === 0 ? c.moveTo(px, py) : c.lineTo(px, py);
+        }
+        c.closePath(); c.fill(); c.restore(); return;
+      }
+      case "school": {
+        c.save(); c.fillStyle = "rgba(122,186,190,.36)";
+        for (let i = 0; i < p.n; i++) {
+          const a = i * 2.399 + p.r * 6, rr = 10 + i * 4.2;
+          const fx = x + Math.cos(a) * rr * 1.7 + Math.sin(t * 0.7 + i) * 5;
+          const fy = y + Math.sin(a) * rr * 0.55;
+          this.fish(c, fx, fy, 4.4 * p.s, 1);
+        }
+        c.restore(); return;
+      }
+      case "fish": {
+        c.save(); c.fillStyle = "rgba(96,160,168,.5)";
+        this.fish(c, x + sway * 18, y, 13 * p.s, 1); c.restore(); return;
+      }
+      case "wreck": {
+        c.save(); c.translate(x, y); c.rotate((p.r - 0.5) * 0.55);
+        const s = 1.1 * p.s;
+        c.fillStyle = "rgba(6,28,38,.95)";
+        c.beginPath();
+        c.moveTo(-52 * s, -14 * s); c.lineTo(46 * s, -18 * s);
+        c.quadraticCurveTo(62 * s, 0, 30 * s, 14 * s); c.lineTo(-40 * s, 12 * s);
+        c.quadraticCurveTo(-58 * s, 2, -52 * s, -14 * s); c.closePath(); c.fill();
+        c.strokeStyle = "rgba(84,232,210,.22)"; c.lineWidth = 1; c.stroke();
+        c.fillRect(-6 * s, -34 * s, 4 * s, 22 * s);
+        c.fillStyle = "rgba(84,232,210,.10)";
+        for (let i = 0; i < 3; i++) c.fillRect((-30 + i * 22) * s, -8 * s, 7 * s, 7 * s);
+        c.restore(); return;
+      }
+      case "jelly": {
+        const pulse = this.reduced ? 1 : 1 + Math.sin(t * 1.3 + p.ph) * 0.13;
+        const s = 13 * p.s * pulse;
+        this.blob(x, y, s * 2.6, null, 0.16);
+        c.save();
+        c.strokeStyle = "rgba(168,214,255,.55)"; c.lineWidth = 1.4;
+        c.fillStyle = "rgba(140,196,255,.16)";
+        c.beginPath(); c.ellipse(x, y, s, s * 0.82, 0, Math.PI, 0); c.fill(); c.stroke();
+        for (let i = 0; i < 5; i++) {
+          const ox = x + (i - 2) * s * 0.34;
+          c.beginPath(); c.moveTo(ox, y);
+          c.quadraticCurveTo(ox + Math.sin(t * 1.7 + i + p.ph) * 8, y + s * 1.5, ox + Math.sin(t * 1.1 + i) * 5, y + s * 2.6);
+          c.stroke();
+        }
+        c.restore(); return;
+      }
+      case "whale": {
+        c.save();
+        const s = 2.4 * p.s;
+        const wx = ((p.x + t * p.sp * 0.004) % 1.4 - 0.2) * (this.W + 400) - 200;
+        c.globalAlpha = 0.30; c.fillStyle = "#01131f";
+        c.beginPath();
+        c.moveTo(wx - 70 * s, y);
+        c.quadraticCurveTo(wx - 10 * s, y - 26 * s, wx + 62 * s, y - 5 * s);
+        c.lineTo(wx + 86 * s, y - 20 * s); c.lineTo(wx + 84 * s, y + 10 * s);
+        c.lineTo(wx + 60 * s, y + 4 * s);
+        c.quadraticCurveTo(wx - 10 * s, y + 20 * s, wx - 70 * s, y);
+        c.closePath(); c.fill(); c.restore(); return;
+      }
+      case "biolum": {
+        for (let i = 0; i < p.n; i++) {
+          const a = i * 2.399 + p.r * 9, rr = 9 + i * 6.5;
+          const bx = x + Math.cos(a) * rr * 1.5, by = y + Math.sin(a) * rr * 0.7;
+          const pu = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 1.5 + i * 1.3 + p.ph));
+          this.blob(bx, by, 9 + pu * 7, "#7ff5e6", 0.30 * pu);
+        }
+        return;
+      }
+      case "angler": {
+        c.save();
+        c.fillStyle = "rgba(1,10,18,.94)";
+        c.beginPath();
+        const s = 15 * p.s;
+        c.moveTo(x - s * 1.5, y); c.quadraticCurveTo(x, y - s, x + s * 1.3, y);
+        c.quadraticCurveTo(x, y + s, x - s * 1.5, y); c.closePath(); c.fill();
+        c.strokeStyle = "rgba(1,10,18,.94)"; c.lineWidth = 1.6;
+        c.beginPath(); c.moveTo(x - s * 0.2, y - s * 0.6);
+        c.quadraticCurveTo(x + s * 0.9, y - s * 2.1, x + s * 1.5, y - s * 1.5); c.stroke();
+        const pu = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * 2.1 + p.ph));
+        this.blob(x + s * 1.5, y - s * 1.5, 13 * pu, "#ffe2ab", 0.5 * pu);
+        c.restore(); return;
+      }
+      case "spire": {
+        c.save(); c.globalAlpha = 0.5; c.fillStyle = "#010c16";
+        const w = 34 * p.s, h = 150 * p.s;
+        c.beginPath(); c.moveTo(x - w, y + h); c.lineTo(x - w * 0.3, y); c.lineTo(x + w * 0.35, y + h * 0.2); c.lineTo(x + w, y + h);
+        c.closePath(); c.fill(); c.restore(); return;
+      }
+      case "ruin": {
+        c.save();
+        const s = p.s;
+        c.fillStyle = "rgba(4,18,28,.96)";
+        c.strokeStyle = "rgba(84,232,210,.13)"; c.lineWidth = 1;
+        if (p.kind === 0) {
+          for (let i = 0; i < 3; i++) {
+            const cx = x + (i - 1) * 34 * s, h = (60 + ((i * 53 + p.r * 90) % 45)) * s;
+            c.fillRect(cx - 7 * s, y - h, 14 * s, h);
+            c.strokeRect(cx - 7 * s, y - h, 14 * s, h);
+            c.fillRect(cx - 11 * s, y - h - 6 * s, 22 * s, 6 * s);
+          }
+          c.fillRect(x - 58 * s, y, 116 * s, 8 * s);
+        } else if (p.kind === 1) {
+          c.beginPath();
+          c.moveTo(x - 46 * s, y); c.lineTo(x - 46 * s, y - 40 * s);
+          c.quadraticCurveTo(x, y - 96 * s, x + 46 * s, y - 40 * s);
+          c.lineTo(x + 46 * s, y); c.lineTo(x + 30 * s, y); c.lineTo(x + 30 * s, y - 40 * s);
+          c.quadraticCurveTo(x, y - 74 * s, x - 30 * s, y - 40 * s);
+          c.lineTo(x - 30 * s, y); c.closePath(); c.fill(); c.stroke();
+        } else {
+          c.save(); c.translate(x, y); c.rotate((p.r - 0.5) * 0.7);
+          c.fillRect(-52 * s, -9 * s, 104 * s, 13 * s);
+          c.strokeRect(-52 * s, -9 * s, 104 * s, 13 * s);
+          c.restore();
+        }
+        c.restore(); return;
+      }
+      case "statue": {
+        c.save(); c.globalAlpha = 0.85; c.fillStyle = "rgba(3,15,24,.97)";
+        const s = 1.5 * p.s;
+        c.beginPath(); c.arc(x, y - 66 * s, 17 * s, 0, 6.2832); c.fill();
+        c.beginPath();
+        c.moveTo(x - 26 * s, y); c.quadraticCurveTo(x - 17 * s, y - 52 * s, x, y - 50 * s);
+        c.quadraticCurveTo(x + 17 * s, y - 52 * s, x + 26 * s, y); c.closePath(); c.fill();
+        c.globalAlpha = 1;
+        this.blob(x - 6 * s, y - 68 * s, 7, "#7ff5e6", 0.5);
+        this.blob(x + 6 * s, y - 68 * s, 7, "#7ff5e6", 0.5);
+        c.restore(); return;
+      }
+      case "seabed": {
+        c.save(); c.fillStyle = "#01070d";
+        c.beginPath(); c.moveTo(0, y + 40);
+        for (let sx = 0; sx <= this.W; sx += 26)
+          c.lineTo(sx, y + Math.sin(sx * 0.013) * 13 + Math.sin(sx * 0.031 + 2) * 7);
+        c.lineTo(this.W, y + 400); c.lineTo(0, y + 400); c.closePath(); c.fill();
+        c.restore(); return;
+      }
+    }
+  },
+
+  fish(c, x, y, s, dir) {
+    c.beginPath();
+    c.moveTo(x - s * dir, y);
+    c.quadraticCurveTo(x, y - s * 0.52, x + s * dir, y);
+    c.quadraticCurveTo(x, y + s * 0.52, x - s * dir, y);
+    c.closePath(); c.fill();
+    c.beginPath();
+    c.moveTo(x - s * dir, y); c.lineTo(x - s * 1.6 * dir, y - s * 0.42);
+    c.lineTo(x - s * 1.6 * dir, y + s * 0.42); c.closePath(); c.fill();
+  },
+
+  /** R/V DEEP CUT. Warm cabin light, weathered hull, working A-frame at the
+   *  stern: the silhouette has to stay readable at every depth.            */
+  drawShip(c, x, y, t) {
+    const d = this.shipDepth;
+    const bob = this.reduced ? 0 : Math.sin(t * 1.25) * (d < 30 ? 3.4 : 1.2);
+    const roll = this.reduced ? 0 : Math.sin(t * 0.85) * (d < 30 ? 0.035 : 0.014);
+    const sink = clamp(d / 60, 0, 1);
+
+    // downward work light, earns its keep as the water darkens
+    const lamp = clamp((d - 40) / 260, 0, 1);
+    if (lamp > 0.02) {
+      c.save(); c.globalCompositeOperation = "lighter";
+      const g = c.createLinearGradient(x, y + 6, x + 40, y + 420);
+      g.addColorStop(0, "rgba(255,216,150," + (0.20 * lamp) + ")");
+      g.addColorStop(1, "rgba(255,216,150,0)");
+      c.fillStyle = g;
+      c.beginPath(); c.moveTo(x - 9, y + 10); c.lineTo(x + 13, y + 10);
+      c.lineTo(x + 150, y + 430); c.lineTo(x - 78, y + 430); c.closePath(); c.fill();
+      c.restore();
+    }
+
+    c.save();
+    c.translate(x, y + bob); c.rotate(roll);
+
+    // buoy on a line: the physical reason the ship rises
+    if (this.buoy > 0.02) {
+      const br = 13 * this.buoy;
+      c.strokeStyle = "rgba(231,241,239,.4)"; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(-6, -14); c.lineTo(-20, -52 - br); c.stroke();
+      c.fillStyle = "#f3a33c";
+      c.beginPath(); c.arc(-20, -58 - br, br, 0, 6.2832); c.fill();
+      c.fillStyle = "rgba(255,255,255,.55)";
+      c.fillRect(-20 - br, -60 - br, br * 2, 2.5);
+    }
+
+    // hull
+    c.fillStyle = "#231d17";
+    c.beginPath();
+    c.moveTo(-40, -9); c.lineTo(38, -9);
+    c.quadraticCurveTo(46, -8, 42, 2);
+    c.lineTo(34, 13); c.quadraticCurveTo(0, 18, -30, 13);
+    c.quadraticCurveTo(-42, 8, -40, -9); c.closePath(); c.fill();
+    // weathered boot-topping
+    c.fillStyle = "#8c4433";
+    c.beginPath(); c.moveTo(-38, 5); c.lineTo(40, 3); c.lineTo(35, 12);
+    c.quadraticCurveTo(0, 17, -30, 12); c.closePath(); c.fill();
+    // deck line + rivets
+    c.fillStyle = "#3b3128"; c.fillRect(-40, -11, 80, 3);
+    c.fillStyle = "rgba(231,241,239,.16)";
+    for (let i = 0; i < 9; i++) c.fillRect(-34 + i * 8, -4, 1.4, 1.4);
+
+    // cabin with the warm window
+    c.fillStyle = "#2f2a22"; c.fillRect(-16, -30, 30, 20);
+    c.fillStyle = "#3d352a"; c.fillRect(-16, -32, 30, 3);
+    this.blob(0, -22, 30, null, 0.30);
+    c.fillStyle = "#ffcb73"; c.fillRect(-11, -26, 9, 8);
+    c.fillStyle = "#ffe2ab"; c.fillRect(2, -26, 8, 8);
+    // porthole
+    c.strokeStyle = "#5a4c3a"; c.lineWidth = 1.5;
+    c.beginPath(); c.arc(-26, -3, 4, 0, 6.2832); c.stroke();
+    c.fillStyle = "rgba(255,203,115,.75)"; c.beginPath(); c.arc(-26, -3, 2.6, 0, 6.2832); c.fill();
+
+    // mast, radar, A-frame crane at the stern
+    c.strokeStyle = "#4a4136"; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(-6, -32); c.lineTo(-6, -52); c.stroke();
+    c.lineWidth = 1.4;
+    c.beginPath(); c.arc(-6, -54, 5, Math.PI, 0); c.stroke();
+    c.beginPath(); c.moveTo(22, -10); c.lineTo(30, -34); c.lineTo(38, -10); c.stroke();
+    c.beginPath(); c.moveTo(30, -34); c.lineTo(30, -20); c.stroke();
+    c.fillStyle = "#4a4136"; c.beginPath(); c.arc(30, -18, 2.4, 0, 6.2832); c.fill();
+    // sonar dome
+    c.fillStyle = "#1a1610";
+    c.beginPath(); c.ellipse(-4, 14, 9, 5, 0, 0, Math.PI); c.fill();
+    if (sink > 0.2) this.blob(-4, 17, 11, "#54e8d2", 0.22 + 0.2 * Math.sin(t * 2.4));
+
+    // name plate
+    c.fillStyle = "rgba(231,241,239,.34)";
+    c.font = "600 4.4px " + MONO;
+    c.fillText("R/V DEEP CUT", -33, 0);
+
+    c.restore();
+  },
+});
+
+/* ---------------------------------- UI ------------------------------------
+   Static chrome is written once with innerHTML. Anything a player typed, or
+   anything that came out of an imported dataset, is set with textContent -
+   never interpolated into markup.                                           */
+
+const ANCHOR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.4" r="2.2"/><path d="M12 6.6V21M6.5 10h11M4 15.4c0 4 3.6 5.6 8 5.6s8-1.6 8-5.6"/></svg>';
+
+document.getElementById("hud").innerHTML = `
+<section class="screen pad" id="screen-title">
+  <div class="title-wrap">
+    <span class="badge" id="badge-title"><i class="dot"></i><span id="badge-title-text">Demo frequencies &mdash; simulated</span></span>
+    <h1 class="wordmark">Deep<span class="cut">Cut</span></h1>
+    <div class="title-rule"><hr class="hair"><span class="label cool">Expedition &middot; 10 rounds</span></div>
+    <p class="tagline">Common answers float.<br>Rare answers sink.</p>
+    <p class="subline">You are the only vessel out here. Every prompt has many right answers &mdash; the crowd already found the easy ones. Name something they overlooked and your ship takes on ballast. The deepest dive wins.</p>
+    <div class="btnrow">
+      <button class="btn primary" id="btn-start">Start diving</button>
+      <button class="btn ghost" id="btn-practice">Practice &middot; untimed</button>
+      <button class="btn ghost" id="btn-chart-1">The chart</button>
+      <button class="btn ghost" id="btn-settings-1">Settings</button>
+    </div>
+    <p class="subline" id="title-best"></p>
+  </div>
+</section>
+
+<section class="screen pad" id="screen-tutorial" hidden>
+  <div class="tut-wrap">
+    <span class="label cool">Briefing</span>
+    <p class="tut-line">Your mission is to <em>sink</em>. Think of an answer the crowd overlooked.</p>
+    <p class="subline">Ten prompts. Twenty seconds each. Every answer is scored on how many people in the dataset gave it &mdash; the rarer your correct answer, the more ballast you take on.</p>
+    <div class="tut-table" id="tut-table"></div>
+    <p class="subline">An answer we cannot measure, or running out of time, costs you <b style="color:var(--amber)">75 metres of depth</b>. Your depth never goes below zero.</p>
+    <div class="btnrow">
+      <button class="btn primary" id="btn-begin">Begin expedition</button>
+      <button class="btn ghost" id="btn-back-title">Back</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="screen-play" hidden>
+  <header class="topbar">
+    <div>
+      <span class="label">Round <b class="num" id="round-n">1</b> / ${CFG.rounds}</span>
+      <div class="pips" id="pips"></div>
+    </div>
+    <div class="depth-read">
+      <span class="label">Depth</span>
+      <span class="depth-num num"><span id="depth-n">0</span><span class="m">M</span></span>
+      <span class="zone-read" id="zone-n">Surface</span>
+    </div>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="frame prompt-frame" id="prompt-block">
+      <div class="prompt-meta">
+        <span class="label cool" id="q-cat">Category</span>
+        <span class="badge" id="badge-play"><i class="dot"></i><span id="badge-play-text">Demo</span></span>
+      </div>
+      <h2 class="prompt-text" id="q-prompt">&nbsp;</h2>
+    </div>
+
+    <div class="sonar-wrap" id="sonar-block" hidden>
+      <span class="sonar-read">Sounding</span>
+      <div class="sonar-scan"></div>
+      <span class="label" id="sonar-sub">Measuring against the dataset</span>
+    </div>
+
+    <div class="frame reveal" id="reveal-block" hidden>
+      <div class="reveal-head">
+        <h2 class="reveal-answer" id="rv-answer">&nbsp;</h2>
+        <span class="reveal-corrected" id="rv-corrected"></span>
+      </div>
+      <div class="freq" id="rv-freq">
+        <div class="freq-bar"><i id="rv-bar"></i><b id="rv-mid"></b></div>
+        <span class="freq-text" id="rv-freq-text"></span>
+      </div>
+      <div class="change">
+        <span class="change-num" id="rv-change">+0</span>
+        <span class="change-dir" id="rv-dir"></span>
+      </div>
+      <span class="deepcut-stamp" id="rv-stamp" hidden>Deep cut</span>
+      <p class="flavour" id="rv-flavour"></p>
+      <div class="reveal-foot">
+        <span class="missed" id="rv-missed"></span>
+        <button class="btn primary" id="btn-continue">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="console" id="console">
+    <div class="console-inner">
+      <div class="timerrow">
+        <span class="label" id="timer-label">Time</span>
+        <span class="label num" id="timer-n">20s</span>
+      </div>
+      <div class="timerbar" id="timerbar"><span id="timerfill"></span></div>
+      <button id="anchor-btn" type="button">${ANCHOR_SVG}<span id="anchor-text">Drop the anchor &mdash; doubles this round</span></button>
+      <form class="answer-row" id="answer-form" autocomplete="off">
+        <input id="answer" name="answer" type="text" maxlength="${CFG.maxAnswerChars}" autocomplete="off"
+               autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send"
+               placeholder="Your answer&hellip;" aria-label="Your answer">
+        <button class="btn primary" id="submit" type="submit">Dive</button>
+      </form>
+      <p class="hint" id="hint">One word or a short phrase. Rarer is deeper.</p>
+    </div>
+  </div>
+</section>
+
+<section class="screen pad" id="screen-results" hidden>
+  <div class="res-wrap">
+    <div class="topnav"><span class="label cool">Expedition log</span><span class="badge" id="badge-res"><i class="dot"></i><span id="badge-res-text">Demo</span></span></div>
+    <span class="res-crown" id="res-crown" hidden>Deepest dive</span>
+    <div><span class="label">Final depth</span><div class="res-depth num"><span id="res-depth">0</span><span class="m">M</span></div></div>
+    <span class="label cool" id="res-zone"></span>
+    <div class="res-grid">
+      <div class="res-cell"><span class="label cool">Best answer</span><span class="v" id="res-best-a">&mdash;</span><span class="d down" id="res-best-d"></span></div>
+      <div class="res-cell"><span class="label warm">Biggest setback</span><span class="v" id="res-worst-a">&mdash;</span><span class="d up" id="res-worst-d"></span></div>
+      <div class="res-cell"><span class="label">Deepest point</span><span class="v num" id="res-max">0 m</span><span class="d" style="color:var(--mute)" id="res-rank"></span></div>
+    </div>
+    <div class="tablewrap"><table class="rounds"><thead><tr>
+      <th>#</th><th>Prompt</th><th>Your answer</th><th class="n">Share</th><th class="n">Change</th><th class="n">Depth</th>
+    </tr></thead><tbody id="res-rows"></tbody></table></div>
+    <p class="prose" id="res-note"></p>
+    <div class="btnrow">
+      <button class="btn primary" id="btn-again">Dive again</button>
+      <button class="btn ghost" id="btn-chart-2">The chart</button>
+      <button class="btn ghost" id="btn-home">Surface</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen pad" id="screen-chart" hidden>
+  <div class="chart-wrap">
+    <div class="topnav"><h2 class="sec">The Chart</h2><button class="btn ghost" id="btn-chart-back">Back</button></div>
+    <p class="prose">Records held on this device only. Deeper is better, so the best run sits at the bottom. <b>Timed and practice runs are kept apart</b>, and so are runs scored against a different dataset or scoring version.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-timed" aria-selected="true">Timed</button>
+      <button class="tab" role="tab" id="tab-practice" aria-selected="false">Practice</button>
+    </div>
+    <div class="chart" id="chart"><div class="chart-grid" id="chart-grid"></div><div class="chart-empty" id="chart-empty">No dives recorded yet.</div></div>
+    <p class="prose" id="chart-foot"></p>
+  </div>
+</section>
+
+<section class="screen pad" id="screen-settings" hidden>
+  <div class="set-wrap">
+    <div class="topnav"><h2 class="sec">Instruments</h2><button class="btn ghost" id="btn-set-back">Back</button></div>
+    <div>
+      <div class="set-row">
+        <div class="t"><b>Sound</b><span>Ocean ambience, sonar and scoring tones. Starts only after you press a button.</span></div>
+        <button class="toggle" id="tg-sound" role="switch" aria-checked="true" aria-label="Sound"><i></i></button>
+      </div>
+      <div class="set-row">
+        <div class="t"><b>Motion</b><span>Off reduces particles, parallax drift and the length of every animation.</span></div>
+        <button class="toggle" id="tg-motion" role="switch" aria-checked="true" aria-label="Motion"><i></i></button>
+      </div>
+      <div class="set-row">
+        <div class="t"><b>Forgive single typos</b><span>Only ever corrects to one unambiguous answer of six letters or more, and always tells you what it matched.</span></div>
+        <button class="toggle" id="tg-typo" role="switch" aria-checked="true" aria-label="Typo forgiveness"><i></i></button>
+      </div>
+    </div>
+    <h2 class="sec">The data</h2>
+    <p class="prose" id="data-status"></p>
+    <p class="prose"><b>Where the numbers come from.</b> The bundled set ships <b>simulated</b> frequencies, authored for play balance. They are not survey results and are never described as what real people said. Whether an answer is <i>valid</i> and how <i>often it was given</i> are stored separately, so a real dataset can replace the demo one without touching the game.</p>
+    <p class="prose"><b>Import format.</b> Drop in a JSON file with this shape. An answer that is absent is reported as unmeasured, not as rare and not as wrong.</p>
+    <pre class="schema" id="schema-block"></pre>
+    <div class="btnrow">
+      <label class="btn" for="dataset-file" style="display:inline-flex;align-items:center">Load JSON file</label>
+      <input type="file" id="dataset-file" accept="application/json,.json" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+      <button class="btn ghost" id="btn-restore-demo">Restore demo data</button>
+      <button class="btn ghost" id="btn-wipe">Erase local records</button>
+    </div>
+    <textarea id="dataset-paste" placeholder="&hellip;or paste dataset JSON here" aria-label="Paste dataset JSON"></textarea>
+    <div class="btnrow"><button class="btn" id="btn-paste-load">Load pasted JSON</button></div>
+    <div id="data-msg"></div>
+    <p class="prose">Scoring in force: <b id="scoring-note"></b></p>
+  </div>
+</section>`;
+
+const $ = id => document.getElementById(id);
+const el = {};
+["screen-title","screen-tutorial","screen-play","screen-results","screen-chart","screen-settings",
+ "badge-title-text","badge-play-text","badge-res-text","badge-title","badge-play","badge-res","title-best","tut-table",
+ "round-n","pips","depth-n","zone-n","q-cat","q-prompt","prompt-block","sonar-block","sonar-sub","reveal-block",
+ "rv-answer","rv-corrected","rv-freq","rv-bar","rv-mid","rv-freq-text","rv-change","rv-dir","rv-stamp","rv-flavour",
+ "rv-missed","btn-continue","timer-label","timer-n","timerbar","timerfill","anchor-btn","anchor-text","answer-form",
+ "answer","submit","hint","console","stage","res-crown","res-depth","res-zone","res-best-a","res-best-d","res-worst-a",
+ "res-worst-d","res-max","res-rank","res-rows","res-note","chart","chart-grid","chart-empty","chart-foot",
+ "tab-timed","tab-practice","tg-sound","tg-motion","tg-typo","data-status","data-msg","schema-block","scoring-note",
+ "dataset-file","dataset-paste","practice-flag","vignette"
+].forEach(k => el[k.replace(/-([a-z])/g, (m, c) => c.toUpperCase())] = $(k));
+
+const SCREENS = ["screenTitle","screenTutorial","screenPlay","screenResults","screenChart","screenSettings"];
+let screenBefore = "screenTitle";
+function show(name, remember) {
+  if (remember) screenBefore = SCREENS.find(s => !el[s].hidden) || "screenTitle";
+  SCREENS.forEach(s => { el[s].hidden = s !== name; });
+  if (name !== "screenPlay") document.body.classList.remove("kb-open");
+}
+
+const FLAVOUR = {
+  deep:  ["You found a thought nobody packed.", "Uncharted thinking.", "The chart ends here.", "Nobody else went looking there."],
+  good:  ["That answer has some weight.", "Ballast secured.", "The crowd walked straight past that one."],
+  small: ["A little ballast.", "Marginally overlooked.", "Slightly off the beaten track."],
+  flat:  ["Dead level. The sea is undecided."],
+  upS:   ["The crowd was nearby.", "A common thought, that one."],
+  upB:   ["Too obvious. Buoyancy increased.", "The crowd stayed near the surface.", "Half the fleet said the same thing."],
+  pen:   ["Nothing to weigh. The ship lightens.", "The instruments found nothing to measure."],
+};
+function flavourFor(change, kind) {
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  if (kind !== MATCH.HIT) return pick(FLAVOUR.pen);
+  if (change >= CFG.deepCutThreshold) return pick(FLAVOUR.deep);
+  if (change >= 40) return pick(FLAVOUR.good);
+  if (change > 0) return pick(FLAVOUR.small);
+  if (change === 0) return pick(FLAVOUR.flat);
+  if (change > -40) return pick(FLAVOUR.upS);
+  return pick(FLAVOUR.upB);
+}
+const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(Math.round(n));
+
+/* --------------------------------- GAME -----------------------------------
+   One state machine, one clock. Every transition is decided by comparing
+   `now` against a timestamp recorded on entry - there is not a single
+   setTimeout in the round loop, so restarting cannot leave a timer alive.  */
+
+const ST = { IDLE: "idle", ASK: "ask", SONAR: "sonar", REVEAL: "reveal", DONE: "done" };
+
+const G = {
+  state: ST.IDLE, stateAt: 0, mode: "timed",
+  dataset: null, queue: [], round: 0, depth: 0, maxDepth: 0,
+  log: [], anchorArmed: false, anchorUsed: false,
+  deadline: 0, continueAt: 0, locked: false, pending: null, bucket: "", pb: null,
+  hiddenAt: 0, pausedLeft: null,
+};
+
+function activeDataset() { return Store.loadDataset() || DEMO_DATA; }
+
+function pickQuestions(ds, n) {
+  const byCat = new Map();
+  for (const q of ds.compiled) {
+    if (!byCat.has(q.category)) byCat.set(q.category, []);
+    byCat.get(q.category).push(q);
+  }
+  for (const list of byCat.values()) list.sort(() => Math.random() - 0.5);
+  const cats = Array.from(byCat.keys()).sort(() => Math.random() - 0.5);
+  const out = [];
+  let guard = 0;
+  while (out.length < n && guard++ < 500) {
+    let added = false;
+    for (const c of cats) {
+      const list = byCat.get(c);
+      if (list.length) { out.push(list.pop()); added = true; }
+      if (out.length >= n) break;
+    }
+    if (!added) break;
+  }
+  return out.slice(0, n);
+}
+
+function startRun(mode) {
+  Audio_.unlock();
+  const ds = prepareDataset(activeDataset());   // frozen for the whole run
+  G.dataset = ds;
+  G.mode = mode;
+  G.queue = pickQuestions(ds, CFG.rounds);
+  G.round = 0; G.depth = 0; G.maxDepth = 0; G.log = [];
+  G.anchorArmed = false; G.anchorUsed = false;
+  G.locked = false; G.pending = null;
+  G.deadline = 0; G.continueAt = 0; G.hiddenAt = 0; G.pausedLeft = null;
+  G.bucket = Store.bucket(mode, ds.datasetVersion);
+  G.pb = Store.best(G.bucket);
+
+  document.body.classList.toggle("practice", mode === "practice");
+  el.practiceFlag.hidden = mode !== "practice";
+  el.timerLabel.textContent = mode === "practice" ? "Untimed" : "Time";
+
+  World.reset(Math.floor(Math.random() * 1e9), G.pb);
+  World.onPB = () => {
+    World.ring(false);
+    el.vignette.classList.add("deep");
+    setTimeout(() => el.vignette.classList.remove("deep"), 700);
+    Audio_.best();
+  };
+  paintBadges();
+  buildPips();
+  show("screenPlay");
+  nextRound();
+}
+
+function buildPips() {
+  el.pips.textContent = "";
+  for (let i = 0; i < CFG.rounds; i++) {
+    const s = document.createElement("span");
+    s.className = "pip";
+    el.pips.appendChild(s);
+  }
+}
+function paintPips() {
+  const kids = el.pips.children;
+  for (let i = 0; i < kids.length; i++) {
+    const r = G.log[i];
+    kids[i].className = "pip" + (r ? (r.change > 0 ? " down" : r.change < 0 ? " up" : "") : (i === G.round ? " now" : ""));
+  }
+}
+
+function paintDepth() {
+  el.depthN.textContent = fmt(G.depth);
+  el.zoneN.textContent = zoneAt(G.depth).name;
+}
+
+function paintBadges() {
+  const ds = G.dataset || prepareDataset(activeDataset());
+  const demo = ds.sourceType === "simulated-demo";
+  const text = demo ? "Demo frequencies — simulated"
+                    : "Survey data — " + (ds.sourceRef || ds.sourceType);
+  [["badgeTitleText", "badgeTitle"], ["badgePlayText", "badgePlay"], ["badgeResText", "badgeRes"]].forEach(([t, b]) => {
+    el[t].textContent = demo ? (b === "badgeTitle" ? text : "Demo — simulated") : text;
+    el[b].classList.toggle("survey", !demo);
+  });
+}
+
+function nextRound() {
+  if (G.round >= CFG.rounds) return finish();
+  const q = G.queue[G.round];
+  if (!q) return finish();
+
+  G.state = ST.ASK; G.stateAt = performance.now();
+  G.locked = false; G.pending = null;
+  G.deadline = G.mode === "practice" ? 0 : performance.now() + CFG.roundSeconds * 1000;
+
+  el.roundN.textContent = String(G.round + 1);
+  el.qCat.textContent = q.category;
+  el.qPrompt.textContent = q.prompt;
+  el.promptBlock.hidden = false;
+  el.sonarBlock.hidden = true;
+  el.revealBlock.hidden = true;
+  el.console.hidden = false;
+  el.answer.value = "";
+  el.answer.disabled = false;
+  el.submit.disabled = false;
+  el.hint.textContent = "One word or a short phrase. Rarer is deeper.";
+  el.timerbar.classList.remove("warn", "crit");
+  el.timerfill.style.transform = "scaleX(1)";
+  el.timerN.textContent = G.mode === "practice" ? "∞" : CFG.roundSeconds + "s";
+  paintAnchorButton();
+  paintPips();
+  paintDepth();
+  if (!("ontouchstart" in window)) el.answer.focus();
+}
+
+function paintAnchorButton() {
+  const b = el.anchorBtn;
+  b.classList.toggle("armed", G.anchorArmed);
+  b.disabled = G.anchorUsed || G.state !== ST.ASK;
+  el.anchorText.textContent = G.anchorUsed
+    ? "Anchor spent"
+    : G.anchorArmed
+      ? "Anchor armed — this round counts double, up or down"
+      : "Drop the anchor — doubles this round, once per dive";
+}
+
+function toggleAnchor() {
+  if (G.state !== ST.ASK || G.anchorUsed) return;
+  G.anchorArmed = !G.anchorArmed;
+  Audio_.ui();
+  paintAnchorButton();
+  el.hint.textContent = G.anchorArmed
+    ? "Risk doubled both ways: a popular answer now costs twice the buoyancy."
+    : "One word or a short phrase. Rarer is deeper.";
+}
+
+function submitAnswer(raw, timedOut) {
+  if (G.state !== ST.ASK || G.locked) return;
+  const text = String(raw || "").slice(0, CFG.maxAnswerChars).trim();
+  if (!timedOut && !text) {
+    el.answer.classList.remove("shake"); void el.answer.offsetWidth; el.answer.classList.add("shake");
+    return;
+  }
+  G.locked = true;
+  Audio_.unlock();
+
+  const q = G.queue[G.round];
+  const res = timedOut ? { kind: MATCH.TIMEOUT, key: "" } : resolveAnswer(q, text, Store.data.settings.typo);
+
+  let change, percent = null;
+  if (res.kind === MATCH.HIT) { percent = res.answer.percent; change = SCORING.fromPercent(percent); }
+  else change = SCORING.unsupportedPenalty;
+
+  const anchored = G.anchorArmed;
+  if (anchored) { change = SCORING.applyAnchor(change); G.anchorUsed = true; G.anchorArmed = false; }
+
+  G.pending = { q, res, text, change, percent, anchored, timedOut: !!timedOut };
+
+  el.answer.disabled = true; el.submit.disabled = true;
+  el.promptBlock.hidden = true;
+  el.sonarBlock.hidden = false;
+  el.sonarSub.textContent = anchored ? "Anchor away — doubling this reading" : "Measuring against the dataset";
+  el.console.hidden = true;
+  document.body.classList.remove("kb-open");
+  el.answer.blur();
+
+  G.state = ST.SONAR; G.stateAt = performance.now();
+  World.ring(false);
+  Audio_.ping();
+}
+
+function revealRound() {
+  const p = G.pending;
+  const q = p.q, res = p.res;
+  const before = G.depth;
+  G.depth = Math.max(0, G.depth + p.change);
+  G.maxDepth = Math.max(G.maxDepth, G.depth);
+  const applied = G.depth - before;
+  const deep = res.kind === MATCH.HIT && p.change >= CFG.deepCutThreshold;
+
+  G.log.push({
+    n: G.round + 1, prompt: q.prompt, answer: p.text, kind: res.kind,
+    canonical: res.kind === MATCH.HIT ? res.answer.canonical : null,
+    percent: p.percent, change: p.change, applied, depth: G.depth,
+    anchored: p.anchored, why: res.why || null, corrected: res.corrected || null,
+    sampleSize: q.sampleSize,
+  });
+
+  el.sonarBlock.hidden = true;
+  el.revealBlock.hidden = false;
+
+  el.rvAnswer.textContent = p.timedOut ? "No answer" : p.text;
+  el.rvAnswer.className = "reveal-answer " + (res.kind === MATCH.HIT ? "hit" : "miss");
+  el.rvCorrected.textContent = res.corrected ? "matched to “" + res.corrected + "”" : "";
+
+  const demo = G.dataset.sourceType === "simulated-demo";
+  if (res.kind === MATCH.HIT) {
+    el.rvFreq.hidden = false;
+    const pct = p.percent;
+    el.rvBar.style.width = clamp(pct, 0.6, 100) + "%";
+    el.rvBar.style.background = pct >= 25 ? "var(--amber)" : pct >= 12 ? "#c8b06a" : "var(--turq)";
+    el.rvMid.style.left = "25%";
+    el.rvFreqText.textContent = "";
+    const strong = document.createElement("strong");
+    strong.textContent = (pct < 1 ? pct.toFixed(1) : Math.round(pct)) + "%";
+    el.rvFreqText.appendChild(strong);
+    el.rvFreqText.appendChild(document.createTextNode(
+      demo ? " in this demo dataset · n = " + fmt(q.sampleSize) + " simulated responses"
+           : " of respondents · n = " + fmt(q.sampleSize)));
+  } else {
+    el.rvFreq.hidden = true;
+  }
+
+  el.rvChange.textContent = signed(p.change) + " m";
+  el.rvChange.className = "change-num num " + (p.change > 0 ? "down" : p.change < 0 ? "up" : "");
+  el.rvDir.className = "change-dir " + (p.change > 0 ? "down" : "up");
+  el.rvDir.textContent = p.change > 0 ? "↓ Descending" : p.change < 0 ? "↑ Rising" : "Holding";
+  el.rvStamp.hidden = !deep;
+
+  let flav = flavourFor(p.change, res.kind);
+  if (res.kind === MATCH.TIMEOUT) flav = "The clock ran out. Ballast released.";
+  else if (res.kind === MATCH.INVALID) flav = res.why;
+  else if (res.kind === MATCH.UNMEASURED) flav = "A fair answer — but this dataset recorded no responses for it at all, so there is nothing to weigh. Unmeasured is not the same as rare.";
+  else if (res.kind === MATCH.UNLISTED) flav = "Not in this dataset’s answer bank — we cannot measure it, so it earns no ballast. That is not the same as being wrong.";
+  el.rvFlavour.textContent = flav + (p.anchored ? "  The anchor doubled it." : "");
+
+  el.rvMissed.textContent = "";
+  if (q.deepest && (res.kind !== MATCH.HIT || res.answer.i !== q.deepest.i)) {
+    const d = q.deepest;
+    el.rvMissed.appendChild(document.createTextNode("Deepest available: "));
+    const b = document.createElement("b"); b.textContent = d.canonical;
+    el.rvMissed.appendChild(b);
+    el.rvMissed.appendChild(document.createTextNode(
+      "  " + (d.percent < 1 ? d.percent.toFixed(1) : Math.round(d.percent)) + "%  ·  " + signed(SCORING.fromPercent(d.percent)) + " m"));
+  }
+
+  // physical consequences
+  World.goTo(G.depth);
+  World.buoyTarget = p.change < 0 ? 1 : 0;
+  if (p.change < 0) setTimeout(() => { World.buoyTarget = 0; }, 2200);
+  if (deep) {
+    World.ring(true); World.ring(true); World.deepFlash = 1;
+    World.puff(34, false);
+    el.vignette.classList.add("deep");
+    setTimeout(() => el.vignette.classList.remove("deep"), 1400);
+    Audio_.deepCut();
+  } else if (res.kind !== MATCH.HIT) {
+    el.vignette.classList.add("rise");
+    setTimeout(() => el.vignette.classList.remove("rise"), 900);
+    Audio_.penalty();
+  } else if (p.change > 0) {
+    World.puff(10 + Math.round(p.change / 8), false);
+    Audio_.descend(p.change);
+  } else {
+    el.vignette.classList.add("rise");
+    setTimeout(() => el.vignette.classList.remove("rise"), 900);
+    Audio_.rise();
+  }
+
+  paintDepth(); paintPips(); paintAnchorButton();
+  el.btnContinue.disabled = true;
+  el.btnContinue.textContent = G.round + 1 >= CFG.rounds ? "Surface" : "Continue";
+  G.continueAt = performance.now() + (deep ? CFG.continueDelayDeepMs : CFG.continueDelayMs);
+  G.state = ST.REVEAL; G.stateAt = performance.now();
+}
+
+function continueRound() {
+  if (G.state !== ST.REVEAL || el.btnContinue.disabled) return;
+  Audio_.ui();
+  G.round++;
+  if (G.round >= CFG.rounds) finish(); else nextRound();
+}
+
+function finish() {
+  G.state = ST.DONE;
+  el.console.hidden = true;
+  el.revealBlock.hidden = true;
+  el.promptBlock.hidden = true;
+
+  const run = {
+    depth: G.depth, max: G.maxDepth, mode: G.mode,
+    when: new Date().toISOString(),
+    dataset: G.dataset.datasetVersion, scoring: SCORING.id,
+    log: G.log.map(r => ({ n: r.n, a: r.answer, c: r.change, d: r.depth })),
+  };
+  const idx = Store.addRun(G.bucket, run);
+  const isBest = idx === 0 && G.depth > 0;
+
+  el.resCrown.hidden = !isBest;
+  el.resDepth.textContent = fmt(G.depth);
+  el.resZone.textContent = "Reached " + zoneAt(G.maxDepth).name + (G.mode === "practice" ? " · practice dive" : "");
+  el.resMax.textContent = fmt(G.maxDepth) + " m";
+
+  const hits = G.log.filter(r => r.kind === MATCH.HIT);
+  const best = hits.slice().sort((a, b) => b.change - a.change)[0];
+  const worst = G.log.slice().sort((a, b) => a.change - b.change)[0];
+  el.resBestA.textContent = best && best.change > 0 ? best.answer : "—";
+  el.resBestD.textContent = best && best.change > 0
+    ? signed(best.change) + " m · " + (best.percent < 1 ? best.percent.toFixed(1) : Math.round(best.percent)) + "%" : "";
+  el.resWorstA.textContent = worst ? (worst.timedOut || worst.kind === MATCH.TIMEOUT ? "No answer" : worst.answer) : "—";
+  el.resWorstD.textContent = worst ? signed(worst.change) + " m" : "";
+
+  const all = Store.runsIn(G.bucket);
+  el.resRank.textContent = all.length > 1 ? "Rank " + (idx + 1) + " of " + all.length + " on this device" : "First recorded dive";
+
+  el.resRows.textContent = "";
+  for (const r of G.log) {
+    const tr = document.createElement("tr");
+    if (r.anchored) tr.className = "anchored";
+    const cells = [
+      ["", String(r.n)],
+      ["", r.prompt.replace(/\s+—.*$/, "")],
+      ["a", r.kind === MATCH.TIMEOUT ? "— no answer" : r.answer],
+      ["n", r.percent == null ? "—" : (r.percent < 1 ? r.percent.toFixed(1) : Math.round(r.percent)) + "%"],
+      ["n", signed(r.change) + (r.anchored ? " ⚓" : "")],
+      ["n", fmt(r.depth) + " m"],
+    ];
+    cells.forEach(([cls, txt], i) => {
+      const td = document.createElement("td");
+      if (cls) td.className = cls;
+      td.textContent = txt;
+      if (i === 4) td.style.color = r.change > 0 ? "var(--turq)" : r.change < 0 ? "var(--amber)" : "var(--mute)";
+      tr.appendChild(td);
+    });
+    el.resRows.appendChild(tr);
+  }
+
+  const demo = G.dataset.sourceType === "simulated-demo";
+  el.resNote.textContent = demo
+    ? "Percentages are simulated demo frequencies from dataset " + G.dataset.datasetVersion +
+      ", authored for play balance. They are not survey results and do not describe what any real group of people said."
+    : "Percentages from " + (G.dataset.sourceRef || "the imported dataset") + " · " + G.dataset.datasetVersion + ".";
+
+  paintBadges();
+  if (isBest) Audio_.best();
+  show("screenResults");
+  window.scrollTo(0, 0);
+}
+
+/* --------------------------------- CHART ---------------------------------- */
+let chartMode = "timed";
+function paintChart() {
+  const ds = Store.loadDataset() || DEMO_DATA;
+  const key = Store.bucket(chartMode, ds.datasetVersion);
+  const runs = Store.runsIn(key);
+  el.tabTimed.setAttribute("aria-selected", String(chartMode === "timed"));
+  el.tabPractice.setAttribute("aria-selected", String(chartMode === "practice"));
+
+  Array.from(el.chart.querySelectorAll(".mark")).forEach(n => n.remove());
+  el.chartEmpty.hidden = runs.length > 0;
+  el.chartEmpty.textContent = chartMode === "timed"
+    ? "No timed dives recorded on this device yet."
+    : "No practice dives recorded on this device yet.";
+
+  const deepest = runs.length ? runs[0].depth : 0;
+  const scale = Math.max(200, Math.ceil((deepest * 1.12) / 100) * 100);
+
+  el.chartGrid.textContent = "";
+  const stepGrid = scale <= 400 ? 100 : scale <= 900 ? 200 : 300;
+  for (let d = 0; d <= scale; d += stepGrid) {
+    const y = (d / scale) * 100;
+    const line = document.createElement("i"); line.style.top = y + "%";
+    const lab = document.createElement("span"); lab.style.top = y + "%"; lab.textContent = d + " m";
+    el.chartGrid.appendChild(line); el.chartGrid.appendChild(lab);
+  }
+
+  runs.forEach((r, i) => {
+    const m = document.createElement("div");
+    m.className = "mark" + (i === 0 ? " best" : "");
+    m.style.top = clamp((r.depth / scale) * 100, 1.5, 98.5) + "%";
+    const dot = document.createElement("span"); dot.className = "dot";
+    const line = document.createElement("span"); line.className = "line";
+    const txt = document.createElement("span"); txt.className = "txt";
+    txt.textContent = (i === 0 ? "Deepest dive · " : "") + fmt(r.depth) + " m";
+    const em = document.createElement("em");
+    let when = "";
+    try { when = new Date(r.when).toLocaleDateString("en-AU", { day: "numeric", month: "short" }); } catch (e) {}
+    em.textContent = when;
+    txt.appendChild(em);
+    m.appendChild(dot); m.appendChild(line); m.appendChild(txt);
+    el.chart.appendChild(m);
+  });
+
+  el.chartFoot.textContent = "Bucket: " + chartMode + " · dataset " + ds.datasetVersion +
+    " · scoring " + SCORING.id + " · " + runs.length + " run" + (runs.length === 1 ? "" : "s") +
+    " kept, deepest " + CFG.maxRuns + " retained.";
+}
+
+/* -------------------------------- SETTINGS -------------------------------- */
+const SCHEMA_TEXT = `{
+  "datasetVersion": "my-survey-2026.1",
+  "sourceType":     "human-survey",      // or "simulated-demo"
+  "sourceRef":      "Where these numbers came from",
+  "methodology":    "How they were collected",
+  "collectionDate": "2026-03-14",
+  "questions": [{
+    "id":         "fruit-basic",
+    "prompt":     "Name a fruit.",
+    "category":   "food",
+    "sampleSize": 1200,                  // total respondents asked
+    "answers": [
+      { "canonical": "apple",
+        "aliases":   ["apples", "green apple"],
+        "count":     480 },              // NOT a percentage
+      { "canonical": "dragon fruit",
+        "aliases":   ["dragonfruit", "pitaya"],
+        "count":     24 }
+    ],
+    "knownInvalid": [
+      { "term": "carrot", "why": "A carrot is a root vegetable." }
+    ]
+  }]
+}`;
+
+function setToggle(node, on) { node.setAttribute("aria-checked", String(!!on)); }
+function applySettings() {
+  const s = Store.data.settings;
+  setToggle(el.tgSound, s.sound); setToggle(el.tgMotion, s.motion); setToggle(el.tgTypo, s.typo);
+  Audio_.setEnabled(s.sound);
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = !s.motion || prefersReduced;
+  document.body.classList.toggle("reduced", reduced);
+  World.setReduced(reduced);
+}
+function msg(node, text, bad) {
+  node.textContent = "";
+  const d = document.createElement("div");
+  d.className = "notice" + (bad ? " bad" : "");
+  d.textContent = text;
+  node.appendChild(d);
+}
+function paintDataStatus() {
+  const custom = Store.loadDataset();
+  const ds = custom || DEMO_DATA;
+  const bits = ["In use: " + ds.datasetVersion,
+                "source type: " + ds.sourceType,
+                ds.questions.length + " questions"];
+  if (ds.sourceRef) bits.push("source: " + ds.sourceRef);
+  if (ds.collectionDate) bits.push("collected: " + ds.collectionDate);
+  if (ds.methodology) bits.push("method: " + ds.methodology);
+  el.dataStatus.textContent = bits.join(" · ") + (custom ? " — imported, replacing the demo set." : " — the bundled demo set.");
+}
+function tryLoadDataset(text) {
+  let parsed;
+  try { parsed = JSON.parse(text); }
+  catch (e) { return msg(el.dataMsg, "That is not valid JSON: " + e.message, true); }
+  const v = validateDataset(parsed);
+  if (!v.ok) return msg(el.dataMsg, "Rejected. " + v.errors.join(" "), true);
+  Store.saveDataset(parsed);
+  paintDataStatus(); paintBadges(); paintChart();
+  msg(el.dataMsg, "Loaded " + parsed.questions.length + " questions from " + parsed.datasetVersion +
+    ". It applies from your next dive, never mid-run, and its records are kept in a separate bucket.");
+}
+
+/* --------------------------------- INPUT ---------------------------------- */
+el.answerForm.addEventListener("submit", e => { e.preventDefault(); submitAnswer(el.answer.value, false); });
+el.answer.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(el.answer.value, false); } });
+el.answer.addEventListener("focus", () => { if (G.state === ST.ASK) document.body.classList.add("kb-open"); });
+el.answer.addEventListener("blur", () => setTimeout(() => document.body.classList.remove("kb-open"), 120));
+el.anchorBtn.addEventListener("click", toggleAnchor);
+el.btnContinue.addEventListener("click", continueRound);
+
+$("btn-start").addEventListener("click", () => { Audio_.unlock(); buildTutorial(); show("screenTutorial"); });
+$("btn-begin").addEventListener("click", () => startRun("timed"));
+$("btn-back-title").addEventListener("click", () => show("screenTitle"));
+$("btn-practice").addEventListener("click", () => { Audio_.unlock(); startRun("practice"); });
+$("btn-again").addEventListener("click", () => startRun(G.mode));
+$("btn-home").addEventListener("click", () => { show("screenTitle"); paintTitle(); });
+$("btn-chart-1").addEventListener("click", () => { paintChart(); show("screenChart", true); });
+$("btn-chart-2").addEventListener("click", () => { paintChart(); show("screenChart", true); });
+$("btn-chart-back").addEventListener("click", () => show(screenBefore === "screenChart" ? "screenTitle" : screenBefore));
+$("btn-settings-1").addEventListener("click", () => { paintDataStatus(); show("screenSettings", true); });
+$("btn-set-back").addEventListener("click", () => show(screenBefore === "screenSettings" ? "screenTitle" : screenBefore));
+el.tabTimed.addEventListener("click", () => { chartMode = "timed"; paintChart(); });
+el.tabPractice.addEventListener("click", () => { chartMode = "practice"; paintChart(); });
+
+[["tgSound", "sound"], ["tgMotion", "motion"], ["tgTypo", "typo"]].forEach(([k, key]) => {
+  el[k].addEventListener("click", () => {
+    Store.data.settings[key] = !Store.data.settings[key];
+    Store.save(); applySettings();
+    if (key === "sound" && Store.data.settings.sound) { Audio_.unlock(); Audio_.ui(); }
+  });
+});
+$("btn-paste-load").addEventListener("click", () => tryLoadDataset(el.datasetPaste.value));
+el.datasetFile.addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => tryLoadDataset(String(r.result));
+  r.onerror = () => msg(el.dataMsg, "Could not read that file.", true);
+  r.readAsText(f);
+  e.target.value = "";
+});
+$("btn-restore-demo").addEventListener("click", () => {
+  Store.clearDataset(); paintDataStatus(); paintBadges(); paintChart();
+  msg(el.dataMsg, "Back to the bundled demo set. It applies from your next dive.");
+});
+$("btn-wipe").addEventListener("click", () => {
+  Store.data.runs = {}; Store.save(); paintChart(); paintTitle();
+  msg(el.dataMsg, "Local dive records erased. Settings and dataset kept.");
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && G.state === ST.REVEAL && !el.btnContinue.disabled) { e.preventDefault(); continueRound(); }
+});
+
+/* Mobile keyboard: keep the console above it without breaking the fixed HUD. */
+if (window.visualViewport) {
+  const vv = window.visualViewport;
+  const sync = () => {
+    const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    document.documentElement.style.setProperty("--kb", kb + "px");
+    document.body.classList.toggle("kb-open", kb > 90 && G.state === ST.ASK);
+  };
+  vv.addEventListener("resize", sync);
+  vv.addEventListener("scroll", sync);
+}
+
+/* ---------------------------------- LOOP ---------------------------------- */
+let last = performance.now();
+
+/* State advancement is deliberately separate from painting: the machine is
+   decided entirely by comparing `now` to recorded timestamps, so it can be
+   stepped without a frame ever being drawn. */
+function update(now) {
+  if (G.state === ST.ASK && G.deadline) {
+    const left = Math.max(0, G.deadline - now);
+    const secs = Math.ceil(left / 1000);
+    if (el.timerN.textContent !== secs + "s") {
+      el.timerN.textContent = secs + "s";
+      if (secs <= 5 && secs > 0) Audio_.tick();
+    }
+    el.timerfill.style.transform = "scaleX(" + (left / (CFG.roundSeconds * 1000)) + ")";
+    el.timerbar.classList.toggle("warn", left <= 8000 && left > 3500);
+    el.timerbar.classList.toggle("crit", left <= 3500);
+    if (left <= 0) submitAnswer("", true);
+  } else if (G.state === ST.SONAR) {
+    const wait = document.body.classList.contains("reduced") ? CFG.sonarMsReduced : CFG.sonarMs;
+    if (now - G.stateAt >= wait) revealRound();
+  } else if (G.state === ST.REVEAL) {
+    if (el.btnContinue.disabled && now >= G.continueAt) el.btnContinue.disabled = false;
+  }
+}
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  update(now);
+  World.step(dt);
+  World.draw();
+  requestAnimationFrame(frame);
+}
+
+/* The frame loop stops while the tab is hidden, but wall-clock time does not.
+   Without this, backgrounding the tab mid-round would burn the whole 20 s and
+   time you out the instant you came back. Every pending deadline is shifted by
+   however long we were away, so leaving and returning costs nothing. */
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    G.hiddenAt = performance.now();
+    if (G.state === ST.ASK && G.deadline) G.pausedLeft = Math.max(0, G.deadline - G.hiddenAt);
+  } else {
+    const now = performance.now();
+    if (G.hiddenAt) {
+      const gap = now - G.hiddenAt;
+      G.stateAt += gap;
+      if (G.continueAt) G.continueAt += gap;
+      G.hiddenAt = 0;
+    }
+    if (G.state === ST.ASK && G.pausedLeft != null) { G.deadline = now + G.pausedLeft; G.pausedLeft = null; }
+    last = now;
+  }
+});
+
+/* ---------------------------------- BOOT ---------------------------------- */
+function buildTutorial() {
+  const rows = [["Apple", 40], ["Banana", 20], ["Dragon fruit", 2]];
+  el.tutTable.textContent = "";
+  for (const [name, p] of rows) {
+    const ch = SCORING.fromPercent(p);
+    const row = document.createElement("div"); row.className = "tut-row";
+    const a = document.createElement("span"); a.className = "ans"; a.textContent = name;
+    const pc = document.createElement("span"); pc.className = "pct"; pc.textContent = p + "% gave it";
+    const c = document.createElement("span");
+    c.className = "chg " + (ch > 0 ? "down" : "up");
+    c.textContent = signed(ch) + " m " + (ch > 0 ? "↓" : "↑");
+    row.appendChild(a); row.appendChild(pc); row.appendChild(c);
+    el.tutTable.appendChild(row);
+  }
+}
+function paintTitle() {
+  const ds = Store.loadDataset() || DEMO_DATA;
+  const t = Store.best(Store.bucket("timed", ds.datasetVersion));
+  el.titleBest.textContent = t != null
+    ? "Your deepest dive on this device: " + fmt(t) + " m — " + zoneAt(t).name + "."
+    : "No dives recorded on this device yet.";
+}
+
+const DEMO_DATA = (function () {
+  try {
+    const raw = JSON.parse(document.getElementById("deepcut-demo-data").textContent);
+    const v = validateDataset(raw);
+    if (!v.ok) throw new Error(v.errors.join(" "));
+    return raw;
+  } catch (e) {
+    return { datasetVersion: "fallback-0", sourceType: "simulated-demo", questions: [{
+      id: "fallback", prompt: "Name a fruit.", category: "food", sampleSize: 100,
+      answers: [{ canonical: "apple", aliases: ["apples"], count: 40 },
+                { canonical: "banana", aliases: ["bananas"], count: 20 },
+                { canonical: "dragon fruit", aliases: ["dragonfruit", "pitaya"], count: 2 }],
+      knownInvalid: [{ term: "carrot", why: "A carrot is a root vegetable." }] }] };
+  }
+})();
+
+Store.load();
+applySettings();
+World.init(document.getElementById("ocean"));
+World.reset(Math.floor(Math.random() * 1e9), Store.best(Store.bucket("timed", DEMO_DATA.datasetVersion)));
+World.goTo(18);
+el.schemaBlock.textContent = SCHEMA_TEXT;
+el.scoringNote.textContent = SCORING.label + " (" + SCORING.id + ") — " + SCORING.describe() +
+  "; unmeasured answer or timeout " + SCORING.unsupportedPenalty + " m; anchor doubles one round.";
+paintBadges(); paintTitle(); paintDataStatus(); buildTutorial(); paintChart();
+if (Store.corrupted) msg(el.dataMsg, "Saved records were unreadable and have been reset. Settings restored to defaults.", true);
+show("screenTitle");
+requestAnimationFrame(frame);
+
+/* Documented public surface. Replacing the bundled demo data needs nothing
+   more than this - no rebuild, no code change:
+     DEEPCUT.loadDataset(json)   -> {ok, errors}   applies from the next dive
+     DEEPCUT.restoreDemo()                         back to the bundled set
+     DEEPCUT.datasetFormat()     -> the schema as text
+     DEEPCUT.score(percent)      -> metres of depth change
+     DEEPCUT.check(questionId, "answer")           how a given answer resolves
+*/
+window.DEEPCUT = {
+  version: "1.0.0",
+  loadDataset(json) {
+    const data = typeof json === "string" ? JSON.parse(json) : json;
+    const v = validateDataset(data);
+    if (v.ok) { Store.saveDataset(data); paintDataStatus(); paintBadges(); paintChart(); }
+    return v;
+  },
+  restoreDemo() { Store.clearDataset(); paintDataStatus(); paintBadges(); paintChart(); return true; },
+  datasetFormat() { return SCHEMA_TEXT; },
+  activeDataset() { return activeDataset(); },
+  score(percent) { return SCORING.fromPercent(percent); },
+  scoring: SCORING,
+  check(questionId, text) {
+    const ds = G.dataset || prepareDataset(activeDataset());
+    const q = ds.compiled.find(x => x.id === questionId);
+    if (!q) return { error: "no such question id" };
+    const r = resolveAnswer(q, text, Store.data.settings.typo);
+    return {
+      kind: r.kind,
+      canonical: r.kind === MATCH.HIT ? r.answer.canonical : null,
+      percent: r.kind === MATCH.HIT ? r.answer.percent : null,
+      change: r.kind === MATCH.HIT ? SCORING.fromPercent(r.answer.percent) : SCORING.unsupportedPenalty,
+      corrected: r.corrected || null,
+      why: r.why || null,
+    };
+  },
+  /* verification handles - the game does not read these */
+  _internals: { G, World, Store, SCORING, MATCH, norm, keysFor, resolveAnswer, prepareDataset, validateDataset, zoneAt, compileQuestion, update },
+};
+
+/* Keep a live viewer's dive intact across a republish. */
+try {
+  window.claude && window.claude.hot && window.claude.hot.snapshot &&
+    window.claude.hot.snapshot(() => ({ state: G.state, depth: G.depth, round: G.round }));
+} catch (e) {}
+
+</script>
