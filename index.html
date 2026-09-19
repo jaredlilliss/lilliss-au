@@ -46,6 +46,82 @@
 
 <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
 <style>
+/* ---- the fault picker: #services, #about and the certs, merged ------------
+   A stranger arrives with a symptom, not a shopping list. So the section asks
+   what has gone wrong and answers it, instead of asking to be read.
+
+   No JavaScript: five radios plus :checked sibling selectors. A native radio
+   group already gives arrow-key navigation, a single tab stop and the right
+   screen-reader semantics; a scripted picker would have to win all three back.
+   The inputs are moved off-screen rather than display:none, because
+   display:none drops them out of the tab order and the control stops being
+   reachable by keyboard at all. */
+.diag{margin-top:52px}
+.diag>input{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.diag-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+  gap:clamp(18px,3vw,46px);align-items:start}
+@media (max-width:900px){ .diag-grid{grid-template-columns:minmax(0,1fr)} }
+
+.faults{display:flex;flex-direction:column;gap:8px;min-width:0}
+.faults label{display:flex;align-items:center;gap:13px;cursor:pointer;min-width:0;
+  padding:15px 17px;border:1px solid var(--edge);border-radius:var(--r);
+  background:var(--s-1);color:var(--muted);
+  font-size:clamp(14.6px,1.5vw,16px);line-height:1.35;
+  transition:color .26s,border-color .26s,background .26s,transform .26s}
+.faults label:hover{color:var(--ink);border-color:var(--edge-2);background:var(--s-2)}
+.faults label::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;
+  background:transparent;border:1px solid var(--edge-2);
+  transition:background .26s,border-color .26s,box-shadow .26s}
+
+.answers{position:relative;min-width:0}
+.ans{display:none;border:1px solid var(--edge);border-radius:var(--r-lg);
+  background:var(--s-1);padding:clamp(24px,3vw,34px);
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+.ans h3{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,29px);
+  letter-spacing:-.01em;line-height:1.16;margin-bottom:14px}
+.ans .lead{color:var(--ink);font-size:clamp(15.5px,1.7vw,17.5px);margin-bottom:14px}
+.ans .note{color:var(--muted);font-size:clamp(14.4px,1.5vw,15.6px)}
+.ans .when{display:block;margin-top:20px;padding-top:16px;border-top:1px solid var(--edge);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember)}
+
+/* the lit row and the panel it opens */
+#f-till:checked~.diag-grid .a-till{display:block}
+#f-till:checked~.diag-grid label[for="f-till"]{color:var(--ink);border-color:rgba(255,140,74,.45);background:var(--s-2);transform:translateX(4px)}
+#f-till:checked~.diag-grid label[for="f-till"]::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 11px 2px rgba(255,140,74,.45)}
+#f-pc:checked~.diag-grid .a-pc{display:block}
+#f-pc:checked~.diag-grid label[for="f-pc"]{color:var(--ink);border-color:rgba(255,140,74,.45);background:var(--s-2);transform:translateX(4px)}
+#f-pc:checked~.diag-grid label[for="f-pc"]::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 11px 2px rgba(255,140,74,.45)}
+#f-net:checked~.diag-grid .a-net{display:block}
+#f-net:checked~.diag-grid label[for="f-net"]{color:var(--ink);border-color:rgba(255,140,74,.45);background:var(--s-2);transform:translateX(4px)}
+#f-net:checked~.diag-grid label[for="f-net"]::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 11px 2px rgba(255,140,74,.45)}
+#f-cam:checked~.diag-grid .a-cam{display:block}
+#f-cam:checked~.diag-grid label[for="f-cam"]{color:var(--ink);border-color:rgba(255,140,74,.45);background:var(--s-2);transform:translateX(4px)}
+#f-cam:checked~.diag-grid label[for="f-cam"]::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 11px 2px rgba(255,140,74,.45)}
+#f-admin:checked~.diag-grid .a-admin{display:block}
+#f-admin:checked~.diag-grid label[for="f-admin"]{color:var(--ink);border-color:rgba(255,140,74,.45);background:var(--s-2);transform:translateX(4px)}
+#f-admin:checked~.diag-grid label[for="f-admin"]::before{background:var(--ember);border-color:var(--ember);box-shadow:0 0 11px 2px rgba(255,140,74,.45)}
+
+/* keyboard: the radio is off-screen, so the ring has to be drawn on its label */
+#f-till:focus-visible~.diag-grid label[for="f-till"]{outline:2px solid var(--ember);outline-offset:3px}
+#f-pc:focus-visible~.diag-grid label[for="f-pc"]{outline:2px solid var(--ember);outline-offset:3px}
+#f-net:focus-visible~.diag-grid label[for="f-net"]{outline:2px solid var(--ember);outline-offset:3px}
+#f-cam:focus-visible~.diag-grid label[for="f-cam"]{outline:2px solid var(--ember);outline-offset:3px}
+#f-admin:focus-visible~.diag-grid label[for="f-admin"]{outline:2px solid var(--ember);outline-offset:3px}
+
+.habits{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:clamp(16px,2.4vw,34px);margin-top:clamp(44px,5vw,66px);
+  padding-top:clamp(28px,3vw,38px);border-top:1px solid var(--edge)}
+.habit h4{font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:8px;line-height:1.2}
+.habit p{color:var(--muted);font-size:14.8px}
+.creds{margin-top:clamp(26px,3vw,34px);font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.creds b{color:var(--muted);font-weight:400}
+@media (prefers-reduced-motion:reduce){
+  .faults label{transition:none}
+}
+
 /* ---- seamless navigation between the pages of this site -------------------
    Cross-document view transitions. No script, no router: the browser cross-fades
    the old page into the new one, and the masthead is named so it stays put
@@ -273,7 +349,10 @@ h2{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1
   line-height:1.6;color:var(--muted)}
 
 /* ── services ──────────────────────────────────────────────────────────── */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:18px;margin-top:58px}
+/* min() so the track can collapse below its own minimum on a small phone: a grid
+   track minimum is a hard floor, and 268px inside a 214px column is 14px of the
+   whole document hanging off the right edge at 320. */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,268px),1fr));gap:18px;margin-top:58px}
 .card{position:relative;background:var(--s-1);border:1px solid var(--edge);border-radius:var(--r-lg);
   padding:30px 26px;overflow:hidden;
   -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
@@ -328,7 +407,6 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     <nav>
       <a href="#work">Work</a>
       <a href="#services">Services</a>
-      <a href="#about">About</a>
       <a class="cta" href="#contact">Contact</a>
       <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
     </nav>
@@ -442,7 +520,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
         <p>Older builds, experiments, and the writing about how each one is put
         together &mdash; single-file sites, offline-capable, no frameworks.</p>
         <div class="work-foot">
-          <a class="wln" href="/work/">Every build and its state &rarr;</a>
+          <a class="wln" href="/work/">The full index &rarr;</a>
           <a class="wln" href="https://jaredlilliss.github.io/">The personal site &rarr;</a>
         </div>
       </article>
@@ -450,75 +528,88 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   </div>
 </section>
   <section id="services">
-    <p class="sec-k rv">Services</p>
-    <h2 class="rv">On site</h2>
+    <p class="sec-k rv">What I fix</p>
+    <h2 class="rv">Tell me what<br>has gone wrong.</h2>
     <p class="sec-sub rv">
       Hospitality venues and small businesses across Sydney and regional NSW,
-      usually the same day.
+      usually the same day. Pick the one that sounds like your week.
     </p>
 
-    <div class="cards">
-      <article class="card rv">
-        <h3>POS &amp; EFTPOS</h3>
-        <p>Rollouts, replacements and fault resolution for point-of-sale and payment terminals.</p>
-      </article>
-      <article class="card rv">
-        <h3>Windows support</h3>
-        <p>Setup, repair, migration and endpoint hardware for Windows machines.</p>
-      </article>
-      <article class="card rv">
-        <h3>Networks</h3>
-        <p>Structured cabling, switching and Wi-Fi for small sites &mdash; runs labelled, layout documented.</p>
-      </article>
-      <article class="card rv">
-        <h3>CCTV &amp; AV</h3>
-        <p>Camera and audio-visual installation and troubleshooting, from mounting to configuration.</p>
-      </article>
-      <article class="card rv">
-        <h3>Small-business IT</h3>
-        <p>Email, printers, backups, and dealing with vendors so you don't have to.</p>
-      </article>
-    </div>
-  </section>
+    <div class="diag rv" role="group" aria-label="Common faults">
+      <input type="radio" name="fault" id="f-till" checked>
+      <input type="radio" name="fault" id="f-pc">
+      <input type="radio" name="fault" id="f-net">
+      <input type="radio" name="fault" id="f-cam">
+      <input type="radio" name="fault" id="f-admin">
 
-
-<section id="about">
-    <p class="sec-k rv">About</p>
-    <h2 class="rv">Two kinds of work,<br>one set of habits</h2>
-
-    <div class="two">
-      <div class="prose rv">
-        <p>
-          The health platform is a polling loop feeding an append-only PostgreSQL
-          time series. <strong>Its privacy posture is set at the schema level</strong>
-          &mdash; there is no column for personal or health information, so none can
-          be collected by mistake rather than none being collected by policy. Nothing
-          is ever updated in place either: a reading that turns out to be wrong is
-          corrected by a later row, not by editing the record of what was published
-          at the time.
-        </p>
-        <p>
-          The site work is the same instinct. Every build here is a single
-          self-contained HTML file &mdash; no framework, no build step, no tracker,
-          fonts served from the same domain &mdash; because a page that depends on
-          four services is a page with four ways to stop working.
-        </p>
-        <p>
-          The field work keeps it honest. When a venue's tills stop mid-service the
-          fix has to hold, and it has to be written down, because the next person on
-          that site inherits whatever I leave behind.
-          <a href="https://jaredlilliss.github.io/" style="color:var(--ember);text-decoration:none;border-bottom:1px solid var(--ember-dim)">See the build →</a>
-        </p>
+      <div class="diag-grid">
+        <div class="faults">
+        <label for="f-till">The tills have stopped</label>
+        <label for="f-pc">A machine will not start</label>
+        <label for="f-net">Nothing is on the network</label>
+        <label for="f-cam">A camera or a screen is dead</label>
+        <label for="f-admin">Email, printers, backups &mdash; a mess</label>
+        </div>
+        <div class="answers">
+        <div class="ans a-till">
+          <h3>POS &amp; EFTPOS</h3>
+          <p class="lead">Rollouts, replacements and fault resolution for point-of-sale and payment terminals.</p>
+          <p class="note">Mid-service is the worst time for this and the most common time. The fix has to hold, and it gets written down, because the next person on that site inherits whatever I leave behind.</p>
+          <span class="when">Sydney &amp; regional NSW &middot; usually the same day</span>
+        </div>
+        <div class="ans a-pc">
+          <h3>Windows support</h3>
+          <p class="lead">Setup, repair, migration and endpoint hardware for Windows machines.</p>
+          <p class="note">Setup, repair or replace &mdash; whichever one actually ends the problem, rather than the one that gets the shop open until Thursday.</p>
+          <span class="when">Sydney &amp; regional NSW &middot; usually the same day</span>
+        </div>
+        <div class="ans a-net">
+          <h3>Networks</h3>
+          <p class="lead">Structured cabling, switching and Wi-Fi for small sites.</p>
+          <p class="note">Runs labelled, layout documented. A site nobody can trace is a site that costs double the second time something goes wrong in it.</p>
+          <span class="when">Sydney &amp; regional NSW &middot; usually the same day</span>
+        </div>
+        <div class="ans a-cam">
+          <h3>CCTV &amp; AV</h3>
+          <p class="lead">Camera and audio-visual installation and troubleshooting, from mounting to configuration.</p>
+          <p class="note">Mounting through to configuration, so there is no gap between the person who hung it and the person who has to make it work.</p>
+          <span class="when">Sydney &amp; regional NSW &middot; usually the same day</span>
+        </div>
+        <div class="ans a-admin">
+          <h3>Small-business IT</h3>
+          <p class="lead">Email, printers, backups, and dealing with vendors so you don’t have to.</p>
+          <p class="note">Including the part nobody wants, which is being on hold to a vendor who would rather talk to anyone but you.</p>
+          <span class="when">Sydney &amp; regional NSW &middot; usually the same day</span>
+        </div>
+        </div>
       </div>
-
-      <aside class="certs rv">
-        <h4>Certifications</h4>
-        <div class="cert"><b>CompTIA A+</b><span class="held">Held</span></div>
-        <div class="cert"><b>Microsoft Azure Fundamentals (AZ-900)</b><span class="held">Held</span></div>
-        <div class="cert"><b>CompTIA Security+</b><span class="wip">In progress · 2026</span></div>
-      </aside>
     </div>
+
+    <div class="habits rv">
+      <div class="habit">
+        <h4>It gets written down</h4>
+        <p>The fix has to hold, and the next person on that site inherits whatever I leave
+        behind &mdash; so the work is documented rather than remembered.</p>
+      </div>
+      <div class="habit">
+        <h4>Nothing here can phone home</h4>
+        <p>Every build on this site is a single self-contained HTML file. No framework, no
+        tracker, fonts from this domain. A page that depends on four services has four ways
+        to stop working.</p>
+      </div>
+      <div class="habit">
+        <h4>Privacy set at the schema</h4>
+        <p>The health platform has no column for personal or health information, so none can
+        be collected by mistake rather than none being collected by policy.
+        <a class="wln" href="https://jaredlilliss.github.io/">The build &rarr;</a></p>
+      </div>
+    </div>
+
+    <p class="creds rv">Certified &mdash; <b>CompTIA A+</b> &middot; <b>Microsoft AZ-900</b>
+    &middot; <b>CompTIA Security+ in progress</b></p>
   </section>
+
+  
 
 
   <section id="contact">
