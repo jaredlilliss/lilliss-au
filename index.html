@@ -46,6 +46,30 @@
 
 <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
 <style>
+/* ---- the built strip: four things and their state, instead of four paragraphs
+   Replaces a 366-word section that restated /work/. The detail is one click
+   away; this is here so the front page still shows the work exists. */
+/* explicit column counts rather than auto-fit: auto-fit packed four chips as 3+1 and
+   left one stranded on its own row. Four, two, one. */
+.strip{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;margin-top:44px;align-items:stretch}
+@media (max-width:1040px){ .strip{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px){ .strip{grid-template-columns:minmax(0,1fr)} }
+.strip li{display:flex}
+.strip a{flex:1;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;
+  padding:17px 19px;border:1px solid var(--edge);border-radius:var(--r);background:var(--s-1);
+  text-decoration:none;transition:border-color .26s,background .26s,transform .26s}
+.strip a:hover,.strip a:focus-visible{border-color:rgba(255,140,74,.42);background:var(--s-2);
+  transform:translateY(-3px)}
+.strip b{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--ink);
+  letter-spacing:-.008em;min-width:0}
+.strip .st{flex:0 0 auto;font-family:var(--mono);font-style:normal;font-size:10px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--edge-2);border-radius:999px;padding:5px 9px}
+.strip .st.on{color:var(--live);border-color:rgba(95,211,154,.45);background:rgba(95,211,154,.08)}
+.strip-foot{display:flex;flex-wrap:wrap;gap:12px 26px;margin-top:26px}
+@media (prefers-reduced-motion:reduce){ .strip a{transition:none} }
+
 /* ---- the fault picker: #services, #about and the certs, merged ------------
    A stranger arrives with a symptom, not a shopping list. So the section asks
    what has gone wrong and answers it, instead of asking to be read.
@@ -405,7 +429,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   <div class="bar">
     <a class="sig" href="/"><b>LILLISS</b> IT</a>
     <nav>
-      <a href="#work">Work</a>
+      <a href="/work/">Work</a>
       <a href="#services">Services</a>
       <a class="cta" href="#contact">Contact</a>
       <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
@@ -436,7 +460,7 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
     </p>
 
     <div class="cta">
-      <a class="btn hot" href="#work">See the work</a>
+      <a class="btn hot" href="/work/">See the work</a>
       <a class="btn" href="#contact">Get in touch</a>
     </div>
 
@@ -448,84 +472,32 @@ footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
   </section>
 
 
-  <section id="work">
+  <section id="built">
   <div class="wrap">
-    <p class="sec-k rv">Work</p>
+    <p class="sec-k rv">Built</p>
     <h2 class="rv">Some of it is still running.</h2>
     <p class="sec-sub rv">
-      A live data pipeline, and two concept sites built to see how far a single
-      HTML file can go. Everything here is either running right now or labelled
-      as a concept on its own page.
+      A live data pipeline and three single-file builds. Each one says whether it is
+      running right now or labelled as a concept.
     </p>
 
-    <div class="cards">
-      <article class="card rv">
-        <h3>Aussie Health Utility</h3>
-        <p>It has run unattended on a small Melbourne server since the August 2026 cutover,
-        backing itself up nightly, and nobody has had to touch it. The board it
-        publishes is open to anyone &mdash; and the counting method is printed on
-        the board itself, including the things the numbers cannot be used to say.</p>
-        <div class="work-foot">
-          <a class="wln" href="https://jaredlilliss.github.io/queue-board/">The live board &rarr;</a>
-          <a class="wln" href="https://github.com/jaredlilliss/aussie-health-utility">Public mirror &rarr;</a>
-          <span class="wnote">Public mirror &mdash; the working repository stays private.</span>
-        </div>
-      </article>
+    <ul class="strip rv">
+      <li><a href="https://jaredlilliss.github.io/queue-board/">
+        <b>Queue Board</b><i class="st on">Running</i></a></li>
+      <li><a href="/deep-cut/">
+        <b>Deep Cut</b><i class="st on">Playable</i></a></li>
+      <li><a href="/stillwild-concept/">
+        <b>Still Wild</b><i class="st">Concept</i></a></li>
+      <li><a href="/xperience-concept/">
+        <b>Xperience Space</b><i class="st">Concept</i></a></li>
+    </ul>
 
-      <article class="card rv">
-        <h3>Still Wild &mdash; concept</h3>
-        <p>A concept site for a Brisbane adventure business, built as one
-        self-contained HTML file: a live canvas dawn over layered ridges, five
-        languages, and an honesty layer that labels every invented detail as
-        invented rather than quietly leaving it in.</p>
-        <div class="work-foot">
-          <a class="wln" href="/stillwild-concept/">See the concept &rarr;</a>
-          <span class="wnote">Built from the business&rsquo;s published photographs, with
-          permission, for prototyping. Not affiliated with them.</span>
-        </div>
-      </article>
-
-      <article class="card rv">
-        <h3>XperienceSpace &mdash; concepts</h3>
-        <p>A bilingual one-page brochure built to the UAE government's own design
-        system, English and Arabic, with the language switch working even with
-        scripting off &mdash; and a companion timeline where every date traces to
-        a named government source, with the gaps left visibly empty rather than
-        filled in.</p>
-        <div class="work-foot">
-          <a class="wln" href="/xperience-concept/brochure.html">The brochure &rarr;</a>
-          <a class="wln" href="/xperience-concept/spine.html">The sourced timeline &rarr;</a>
-          <span class="wnote">An unsolicited concept. No affiliation with the organisation
-          it depicts.</span>
-        </div>
-      </article>
-
-      <article class="card rv">
-        <h3>Deep Cut &mdash; a game</h3>
-        <p>A diving game about rare answers. Every prompt has many right
-        answers and the crowd already found the easy ones; name something they
-        overlooked and the ship takes on ballast. Common answers float, rare
-        answers sink, and the deepest dive wins. One self-contained file that
-        runs entirely in your browser, with no account, no server and nothing
-        leaving the device.</p>
-        <div class="work-foot">
-          <a class="wln" href="/deep-cut/">Play it &rarr;</a>
-          <span class="wnote">Plays on simulated demo data. No respondent ever
-          existed, and no figure in the game is a measurement of anybody.</span>
-        </div>
-      </article>
-
-      <article class="card rv">
-        <h3>Everything else</h3>
-        <p>Older builds, experiments, and the writing about how each one is put
-        together &mdash; single-file sites, offline-capable, no frameworks.</p>
-        <div class="work-foot">
-          <a class="wln" href="/work/">The full index &rarr;</a>
-          <a class="wln" href="/designs/">A design of it &rarr;</a>
-          <a class="wln" href="https://jaredlilliss.github.io/">The personal site &rarr;</a>
-        </div>
-      </article>
-    </div>
+    <p class="strip-foot rv">
+      <a class="wln" href="/work/">The full index &rarr;</a>
+      <a class="wln" href="/designs/">A design of it &rarr;</a>
+      <a class="wln" href="https://github.com/jaredlilliss/aussie-health-utility">The code &rarr;</a>
+      <a class="wln" href="https://jaredlilliss.github.io/">The personal site &rarr;</a>
+    </p>
   </div>
 </section>
   <section id="services">
