@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lilliss IT — Jared Lilliss</title>
-<meta name="description" content="IT support for the systems businesses across Sydney and regional NSW run on. On site for point-of-sale, networks, Windows machines and cameras; the same hands build and run the software.">
-<link rel="icon" href="/icon.svg">
+<meta name="description" content="Jared Lilliss — field IT across Sydney and regional NSW: point-of-sale and EFTPOS, networks, Windows, cameras. And software built to keep running, including a live NSW health-data collector.">
 <meta name="theme-color" content="#05070d">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://lilliss.au/">
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lilliss IT">
 <meta property="og:title" content="Lilliss IT — Jared Lilliss">
@@ -18,17 +19,22 @@
 <meta property="og:image" content="https://lilliss.au/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Lilliss IT front page: a dusk horizon with an orange sun low over a dark ground, the headline “IT support for the systems a business runs on”, and a panel of live collector figures beside it">
+<meta property="og:image:alt" content="Jared Lilliss, Lilliss IT: the name in serif over a night sky with an aurora, a lit cable rail down the left">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://lilliss.au/og.png">
 <meta name="twitter:title" content="Lilliss IT — Jared Lilliss">
-<meta name="twitter:description" content="Field IT across Sydney and regional NSW — point-of-sale, networks, Windows, cameras. And software built to keep running, including a live NSW health-data collector.">
+<meta name="twitter:description" content="Field IT across Sydney and regional NSW, and software built to keep running — including a live NSW health-data collector.">
+
+
+<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Lilliss IT",
-  "description": "Jared Lilliss \u2014 field IT across Sydney and regional NSW, and software built to keep running, including a live NSW health-data collector.",
+  "description": "Jared Lilliss — field IT across Sydney and regional NSW, and software built to keep running, including a live NSW health-data collector.",
   "url": "https://lilliss.au/",
   "email": "jared@lilliss.au",
   "founder": { "@type": "Person", "name": "Jared Lilliss" },
@@ -37,407 +43,727 @@
   "knowsAbout": ["Point of sale systems","EFTPOS terminals","Windows endpoint support","Structured cabling","CCTV installation","Audio visual installation"]
 }
 </script>
-<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+
+<noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
 <style>
-@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces.woff2') format('woff2')}
-@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-italic.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/plexmono-400.woff2') format('woff2')}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
-@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
-</style>
-<style>
-:root{
-  /* NIGHT OVER NSW. The ground is a named place, not a tint: deep night at the top,
-     a thin pre-dawn band at the horizon, darker land beneath it. The lights on the
-     horizon are the 59 emergency departments that publish a count - the scene IS the
-     proof, which is why there is no separate "proof" card fighting it. */
-  --abyss:#04070f; --night:#070c18; --night2:#0a1120; --land:#050810;
-  --dawn:#1b2236; --dawn2:#3a3248;
-  --ink:#e8edf5; --mute:#93a0b8; --dim:#78859c;
-  --amber:#ffb360; --amber-deep:#c2761f;
-  --live:#6fd6c4;
-  --rule:rgba(232,237,245,.14); --rule2:rgba(232,237,245,.26);
-  --serif:'Fraunces',Iowan Old Style,Georgia,serif;
-  --sans:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,Cascadia Mono,Consolas,monospace;
-  --wrap:1180px;
+/* ---- seamless navigation between the pages of this site -------------------
+   Cross-document view transitions. No script, no router: the browser cross-fades
+   the old page into the new one, and the masthead is named so it stays put
+   instead of blinking. Anything that does not support it just navigates, which
+   is exactly what it did before. */
+@view-transition{navigation:auto}
+header .bar{view-transition-name:masthead}
+.sig{view-transition-name:sig}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}
+::view-transition-old(masthead),::view-transition-new(masthead){animation:none}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
+
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;
+  src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
+:root{
+  /* ground + ink — never pure black, never pure white */
+  --bg:#05070d; --bg-2:#080b13;
+  --ink:#eceff5; --muted:#8d96aa; --dim:#7b8498;
+
+  /* Surfaces are WHITE AT LOW ALPHA rather than separate colours.
+     Cheap-looking dark UIs pick a lighter grey and paint it on; that reads as
+     a different material. Low-alpha white stays the same material lit slightly
+     more, which is why it holds up over a moving background. */
+  --s-1:rgba(255,255,255,.022);
+  --s-2:rgba(255,255,255,.042);
+  --s-3:rgba(255,255,255,.068);
+  --edge:rgba(255,255,255,.085);
+  --edge-2:rgba(255,255,255,.15);
+
+  --ember:#ff8c4a; --ember-deep:#c85c22; --ember-dim:rgba(255,140,74,.16);
+  --live:#5fd39a;
+
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
+
+
+  --maxw:clamp(1080px, 68vw, 1560px);
+  --pad:clamp(20px,4.4vw,44px);
+  --rail:clamp(0px,4vw,68px);   /* the cable's column, collapses to 0 on phones */
+  --r:14px; --r-lg:20px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
-  background:var(--abyss);
-  color:var(--ink);
-  font:400 16px/1.62 var(--sans);
-  -webkit-font-smoothing:antialiased;
+  background:var(--bg);color:var(--ink);
+  font:400 16.5px/1.68 var(--sans);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
+  /* Fraunces carries an optical-size axis whose default is 9 (its smallest
+     design). Stated explicitly rather than left to the initial value, because
+     without it a 116px headline would render the caption-sized drawing. */
+  font-optical-sizing:auto;
 }
 a{color:inherit}
-img,canvas{display:block;max-width:100%}
-:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+::selection{background:var(--ember);color:#140a04}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:4px}
+/* .btn.hot IS --ember and the ring above is --ember, so the focus indicator on the primary
+   call to action was invisible: measured 06/09/2026, ring #ff8c4a on surface #ff8c4a, ratio
+   1.00. WCAG 2.4.7 Focus Visible is Level A. #140a04 is the button's OWN label colour,
+   already chosen to read on ember, so it also holds on :hover where the background flips to
+   --ink. 8.47:1 against the 3.0 a focus indicator needs. */
+.btn.hot:focus-visible{outline-color:#140a04}
 
-/* ---------- the scene ---------- */
-/* CSS paints the whole sky, the dawn band, the horizon and the land. The canvas only
-   ADDS stars and the lights along the horizon, so with scripting off the scene is
-   still a scene rather than a black rectangle - which is the whole no-JS condition. */
-/* The sky is a BAND of a known height, not a full-bleed tint. Everything above the
-   horizon is allowed to be as bright and coloured as it likes, because no reading text
-   lives there; everything below is the dark land, where all the text sits. That split is
-   what lets the page be a scene AND clear AA, instead of trading one for the other. */
-:root{--skyh:clamp(206px,34vh,330px)}
-.scene{position:relative;min-height:min(100svh,960px);display:flex;flex-direction:column;isolation:isolate;
-  background:linear-gradient(180deg,#0c1422 0%,#080e19 22%,#05080f 62%,var(--abyss) 100%)}
-.sky{position:absolute;left:0;right:0;top:0;height:var(--skyh);z-index:0;overflow:hidden;background:
-  linear-gradient(180deg,
-    #05070f 0%,
-    #090e26 18%,
-    #141539 33%,
-    #2b1f45 49%,
-    #4d2b4a 63%,
-    #7d3f45 74%,
-    #b0603a 84%,
-    #d8863f 93%,
-    #efa35d 100%);}
-/* the sun, sitting on the horizon to the right - the light in the first screen */
-.sky::before{content:"";position:absolute;right:16%;bottom:-34px;width:172px;height:172px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,226,170,.95) 0%,rgba(255,193,116,.72) 26%,rgba(255,164,86,.30) 46%,rgba(255,150,70,.10) 66%,transparent 78%);
-  pointer-events:none}
-/* one soft veil over the whole band so the brightest part never sits under the nav */
-.sky::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(4,7,15,.55) 0%,rgba(4,7,15,.18) 26%,rgba(4,7,15,0) 52%)}
-/* the canvas runs PAST the horizon so the town lights can stand on the dark land just
-   below it - on the bright dawn band itself an amber point is invisible, which is how
-   the first build of this lost all 59 of them */
-#stars{position:absolute;left:0;right:0;top:0;height:calc(var(--skyh) + 74px);z-index:1;width:100%;pointer-events:none}
-/* the horizon: the edge the eye lands on, and the shelf the lights stand on */
-.horizon{position:absolute;left:0;right:0;top:var(--skyh);height:0;z-index:2;pointer-events:none;
-  border-top:1px solid rgba(255,200,140,.55);
-  box-shadow:0 -10px 26px -6px rgba(255,150,70,.30), 0 1px 0 0 rgba(4,7,15,.9), 0 14px 34px -14px rgba(0,0,0,.9)}
-
-.bar{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;
-  gap:20px;padding:22px clamp(18px,4vw,44px)}
-.mark{font:600 13px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--ink);text-decoration:none}
-.mark b{color:var(--amber);font-weight:600}
-nav{display:flex;gap:clamp(14px,2.4vw,30px);align-items:center}
-nav a{font:500 12px/1 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:var(--mute);text-decoration:none}
-nav a:hover{color:var(--ink)}
-nav a.cta{color:var(--amber)}
-
-/* content begins BELOW the horizon, on the land - never on the bright band */
-.stage{position:relative;z-index:3;flex:1;display:flex;align-items:center;
-  padding:calc(var(--skyh) - 56px) clamp(18px,4vw,44px) clamp(34px,7vh,78px)}
-.col{width:100%;max-width:min(var(--wrap),100%);margin:0 auto;
-  display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.86fr);gap:clamp(26px,5vw,68px);align-items:center}
-/* a grid track's implicit minimum is min-content, so one non-wrapping child (the badge)
-   pushes the whole column past the viewport. Floor every track and child at zero. */
-.col > *{min-width:0}
-
-.badge{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px;font:500 11px/1.5 var(--mono);
-  letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin:0 0 22px}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 0 3px rgba(111,214,196,.15)}
-
-h1{margin:0;font-family:var(--serif);font-weight:500;letter-spacing:-.021em;line-height:1.04;
-  font-size:clamp(33px,5.1vw,62px);max-width:15ch;text-wrap:balance}
-.said{margin:20px 0 0;font-family:var(--serif);font-style:italic;font-weight:300;
-  font-size:clamp(17px,2.05vw,25px);line-height:1.38;color:var(--ink);opacity:.9;max-width:26ch}
-.lede{margin:22px 0 0;max-width:46ch;color:var(--mute);font-size:clamp(15px,1.42vw,16.5px);line-height:1.66}
-.acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 21px;
-  border:1px solid var(--rule2);border-radius:999px;background:transparent;color:var(--ink);
-  font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
-  transition:background .16s,border-color .16s,color .16s}
-.btn:hover{border-color:var(--amber);color:var(--amber)}
-.btn.key{background:var(--amber);border-color:var(--amber);color:#1a0f02}
-.btn.key:hover{background:#ffc47f;border-color:#ffc47f;color:#1a0f02}
-
-/* ---------- the object standing in the scene ---------- */
-/* This is the specimen panel: a real instrument on the page, lit from the dawn side.
-   Every figure in it is canon and none of them are computed here. */
-.spec{border:1px solid var(--rule);border-radius:3px;background:rgba(4,7,15,.62);
-  padding:clamp(18px,2.4vw,26px);backdrop-filter:blur(2px)}
-.spec-h{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
-  padding-bottom:13px;border-bottom:1px solid var(--rule)}
-.spec-h .k{font:600 10px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
-.spec-h .v{font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
-.row{display:grid;grid-template-columns:auto 1fr;gap:clamp(12px,1.8vw,20px);align-items:baseline;
-  padding:14px 0;border-bottom:1px solid var(--rule)}
-.row:last-of-type{border-bottom:0;padding-bottom:4px}
-.n{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.5vw,40px);line-height:.96;
-  color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.n small{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--mute);margin-left:5px}
-.d{color:var(--mute);font-size:13.5px;line-height:1.5}
-.d b{color:var(--ink);font-weight:600}
-.spec-f{margin:14px 0 0;font:400 11.5px/1.6 var(--mono);color:var(--dim);letter-spacing:.02em}
-.spec-f a{color:var(--mute)}
-
-/* ---------- below the fold: short, and it stops ---------- */
-main{position:relative;z-index:2;background:#03060c;border-top:1px solid var(--rule)}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:clamp(40px,7vh,74px) clamp(18px,4vw,44px)}
-h2{margin:0 0 6px;font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.5vw,28px);letter-spacing:-.012em}
-.h-note{margin:0 0 26px;color:var(--dim);font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:1px;background:var(--rule)}
-.cell{background:#03060c;padding:20px clamp(16px,1.8vw,22px)}
-.cell h3{margin:0 0 7px;font:600 12px/1.3 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--amber)}
-.cell p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.58}
-.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:clamp(18px,2.6vw,32px);margin-top:clamp(30px,5vh,48px)}
-.term b{display:block;font-family:var(--serif);font-weight:500;font-size:19px;margin-bottom:5px}
-.term p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.58}
-footer{border-top:1px solid var(--rule);background:#02040a}
-.foot{max-width:var(--wrap);margin:0 auto;padding:26px clamp(18px,4vw,44px);
-  display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;justify-content:space-between;
-  font:400 12px/1.7 var(--mono);color:var(--dim);letter-spacing:.03em}
-.foot a{color:var(--mute)}
-
-@media (max-width:860px){
-  :root{--skyh:clamp(210px,32vh,300px)}
-  .col{grid-template-columns:minmax(0,1fr);gap:26px}
-  .badge{letter-spacing:.14em}
-  .btn{padding:0 16px;letter-spacing:.11em}
-  h1{font-size:clamp(30px,8.4vw,40px)}
-  .lede,.said{max-width:100%}
-  .n{font-size:clamp(26px,8vw,34px)}
-  .scene{min-height:auto}
-  .stage{padding-bottom:40px}
-  .sky::before{right:8%;width:128px;height:128px;bottom:-26px}
-  nav a:not(.cta){display:none}
+/* ── the sky ───────────────────────────────────────────────────────────── */
+#sky{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%}
+/* Forced colours (Windows High Contrast) never touch canvas pixels, so the aurora
+   kept painting under the white backplates the mode puts behind every text run —
+   rendered 08/09 under inForcedColors and looked at. Decoration goes off there. */
+@media (forced-colors:active){#sky{display:none}}
+.grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;
+  background-image:radial-gradient(rgba(141,150,170,.12) 1px,transparent 1px);
+  background-size:26px 26px;
 }
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
+header,main,footer{position:relative;z-index:3}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad) 0 calc(var(--pad) + var(--rail))}
+
+/* ── the cable ─────────────────────────────────────────────────────────────
+   Structured cabling is the trade, so the page is strung on one. A single
+   hairline runs the full document; a light travels it as you scroll, and each
+   section's node latches on when you reach it. Hidden below 860px, where the
+   rail column collapses and it would just be a stripe crowding the text. */
+.cable{
+  position:fixed;left:calc((100vw - var(--maxw))/2 + var(--pad) + var(--rail)/2);
+  top:0;bottom:0;width:1px;z-index:2;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0,var(--edge) 90px,var(--edge) calc(100% - 90px),transparent 100%);
 }
-@media (forced-colors:active){
-  .sky,.sky::before,.sky::after,#stars,.horizon{display:none}
-  .spec,.cell,.row,.grid{border-color:CanvasText}
-  .btn{border:1px solid ButtonText}
+.cable-glow{
+  position:absolute;left:50%;transform:translate(-50%,-50%);
+  top:var(--p,0%);
+  width:3px;height:200px;border-radius:3px;
+  background:linear-gradient(to bottom,transparent,var(--ember),transparent);
+  opacity:.85;filter:blur(1px);
 }
+.cable-node{
+  position:absolute;left:50%;transform:translate(-50%,-50%);
+  width:7px;height:7px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--edge-2);
+  transition:background .45s ease,border-color .45s ease,box-shadow .45s ease;
+}
+.cable-node.lit{background:var(--ember);border-color:var(--ember);box-shadow:0 0 12px 2px rgba(255,140,74,.5)}
+@media (max-width:860px){ .cable{display:none} }
+@media (prefers-reduced-motion:reduce){ .cable-glow{display:none} }
+
+/* ── nav ───────────────────────────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  background:linear-gradient(rgba(5,7,13,.9),rgba(5,7,13,0));
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  max-width:calc(var(--maxw) + 140px);margin:0 auto;padding:17px var(--pad)}
+.sig{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;white-space:nowrap}
+.sig b{color:var(--ember);font-weight:500}
+nav{display:flex;gap:3px;flex-wrap:wrap}
+nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;padding:7px 12px;border:1px solid transparent;
+  border-radius:999px;white-space:nowrap;transition:color .25s,border-color .25s}
+nav a:hover{color:var(--ink);border-color:var(--edge)}
+nav a.me{color:var(--muted)}
+
+nav a.cta{color:var(--ember)}
+/* On a phone the nav wraps to two rows. Without flex-wrap on the bar itself the
+   brand stays vertically CENTRED against those two rows, so "LILLISS IT" sits
+   BETWEEN them — half the nav above it, half beside it. It reads as a broken
+   header, and it is the first thing on the page.
+   Giving the nav its own full-width row puts the brand alone on the first line.
+   This is the rule the personal site already had; the two headers are the same
+   design and should not have been two different rules. */
+@media (max-width:560px){
+  .bar{flex-wrap:wrap;gap:8px 12px;padding:13px 16px}
+  nav{flex-wrap:wrap;width:100%;gap:4px 2px}
+  nav a{padding:6px 9px;letter-spacing:.1em}
+}
+
+/* ── hero ──────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:132px 0 72px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);display:flex;flex-wrap:wrap;gap:9px 20px;margin-bottom:30px}
+.kicker .avail{color:var(--live)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--live);
+  margin-right:8px;vertical-align:middle;animation:pulse 2.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.22}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+
+/* ── three decisions here that look like omissions ───────────────────────────
+   1. The h1 is a NAME, not a slogan. On lilliss.au that states the one-person
+      fact instead of arguing it, which the page previously did six times over.
+   2. The Aussie Health card does not repeat the hero's sentence about every ED
+      and fifteen minutes. Hero states the fact, the card says what to go and
+      look at, the About says how it is built. Keep them from converging.
+   3. Services sits AFTER Work on purpose, and each card states scope rather
+      than selling it. */
+h1{font-family:var(--serif);font-weight:600;line-height:.95;letter-spacing:-.022em;
+  font-size:clamp(44px,9.2vw,116px)}
+h1 .ln{display:block}
+h1 em{font-style:italic;color:var(--ember)}
+.lede{max-width:585px;margin-top:32px;color:var(--muted);font-size:clamp(16px,1.9vw,19.5px)}
+.lede strong{color:var(--ink);font-weight:500}
+
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
+.btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;padding:14px 24px;border-radius:999px;border:1px solid var(--edge-2);
+  transition:all .28s}
+.btn:hover{border-color:var(--ember);color:var(--ember)}
+.btn.hot{background:var(--ember);border-color:var(--ember);color:#140a04;font-weight:500}
+.btn.hot:hover{background:var(--ink);border-color:var(--ink);color:#05070d}
+
+.facts{display:flex;flex-wrap:wrap;gap:0;margin-top:46px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.06em;color:var(--dim)}
+.facts span{padding:0 18px;border-left:1px solid var(--edge)}
+.facts span:first-child{padding-left:0;border-left:0}
+@media (max-width:600px){
+  .facts{flex-direction:column;gap:7px}
+  .facts span{padding:0;border-left:0}
+}
+
+/* ── sections ──────────────────────────────────────────────────────────── */
+section{padding:clamp(84px,12vw,150px) 0}
+.sec-k{font-family:var(--mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:20px}
+h2{font-family:var(--serif);font-weight:600;letter-spacing:-.018em;line-height:1.04;
+  font-size:clamp(30px,5.4vw,58px)}
+.sec-sub{color:var(--muted);max-width:620px;margin-top:22px;font-size:clamp(15.5px,1.7vw,18px)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .85s cubic-bezier(.2,.7,.3,1),transform .85s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+
+/* ── work ──────────────────────────────────────────────────── */
+/* Three rules. The cards, grid, headings and reveal are #services' own, reused
+   unchanged - a second set of components is how a section starts looking bolted
+   on. The caveat sits in the same footer as the links, on its own row, because a
+   caveat kept somewhere else is a caveat nobody reads. */
+.work-foot{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;
+  margin-top:22px;padding-top:16px;border-top:1px solid var(--edge)}
+.wln{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember);text-decoration:none;white-space:nowrap;transition:color .28s}
+.wln:hover,.wln:focus-visible{color:var(--ink)}
+.wnote{flex-basis:100%;font-family:var(--mono);font-size:10.8px;letter-spacing:.08em;
+  /* --muted, not --dim. On the composited card --dim measures 4.33:1, the only
+     thing in this section that fails AA - and it is the caveat that protects
+     someone else's business: "with permission, for prototyping", "unsolicited
+     concept, no affiliation". The qualifier carrying the legal and ethical weight
+     should not be the hardest text on the page to read. --muted gives 6.57:1 and
+     the note still reads as secondary, because it stays small and monospaced. */
+  line-height:1.6;color:var(--muted)}
+
+/* ── services ──────────────────────────────────────────────────────────── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:18px;margin-top:58px}
+.card{position:relative;background:var(--s-1);border:1px solid var(--edge);border-radius:var(--r-lg);
+  padding:30px 26px;overflow:hidden;
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+  transition:transform .4s cubic-bezier(.2,.7,.3,1),border-color .4s,background .4s}
+.card:hover{transform:translateY(-5px);border-color:rgba(255,140,74,.4);background:var(--s-2)}
+.card h3{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.008em;margin-bottom:12px;line-height:1.2}
+.card p{color:var(--muted);font-size:15.2px}
+
+
+/* ── about + certs ─────────────────────────────────────────────────────── */
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(32px,6vw,72px);margin-top:52px;align-items:start}
+@media (max-width:800px){.two{grid-template-columns:1fr}}
+.prose p{color:var(--muted);margin-bottom:20px;font-size:16.2px}
+.prose p strong{color:var(--ink);font-weight:500}
+.certs{background:var(--s-1);border:1px solid var(--edge);border-radius:var(--r-lg);padding:26px 24px}
+.certs h4{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:18px;font-weight:400}
+.cert{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  padding:12px 0;border-top:1px solid var(--edge);font-size:14.6px}
+.cert:first-of-type{border-top:0}
+.cert b{font-weight:500}
+.cert span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);white-space:nowrap}
+.cert span.held{color:var(--live)}
+.cert span.wip{color:var(--ember)}
+
+/* ── contact ───────────────────────────────────────────────────────────── */
+.mail{display:inline-block;margin-top:34px;font-family:var(--serif);font-weight:600;
+  font-size:clamp(24px,4.6vw,50px);letter-spacing:-.02em;text-decoration:none;
+  border-bottom:2px solid var(--ember-dim);padding-bottom:5px;transition:border-color .3s,color .3s;
+  overflow-wrap:anywhere}
+.mail:hover{color:var(--ember);border-bottom-color:var(--ember)}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+
+/* ── footer ────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--edge);padding:44px 0 56px;margin-top:40px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--dim)}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--ember)}
 </style>
 </head>
 <body>
 
-<div class="scene">
-  <div class="sky" aria-hidden="true"></div>
-  <canvas id="stars" aria-hidden="true"></canvas>
-  <div class="horizon" aria-hidden="true"></div>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="cable" aria-hidden="true"><div class="cable-glow" id="glow"></div></div>
 
-  <header class="bar">
-    <a class="mark" href="/">Lilliss<b>&nbsp;IT</b></a>
-    <nav aria-label="Primary">
-      <a href="/work/">Work</a>
-      <a href="#terms">How it runs</a>
+<header>
+  <div class="bar">
+    <a class="sig" href="/"><b>LILLISS</b> IT</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
       <a class="cta" href="#contact">Contact</a>
+      <a class="me" href="https://jaredlilliss.github.io/">Jared →</a>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <div class="stage">
-    <div class="col">
-      <div>
-        <p class="badge"><span class="dot"></span>Taking new work &middot; Sydney &amp; regional NSW</p>
-        <h1>IT support for the systems a business runs on.</h1>
-        <p class="said">On site by day. Awake all night.</p>
-        <p class="lede">Point-of-sale and payment terminals, networks and cabling, Windows
-        machines, cameras and AV. The same hands build and run software, and one of
-        those builds has been taking a reading every fifteen minutes since July 2026.</p>
-        <div class="acts">
-          <a class="btn key" href="#contact">Get in touch</a>
-          <a class="btn" href="/work/">See what is running</a>
-        </div>
-      </div>
+<main class="wrap">
 
-      <aside class="spec" aria-label="The emergency department collector">
-        <div class="spec-h"><span class="k">The collector</span><span class="v">Running</span></div>
-        <div class="row">
-          <div class="n">59</div>
-          <p class="d">NSW emergency departments that publish a live count, <b>of 176
-          listed</b> &mdash; every one that publishes, read every cycle.</p>
+
+  <section class="hero" id="top">
+    <div class="kicker">
+      <span class="avail"><span class="dot"></span>Taking new work</span>
+      <span id="clock">Sydney</span>
+      <span>Bass Hill · Sydney &amp; regional NSW</span>
+    </div>
+    <h1>
+      <span class="ln">Jared</span>
+      <span class="ln"><em>Lilliss</em></span>
+    </h1>
+
+    <p class="lede">
+      I fix the gear small businesses run on &mdash; point&#8209;of&#8209;sale and EFTPOS,
+      networks, Windows machines, cameras &mdash; across Sydney and regional NSW.
+      I also build software, and keep it running: a collector that has taken a reading
+      from <strong>every NSW emergency department publishing a live count, every fifteen
+      minutes since July 2026</strong>.
+    </p>
+
+    <div class="cta">
+      <a class="btn hot" href="#work">See the work</a>
+      <a class="btn" href="#contact">Get in touch</a>
+    </div>
+
+    <div class="facts">
+      <span>Trading since 2019, registered 2026</span>
+      <span>ABN 78 576 434 613</span>
+      <span>CompTIA A+ &middot; AZ-900</span>
+    </div>
+  </section>
+
+
+  <section id="work">
+  <div class="wrap">
+    <p class="sec-k rv">Work</p>
+    <h2 class="rv">Some of it is still running.</h2>
+    <p class="sec-sub rv">
+      A live data pipeline, and two concept sites built to see how far a single
+      HTML file can go. Everything here is either running right now or labelled
+      as a concept on its own page.
+    </p>
+
+    <div class="cards">
+      <article class="card rv">
+        <h3>Aussie Health Utility</h3>
+        <p>It has run unattended on a small Melbourne server since the August 2026 cutover,
+        backing itself up nightly, and nobody has had to touch it. The board it
+        publishes is open to anyone &mdash; and the counting method is printed on
+        the board itself, including the things the numbers cannot be used to say.</p>
+        <div class="work-foot">
+          <a class="wln" href="https://jaredlilliss.github.io/queue-board/">The live board &rarr;</a>
+          <a class="wln" href="https://github.com/jaredlilliss/aussie-health-utility">Public mirror &rarr;</a>
+          <span class="wnote">Public mirror &mdash; the working repository stays private.</span>
         </div>
-        <div class="row">
-          <div class="n">15<small>MIN</small></div>
-          <p class="d">between readings, since <b>July 2026</b>. The feed reports
-          <b>people waiting for treatment</b>; it carries no waiting time, so this page
-          states none.</p>
+      </article>
+
+      <article class="card rv">
+        <h3>Still Wild &mdash; concept</h3>
+        <p>A concept site for a Brisbane adventure business, built as one
+        self-contained HTML file: a live canvas dawn over layered ridges, five
+        languages, and an honesty layer that labels every invented detail as
+        invented rather than quietly leaving it in.</p>
+        <div class="work-foot">
+          <a class="wln" href="/stillwild-concept/">See the concept &rarr;</a>
+          <span class="wnote">Built from the business&rsquo;s published photographs, with
+          permission, for prototyping. Not affiliated with them.</span>
         </div>
-        <div class="row">
-          <div class="n">365<small>DAYS</small></div>
-          <p class="d">each reading is kept. The store is <b>append-only</b>: a wrong
-          reading is corrected by a later row, never by editing what was published.</p>
+      </article>
+
+      <article class="card rv">
+        <h3>XperienceSpace &mdash; concepts</h3>
+        <p>A bilingual one-page brochure built to the UAE government's own design
+        system, English and Arabic, with the language switch working even with
+        scripting off &mdash; and a companion timeline where every date traces to
+        a named government source, with the gaps left visibly empty rather than
+        filled in.</p>
+        <div class="work-foot">
+          <a class="wln" href="/xperience-concept/brochure.html">The brochure &rarr;</a>
+          <a class="wln" href="/xperience-concept/spine.html">The sourced timeline &rarr;</a>
+          <span class="wnote">An unsolicited concept. No affiliation with the organisation
+          it depicts.</span>
         </div>
-        <p class="spec-f">Unattended on a small Melbourne server since the August 2026
-        cutover, backing itself up nightly. The counting method is printed on
-        <a href="https://jaredlilliss.github.io/queue-board/">the board</a> itself,
-        including what the numbers cannot be used to say.</p>
-      </aside>
+      </article>
+
+      <article class="card rv">
+        <h3>Deep Cut &mdash; a game</h3>
+        <p>A diving game about rare answers. Every prompt has many right
+        answers and the crowd already found the easy ones; name something they
+        overlooked and the ship takes on ballast. Common answers float, rare
+        answers sink, and the deepest dive wins. One self-contained file that
+        runs entirely in your browser, with no account, no server and nothing
+        leaving the device.</p>
+        <div class="work-foot">
+          <a class="wln" href="/deep-cut/">Play it &rarr;</a>
+          <span class="wnote">Plays on simulated demo data. No respondent ever
+          existed, and no figure in the game is a measurement of anybody.</span>
+        </div>
+      </article>
+
+      <article class="card rv">
+        <h3>Everything else</h3>
+        <p>Older builds, experiments, and the writing about how each one is put
+        together &mdash; single-file sites, offline-capable, no frameworks.</p>
+        <div class="work-foot">
+          <a class="wln" href="/work/">Every build and its state &rarr;</a>
+          <a class="wln" href="https://jaredlilliss.github.io/">The personal site &rarr;</a>
+        </div>
+      </article>
     </div>
   </div>
-</div>
+</section>
+  <section id="services">
+    <p class="sec-k rv">Services</p>
+    <h2 class="rv">On site</h2>
+    <p class="sec-sub rv">
+      Hospitality venues and small businesses across Sydney and regional NSW,
+      usually the same day.
+    </p>
 
-<main>
-  <section id="work" class="wrap">
-    <h2>What I do</h2>
-    <p class="h-note">On site across Sydney and regional NSW, usually the same day</p>
-    <div class="grid">
-      <div class="cell"><h3>POS &amp; EFTPOS</h3><p>Rollouts, replacements and fault
-      resolution for point-of-sale and payment terminals.</p></div>
-      <div class="cell"><h3>Networks</h3><p>Structured cabling, switching and Wi-Fi for
-      small sites. Runs labelled, layout documented.</p></div>
-      <div class="cell"><h3>Windows</h3><p>Setup, repair, migration and endpoint hardware
-      for Windows machines.</p></div>
-      <div class="cell"><h3>CCTV &amp; AV</h3><p>Camera and audio-visual installation and
-      troubleshooting, from mounting to configuration.</p></div>
-      <div class="cell"><h3>Small-business IT</h3><p>Email, printers, backups, and dealing
-      with vendors so you don't have to.</p></div>
-      <div class="cell"><h3>Software</h3><p>Single self-contained builds. No framework, no
-      build step, no tracker, fonts served from this domain.</p></div>
-    </div>
-
-    <div id="terms" class="terms">
-      <div class="term"><b>A written scope first</b><p>The price and the boundary are
-      agreed on paper before anything starts.</p></div>
-      <div class="term"><b>One contact</b><p>The person who scoped it is the person on
-      site.</p></div>
-      <div class="term"><b>Nothing changed without your yes</b><p>And what was changed is
-      written down for whoever comes next.</p></div>
+    <div class="cards">
+      <article class="card rv">
+        <h3>POS &amp; EFTPOS</h3>
+        <p>Rollouts, replacements and fault resolution for point-of-sale and payment terminals.</p>
+      </article>
+      <article class="card rv">
+        <h3>Windows support</h3>
+        <p>Setup, repair, migration and endpoint hardware for Windows machines.</p>
+      </article>
+      <article class="card rv">
+        <h3>Networks</h3>
+        <p>Structured cabling, switching and Wi-Fi for small sites &mdash; runs labelled, layout documented.</p>
+      </article>
+      <article class="card rv">
+        <h3>CCTV &amp; AV</h3>
+        <p>Camera and audio-visual installation and troubleshooting, from mounting to configuration.</p>
+      </article>
+      <article class="card rv">
+        <h3>Small-business IT</h3>
+        <p>Email, printers, backups, and dealing with vendors so you don't have to.</p>
+      </article>
     </div>
   </section>
 
-  <section id="contact" class="wrap" style="padding-top:0">
-    <h2>Get in touch</h2>
-    <p class="h-note">A fault, a site, or a build</p>
-    <p class="lede" style="max-width:56ch;margin-top:0">Tell me what it is and how soon you
-    need it, and you'll get a straight answer about whether I can help and when, including
-    when I can't.</p>
-    <div class="acts"><a class="btn key" href="mailto:jared@lilliss.au">jared@lilliss.au</a></div>
+
+<section id="about">
+    <p class="sec-k rv">About</p>
+    <h2 class="rv">Two kinds of work,<br>one set of habits</h2>
+
+    <div class="two">
+      <div class="prose rv">
+        <p>
+          The health platform is a polling loop feeding an append-only PostgreSQL
+          time series. <strong>Its privacy posture is set at the schema level</strong>
+          &mdash; there is no column for personal or health information, so none can
+          be collected by mistake rather than none being collected by policy. Nothing
+          is ever updated in place either: a reading that turns out to be wrong is
+          corrected by a later row, not by editing the record of what was published
+          at the time.
+        </p>
+        <p>
+          The site work is the same instinct. Every build here is a single
+          self-contained HTML file &mdash; no framework, no build step, no tracker,
+          fonts served from the same domain &mdash; because a page that depends on
+          four services is a page with four ways to stop working.
+        </p>
+        <p>
+          The field work keeps it honest. When a venue's tills stop mid-service the
+          fix has to hold, and it has to be written down, because the next person on
+          that site inherits whatever I leave behind.
+          <a href="https://jaredlilliss.github.io/" style="color:var(--ember);text-decoration:none;border-bottom:1px solid var(--ember-dim)">See the build →</a>
+        </p>
+      </div>
+
+      <aside class="certs rv">
+        <h4>Certifications</h4>
+        <div class="cert"><b>CompTIA A+</b><span class="held">Held</span></div>
+        <div class="cert"><b>Microsoft Azure Fundamentals (AZ-900)</b><span class="held">Held</span></div>
+        <div class="cert"><b>CompTIA Security+</b><span class="wip">In progress · 2026</span></div>
+      </aside>
+    </div>
   </section>
+
+
+  <section id="contact">
+    <p class="sec-k rv">Contact</p>
+    <h2 class="rv">Get in touch</h2>
+    <p class="sec-sub rv">
+      A fault, a site, or a build &mdash; tell me what it is and how soon you need it,
+      and you'll get a straight answer about whether I can help and when, including
+      when I can't.
+    </p>
+
+    <a class="mail rv" href="mailto:jared@lilliss.au?subject=Lilliss%20IT%20enquiry&amp;body=The%20fault%3A%0D%0A%0D%0AThe%20gear%3A%0D%0A%0D%0AUrgency%20%E2%80%94%20mid-service%2C%20today%2C%20or%20this%20week%3A%0D%0A%0D%0ASuburb%3A%0D%0A">jared@lilliss.au</a>
+
+    <div class="links rv">
+      <a class="btn" href="https://www.linkedin.com/in/jaredlilliss/">LinkedIn</a>
+      <a class="btn" href="https://github.com/jaredlilliss">GitHub</a>
+      <a class="btn" href="https://jaredlilliss.github.io/">Personal site</a>
+    </div>
+  </section>
+
 </main>
 
 <footer>
-  <div class="foot">
-    <span>Lilliss IT &middot; Jared Lilliss &middot; ABN 78 576 434 613 &middot; Trading since 2019, registered 2026</span>
-    <span>Bass Hill NSW &middot; <a href="/privacy.html">Privacy</a></span>
-    <span>Elsewhere &middot; <a href="https://www.linkedin.com/in/jaredlilliss/">LinkedIn</a> &middot; <a href="https://github.com/jaredlilliss">GitHub</a> &middot; <a href="https://jaredlilliss.github.io/">Personal site</a></span>
+  <div class="wrap foot">
+    <span>© <span id="yr">2026</span> Lilliss IT · ABN 78 576 434 613</span>
+    <span>Bass Hill NSW · Sydney &amp; regional NSW</span>
+    <a href="/privacy.html">Privacy</a>
   </div>
 </footer>
 
 <script>
-/* Stars and the lights along the horizon. Everything structural is CSS above, so if any
-   line of this fails the page is still the same scene, just without the sparkle - that is
-   the no-JS condition, tested rather than assumed.
-   Lessons already paid for on the spine and the brochure and reused here: cap DPR so a
-   250% panel does not draw 4x the pixels, guard getContext, stop on visibilitychange,
-   and never let a 0x0 canvas reach drawImage. */
 (function(){
-  var c = document.getElementById('stars');
-  if (!c || !c.getContext) return;
-  var ctx; try { ctx = c.getContext('2d'); } catch (e) { return; }
-  if (!ctx) return;
+  /* Guarded, like the spine's. This line sits ABOVE the defended reveal below;
+     unguarded, it was the one statement that could still blank the page. */
+  var reduced = false;
+  try { reduced = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
 
-  var reduce = false;
-  try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  /* ── reveals — FIRST, and defended ────────────────────────────────────────
+     Every content block on this page is .rv{opacity:0} and only becomes visible
+     when this runs. It used to be the LAST thing in this IIFE, after the sky
+     engine, the clock and the year — so anything throwing earlier left the whole
+     front door blank. The <noscript> rule covers JavaScript being OFF; it does
+     nothing for JavaScript that runs and then dies, which is the likelier case.
 
-  var W = 0, H = 0, dpr = 1, stars = [], lights = [], raf = 0, t0 = 0, HY = 0;
-  var hEl = document.querySelector('.horizon');
+     MEASURED, not theorised: stubbing getContext to return null (iOS Lockdown
+     Mode, memory pressure, a hardened browser, or any bug in the sky engine)
+     gave 30 .rv blocks and 0 visible — a 105 KB screenshot where a healthy page
+     is 732 KB. The business front door, blank, from one null.
 
-  function build(){
-    var n = Math.round(Math.min(150, (W * H) / 11000));
+     So it runs before anything that can throw, in its own try, with a timed
+     backstop if IntersectionObserver itself never fires. Content first; the
+     decoration can fail on its own time. */
+  try {
+    var rvAll = [].slice.call(document.querySelectorAll('.rv'));
+    var show = function(el){ el.classList.add('in'); };
+    if ('IntersectionObserver' in window) {
+      var rvio = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if (e.isIntersecting){ show(e.target); rvio.unobserve(e.target); } });
+      }, {threshold:.12});
+      rvAll.forEach(function(el){ rvio.observe(el); });
+      setTimeout(function(){ rvAll.forEach(show); }, 2600);
+    } else {
+      rvAll.forEach(show);
+    }
+  } catch (e) {
+    [].forEach.call(document.querySelectorAll('.rv'), function(el){ el.classList.add('in'); });
+  }
+
+  /* ── clock and year — also ahead of the sky ───────────────────────────────
+     Same reasoning as the reveals: the sky may bail out entirely if the canvas
+     is unavailable, and nothing a reader actually needs should sit downstream of
+     a decoration. Sydney time regardless of the visitor's own zone — the point
+     is showing when HE is, not when they are — falling back to a plain label if
+     the browser has no tz database for Australia/Sydney. */
+  try {
+    var clock = document.getElementById('clock');
+    var tickClock = function(){
+      try{
+        var now = new Date().toLocaleTimeString('en-AU', {
+          hour:'2-digit', minute:'2-digit',
+          timeZone:'Australia/Sydney', timeZoneName:'shortOffset'
+        });
+        clock.textContent = 'Sydney ' + now.replace('GMT','UTC');
+      }catch(e){ clock.textContent = 'Sydney, Australia'; }
+    };
+    if (clock) { tickClock(); setInterval(tickClock, 30000); }
+    var yrEl = document.getElementById('yr');
+    if (yrEl) yrEl.textContent = new Date().getFullYear();
+  } catch (e) {}
+
+  /* ── night sky ──────────────────────────────────────────────────────────
+     Same visual language as the personal site, so the two properties read as
+     one hand — but a different engine underneath, for three measured reasons:
+
+     1. AURORA IS CACHED. The naive version repaints three full-screen radial
+        gradients every frame. On this machine that meant 3840x1977 x 3
+        gradients x 60fps, which saturated the main thread badly enough that
+        Chrome could not even inject a script into the page. The fields drift
+        at sin(t * .00022) — about one full cycle every eight minutes — so
+        per-frame regeneration bought nothing visible at enormous cost. They
+        are now rendered to an offscreen canvas and refreshed twice a second;
+        the per-frame work is one blit plus the stars.
+     2. DPR IS CAPPED AT 1.5. A starfield of 1px squares over soft gradients
+        gains nothing from a 2.5x backing store, and pixel cost is quadratic.
+     3. THE LOOP STOPS WHEN THE TAB IS HIDDEN. rAF already throttles in most
+        browsers, but not all, and this is a page people leave open. */
+  /* getContext can return null — Lockdown Mode, memory pressure, a hardened
+     browser. Unguarded, `c.getContext('2d')` on a missing element or a null
+     context threw and took everything after it with it. Now the sky simply does
+     not start, and the page is unaffected. */
+  var c = document.getElementById('sky');
+  var x = (c && c.getContext) ? c.getContext('2d') : null;
+  var off = document.createElement('canvas');
+  var ox = off.getContext ? off.getContext('2d') : null;
+  if (!x || !ox) { c && c.parentNode && c.parentNode.removeChild(c); return; }
+  var W, H, DPR, stars = [], t = 0, lastW = 0, lastH = 0, lastDpr = 0;
+  var auroraAt = -1e9, running = false;
+
+  function seed(){
     stars = [];
-    for (var i = 0; i < n; i++){
-      /* seeded by index, not Math.random at paint time, so a resize does not reshuffle
-         the sky under the reader */
-      var a = Math.sin(i * 12.9898) * 43758.5453; a -= Math.floor(a);
-      var b = Math.sin(i * 78.233) * 43758.5453;  b -= Math.floor(b);
-      var d = Math.sin(i * 39.425) * 43758.5453;  d -= Math.floor(d);
-      /* stars thin out towards the horizon, where the dawn washes them out */
-      stars.push({ x: a, y: b * b * 0.80, r: 0.4 + d * 0.9, p: d * 6.283, s: 0.25 + d * 0.5 });
-    }
-    /* 59 lights on the horizon - one for each department that publishes a count */
-    lights = [];
-    for (var j = 0; j < 59; j++){
-      var u = Math.sin(j * 4.113) * 43758.5453; u -= Math.floor(u);
-      var v = Math.sin(j * 7.77) * 43758.5453;  v -= Math.floor(v);
-      var w = Math.sin(j * 21.31) * 43758.5453; w -= Math.floor(w);
-      /* spread them unevenly in BOTH axes and vary the size: an even row of identical
-         dots reads as a dotted rule, not as a town seen from a long way off */
-      lights.push({ x: (j + 0.5) / 59 + (u - 0.5) * 0.030,
-                    o: 0.22 + v * 0.62,
-                    dy: (w - 0.5) * 2,
-                    sc: 0.55 + w * 0.95,
-                    p: v * 6.283 });
-    }
+    var n = Math.min(200, Math.floor(innerWidth / 7));
+    for (var i = 0; i < n; i++) stars.push({
+      x: Math.random()*W, y: Math.random()*H,
+      r: (Math.random()*1.1 + .3) * DPR,
+      p: Math.random()*Math.PI*2, s: Math.random()*.5 + .2
+    });
   }
-
   function size(){
-    var r = c.getBoundingClientRect();
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    W = Math.max(1, Math.round(r.width));
-    H = Math.max(1, Math.round(r.height));
-    c.width = Math.max(1, Math.round(W * dpr));
-    c.height = Math.max(1, Math.round(H * dpr));
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    /* measure the horizon rather than hardcoding it, so the two can never drift apart
-       when the sky height changes at a breakpoint */
-    HY = hEl ? (hEl.getBoundingClientRect().top - r.top) : H * 0.8;
-    if (!(HY > 0 && HY < H)) HY = H * 0.8;
-    build();
+    DPR = Math.min(devicePixelRatio || 1, 1.5);
+    W = c.width = off.width = Math.round(innerWidth * DPR);
+    H = c.height = off.height = Math.round(innerHeight * DPR);
+    c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px';
+    var widthChanged = innerWidth !== lastW || DPR !== lastDpr;
+    /* Mobile browsers fire resize on every URL-bar collapse. Reseeding on those
+       made the stars visibly jump mid-scroll, so only a real width change or a
+       large height change reseeds. */
+    var heightJumped = lastH && Math.abs(innerHeight - lastH) / lastH > .25;
+    if (widthChanged || heightJumped || !stars.length) seed();
+    lastW = innerWidth; lastH = innerHeight; lastDpr = DPR;
+    auroraAt = -1e9;            /* force a rebuild at the new size */
+    paint();
   }
-
-  function paint(now){
-    raf = 0;
-    if (!W || !H) return;
-    var t = reduce ? 0 : (now - t0) / 1000;
-    ctx.clearRect(0, 0, W, H);
-
+  function field(cx, cy, rad, rgb, alpha){
+    var g = ox.createRadialGradient(cx, cy, 0, cx, cy, rad);
+    g.addColorStop(0, 'rgba(' + rgb + ',' + alpha + ')');
+    g.addColorStop(1, 'rgba(' + rgb + ',0)');
+    ox.fillStyle = g; ox.fillRect(0, 0, W, H);
+  }
+  function buildAurora(){
+    ox.clearRect(0, 0, W, H);
+    var d = reduced ? 0 : t, m = Math.max(W, H);
+    field(W*.74 + Math.sin(d*.00022)*W*.06, H*.26, m*.60, '29,92,82',  .30);
+    field(W*.18 + Math.cos(d*.00017)*W*.05, H*.78, m*.52, '200,92,34', .16);
+    field(W*.50,                            H*.04, m*.40, '38,52,95',  .22);
+    auroraAt = t;
+  }
+  function paint(){
+    /* SELF-HEALING SIZE. A hidden pane, a restored tab or a print pass lays the
+       page out before the viewport exists: innerWidth reads 0, size() makes a
+       0x0 offscreen buffer, and drawImage() of a 0x0 canvas THROWS. Uncaught,
+       that exception left this closure at the sky and took the cable nodes and
+       the scroll glow below it — seen 11/09 as an InvalidStateError at the
+       IIFE close. So the size is checked on the path that actually paints, and
+       an empty viewport paints nothing instead of throwing. */
+    var wantDpr = Math.min(devicePixelRatio || 1, 1.5);
+    var wantW = Math.round(innerWidth * wantDpr), wantH = Math.round(innerHeight * wantDpr);
+    if (!(wantW > 0 && wantH > 0)) return;
+    if (c.width !== wantW || c.height !== wantH){ size(); return; }   /* size() paints */
+    if (t - auroraAt > 500) buildAurora();
+    x.clearRect(0, 0, W, H);
+    x.drawImage(off, 0, 0);
+    x.fillStyle = '#cdd6e6';
     for (var i = 0; i < stars.length; i++){
       var s = stars[i];
-      var tw = reduce ? 0.62 : 0.42 + 0.34 * Math.sin(t * s.s + s.p);
-      /* fade each star out as it nears the dawn band, so none sits on the bright edge */
-      var sy = s.y * HY;
-      var fade = 1 - Math.min(1, Math.max(0, (sy / HY - 0.30) / 0.42));
-      ctx.globalAlpha = tw * 0.80 * fade;
-      ctx.fillStyle = '#dfe7f5';
-      ctx.beginPath();
-      ctx.arc(s.x * W, sy, s.r, 0, 6.2832);
-      ctx.fill();
+      x.globalAlpha = reduced ? .55 : (.35 + .45 * Math.abs(Math.sin(t*.001*s.s + s.p)));
+      x.fillRect(s.x, s.y, s.r, s.r);
     }
+    x.globalAlpha = 1;
+  }
+  var last = 0;
+  function loop(ts){
+    if (!running) return;
+    t = ts || 0;
+    if (t - last >= 33){ last = t; paint(); }   /* ~30fps is plenty for a twinkle */
+    requestAnimationFrame(loop);
+  }
+  function start(){ if (!running && !reduced){ running = true; requestAnimationFrame(loop); } }
+  function stop(){ running = false; }
 
-    /* the lights stand on the dark land just BELOW the horizon, where warm points read */
-    var hy = HY + 13;
-    for (var j = 0; j < lights.length; j++){
-      var g = lights[j];
-      var pulse = reduce ? 1 : 0.76 + 0.24 * Math.sin(t * 0.55 + g.p);
-      var x = g.x * W;
-      var yy = hy + g.dy * 13;
-      ctx.globalAlpha = g.o * pulse * 0.26;
-      ctx.fillStyle = '#ff9d42';
-      ctx.beginPath();
-      ctx.arc(x, yy, 6.8 * g.sc, 0, 6.2832);
-      ctx.fill();
-      ctx.globalAlpha = Math.min(1, g.o * pulse * 1.2);
-      ctx.fillStyle = '#ffd9a4';
-      ctx.beginPath();
-      ctx.arc(x, yy, 1.55 * g.sc, 0, 6.2832);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    if (!reduce) queue();
+  size();
+  addEventListener('resize', size);
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) stop(); else start();
+  });
+  if (reduced) paint(); else start();
+
+  /* ── the cable ──────────────────────────────────────────────────────────
+     One node per section, placed at the section's midpoint in document space,
+     and a travelling light whose position is scroll progress. Positions are
+     recomputed on resize because section heights change with the text reflow. */
+  var cable = document.querySelector('.cable'),
+      glow  = document.getElementById('glow'),
+      secs  = [].slice.call(document.querySelectorAll('main section')),
+      nodes = [];
+
+  function buildNodes(){
+    nodes.forEach(function(n){ n.el.remove(); });
+    nodes = [];
+    var docH = document.documentElement.scrollHeight;
+    secs.forEach(function(sec){
+      var mid = sec.offsetTop + sec.offsetHeight / 2;
+      var el = document.createElement('div');
+      el.className = 'cable-node';
+      el.style.top = (mid / docH * 100) + '%';
+      cable.appendChild(el);
+      nodes.push({ el: el, at: mid });
+    });
   }
 
-  function queue(){ if (!raf) raf = requestAnimationFrame(paint); }
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var docH = document.documentElement.scrollHeight;
+      var y = scrollY + innerHeight * .5;
+      glow.style.setProperty('--p', (y / docH * 100) + '%');
+      for (var i = 0; i < nodes.length; i++){
+        nodes[i].el.classList.toggle('lit', scrollY + innerHeight * .62 >= nodes[i].at);
+      }
+      ticking = false;
+    });
+  }
 
-  try {
-    size();
-    t0 = performance.now();
-    paint(t0);
-  } catch (e) { return; }
+  if (matchMedia('(min-width:861px)').matches){
+    buildNodes(); onScroll();
+    addEventListener('scroll', onScroll, {passive:true});
+    addEventListener('resize', function(){ buildNodes(); onScroll(); });
+  }
 
-  var rt;
-  addEventListener('resize', function(){
-    clearTimeout(rt);
-    rt = setTimeout(function(){ try { size(); queue(); } catch (e) {} }, 140);
-  }, { passive: true });
+  /* clock and year moved to the TOP of this IIFE — see the note there. They sat
+     downstream of the sky engine, so a null canvas context took them too. */
 
-  document.addEventListener('visibilitychange', function(){
-    if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-    else { t0 = performance.now(); queue(); }
-  });
+  /* reveals now run at the TOP of this IIFE — see the note there. Leaving them
+     here meant the whole page depended on every preceding line surviving. */
 })();
 </script>
 </body>

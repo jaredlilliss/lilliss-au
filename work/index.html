@@ -31,6 +31,20 @@
      the scroll handler for the rule down the left. -->
 
 <style>
+/* ---- seamless navigation between the pages of this site -------------------
+   Cross-document view transitions. No script, no router: the browser cross-fades
+   the old page into the new one, and the masthead is named so it stays put
+   instead of blinking. Anything that does not support it just navigates, which
+   is exactly what it did before. */
+@view-transition{navigation:auto}
+header .bar{view-transition-name:masthead}
+.sig{view-transition-name:sig}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}
+::view-transition-old(masthead),::view-transition-new(masthead){animation:none}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+}
+
 @font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces.woff2') format('woff2')}
 @font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-italic.woff2') format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
