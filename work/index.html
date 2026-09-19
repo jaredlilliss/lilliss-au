@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Work — Lilliss IT</title>
+<meta name="description" content="What Lilliss IT has built: the collector that has been reading NSW emergency department counts every fifteen minutes since July 2026, and the concept pieces. Each one says whether it is running or a concept.">
+<link rel="icon" href="/icon.svg">
+<meta name="theme-color" content="#05070d">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://lilliss.au/work/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lilliss IT">
+<meta property="og:title" content="Work — Lilliss IT">
+<meta property="og:description" content="What Lilliss IT has built: a collector reading NSW emergency department counts every fifteen minutes since July 2026, and the concept pieces. Each one says whether it is running or a concept.">
+<meta property="og:url" content="https://lilliss.au/work/">
+<meta property="og:locale" content="en_AU">
+<meta property="og:image" content="https://lilliss.au/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Lilliss IT front page: a dusk horizon with an orange sun low over a dark ground, the headline “IT support for the systems a business runs on”, and a panel of live collector figures beside it">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lilliss.au/og.png">
+<meta name="twitter:title" content="Work — Lilliss IT">
+<meta name="twitter:description" content="What Lilliss IT has built: a collector reading NSW emergency department counts every fifteen minutes since July 2026, and the concept pieces. Each one says whether it is running or a concept.">
+<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- /work/ - the index of what has been built. Each item states whether it is
+     running or a concept. Self-hosted faces, no third-party request, one script:
+     the scroll handler for the rule down the left. -->
+
+<style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces.woff2') format('woff2')}
+@font-face{font-family:'Fraunces';font-style:italic;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-italic.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/plexmono-400.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/plexmono-500.woff2') format('woff2')}
+
+/* One committed ground, surfaces as low-alpha white so they stay the same
+   material lit more, and one ember. */
+:root{
+  --bg:#05070d; --bg-2:#080b13;
+  --ink:#eceff5; --muted:#8d96aa; --dim:#7b8498;
+  --s-1:rgba(255,255,255,.022);
+  --s-2:rgba(255,255,255,.042);
+  --s-3:rgba(255,255,255,.068);
+  --edge:rgba(255,255,255,.085);
+  --edge-2:rgba(255,255,255,.15);
+  --ember:#ff8c4a; --ember-deep:#c85c22; --ember-dim:rgba(255,140,74,.16);
+  --live:#5fd39a;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --maxw:1080px; --pad:26px; --rail:54px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 16px/1.62 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:0;z-index:40;background:var(--ember);color:#05070d;
+  padding:.7rem 1rem;font:500 .8rem var(--mono);text-decoration:none}
+.skip:focus{left:1rem;top:1rem}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad) 0 calc(var(--pad) + var(--rail))}
+@media(max-width:860px){ .wrap{padding:0 var(--pad)} }
+
+/* ── the cable ─────────────────────────────────────────────────────────────
+   Structured cabling is the trade, so the page is strung on one.
+   One hairline the full height, a light travelling it with the scroll, a node
+   per section that latches when you reach it. Hidden below 860px where the rail
+   column collapses and it would only crowd the text. */
+.cable{position:fixed;left:calc((100vw - var(--maxw))/2 + var(--pad) + var(--rail)/2);
+  top:0;bottom:0;width:1px;z-index:2;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0,var(--edge) 90px,var(--edge) calc(100% - 90px),transparent 100%)}
+.cable-glow{position:absolute;left:50%;transform:translate(-50%,-50%);top:var(--p,0%);
+  width:3px;height:200px;border-radius:3px;
+  background:linear-gradient(to bottom,transparent,var(--ember),transparent);
+  opacity:.85;filter:blur(1px)}
+.cable-node{position:absolute;left:50%;transform:translate(-50%,-50%);
+  width:7px;height:7px;border-radius:50%;background:var(--bg);border:1px solid var(--edge-2);
+  transition:background .45s ease,border-color .45s ease,box-shadow .45s ease}
+.cable-node.lit{background:var(--ember);border-color:var(--ember);box-shadow:0 0 12px 2px rgba(255,140,74,.5)}
+@media (max-width:860px){ .cable{display:none} }
+@media (prefers-reduced-motion:reduce){ .cable-glow{display:none} }
+
+/* ── nav ──────────────────────────────────────────────────────────────────── */
+header{position:fixed;top:0;left:0;right:0;z-index:20;
+  background:linear-gradient(rgba(5,7,13,.92),rgba(5,7,13,0));
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  max-width:calc(var(--maxw) + 140px);margin:0 auto;padding:17px var(--pad)}
+.sig{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;white-space:nowrap}
+.sig b{color:var(--ember);font-weight:500}
+nav{display:flex;gap:3px;flex-wrap:wrap}
+nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;padding:7px 12px;border:1px solid transparent;
+  border-radius:999px;white-space:nowrap;transition:color .25s,border-color .25s}
+nav a:hover{color:var(--ink);border-color:var(--edge)}
+nav a[aria-current]{color:var(--ink);border-color:var(--edge)}
+nav a.cta{color:var(--ember)}
+
+/* ── the head ─────────────────────────────────────────────────────────────── */
+main{padding-top:104px}
+.head{padding:36px 0 8px}
+.kick{font:500 11.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ember);margin:0 0 18px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.3rem,6vw,3.5rem);line-height:1.04;
+  letter-spacing:-.02em;margin:0 0 .5rem;max-width:16ch;text-wrap:balance}
+.lede{font-size:1.06rem;color:var(--muted);max-width:56ch;margin:0 0 6px}
+.lede b{color:var(--ink);font-weight:600}
+
+/* ── the items ────────────────────────────────────────────────────────────── */
+.items{list-style:none;margin:34px 0 0;padding:0}
+.item{position:relative;border-top:1px solid var(--edge);padding:26px 0 28px}
+.item:last-child{border-bottom:1px solid var(--edge)}
+.item-top{display:flex;align-items:baseline;gap:.7rem 1rem;flex-wrap:wrap;margin-bottom:.45rem}
+.item h2{font-family:var(--serif);font-weight:600;font-size:1.5rem;line-height:1.2;
+  letter-spacing:-.015em;margin:0}
+.item h2 a{text-decoration:none;border-bottom:1.5px solid var(--ember-dim);padding-bottom:2px}
+.item h2 a:hover{border-bottom-color:var(--ember)}
+
+/* the state chip: the whole promise of this page is that this is never ambiguous */
+.state{font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  padding:.42rem .6rem;border-radius:999px;border:1px solid;white-space:nowrap;flex:0 0 auto}
+.state.live{color:var(--live);border-color:rgba(95,211,154,.4);background:rgba(95,211,154,.08)}
+.state.concept{color:var(--muted);border-color:var(--edge-2);background:var(--s-1)}
+.item p{margin:0 0 .6rem;max-width:64ch;color:var(--muted)}
+.item p b{color:var(--ink);font-weight:600}
+.fine{display:block;font:400 12.5px/1.6 var(--mono);color:var(--dim);max-width:64ch;margin-top:.5rem}
+.go{display:inline-flex;align-items:baseline;gap:.4rem;margin-top:.55rem;
+  font:500 12.5px/1.5 var(--mono);letter-spacing:.06em;text-decoration:none;color:var(--ink);
+  border-bottom:1.5px solid var(--ember);padding:.3rem 0 2px}
+.go:hover{color:var(--ember)}
+.go::after{content:"\2192";color:var(--ember)}
+.also{display:flex;gap:.2rem 1.4rem;flex-wrap:wrap;margin-top:.2rem}
+
+/* ── the numbers on the collector, the one item that has any ──────────────── */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));
+  gap:1px;background:var(--edge);border:1px solid var(--edge);margin:.9rem 0 .2rem;max-width:64ch}
+.figs div{background:var(--bg-2);padding:.75rem .85rem;min-width:0}
+.figs b{display:block;font:600 1.5rem/1 var(--sans);letter-spacing:-.03em;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.figs i{display:block;margin-top:.3rem;font:500 10.5px/1.4 var(--mono);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);font-style:normal}
+/* auto-fit fits TWO 140px columns into a phone, and three figures then leave a fourth
+   cell empty -- an empty bordered box reads as a missing number. Below that width each
+   figure becomes its own row, value and label on one line. */
+@media (max-width:560px){
+  .figs{grid-template-columns:1fr}
+  .figs div{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.6rem .85rem}
+  .figs b{font-size:1.3rem}
+  .figs i{margin-top:0;text-align:right}
+}
+
+footer{margin-top:40px;padding:22px 0 60px;
+  font:400 12.5px/1.8 var(--mono);color:var(--dim);display:flex;gap:.4rem 1.6rem;flex-wrap:wrap}
+footer a{text-decoration:none;border-bottom:1px solid var(--edge-2)}
+footer a:hover{color:var(--ember);border-bottom-color:var(--ember)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the work</a>
+
+<div class="cable" id="cable" aria-hidden="true"><div class="cable-glow" id="glow"></div></div>
+
+<header>
+  <div class="bar">
+    <a class="sig" href="/">LILLISS <b>IT</b></a>
+    <nav aria-label="Sections">
+      <a href="/work/" aria-current="page">Work</a>
+      <a href="/#terms">How it runs</a>
+      <a class="cta" href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+
+  <div class="head">
+    <p class="kick">Lilliss IT &middot; what has been built</p>
+    <h1>The work, and what state it is in.</h1>
+    <p class="lede">Running now, or labelled as a concept on its own page &mdash; <b>nothing here is a mock-up in disguise.</b></p>
+  </div>
+
+  <ul class="items">
+
+    <li class="item" data-node>
+      <div class="item-top">
+        <h2><a href="https://jaredlilliss.github.io/queue-board/">The Queue Board</a></h2>
+        <span class="state live">Running</span>
+      </div>
+      <p>A small Melbourne server has been taking a reading every fifteen minutes since <b>July 2026</b> and has not missed a cycle since the August cutover. The board draws the current counts for every NSW emergency department that publishes one.</p>
+      <div class="figs">
+        <div><b>59</b><i>Departments</i></div>
+        <div><b>15</b><i>Minutes apart</i></div>
+        <div><b>365</b><i>Days kept</i></div>
+      </div>
+      <span class="fine">59 of the 176 emergency departments in NSW &mdash; the ones that publish a live count. The figure is people waiting for treatment; the feed carries no waiting time, so the page states none.</span>
+      <div class="also">
+        <a class="go" href="https://jaredlilliss.github.io/queue-board/">Open the board</a>
+        <a class="go" href="https://github.com/jaredlilliss/aussie-health-utility">The code</a>
+      </div>
+    </li>
+
+    <li class="item" data-node>
+      <div class="item-top">
+        <h2><a href="/deep-cut/">Deep Cut</a></h2>
+        <span class="state live">Playable</span>
+      </div>
+      <p>A game that fits in one file and runs in a browser with nothing installed. Common answers float; rare answers sink.</p>
+      <a class="go" href="/deep-cut/">Play it</a>
+    </li>
+
+    <li class="item" data-node>
+      <div class="item-top">
+        <h2><a href="/stillwild-concept/">Still Wild</a></h2>
+        <span class="state concept">Concept</span>
+      </div>
+      <p>A concept theme for a touring business, built as one self-contained file &mdash; a canvas dawn, in five languages.</p>
+      <span class="fine">A concept. It uses the business&rsquo;s photographs with permission; it is not affiliated with them, and it was not commissioned.</span>
+      <a class="go" href="/stillwild-concept/">See the concept</a>
+    </li>
+
+    <li class="item" data-node>
+      <div class="item-top">
+        <h2><a href="/xperience-concept/">Xperience Space</a></h2>
+        <span class="state concept">Concept</span>
+      </div>
+      <p>Two pieces on one idea. <b>The Span</b> is a reading of 1975 to 2117 in which every date names the source that establishes it. <b>The brochure</b> is its sibling, the same material at reading length.</p>
+      <span class="fine">Concepts. Not commissioned, and not affiliated with anyone named on them.</span>
+      <div class="also">
+        <a class="go" href="/xperience-concept/spine.html">The Span</a>
+        <a class="go" href="/xperience-concept/brochure.html">The brochure</a>
+      </div>
+    </li>
+
+  </ul>
+
+  <footer>
+    <span>&copy; 2026 Jared Lilliss &middot; Sydney</span>
+    <a href="/">Home</a>
+    <a href="/#contact">Contact</a>
+    <a href="/privacy.html">Privacy</a>
+  </footer>
+
+</div>
+</main>
+
+<script>
+/* The cable: the glow tracks the scroll, each section's
+   node latches when you reach it. rAF-throttled, desktop only, and it does not
+   run at all when motion has been declined — the page is complete without it. */
+(function(){
+  "use strict";
+  var cable = document.getElementById('cable'), glow = document.getElementById('glow');
+  var reduced = false; try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+  var nodes = [];
+  function buildNodes(){
+    for (var i = 0; i < nodes.length; i++) cable.removeChild(nodes[i].el);
+    nodes = [];
+    var secs = document.querySelectorAll('[data-node]');
+    var docH = document.documentElement.scrollHeight;
+    for (var j = 0; j < secs.length; j++){
+      var at = secs[j].getBoundingClientRect().top + scrollY;
+      var el = document.createElement('div');
+      el.className = 'cable-node';
+      el.style.top = (at / docH * 100) + '%';
+      cable.appendChild(el);
+      nodes.push({ el: el, at: at });
+    }
+  }
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var docH = document.documentElement.scrollHeight;
+      var y = scrollY + innerHeight * .5;
+      if (glow) glow.style.setProperty('--p', (y / docH * 100) + '%');
+      for (var i = 0; i < nodes.length; i++){
+        nodes[i].el.classList.toggle('lit', scrollY + innerHeight * .62 >= nodes[i].at);
+      }
+      ticking = false;
+    });
+  }
+  try {
+    if (matchMedia('(min-width:861px)').matches && !reduced){
+      buildNodes(); onScroll();
+      addEventListener('scroll', onScroll, { passive:true });
+      addEventListener('resize', function(){ buildNodes(); onScroll(); }, { passive:true });
+    }
+  } catch(e){ /* the list is complete without any of this */ }
+})();
+</script>
+</body>
+</html>
